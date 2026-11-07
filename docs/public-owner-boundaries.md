@@ -12,12 +12,15 @@ Missing consumer scripts and missing evidence remain blocking errors.
 
 - ContentStudio provides evidence/article/case contracts, saved-capture and
   selected-delivery/context consumers, and optional local WeChat formatting.
-  Other workbench scripts remain separately under review. The formatter calls an
+  Draft review/cue adapters also have bounded synthetic native MVP evidence.
+  Browser/backend/human acceptance and other workbench scripts remain separate. The formatter calls an
   independently supplied pinned external runtime; its code/assets are not bundled.
 - QRP provides candidate evidence projections. Candidate sources never become
   verified facts merely because hashes or schema validate.
-- VKP provides source-time review and metadata. Its public source edition has
-  not established the private main workflow's complete context consumer.
+- VKP provides source-time review and metadata. Its public context adapter has
+  source/installed synthetic tests against native purpose/predecessor/hash
+  gates. It writes ASR decisions only; no real ASR or complete private workflow
+  acceptance is established.
 - The full first-party MVP consumer is separately public and pinned in the
   existing lock. Its runtime requirements and per-use evidence/approval still
   apply; no runtime is bundled here. `local-rough-cut` P0 is not a substitute,

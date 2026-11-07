@@ -98,3 +98,26 @@ features remain explicit limits. local-rough-cut P1 is not included.
 The existing complete public contract checker (--no-tests) passed again after
 these updated public pins. That is structural/contract evidence, not an extra
 runtime, browser, author or platform approval.
+
+
+## 0.1.2 native context/draft-cue Owner binding
+
+2026-11-07. Codex; exact runtime model not independently verified. Five metadata
+and boundary files change; framework runtime is unchanged. The existing lock
+binds actually published Studio0.1.4 and VKP0.1.3 source, with real public Git
+objects/HEADs and exact tracked bytes. No fake HEAD/private history/clone claim.
+Separate Owner acceptance remains bounded: VKP decision metadata only and a
+Studio2-second synthetic MP4/ASS, not real ASR/voice/browser/author/platform use.
+The main directed composition and contract-checker results are recorded by the
+release host; they are separate from those Owner checks and preserve failures.
+Git+ installation, remaining workbench source coverage and rough-cut P1 retain
+their earlier limits. No private scripts/materials or new execution authority.
+
+
+Directed main composition:95 passed, one explicit browser regression skipped,
+58 subtests. Existing complete contract checker with --no-tests passes. These
+are separate records; no new full811-test or browser execution is claimed.
+An initial host environment produced65 passes and31 setup errors because it
+lacked the Video owner's psutil dependency. The actual rerun used the existing
+fully provisioned Video Python3.12 environment; no dependency installation,
+schema/assertion change or reduced approval/resource guard was needed.

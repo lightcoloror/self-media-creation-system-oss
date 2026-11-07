@@ -32,10 +32,11 @@
       "directory": "video-knowledge-pipeline",
       "discovery": "AGENT_DISCOVERY.md",
       "repository": "https://github.com/lightcoloror/video-knowledge-pipeline-oss",
-      "commit": "9dff9d8c1ebb2f798a6d03d5cc355c6ed0118e21",
+      "commit": "26da44ea972d009fdad8820bc62e44f1d4617bbc",
       "source_status": "published-public-source-native-runtime-and-per-use-approval-remain-separate",
       "commands": {
-        "help": "video-knowledge --help"
+        "help": "video-knowledge --help",
+        "context_consumer_help": "video-knowledge-context --help"
       }
     },
     "mvp-video-pipeline": {
@@ -53,7 +54,7 @@
       "directory": "content-studio-poc",
       "discovery": "README.md",
       "repository": "https://github.com/lightcoloror/content-visual-studio-oss",
-      "commit": "49c3a4c4be735ca80816af87dc5241555ad9a600",
+      "commit": "6ab1f188a04aa479f4122b18d4f4a85cf08ac9b1",
       "source_status": "published-public-source-native-runtime-and-per-use-approval-remain-separate",
       "commands": {}
     },

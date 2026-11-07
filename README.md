@@ -134,3 +134,16 @@ by the main video delivery path. The bounded synthetic composition passed
 does not prove the separate VKP context-manifest script integration or any
 real-media/author/platform outcome. Those limits remain visible in the Owner
 boundaries and acceptance record.
+
+## Native context and draft/cue owner pins (0.1.2)
+
+The existing lock now selects VKP v0.1.3 and ContentStudio v0.1.4, alongside
+full MVP v0.8.1. VKP's installed context decision API has eight native synthetic
+handoff tests; Studio's four draft/cue adapters have66 Python checks and a
+bounded2-second MP4/ASS native test. These separate Owner results are not a
+claim that every command or complete private workflow has run here. The main
+registry still reports runtime_verified=false until actual per-use evidence.
+No Owner is cloned/installed/launched by discovery. The existing prerequisites,
+purpose/fact/privacy/author gates and separate rough-cut P1 review remain.
+
+For video routes, use Python >=3.12 and install the selected Owners' declared dependencies into the chosen environment. A clean pinned source checkout does not supply packages such as psutil by itself; the toolchain initializer performs no dependency installation.
