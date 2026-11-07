@@ -1,0 +1,118 @@
+{
+  "schema_version": "0.4",
+  "updated_at": "2026-09-03T18:20:00+08:00",
+  "adapters": [
+    {
+      "id": "moments-short-text@0.2",
+      "format": "moments-short-text",
+      "required": ["one-real-trigger", "one-discovery-or-reaction", "natural-stop"],
+      "forbidden_defaults": ["headline", "standard-cta", "forced-summary", "slow-steady-professional-ending"],
+      "voice": ["confirmed-personal-corpus", "allow-asymmetry", "not-eight-card-note"],
+      "story_profile": {"when": "structure_route=story-arc", "central_change_count": 1, "turning_points": "1-3", "standalone": true},
+      "visual": ["personal-or-work-photo-first", "brief-media-description-only", "do-not-store-image-by-default"]
+    },
+    {
+      "id": "graphic-note@0.2",
+      "format": "graphic-note",
+      "required": ["cover-promise", "problem-context", "main-judgment", "chunked-process-or-evidence", "boundary-or-next-action"],
+      "page_rule": "one-cognitive-task-per-page",
+      "caption_rule": "add-context-boundary-and-sources-not-card-duplication",
+      "forbidden_defaults": ["fixed-eight-pages", "article-cut-equally", "same-skin-for-unrelated-subjects"],
+      "design_directions": [
+        {
+          "id": "editorial-field-guide",
+          "status": "structure-only-explicit",
+          "eligible_layout_intents": ["sequence", "timeline", "process", "list", "comparison"],
+          "boundary": "inherit-visual-profile;do-not-apply-to-data-chart-photo-led-story-or-medical-decision-card"
+        },
+        {
+          "id": "reflective-personal-essay",
+          "status": "route-eligible-explicit",
+          "eligible_layout_intents": ["sequence", "timeline", "quote-hero"],
+          "best_fit": ["personal-story", "career-transition", "case-reflection"],
+          "artifact_theme": "reflective-personal-essay",
+          "boundary": "inherit-visual-profile;one-narrative-job-per-card;not-for-data-medical-decision-tool-guide-or-conversion-content"
+        }
+      ]
+    },
+    {
+      "id": "short-video-narration@0.2",
+      "format": "short-video-narration",
+      "required_tracks": ["spoken-script", "subtitle-emphasis", "shot-or-broll", "claim-boundary"],
+      "structure": ["audience-situation", "reason-to-listen", "one-main-judgment", "two-or-three-beats", "boundary-or-result"],
+      "story_profile": {"when": "structure_route=story-arc", "opening": "two-second-result-choice-or-scene-preview", "central_change_count": 1, "turning_points": "1-3", "standalone": true, "post_story_explanation_sentences": "2-4"},
+      "delivery": ["one-idea-per-sentence", "read-aloud-test", "mark-pauses-and-emphasis"],
+      "benchmark": ["after-fact-revision-lock", "structure-and-visual-grammar-only", "record-adopt-and-reject", "no-external-case-as-fact", "one-test-variable"],
+      "visual_grammar": {
+        "presenter": "small-window-plus-information-card-for-explanation",
+        "customer": "full-screen-interview-for-lived-experience-only",
+        "evidence": "post-production-full-screen-overlay-with-continuous-audio-and-one-document-per-screen",
+        "information_card": "one-cognitive-task-per-screen-no-new-fact",
+        "boundary_cta": "only-claim-capability-already-demonstrated"
+      },
+      "case_review_extension": {
+        "contract": "case-video-script.v1",
+        "external_review_contract": "case-video-review-receipt.v1",
+        "handoff_contract": "case-video-script-handoff.v1",
+        "applies_when": "content-job=case-review and evidence-risk includes insurance medical privacy authorization or rights",
+        "evidence_root": "verified research-output.v1 with resolvable claim evidence source contradiction and unknown refs",
+        "binding": ["same-content-id", "research-content-fact-route-hashes", "stable-body-and-hook-hashes", "external-review-subject-hash", "full-brief-and-handoff-hashes"],
+        "required": ["single-question", "one-service-capability", "pressure-choice-story", "recorded-quote-consent-or-fallback", "stable-body-before-hook", "one-test-variable"],
+        "projection": "content-video-brief.v1 plus case-video-script-handoff.v1",
+        "unavailable_owner_fallback": "recorded-quote-and-reviewed-cleared-rights-blocked; keep interview fallback and candidate visual description only",
+        "state_machine": "reuse-existing-content-and-mvp-video-state-machines-only",
+        "publication_boundary": "manual-only"
+      },
+      "forbidden_defaults": ["read-graphic-note-aloud", "fixed-duration-formula", "forced-follow-cta", "copy-benchmark-assets-or-wording", "tiny-evidence-inside-decorative-card"]
+    },
+    {
+      "id": "demo-video@0.2",
+      "format": "demo-video",
+      "required": ["real-user-problem", "old-way-friction", "actual-input", "system-processing", "visible-result", "current-capability", "known-limit", "collaboration-ask"],
+      "proof": ["show-real-state", "separate-built-from-planned", "show-relevant-failure-path"]
+    },
+    {
+      "id": "interview-video@0.2",
+      "format": "interview-video",
+      "required": ["consent-and-scope", "context", "open-question", "concrete-follow-up", "speaker-owned-conclusion", "fact-check"],
+      "editing": ["preserve-intent", "label-reconstruction", "not-advertisement", "retain-uncertainty"],
+      "story_profile": {"when": "structure_route=story-arc", "source_mode": "authorized-interview", "action_meaning_layers": "separated", "turning_points": "1-4", "standalone": true}
+    },
+    {
+      "id": "long-video@0.2",
+      "format": "long-video",
+      "required": ["episode-promise", "chapter-map", "evidence-and-cases", "counterexample-or-limit", "stage-summaries", "final-answer"],
+      "retention": ["title-thumbnail-opening-alignment", "re-engage-with-case-visual-question-or-summary", "review-real-retention-data"]
+    },
+    {
+      "id": "live@0.2",
+      "format": "live",
+      "required": ["opening-and-boundary", "repeatable-topic-unit", "new-viewer-recap", "interaction-node", "sensitive-question-playbook", "no-interaction-playbook", "technical-failure-playbook", "close"],
+      "loop": "opening -> topic-unit -> interaction -> recap -> next-unit",
+      "forbidden": ["fake-audience-questions", "manufactured-urgency", "comment-trigger-bait", "linear-lecture-only"]
+    },
+    {
+      "id": "longform-article@0.2",
+      "format": "longform-article",
+      "required": ["accurate-title", "main-message", "background", "sectioned-questions", "evidence-or-case", "limits-and-unknowns", "sources"],
+      "health": ["primary-audience", "communication-objective", "one-main-message", "common-language", "numbers-and-risks-explained"],
+      "story_profile": {"when": "structure_route=story-arc", "scene_meaning_alternation": "planned", "turning_points": "1-6", "standalone": true},
+      "design_directions": [
+        {
+          "id": "editorial-field-guide",
+          "status": "route-eligible-explicit",
+          "best_fit": ["mechanism-explanation", "tool-or-checklist", "case-review"],
+          "artifact_theme": "editorial-field-guide",
+          "boundary": "not-for-photo-led-story-data-chart-medical-decision-card-or-conversion-page"
+        },
+        {
+          "id": "reflective-personal-essay",
+          "status": "route-eligible-explicit",
+          "best_fit": ["personal-story", "career-transition", "case-reflection"],
+          "artifact_theme": "reflective-personal-essay",
+          "boundary": "not-for-mechanism-guide-data-chart-medical-decision-or-sales-conversion"
+        }
+      ]
+    }
+  ]
+}

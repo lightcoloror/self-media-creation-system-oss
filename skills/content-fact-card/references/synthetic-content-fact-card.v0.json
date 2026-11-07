@@ -1,0 +1,48 @@
+{
+  "schema_version": "content-fact-card.v0",
+  "fact_card_id": "fact-card-synthetic-policy-list",
+  "content_id": "content.synthetic-policy-list",
+  "synthetic_only": true,
+  "revision_id": "fact-rev-synthetic-policy-list",
+  "canonical_status": "locked_for_draft",
+  "source_precedence": ["reviewed synthetic household inventory"],
+  "correction_log": [],
+  "facts": [
+    {
+      "fact_id": "fact-inventory-created",
+      "text": "A fictional household created an inventory of its fictional policy documents.",
+      "fact_type": "objective-event",
+      "sequence": 1,
+      "actor": "fictional household",
+      "action": "created a policy-document inventory",
+      "status": "confirmed",
+      "allowed_wording": ["A fictional household created a policy-document inventory."],
+      "forbidden_paraphrases": ["The inventory guaranteed that every future claim would be paid."],
+      "last_confirmed_at": "2026-08-24T23:30:00+08:00",
+      "privacy_class": "public",
+      "evidence_refs": [
+        {
+          "ref_type": "evidence",
+          "ref_id": "evidence-synthetic-inventory-001",
+          "usage_status": "active",
+          "used_in_versions": ["fact-rev-synthetic-policy-list"],
+          "rights": {
+            "reuse_mode": "not-for-publication",
+            "license_status": "not-applicable",
+            "attribution": "synthetic fixture",
+            "commercial_use_boundary": "contract testing only"
+          }
+        }
+      ]
+    }
+  ],
+  "unknowns": ["No real product, household, policy, or claim is represented."],
+  "forbidden_claims": ["Do not present this fixture as a real customer case or product recommendation."],
+  "gates": {
+    "fact": "pass",
+    "privacy": "pass",
+    "medical_insurance": "pass",
+    "authorization": "pass",
+    "rights": "pass"
+  }
+}

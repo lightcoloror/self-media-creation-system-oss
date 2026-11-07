@@ -1,0 +1,95 @@
+{
+  "schema_version": "serious-content-translation-review-input.v1",
+  "generated_at": "2026-09-03T10:00:00+08:00",
+  "content_id": "synthetic-factory-incident-review",
+  "risk_class": "insurance-health",
+  "sensitivity_profile": "medical-sensitive",
+  "content_nature": "education",
+  "body_binding": {
+    "body_ref": "fixtures/serious-content-translation-v1/synthetic-body.md",
+    "body_sha256": "8051dd98b8e53525fffbeb93b029c38cb1791744e356278ae8f718ce9076c5f8"
+  },
+  "precreative_gate": {
+    "audience_decision": "A factory owner needs to know what to verify before treating a small incident as an insurance conclusion.",
+    "evidence_spine_status": "verified",
+    "privacy_status": "not-applicable",
+    "risk_boundary": "Synthetic education only; no claim promise, product recommendation, medical decision, or real customer detail.",
+    "reviewed_at": "2026-09-03T09:00:00+08:00",
+    "decision": "passed"
+  },
+  "translation_plan": {
+    "content_role": "tool",
+    "real_tension": null,
+    "viewer_stakes": "A missed verification step can delay a fictional claim-preparation workflow.",
+    "central_judgment": "Verify scope and materials before treating an incident as a coverage conclusion.",
+    "explanation_budget": {
+      "level": "short",
+      "max_professional_concepts": 2,
+      "max_boundaries": 1
+    },
+    "life_relevance": "The audience may have bought group cover but still be unsure what must be checked after an incident.",
+    "protagonist_goal_or_reader_task": "The fictional owner wants to know what must be checked before treating the incident as an insurance conclusion.",
+    "scene_or_dialogue_anchor": "The owner is looking at an incomplete incident record and an insurance document without knowing which one answers the question.",
+    "completion_question": "What must be verified before the owner can draw a coverage conclusion?",
+    "completion_payoff": "The body resolves the question by separating what happened, contract scope, and required materials.",
+    "takeaway_or_next_use": "Use the same three-part check before preparing the next claim conversation.",
+    "target_action": "understand",
+    "service_action": null,
+    "service_action_effect": null,
+    "entry_mechanism": "life-problem",
+    "humor_level": "none",
+    "humor_target": "none",
+    "sensitive_humor_exception": null,
+    "information_advances": [
+      "A fictional factory prepares for renewal.",
+      "The owner first verifies what happened.",
+      "Contract scope and required materials are checked next."
+    ],
+    "story_reveal_contract": null,
+    "analogy": {
+      "metaphor": "A checklist is a map, not the destination.",
+      "mapping": "It helps order the verification steps before a decision.",
+      "boundary": "It cannot determine coverage, claim outcome, or product suitability."
+    }
+  },
+  "postcreative_gate": {
+    "reviewed_at": "2026-09-03T09:30:00+08:00",
+    "decision": "passed",
+    "key_boundary_in_body": true,
+    "source_detail_available_in_package": true,
+    "safe_action_present": true,
+    "individual_case_generalized": false,
+    "misinterpretation_scenarios": [
+      "A viewer could mistake the sequence for a promise that every incident will be covered."
+    ],
+    "scores": {
+      "evidence": 5,
+      "boundary": 5,
+      "safety": 5
+    },
+    "attention_review": {
+      "decision": "passed",
+      "opening_watch_reason_present": true,
+      "audience_relevance_immediate": true,
+      "protagonist_goal_or_reader_task_visible": true,
+      "concrete_stakes_visible": true,
+      "scene_or_dialogue_anchor_preserved": true,
+      "tension_or_direct_utility_present": true,
+      "information_progression_present": true,
+      "completion_payoff_present": true,
+      "takeaway_or_next_use_present": true,
+      "service_causality_fit": true,
+      "central_judgment_clear": true,
+      "explanation_within_budget": true,
+      "title_cover_opening_aligned": true
+    },
+    "fun_integrity_review": {
+      "fun_present": false,
+      "role": "none",
+      "helps_answer_core_question": null,
+      "humor_target_safe": true,
+      "core_value_survives_without_fun": true,
+      "primary_memory_target": "central-judgment"
+    }
+  }
+}

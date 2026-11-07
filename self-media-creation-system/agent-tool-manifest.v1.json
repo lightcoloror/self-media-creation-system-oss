@@ -1,0 +1,448 @@
+{
+  "schema_version": "agent-tool-manifest.v1",
+  "id": "self-media-creation-system-agent-entry",
+  "manifest_version": "1.9.0",
+  "description": "Operational entry for five bounded self-media workflows, evidence-bound material-to-angle decisions, de-identified story-material capture and design, measured prerecord/final-cut timing, direct post-publication recording, recoverable artifact lifecycle, production-run toolchain freezing, and human-reviewed privacy/redaction binding. It grants no Provider, external-send, upload, or publication authority.",
+  "capabilities": [
+    "deliverable_and_saved_state_entry_selection",
+    "hash_bound_concrete_request_and_state_checkpoint_recovery",
+    "sourced_consumer_assertions_at_actual_output_entries",
+    "legacy_project_sync_and_generated_page_freshness",
+    "final_media_layout_identity_bgm_and_local_speech_acceptance",
+    "unique_coordinator_with_legacy_skill_alias_resolution",
+    "per_task_creation_route_selection",
+    "independent_travel_experience_vlog_route",
+    "reusable_offline_publication_desk",
+    "operational_recipe_discovery",
+    "compact_task_capsule_resolution",
+    "mandatory_step_handoff_contract",
+    "registry_enriched_local_tool_card",
+    "context_receipt_preflight",
+    "step_output_receipt_gate",
+    "derived_unique_next_step_and_completion_gate",
+    "canonical_routing_binding",
+    "bounded_error_recovery",
+    "material_angle_editorial_goal_decision",
+    "story_five_question_view_adapter",
+    "frozen_body_packaging_review",
+    "audience_path_review_gate",
+    "standalone_series_item_gate",
+    "deidentified_story_material_inbox",
+    "format_aware_story_design_gate",
+    "hash_bound_short_video_timing_evidence",
+    "sensitivity_and_fun_integrity_gate",
+    "science_popularization_review_gate",
+    "cross_platform_fact_consistency_gate",
+    "direct_postpublication_operations_discovery",
+    "synthetic_cold_start_examples",
+    "small_model_evidence_candidate_loop",
+    "artifact_lifecycle_registration",
+    "video_archive_level_planning_default_rework",
+    "artifact_lifecycle_render_preflight",
+    "reference_protected_quarantine",
+    "retention_gated_purge",
+    "production_run_toolchain_freeze",
+    "human_subject_to_redaction_window_binding",
+    "persistent_author_expression_recall",
+    "source_preserved_author_judgments",
+    "exact_revision_and_scoped_author_feedback",
+    "version_bound_editorial_execution_integrity"
+  ],
+  "interfaces": {
+    "canonical": [
+      {
+        "kind": "cli",
+        "command": "python scripts/self_media_agent.py resolve --request <task.json> --output <selection.json>",
+        "mode": "read_only",
+        "timeout_seconds": 10
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/self_media_agent.py creation-route",
+        "mode": "read_only",
+        "timeout_seconds": 10
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/self_media_agent.py publication-desk",
+        "mode": "read_only",
+        "timeout_seconds": 10
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/self_media_agent.py authoring",
+        "mode": "read_only",
+        "timeout_seconds": 10
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/self_media_agent.py doctor",
+        "mode": "read_only",
+        "timeout_seconds": 30
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/self_media_agent.py sequence-status --capsule <capsule.json> [--receipt <receipt.json> ...] [--require-complete]",
+        "mode": "read_only",
+        "timeout_seconds": 30
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/content_packaging_review.py check",
+        "mode": "read_only",
+        "timeout_seconds": 30
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/topic_angle_decision.py check",
+        "mode": "read_only",
+        "timeout_seconds": 30
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/story_five_question_adapter.py check",
+        "mode": "read_only",
+        "timeout_seconds": 30
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/story_material_inbox.py check",
+        "mode": "read_only",
+        "timeout_seconds": 30
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/story_design_gate.py check",
+        "mode": "read_only",
+        "timeout_seconds": 30
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/short_video_timing_evidence.py check",
+        "mode": "read_only",
+        "timeout_seconds": 30
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/serious_content_translation_gate.py check",
+        "mode": "read_only",
+        "timeout_seconds": 30
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/science_popularization_gate.py check",
+        "mode": "read_only",
+        "timeout_seconds": 30
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/cross_platform_fact_consistency_gate.py check",
+        "mode": "read_only",
+        "timeout_seconds": 30
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/self_media_agent.py operations",
+        "mode": "read_only",
+        "timeout_seconds": 10
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/small_model_content_loop.py doctor",
+        "mode": "read_only",
+        "timeout_seconds": 30
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/small_model_content_loop.py run --input <synthetic-input.json> --run-root <repo-relative-run-root>",
+        "mode": "local_candidate_write",
+        "timeout_seconds": 60
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/artifact_lifecycle.py doctor",
+        "mode": "read_only",
+        "timeout_seconds": 10
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/artifact_lifecycle.py archive-policy",
+        "mode": "read_only",
+        "timeout_seconds": 10
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/artifact_lifecycle.py archive-plan --assessment <assessment.json> --output <new-plan.json>",
+        "mode": "local_plan_write",
+        "timeout_seconds": 10
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/artifact_lifecycle.py preflight --manifest <manifest.json> --workspace-root <workspace> --output-class <small_known|large_or_unknown> --estimated-output-bytes <bytes-for-large-output> --receipt <receipt.json>",
+        "mode": "read_only_receipt_write",
+        "timeout_seconds": 30
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/artifact_lifecycle.py plan-gc --manifest <manifest.json> --workspace-root <workspace> --phase quarantine --task-close --receipt <plan.json>",
+        "mode": "read_only_receipt_write",
+        "timeout_seconds": 30
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/production_run_lock.py create --spec <spec.json> --workspace-root <workspace> --output <production-run-lock.json>",
+        "mode": "local_lock_write",
+        "timeout_seconds": 30
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/production_run_lock.py verify --lock <production-run-lock.json> --workspace-root <workspace> --output <verification.json>",
+        "mode": "read_only_receipt_write",
+        "timeout_seconds": 30
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/privacy_redaction_binding.py --binding <binding.json> --workspace-root <media-workspace> --mvp-root <mvp-video-pipeline> --output <receipt.json>",
+        "mode": "read_only_receipt_write",
+        "timeout_seconds": 30
+      },
+      {
+        "kind": "cli",
+        "command": "python scripts/artifact_lifecycle.py apply-gc --manifest <manifest.json> --workspace-root <workspace> --plan <plan.json> --phase quarantine --receipt <receipt.json>",
+        "mode": "recoverable_local_move",
+        "timeout_seconds": 120
+      }
+    ],
+    "windows_wrappers": [],
+    "http": [],
+    "mcp": []
+  },
+  "inputs": [
+    {
+      "name": "author_writing_context",
+      "contract": "author-writing-context.v1",
+      "required": false,
+      "status": "required_before_writing_or_author_review; empty_approved_sample_recall_is_valid"
+    },
+    {
+      "name": "author_revision_review",
+      "contract": "author-writing-revision.v1 with review_ref",
+      "required": false,
+      "status": "exact_revision_and_explicit_author_decision_required_at_author_review"
+    },
+    {
+      "name": "task_request",
+      "contract": "self-media-agent-request.v1",
+      "required": false,
+      "status": "managed_recipe_input_after_entry_selection; legacy compatibility remains"
+    },
+    {
+      "name": "work_request",
+      "contract": "self-media-work-request.v1",
+      "required": false,
+      "status": "preferred_cold_start_deliverable_and_saved_state_selection; no_execution_or_new_workflow"
+    },
+    {
+      "name": "step_context_manifest",
+      "contract": "self-media-context-input.v1",
+      "required": false,
+      "status": "required_before_each_existing_owner_step"
+    },
+    {
+      "name": "small_model_loop_request",
+      "contract": "small-model-content-loop-input.v1",
+      "required": false,
+      "status": "synthetic_only_hash_bound_owner_local_route"
+    },
+    {
+      "name": "story_material_observation",
+      "contract": "story-material-observation.v1",
+      "required": false,
+      "status": "deidentified_append_only_candidate_input"
+    },
+    {
+      "name": "topic_angle_decision_input",
+      "contract": "topic-angle-decision-input.v2",
+      "required": false,
+      "status": "evidence_bound_candidate_selection_input"
+    },
+    {
+      "name": "story_five_question_input",
+      "contract": "story-five-question-input.v1",
+      "required": false,
+      "status": "view_only_over_hash_bound_story_design_card_input"
+    },
+    {
+      "name": "science_popularization_review_request",
+      "contract": "science-popularization-review.v1",
+      "required": false,
+      "status": "required_for_science_technology_health_or_medical_insurance_cross_domain_factual_content"
+    },
+    {
+      "name": "short_video_timing_observation",
+      "contract": "short-video-timing-evidence-input.v1",
+      "required": false,
+      "status": "observed_read_aloud_before_recording_or_timed_transcript_after_final_cut"
+    },
+    {
+      "name": "artifact_lifecycle_manifest",
+      "contract": "self-media-artifact-lifecycle-manifest.v2",
+      "required": false,
+      "status": "required_for_real_video_render_and_task_close"
+    },
+    {
+      "name": "production_run_lock",
+      "contract": "self-media-production-run-lock.v1",
+      "required": false,
+      "status": "required_for_real_case_video_candidate"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "task_selection",
+      "contract": "self-media-entry-selection.v1",
+      "required": false,
+      "status": "work_request_result; one_existing_entry_and_next_action; selected_is_not_executed_or_complete"
+    },
+    {
+      "name": "author_writing_revision",
+      "contract": "author-writing-revision.v1",
+      "required": false,
+      "status": "required_for_every_writing_step; source_bound_before_after_and_separate_sample_adoption"
+    },
+    {
+      "name": "task_capsule",
+      "contract": "self-media-task-capsule.v2",
+      "required": false,
+      "status": "required_for_selected_managed_recipe_only; routing_decision_only"
+    },
+    {
+      "name": "step_handoff",
+      "contract": "self-media-step-handoff.v1",
+      "required": true,
+      "status": "required_before_existing_owner_execution"
+    },
+    {
+      "name": "step_output_receipt",
+      "contract": "self-media-step-output-receipt.v1",
+      "required": true,
+      "status": "required_before_next_step"
+    },
+    {
+      "name": "sequence_status",
+      "contract": "self-media-sequence-status.v1",
+      "required": true,
+      "status": "derived_only; required before next-step selection and managed-pipeline completion claims"
+    },
+    {
+      "name": "agent_entry_receipt",
+      "contract": "self-media-agent-doctor.v1",
+      "required": false,
+      "status": "stdout_only"
+    },
+    {
+      "name": "small_model_candidate_review_bundle",
+      "contract": "content-item.v0.2 plus platform-fit-variants.v1 plus review-packet.v1 facade",
+      "required": false,
+      "status": "candidate_only_review_required_manual_only"
+    },
+    {
+      "name": "story_design_card",
+      "contract": "story-design-card.v1",
+      "required": false,
+      "status": "format_aware_fact_bound_candidate_only"
+    },
+    {
+      "name": "topic_angle_decision",
+      "contract": "topic-angle-decision.v2",
+      "required": false,
+      "status": "candidate_only_review_required_manual_only"
+    },
+    {
+      "name": "story_five_question_adapter",
+      "contract": "story-five-question-adapter.v1",
+      "required": false,
+      "status": "view_only_candidate_receipt_over_story_design_card"
+    },
+    {
+      "name": "science_popularization_review_receipt",
+      "contract": "science-popularization-review.v1",
+      "required": false,
+      "status": "passed_review_required_candidate_only_manual_only"
+    },
+    {
+      "name": "short_video_timing_evidence",
+      "contract": "short-video-timing-evidence.v1",
+      "required": false,
+      "status": "prerecord_and_final_cut_receipts_are_distinct_candidate_only_manual_only"
+    },
+    {
+      "name": "artifact_lifecycle_operation_receipt",
+      "contract": "artifact-lifecycle-operation-receipt.v1",
+      "required": false,
+      "status": "required_after_artifact_registration_transition_lock_or_cleanup"
+    },
+    {
+      "name": "privacy_redaction_binding_receipt",
+      "contract": "self-media-privacy-redaction-binding-receipt.v1",
+      "required": false,
+      "status": "required_before_customer_review_for_mosaic_candidates"
+    },
+    {
+      "name": "production_run_lock_verification",
+      "contract": "self-media-production-run-lock-verification.v1",
+      "required": false,
+      "status": "required_before_real_case_video_execution"
+    }
+  ],
+  "health": {
+    "doctor": {
+      "kind": "cli",
+      "command": "python scripts/self_media_agent.py doctor",
+      "profile": "no_write",
+      "timeout_seconds": 30
+    },
+    "status_semantics": "Doctor proves only local schemas, five synthetic recipes, material-to-angle and five-question adapter discovery, direct post-publication operations discovery, science-popularization review discovery, artifact lifecycle, production-run lock and privacy/redaction binding discovery, canonical route binding, compact capsules, and safety boundaries. It does not prove online services, factual approval, editorial-angle approval, subject-matter approval, audience approval, author approval, video completion, upload authority, or publication authority.",
+    "proves_current_online": false
+  },
+  "platforms": [
+    "windows",
+    "linux",
+    "macos"
+  ],
+  "requirements": {
+    "network": {
+      "mode": "none",
+      "reason": "Discovery, resolution, context packing, registry enrichment, lifecycle control, examples, and recovery are file-only. Recipes point to separate owners, but this entry does not call external services."
+    },
+    "secrets": {
+      "mode": "none",
+      "reason": "The entry accepts only relative hash-bound artifact references and does not read credentials."
+    },
+    "approval": {
+      "mode": "required",
+      "reason": "Human review remains mandatory for author voice, master lock, permanent-purge authorization, release, upload, sending, customer contact, and publication."
+    }
+  },
+  "contract_refs": [],
+  "provenance": {
+    "source_kind": "reviewed-public-workspace-edition",
+    "metadata_authorizes_execution": false,
+    "runtime_status": "not_assessed"
+  },
+  "license": {
+    "spdx": "Apache-2.0",
+    "status": "owner-authorized public edition"
+  },
+  "portability": {
+    "status": "local_operational_consumer_ready",
+    "in_repo_discovery": true,
+    "canonical_cross_platform_entry": true,
+    "gaps": [
+      "canonical_parent_contract_set_must_be_present_in_the_workspace",
+      "registry_alias_promotion_remains_external_to_this_repository"
+    ]
+  },
+  "notTrustedAsInstruction": true,
+  "executionAuthority": "none_metadata_only"
+}

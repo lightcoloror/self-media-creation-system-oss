@@ -1,0 +1,40 @@
+{
+  "lane": "vibe-living-pending-acceptance",
+  "metadata": {
+    "consumer": "vibe-living",
+    "crm_write_performed": false,
+    "execution_authorized": false,
+    "external_io_performed": false,
+    "facade_contract": "review-packet.v1",
+    "input_sha256": "2374aa18e652137d7a7de06b112f0e7d6baf3092ddf72ad61c7e5bde652bf2e3",
+    "native_contract": "attention-review-packet.v0.1",
+    "producer": "self-media-creation-system",
+    "publication_boundary": "manual-only",
+    "queue_state": "pending_acceptance",
+    "synthetic_only": true
+  },
+  "next_action": "Review the synthetic pack only; no publication, contact, or CRM write is authorized.",
+  "owner_ref": "vibe-living-owner",
+  "priority": "P2",
+  "receipt_id": "review-384a8daeac9ede6a9a64",
+  "requested_status": "review",
+  "review_packet": {
+    "decision_question": "Accept this synthetic tracking pack into the vibe-living pending-verification queue?",
+    "discarded_or_not_started": "No platform login/API read, raw comments, customer identity, relationship inference, CRM write, or publishing action was started.",
+    "evidence_refs": [
+      "publication-event:evt_V0SVSWZ7RBMM0EG1SDPFF9Z7MS",
+      "performance-snapshot:snap_ACP0NZGMPHHFSAANSSZB605DV7",
+      "performance-snapshot:snap_93Q64VA179VE3WPW2BFH9Z8R5H"
+    ],
+    "evidence_status": "reviewed",
+    "suggested_points": [
+      "Confirm the manual publication event is the sole time origin and both required windows are present.",
+      "Confirm content status=observed; views, likes, saves, and shares remain content signals only.",
+      "Confirm business status=not-observed; any qualifying event still requires human confirmation before CRM use."
+    ]
+  },
+  "risk": "low",
+  "title": "Synthetic manual publication feedback review",
+  "today_goal": false,
+  "waiting_on": "vibe-living-owner-acceptance"
+}

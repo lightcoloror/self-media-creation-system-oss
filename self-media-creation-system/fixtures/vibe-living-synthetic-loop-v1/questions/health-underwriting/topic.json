@@ -1,0 +1,31 @@
+{
+  "audience_problem": "虚构读者不知道体检异常与健康告知、核保结论之间并不是简单的一一对应关系。",
+  "cluster_key": "synthetic-high-frequency-insurance-questions",
+  "created_at": "2026-08-05T12:00:00+08:00",
+  "evidence_status": "candidate",
+  "goal_ids": [
+    "goal_01ARZ3NDEKTSV4RRFFQ69G5FBC"
+  ],
+  "notes": "synthetic_frequency_count=5; rank is fixture input, not audience research or platform evidence.",
+  "parent_topic_id": null,
+  "relationship_types": [
+    "answers-question",
+    "reuses-evidence"
+  ],
+  "schema_version": "0.1",
+  "source_refs": [
+    {
+      "evidence_status": "verified",
+      "note": "Verified as a synthetic fixture artifact only; it does not prove real-world frequency.",
+      "ref": "fixture://vibe-living-synthetic-loop-v1/questions/health-underwriting/research-output.v1.json",
+      "source_type": "workspace-file"
+    }
+  ],
+  "status": "qualified",
+  "target_account_ids": [
+    "acct_1RNQ220TWEF0K9RGMTYS1B47WB"
+  ],
+  "title": "体检发现小问题以后，还能不能买保险？",
+  "topic_id": "topic_WKS9F15JCD7KCBPW0FSGVZTH18",
+  "updated_at": "2026-08-05T12:00:00+08:00"
+}

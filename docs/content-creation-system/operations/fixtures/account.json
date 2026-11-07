@@ -1,0 +1,44 @@
+{
+  "schema_version": "0.1",
+  "account_id": "acct_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+  "platform": "synthetic-platform",
+  "platform_account_id": null,
+  "display_name": "虚构回归账号：回声花园",
+  "account_role": "experiment",
+  "status": "active",
+  "goal_ids": [
+    "goal_01ARZ3NDEKTSV4RRFFQ69G5FBA"
+  ],
+  "positioning": {
+    "summary": "仅用于验证自媒体经营数据合同。",
+    "audience_segments": [
+      "虚构测试受众"
+    ],
+    "business_boundary": "没有真实读者、客户、平台账号或发布行为。"
+  },
+  "ownership": {
+    "owner_ref": "synthetic-fixture",
+    "manager_refs": [],
+    "access_model": "single-owner",
+    "last_permission_review_at": null
+  },
+  "security": {
+    "mfa_status": "unknown",
+    "mfa_method": "unknown",
+    "recovery_status": "unknown",
+    "backup_codes_status": "unknown",
+    "secret_location_class": "not-recorded",
+    "last_security_review_at": null,
+    "last_recovery_drill_at": null,
+    "notes": "虚构 fixture，不含账户凭据。"
+  },
+  "source_refs": [
+    {
+      "ref": "fixture://operations-contract-regression/account",
+      "evidence_status": "local-fact",
+      "note": "合成对象。"
+    }
+  ],
+  "created_at": "2026-05-05T08:00:00+08:00",
+  "updated_at": "2026-05-05T08:00:00+08:00"
+}

@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "local://attention-firewall-cockpit/intake.schema.json",
+  "title": "Attention firewall intake v0.2",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "receipt_id",
+    "title",
+    "lane"
+  ],
+  "properties": {
+    "receipt_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "lane": {
+      "type": "string",
+      "minLength": 1
+    },
+    "owner_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "priority": {
+      "enum": [
+        "P0",
+        "P1",
+        "P2",
+        "P3"
+      ],
+      "default": "P2"
+    },
+    "risk": {
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low"
+      ],
+      "default": "low"
+    },
+    "requested_status": {
+      "enum": [
+        "candidate",
+        "queued",
+        "active",
+        "waiting",
+        "blocked",
+        "review"
+      ],
+      "default": "queued"
+    },
+    "today_goal": {
+      "type": "boolean",
+      "default": false
+    },
+    "next_action": {
+      "type": "string"
+    },
+    "waiting_on": {
+      "type": "string"
+    },
+    "review_packet": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "suggested_points",
+        "discarded_or_not_started",
+        "decision_question",
+        "evidence_status",
+        "evidence_refs"
+      ],
+      "properties": {
+        "suggested_points": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "discarded_or_not_started": {
+          "type": "string"
+        },
+        "decision_question": {
+          "type": "string"
+        },
+        "evidence_status": {
+          "enum": [
+            "candidate",
+            "reviewed",
+            "verified",
+            "not_applicable"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

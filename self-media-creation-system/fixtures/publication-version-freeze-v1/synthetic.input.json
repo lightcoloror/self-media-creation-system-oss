@@ -1,0 +1,27 @@
+{
+  "schema_version": "publication-version-freeze-input.v1",
+  "frozen_at": "2026-09-03T18:30:00+08:00",
+  "content_id": "synthetic-family-policy-check",
+  "source_content_ref": "fixtures/story-design-card-v1/synthetic.input.json",
+  "capacity_mode": "single-master-synchronized",
+  "platforms": ["xiaohongshu", "wechat_channels", "douyin", "kuaishou", "bilibili"],
+  "title": "A synthetic family starts by checking the policies it already has",
+  "cover": {
+    "headline": "Check what you already have first",
+    "visual_description": "A synthetic desk scene with a handwritten inventory; no real person or policy document.",
+    "image_copy_stored": false
+  },
+  "opening": {
+    "first_two_sentences": [
+      "A fictional family wanted to compare another policy.",
+      "The first question showed that nobody could list what the family already had."
+    ]
+  },
+  "body_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+  "media": {
+    "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+    "duration_seconds": 58.4,
+    "media_copy_stored": false
+  },
+  "publication_boundary": "manual-only"
+}

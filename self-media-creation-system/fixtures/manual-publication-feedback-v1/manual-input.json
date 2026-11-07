@@ -1,0 +1,244 @@
+{
+  "content_id": "research-edca758a6ed755c9e91aecb8",
+  "mode": "manual_entry_only",
+  "observations": [
+    {
+      "as_of": "2026-08-08T22:00:00+08:00",
+      "business_events": [],
+      "captured_at": "2026-08-08T22:10:00+08:00",
+      "data_completeness": "complete",
+      "layers": {
+        "admission": "observed",
+        "attraction": "observed",
+        "business": "not_observed",
+        "consumption": "observed",
+        "negative_feedback": "not_observed",
+        "value": "observed"
+      },
+      "metrics": [
+        {
+          "layer": "admission",
+          "metric_key": "admission.status",
+          "unit": "other",
+          "value": 1
+        },
+        {
+          "layer": "attraction",
+          "metric_key": "reach",
+          "unit": "count",
+          "value": 150
+        },
+        {
+          "layer": "attraction",
+          "metric_key": "views",
+          "unit": "count",
+          "value": 120
+        },
+        {
+          "layer": "consumption",
+          "metric_key": "retention_3s_rate",
+          "unit": "percent",
+          "value": 72
+        },
+        {
+          "layer": "consumption",
+          "metric_key": "retention_5s_rate",
+          "unit": "percent",
+          "value": 60
+        },
+        {
+          "layer": "consumption",
+          "metric_key": "retention_10s_rate",
+          "unit": "percent",
+          "value": 42
+        },
+        {
+          "layer": "consumption",
+          "metric_key": "average_watch_time",
+          "unit": "seconds",
+          "value": 18
+        },
+        {
+          "layer": "consumption",
+          "metric_key": "completion_rate",
+          "unit": "percent",
+          "value": 30
+        },
+        {
+          "layer": "consumption",
+          "metric_key": "major_dropoff_second",
+          "unit": "seconds",
+          "value": 12
+        },
+        {
+          "layer": "value",
+          "metric_key": "likes",
+          "unit": "count",
+          "value": 4
+        },
+        {
+          "layer": "value",
+          "metric_key": "saves",
+          "unit": "count",
+          "value": 2
+        },
+        {
+          "layer": "value",
+          "metric_key": "shares",
+          "unit": "count",
+          "value": 0
+        },
+        {
+          "layer": "value",
+          "metric_key": "meaningful_comments",
+          "unit": "count",
+          "value": 1
+        },
+        {
+          "layer": "value",
+          "metric_key": "profile_visits",
+          "unit": "count",
+          "value": 9
+        },
+        {
+          "layer": "value",
+          "metric_key": "attributed_new_followers",
+          "unit": "count",
+          "value": 2
+        }
+      ],
+      "window_label": "early"
+    },
+    {
+      "as_of": "2026-08-13T10:00:00+08:00",
+      "business_events": [],
+      "captured_at": "2026-08-13T10:10:00+08:00",
+      "data_completeness": "complete",
+      "layers": {
+        "admission": "observed",
+        "attraction": "observed",
+        "business": "not_observed",
+        "consumption": "observed",
+        "negative_feedback": "not_observed",
+        "value": "observed"
+      },
+      "metrics": [
+        {
+          "layer": "admission",
+          "metric_key": "admission.status",
+          "unit": "other",
+          "value": 1
+        },
+        {
+          "layer": "attraction",
+          "metric_key": "reach",
+          "unit": "count",
+          "value": 260
+        },
+        {
+          "layer": "attraction",
+          "metric_key": "views",
+          "unit": "count",
+          "value": 210
+        },
+        {
+          "layer": "consumption",
+          "metric_key": "retention_3s_rate",
+          "unit": "percent",
+          "value": 74
+        },
+        {
+          "layer": "consumption",
+          "metric_key": "retention_5s_rate",
+          "unit": "percent",
+          "value": 62
+        },
+        {
+          "layer": "consumption",
+          "metric_key": "retention_10s_rate",
+          "unit": "percent",
+          "value": 44
+        },
+        {
+          "layer": "consumption",
+          "metric_key": "average_watch_time",
+          "unit": "seconds",
+          "value": 20
+        },
+        {
+          "layer": "consumption",
+          "metric_key": "completion_rate",
+          "unit": "percent",
+          "value": 33
+        },
+        {
+          "layer": "consumption",
+          "metric_key": "major_dropoff_second",
+          "unit": "seconds",
+          "value": 13
+        },
+        {
+          "layer": "value",
+          "metric_key": "likes",
+          "unit": "count",
+          "value": 7
+        },
+        {
+          "layer": "value",
+          "metric_key": "saves",
+          "unit": "count",
+          "value": 5
+        },
+        {
+          "layer": "value",
+          "metric_key": "shares",
+          "unit": "count",
+          "value": 1
+        },
+        {
+          "layer": "value",
+          "metric_key": "meaningful_comments",
+          "unit": "count",
+          "value": 2
+        },
+        {
+          "layer": "value",
+          "metric_key": "profile_visits",
+          "unit": "count",
+          "value": 18
+        },
+        {
+          "layer": "value",
+          "metric_key": "attributed_new_followers",
+          "unit": "count",
+          "value": 5
+        }
+      ],
+      "window_label": "d7"
+    }
+  ],
+  "privacy": {
+    "customer_text_included": false,
+    "direct_identifiers_included": false,
+    "raw_comments_included": false,
+    "tracking_parameters_included": false
+  },
+  "publication": {
+    "body_unavailable_reason": "Synthetic fixture does not store a published body or media.",
+    "channel_variant": "synthetic-manual-publication",
+    "platform": "synthetic-surface",
+    "published_at": "2026-08-06T10:00:00+08:00",
+    "recorded_at": "2026-08-06T10:05:00+08:00",
+    "title": "买了保险，真到理赔时需要提前准备什么？"
+  },
+  "schema_version": "manual-publication-feedback-input.v1",
+  "source_objects": {
+    "account_ref": "fixtures/vibe-living-synthetic-loop-v1/account.json",
+    "account_sha256": "d9bdd5932918ba6a7f07a88fd2f799a8d9408c6546222140a2c2a8de838f4774",
+    "content_item_ref": "fixtures/vibe-living-synthetic-loop-v1/questions/claims-preparation/draft.content-item.json",
+    "content_item_sha256": "6ba2894e5e1714a24553fcd31e19e62b5d17cc1530c9f6865a5caa2af0cb5ad2",
+    "topic_ref": "fixtures/vibe-living-synthetic-loop-v1/questions/claims-preparation/topic.json",
+    "topic_sha256": "b5458d4703bb89127cb8154067a1cea048d3e23917ba6766055805cdf1425f93"
+  },
+  "synthetic_only": true
+}

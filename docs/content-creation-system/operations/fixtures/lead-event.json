@@ -1,0 +1,46 @@
+{
+  "schema_version": "0.1",
+  "data_classification": "synthetic-only",
+  "lead_event_id": "lead_01ARZ3NDEKTSV4RRFFQ69G5FB2",
+  "source_interaction_event_id": "int_01ARZ3NDEKTSV4RRFFQ69G5FB1",
+  "source_publication_id": "pub_01ARZ3NDEKTSV4RRFFQ69G5FAX",
+  "account_id": "acct_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+  "business_event_type": "continued_consultation",
+  "dedupe_key": "lead-dedupe:0000000000000000000000000000000000000000000000000000000000000001",
+  "review": {
+    "human_confirmed": true,
+    "decision": "confirmed-lead",
+    "reviewer_ref": "synthetic-reviewer",
+    "reviewed_at": "2026-10-21T11:00:00+08:00",
+    "receipt_ref": "synthetic:lead-review-receipt:001",
+    "receipt_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "review_scope_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+    "evidence_refs": [
+      "synthetic:event:continued-consultation-001"
+    ]
+  },
+  "consent_status": "existing-relationship",
+  "attribution": {
+    "type": "direct",
+    "window_start": "2026-10-18T00:00:00+08:00",
+    "window_end": "2026-10-21T11:00:00+08:00",
+    "model": "manual-evidence"
+  },
+  "handoff": {
+    "status": "prepared",
+    "next_step_summary": "仅供人工决定是否继续沟通。",
+    "receipt_ref": "synthetic:handoff:001"
+  },
+  "privacy": {
+    "deidentified": true,
+    "raw_message_included": false,
+    "direct_identifiers_included": false
+  },
+  "authority": {
+    "execution_authorized": false,
+    "crm_write_performed": false,
+    "do_not_auto_contact": true,
+    "publication_authority": "never"
+  },
+  "created_at": "2026-10-21T11:00:00+08:00"
+}

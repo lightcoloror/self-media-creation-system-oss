@@ -1,0 +1,199 @@
+{
+  "schema_version": "operations-contract-set.v1",
+  "contract_set_id": "content-operations-and-diagnostics",
+  "contract_set_version": "1.1.0",
+  "canonical_root": ".",
+  "hash_mode": "canonical-json-v1",
+  "components": {
+    "operating-goal": {
+      "schema": {
+        "path": "operations/operating-goal.schema.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "ad319658bf0a509698aeccd542b756417e593fc580eb1c405345c5d05354999c"
+      },
+      "fixture": {
+        "path": "operations/fixtures/operating-goal.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "a3e24b0269da9ce1b8bcb5cdac8d411146cbd80e45cf2e1dfd71b8fa2d59fd02"
+      }
+    },
+    "account": {
+      "schema": {
+        "path": "operations/account.schema.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "2546528f3266b052de821a67cbc668fb8751c6c36e022b4d979cfaef45727fde"
+      },
+      "fixture": {
+        "path": "operations/fixtures/account.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "729c270b3c4a02ec957dbe74a6aa5a8625a9495f7246f73555769d1220445ede"
+      }
+    },
+    "topic": {
+      "schema": {
+        "path": "operations/topic.schema.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "6363b5a1003d8d0cd96a55c976ae1b1d3f554adee55a0b34c402270f9dda1515"
+      },
+      "fixture": {
+        "path": "operations/fixtures/topic.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "8b08941262c4362fc72274f11284ba4051deb78bdafa704dd1165a25841b0ea1"
+      }
+    },
+    "publication-event": {
+      "schema": {
+        "path": "operations/publication-event.schema.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "cb49491c2d34ecc5abb48cee9fbb3984218d90ccfb16d7b821ecec7d01fee10c"
+      },
+      "fixture": {
+        "path": "operations/fixtures/publication-event.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "e35469cdd72283702145b8d5ea772c9269b8c3d2adebe13f6a05bb6f9475379b"
+      }
+    },
+    "performance-snapshot": {
+      "schema": {
+        "path": "operations/performance-snapshot.schema.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "91b6da8ebe593f65cd5712f1b78b53b5462833064055cc65495d0ccd39d2b528"
+      },
+      "fixture": {
+        "path": "operations/fixtures/performance-snapshot.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "e6481da8251c85d3c87901d93cc302026db6832f4ae370f01e0f2f1c4fe52fa9"
+      }
+    },
+    "interaction-event": {
+      "schema": {
+        "path": "operations/interaction-event.schema.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "016a93eebd2a6934a847f08bf085226d4bf3bf0467e711debe9f9be12926bd18"
+      },
+      "fixture": {
+        "path": "operations/fixtures/interaction-event.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "5558f2a307aa766152104ac6f32c6f7890f0676f6c1db597d41323308d9b1362"
+      }
+    },
+    "lead-event": {
+      "schema": {
+        "path": "operations/lead-event.schema.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "6595b53ee87f256cc0c9f33927a9646db7f9eff7c264dd6465acb00720c0c667"
+      },
+      "fixture": {
+        "path": "operations/fixtures/lead-event.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "548b8e88cdf6833810dd873961b6b83d3d47d21479fd740d3e3ff0b3adcc451b"
+      }
+    },
+    "experiment-run": {
+      "schema": {
+        "path": "operations/experiment-run.schema.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "f413db2b75ea176d9294479de0dd1655ebbc15155b51af729bfc1b13025d4506"
+      },
+      "fixture": {
+        "path": "operations/fixtures/experiment-run.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "a52ec51974e0bed95f0642464e932a60c451d6aad95c40f6d60302126eb6ebd9"
+      }
+    },
+    "resource-ledger-event": {
+      "schema": {
+        "path": "operations/resource-ledger-event.schema.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "270e4dbaf400eda51a1e2f5d6e18fd049beee5f7e7fb63561f1901eb6df88650"
+      },
+      "fixture": {
+        "path": "operations/fixtures/resource-ledger-event.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "4c38e076371acda68a321ec7a1e27942b1164a44b24c8476a930e586c973820b"
+      }
+    },
+    "revenue-attribution-event": {
+      "schema": {
+        "path": "operations/revenue-attribution-event.schema.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "5271507d494dd25c68a98d073573421247669a1dd7fb787c30c899edb356650b"
+      },
+      "fixture": {
+        "path": "operations/fixtures/revenue-attribution-event.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "15ffaace7d1307fe901b3f0e9486350e3e44be63e92242bc45a5c971215b7ba1"
+      }
+    },
+    "account-continuity-plan": {
+      "schema": {
+        "path": "operations/account-continuity-plan.schema.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "3971cb2b0a7f4efee08d8ad05f90bb262790d1627167ee1a0be33928d8f67a6a"
+      },
+      "fixture": {
+        "path": "operations/fixtures/account-continuity-plan.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "d51969bbbbe1c72ca0017623811a3ac3631897daa3031344c28f3efddd06c418"
+      }
+    },
+    "account-security-event": {
+      "schema": {
+        "path": "operations/account-security-event.schema.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "bb1cdc5f53bde33749c948b0fa1fa11739394fc361f219655197b5310a443215"
+      },
+      "fixture": {
+        "path": "operations/fixtures/account-security-event.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "bbfe4fd83f9fb3210fa1dc816956a90082223171dc3194ddfaf49c3302b6e8c4"
+      }
+    },
+    "operating-review": {
+      "schema": {
+        "path": "operations/operating-review.schema.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "144d030638346cdb805af959231ec6ceb8828096bf99ee550c6db6b762874de2"
+      },
+      "fixture": {
+        "path": "operations/fixtures/operating-review.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "e716d97e033a82b6c8008d543741b59db7b0d6ba8763f047f4fcf9499f8fc30a"
+      }
+    },
+    "diagnostic-run": {
+      "schema": {
+        "path": "diagnostics/diagnostic-run.schema.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "cbec0bee874bce9519b894db4d12fbc38d6e5dbd1f5d9685bea2f33d8df6a069"
+      },
+      "fixture": {
+        "path": "diagnostics/fixtures/diagnostic-run.json",
+        "schema_version": "0.1",
+        "canonical_json_sha256": "430748eb523a120e0a7659c38b02f2a2adf78340a10d0c6d26d3f90823ff0323"
+      }
+    }
+  },
+  "mixing_policy": {
+    "mixed_roots_prohibited": true,
+    "single_contract_set_per_run": true,
+    "on_mismatch": "fail-closed"
+  },
+  "boundaries": {
+    "execution": "record-validate-review-only",
+    "publication": "manual-only",
+    "external_send": "not-authorized",
+    "customer_contact": "not-authorized",
+    "crm_write": "not-authorized",
+    "account_action": "not-authorized",
+    "secret_storage": "prohibited",
+    "evidence_scope": "synthetic-or-deidentified-contract-evidence-only"
+  },
+  "provenance": {
+    "created_at": "2026-11-07T07:28:04.232475+00:00",
+    "acting_tool_model": "Codex; runtime model not independently verified",
+    "supersedes": [
+      "public-edition-independent-synthetic-fixtures"
+    ]
+  }
+}

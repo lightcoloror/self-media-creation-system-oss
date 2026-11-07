@@ -1,0 +1,55 @@
+{
+  "items": [
+    {
+      "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+      "actor_type": "local-tool",
+      "canonical_url": null,
+      "content_id": "research-215a50fc4d541536dfa18e2d",
+      "event_id": "evt_X8CE2T20WTGJWT57SYN9HR5PMM",
+      "event_sequence": 1,
+      "event_type": "prepared",
+      "evidence_status": "local-record",
+      "occurred_at": "2026-08-25T12:00:00+08:00",
+      "platform": "synthetic-surface",
+      "platform_content_id": null,
+      "publication_id": "pub_QTMRG4H2PGAQJ40HD0791Z9X5N",
+      "reason": "Synthetic prepared event; no publication occurred.",
+      "recorded_at": "2026-08-25T12:00:00+08:00",
+      "schema_version": "0.1",
+      "supersedes_event_id": null,
+      "version_id": "ver_2AB7DZWR830RBFWYEJ79BXY2BP"
+    },
+    {
+      "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+      "actor_type": "local-tool",
+      "canonical_url": null,
+      "content_id": "research-215a50fc4d541536dfa18e2d",
+      "event_id": "evt_AJ3GKEC5QPFZBMH93M1GQKJSX8",
+      "event_sequence": 2,
+      "event_type": "published",
+      "evidence_status": "local-record",
+      "frozen_version": {
+        "body_ref": "questions/family-priority/adapter/research-215a50fc4d541536dfa18e2d.article.md",
+        "body_sha256": "3b01f849de99bef1b0d2e9c299829543368e84cac7c81f5c51506e927d771f2b",
+        "channel_variant": "synthetic-article",
+        "cover_refs": [],
+        "cta": null,
+        "freeze_status": "complete",
+        "frozen_at": "2026-08-25T12:01:00+08:00",
+        "media_refs": [],
+        "title": "一家人预算有限，保障顺序怎么排？",
+        "unavailable_reason": null
+      },
+      "occurred_at": "2026-08-25T12:01:00+08:00",
+      "platform": "synthetic-surface",
+      "platform_content_id": null,
+      "publication_id": "pub_QTMRG4H2PGAQJ40HD0791Z9X5N",
+      "reason": "Synthetic published event used only to exercise the feedback contract.",
+      "recorded_at": "2026-08-25T12:01:00+08:00",
+      "schema_version": "0.1",
+      "supersedes_event_id": "evt_X8CE2T20WTGJWT57SYN9HR5PMM",
+      "version_id": "ver_2AB7DZWR830RBFWYEJ79BXY2BP"
+    }
+  ],
+  "synthetic_only": true
+}

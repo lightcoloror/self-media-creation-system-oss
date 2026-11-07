@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/science-popularization-review.v1.schema.json",
+  "title": "Science popularization review receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "review_id", "generated_at", "artifact_status",
+    "publication_boundary", "content_id", "content_domains", "body_binding",
+    "source_basis", "scientific_review", "audience_readability_review",
+    "ai_assistance", "gate_status", "release_status", "next_gate",
+    "authority", "receipt_payload_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "science-popularization-review.v1"},
+    "review_id": {"type": "string", "pattern": "^science-review-[a-f0-9]{24}$"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "artifact_status": {"const": "candidate-only"},
+    "publication_boundary": {"const": "manual-only"},
+    "content_id": {"type": "string", "minLength": 3, "maxLength": 160},
+    "content_domains": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"enum": ["science", "technology", "health", "medicine", "insurance-medical-cross"]}
+    },
+    "body_binding": {"$ref": "#/$defs/body_binding"},
+    "source_basis": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "source_card_ref", "use_role", "authority_limits_preserved"],
+      "properties": {
+        "source_id": {"const": "cast-science-popularization-guide-2026"},
+        "source_card_ref": {"$ref": "#/$defs/repo_ref"},
+        "use_role": {"const": "methodology-quality-baseline"},
+        "authority_limits_preserved": {"const": true}
+      }
+    },
+    "scientific_review": {"$ref": "#/$defs/scientific_review"},
+    "audience_readability_review": {"$ref": "#/$defs/audience_review"},
+    "ai_assistance": {"$ref": "#/$defs/ai_assistance"},
+    "gate_status": {"const": "passed"},
+    "release_status": {"const": "review-required"},
+    "next_gate": {"const": "author-plus-subject-matter-check"},
+    "authority": {
+      "const": {
+        "publish_authorized": false,
+        "execution_authorized": false,
+        "external_send_authorized": false
+      }
+    },
+    "receipt_payload_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "repo_ref": {
+      "type": "string", "minLength": 1, "maxLength": 500,
+      "pattern": "^(?![A-Za-z]:)(?!/)(?!\\\\)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "body_binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["body_ref", "body_sha256"],
+      "properties": {
+        "body_ref": {"$ref": "#/$defs/repo_ref"},
+        "body_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "scientific_review": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "decision", "claims_checked_against_current_authoritative_sources",
+        "source_ledger_complete", "data_and_citation_currency_checked",
+        "concepts_and_definitions_checked", "ai_output_not_used_as_evidence",
+        "individual_case_not_generalized", "controversy_status",
+        "material_limitations_visible", "subject_matter_review_status", "evidence_refs"
+      ],
+      "properties": {
+        "decision": {"const": "passed"},
+        "claims_checked_against_current_authoritative_sources": {"const": true},
+        "source_ledger_complete": {"const": true},
+        "data_and_citation_currency_checked": {"const": true},
+        "concepts_and_definitions_checked": {"const": true},
+        "ai_output_not_used_as_evidence": {"const": true},
+        "individual_case_not_generalized": {"const": true},
+        "controversy_status": {"enum": ["none", "represented"]},
+        "material_limitations_visible": {"const": true},
+        "subject_matter_review_status": {"const": "passed"},
+        "evidence_refs": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"$ref": "#/$defs/repo_ref"}
+        }
+      }
+    },
+    "audience_review": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "decision", "primary_audience", "reviewer_roles", "jargon_explained",
+        "structure_and_information_density_fit", "feedback_resolved", "review_evidence_refs"
+      ],
+      "properties": {
+        "decision": {"const": "passed"},
+        "primary_audience": {"type": "string", "minLength": 1, "maxLength": 240},
+        "reviewer_roles": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "contains": {"const": "target-audience-representative"},
+          "items": {"enum": ["target-audience-representative", "plain-language-editor", "subject-matter-expert"]}
+        },
+        "jargon_explained": {"const": true},
+        "structure_and_information_density_fit": {"const": true},
+        "feedback_resolved": {"const": true},
+        "review_evidence_refs": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"$ref": "#/$defs/repo_ref"}
+        }
+      }
+    },
+    "ai_assistance": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "used", "functions", "nonpublic_or_sensitive_input_provided",
+        "input_deidentification_status", "factual_output_review",
+        "disclosure_assessment", "disclosure_rationale"
+      ],
+      "properties": {
+        "used": {"type": "boolean"},
+        "functions": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"enum": ["none", "ideation", "research-assistance", "outline", "draft", "plain-language-rewrite", "carrier-adaptation"]}
+        },
+        "nonpublic_or_sensitive_input_provided": {"const": false},
+        "input_deidentification_status": {"enum": ["passed", "not-needed"]},
+        "factual_output_review": {"enum": ["passed", "not-applicable"]},
+        "disclosure_assessment": {"enum": ["no-ai-used", "label-required-and-planned", "label-not-required-with-rationale"]},
+        "disclosure_rationale": {"type": "string", "minLength": 1, "maxLength": 500}
+      }
+    }
+  }
+}

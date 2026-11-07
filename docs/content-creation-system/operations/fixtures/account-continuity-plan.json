@@ -1,0 +1,56 @@
+{
+  "schema_version": "0.1",
+  "data_classification": "synthetic-only",
+  "continuity_plan_id": "continuity_01ARZ3NDEKTSV4RRFFQ69G5FB7",
+  "plan_version": "0.1",
+  "accounts": [
+    {
+      "account_id": "acct_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+      "criticality": "important",
+      "rto_hours": 72,
+      "rpo_hours": 24
+    }
+  ],
+  "dependencies": [
+    {
+      "dependency_class": "primary-email",
+      "status": "unverified",
+      "protected_location_class": "not-recorded"
+    },
+    {
+      "dependency_class": "content-backup",
+      "status": "partial",
+      "protected_location_class": "managed-backup"
+    }
+  ],
+  "recovery_order": [
+    "acct_01ARZ3NDEKTSV4RRFFQ69G5FAV"
+  ],
+  "backup_owner_refs": [
+    "synthetic-primary-owner"
+  ],
+  "backup_state": {
+    "content_backup_status": "partial",
+    "last_verified_at": null,
+    "restore_instructions_ref": "synthetic:restore-guide:001"
+  },
+  "drill": {
+    "status": "planned",
+    "last_drill_at": null,
+    "result": "not-evaluated",
+    "next_due_at": "2027-04-30T00:00:00+08:00"
+  },
+  "incident_response_ref": "synthetic:incident-card:001",
+  "reviewed_at": "2026-10-28T14:00:00+08:00",
+  "privacy": {
+    "secrets_included": false,
+    "recovery_codes_included": false,
+    "totp_seed_included": false,
+    "direct_recovery_identifiers_included": false
+  },
+  "authority": {
+    "execution_authorized": false,
+    "credential_rotation_authorized": false,
+    "account_action_authorized": false
+  }
+}

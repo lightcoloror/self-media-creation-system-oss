@@ -1,0 +1,24 @@
+{
+  "schema_version": "content-operations-cycle.resource-input.v1",
+  "data_classification": "synthetic-only",
+  "artifact": {
+    "schema_version": "0.1",
+    "data_classification": "synthetic-only",
+    "resource_event_id": "res_7K04SKXBWAMWPX3AT2D64RN7BG",
+    "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+    "content_id": "research-9af53d1845bc537784dd42b4",
+    "publication_id": "pub_M4SFWHX1HS3T64SWRG3T0WRZKW",
+    "resource_type": "human-time",
+    "occurred_at": "2026-08-11T10:00:00+08:00",
+    "quantity": {"value": 1.5, "unit": "hours"},
+    "cost": {"amount": 0, "currency": "CNY", "tax_included": null},
+    "evidence_status": "manual-record",
+    "evidence_refs": ["synthetic:time-log:001"],
+    "notes": "Synthetic content-production time record.",
+    "privacy": {
+      "personal_payment_data_included": false,
+      "account_credentials_included": false
+    },
+    "authority": {"payment_authorized": false, "execution_authorized": false}
+  }
+}

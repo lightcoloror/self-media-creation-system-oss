@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lightcolor/content-operations/diagnostic-run.schema.json",
+  "title": "可重跑账号诊断记录",
+  "description": "按明确输入窗口、缺失情况、基线和规则版本保存账号诊断。禁止用不可解释的单一健康分替代分维度证据。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "data_classification",
+    "diagnostic_run_id",
+    "account_id",
+    "run_at",
+    "input_window",
+    "publication_ids",
+    "sample_size",
+    "missingness",
+    "baseline",
+    "rule_version",
+    "metric_dictionary_version",
+    "data_completeness",
+    "findings",
+    "report_state",
+    "authority"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "data_classification": { "enum": ["synthetic-only", "deidentified-operational"] },
+    "diagnostic_run_id": { "type": "string", "pattern": "^diag_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "account_id": { "type": "string", "pattern": "^acct_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "run_at": { "type": "string", "format": "date-time" },
+    "input_window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end", "timezone"],
+      "properties": {
+        "start": { "type": "string", "format": "date-time" },
+        "end": { "type": "string", "format": "date-time" },
+        "timezone": { "type": "string", "minLength": 1, "maxLength": 80 }
+      }
+    },
+    "publication_ids": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^pub_[0-9A-HJKMNP-TV-Z]{26}$" },
+      "uniqueItems": true
+    },
+    "sample_size": { "type": "integer", "minimum": 0 },
+    "missingness": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["field", "status", "reason"],
+        "properties": {
+          "field": { "type": "string", "minLength": 1, "maxLength": 160 },
+          "status": { "enum": ["complete", "partial", "unavailable", "not-applicable"] },
+          "reason": { "type": ["string", "null"], "maxLength": 500 }
+        }
+      }
+    },
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "definition", "evidence_refs"],
+      "properties": {
+        "type": { "enum": ["self-history", "peer-cohort", "platform-reference"] },
+        "definition": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "evidence_refs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 1000 },
+          "uniqueItems": true
+        },
+        "cohort_size": { "type": ["integer", "null"], "minimum": 1 }
+      }
+    },
+    "rule_version": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "metric_dictionary_version": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "data_completeness": { "enum": ["complete", "partial", "insufficient"] },
+    "findings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["dimension", "finding", "evidence_refs", "counterevidence_refs", "confidence", "priority", "recommended_action"],
+        "properties": {
+          "dimension": { "enum": ["positioning", "content-mix", "packaging", "consumption", "value", "business", "operations", "risk"] },
+          "finding": { "type": "string", "minLength": 1, "maxLength": 1000 },
+          "evidence_refs": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1, "maxLength": 1000 },
+            "uniqueItems": true
+          },
+          "counterevidence_refs": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1, "maxLength": 1000 },
+            "uniqueItems": true
+          },
+          "confidence": { "enum": ["low", "medium", "high"] },
+          "priority": { "enum": ["p0", "p1", "p2", "observe"] },
+          "recommended_action": { "type": "string", "minLength": 1, "maxLength": 1000 }
+        }
+      }
+    },
+    "report_state": { "enum": ["draft-only", "human-reviewed"] },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["human_confirmed", "reviewer_ref", "reviewed_at", "receipt_ref"],
+      "properties": {
+        "human_confirmed": { "const": true },
+        "reviewer_ref": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "reviewed_at": { "type": "string", "format": "date-time" },
+        "receipt_ref": { "type": "string", "minLength": 1, "maxLength": 1000 }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["execution_authorized", "publication_authority", "automatic_account_action"],
+      "properties": {
+        "execution_authorized": { "const": false },
+        "publication_authority": { "const": "never" },
+        "automatic_account_action": { "const": false }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "report_state": { "const": "human-reviewed" } }, "required": ["report_state"] },
+      "then": { "required": ["review"] }
+    }
+  ]
+}

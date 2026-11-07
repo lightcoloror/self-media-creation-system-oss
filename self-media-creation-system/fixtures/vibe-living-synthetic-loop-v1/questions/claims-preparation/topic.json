@@ -1,0 +1,31 @@
+{
+  "audience_problem": "虚构读者可能以为理赔只是治疗结束后提交发票，忽略治疗前后的责任与材料核对。",
+  "cluster_key": "synthetic-high-frequency-insurance-questions",
+  "created_at": "2026-08-05T12:00:00+08:00",
+  "evidence_status": "candidate",
+  "goal_ids": [
+    "goal_01ARZ3NDEKTSV4RRFFQ69G5FBC"
+  ],
+  "notes": "synthetic_frequency_count=4; rank is fixture input, not audience research or platform evidence.",
+  "parent_topic_id": null,
+  "relationship_types": [
+    "answers-question",
+    "reuses-evidence"
+  ],
+  "schema_version": "0.1",
+  "source_refs": [
+    {
+      "evidence_status": "verified",
+      "note": "Verified as a synthetic fixture artifact only; it does not prove real-world frequency.",
+      "ref": "fixture://vibe-living-synthetic-loop-v1/questions/claims-preparation/research-output.v1.json",
+      "source_type": "workspace-file"
+    }
+  ],
+  "status": "qualified",
+  "target_account_ids": [
+    "acct_1RNQ220TWEF0K9RGMTYS1B47WB"
+  ],
+  "title": "买了保险，真到理赔时需要提前准备什么？",
+  "topic_id": "topic_8M8Q9T4FAA15S6H55ZTVND7VQ7",
+  "updated_at": "2026-08-05T12:00:00+08:00"
+}

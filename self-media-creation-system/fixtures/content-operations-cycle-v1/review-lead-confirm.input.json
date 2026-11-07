@@ -1,0 +1,14 @@
+{
+  "schema_version": "content-operations-cycle.lead-review-input.v1",
+  "data_classification": "synthetic-only",
+  "interaction_event_id": "int_VG7AT3NV2JYM9SRKB9PYS8B1HC",
+  "decision": "confirm",
+  "reviewer_ref": "synthetic-human-reviewer",
+  "reviewed_at": "2026-08-12T12:00:00+08:00",
+  "receipt_ref": "fixtures/content-operations-cycle-v1/lead-review-confirm.credential.json",
+  "receipt_sha256": "f2aeac272319c87129aa1d452184a38040fb8e234f8635d3b01d9bd396f6a20c",
+  "evidence_refs": ["fixture:event:continued-consultation-001"],
+  "consent_status": "not-required",
+  "attribution_type": "direct",
+  "attribution_model": "manual-evidence"
+}

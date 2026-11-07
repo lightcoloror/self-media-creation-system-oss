@@ -1,0 +1,13 @@
+tool-registry.json
+self-media-creation-system/channel-portfolio.v1.json
+.venv/
+**/__pycache__/
+**/*.pyc
+**/.runtime/
+**/.pytest_cache/
+self-media-creation-system/outputs/
+content-studio-poc/
+question-research-poc/
+artifact-lifecycle-core/
+video-knowledge-pipeline/
+mvp-video-pipeline/

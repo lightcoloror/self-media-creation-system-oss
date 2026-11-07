@@ -1,0 +1,36 @@
+{
+  "files": [
+    "tools/test_public_toolchain.py",
+    "self-media-creation-system/tests/test_purpose_continuity.py",
+    "self-media-creation-system/tests/test_routing_convergence.py",
+    "self-media-creation-system/tests/test_creation_route.py",
+    "self-media-creation-system/tests/test_entry_selection.py",
+    "self-media-creation-system/tests/test_editorial_integrity.py",
+    "self-media-creation-system/tests/test_self_media_agent.py",
+    "self-media-creation-system/tests/test_author_expression_store.py",
+    "self-media-creation-system/tests/test_author_writing_context.py",
+    "self-media-creation-system/tests/test_framework_decision.py",
+    "self-media-creation-system/tests/test_content_review_rules.py",
+    "self-media-creation-system/tests/test_content_diagnosis.py",
+    "self-media-creation-system/tests/test_topic_angle_decision.py",
+    "self-media-creation-system/tests/test_story_five_question_adapter.py",
+    "self-media-creation-system/tests/test_story_design_gate.py",
+    "self-media-creation-system/tests/test_serious_content_translation_gate.py",
+    "self-media-creation-system/tests/test_science_popularization_gate.py",
+    "self-media-creation-system/tests/test_cross_platform_fact_consistency_gate.py",
+    "self-media-creation-system/tests/test_content_packaging_review.py",
+    "self-media-creation-system/tests/test_privacy_redaction_binding.py",
+    "self-media-creation-system/tests/test_production_run_lock.py",
+    "self-media-creation-system/tests/test_platform_metrics_intake.py",
+    "self-media-creation-system/tests/test_publication_version_freeze.py",
+    "self-media-creation-system/tests/test_context_efficiency.py"
+  ],
+  "selection": "Existing directed framework, purpose, editorial, evidence/privacy and author contracts",
+  "does_not_cover": [
+    "Full repository discovery",
+    "Unavailable full MVP owner",
+    "Private thread history",
+    "Real media or model services",
+    "Actual human approval or publication"
+  ]
+}

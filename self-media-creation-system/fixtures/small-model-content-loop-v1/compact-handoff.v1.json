@@ -1,0 +1,49 @@
+{
+  "schema_version": "small-model-content-loop-compact-handoff.v1",
+  "message_id": "SMALL-MODEL-CONTENT-CANDIDATE-LOOP-20260827-01",
+  "from": "content-creation-self-media-owner",
+  "to": "fresh-gpt-5.6-luna-low",
+  "subject": "Run the synthetic evidence-to-content candidate loop",
+  "status": "pending",
+  "objective": "Use the stable CLI to produce a canonical content candidate, six standalone platform variants, deterministic gate report, and review packet from the supplied synthetic evidence fixture.",
+  "read_only_refs": [
+    "AGENT_DISCOVERY.md",
+    "fixtures/small-model-content-loop-v1/input.valid.json",
+    "fixtures/small-model-content-loop-v1/negative-cases.json"
+  ],
+  "commands": {
+    "doctor": "python -B scripts/small_model_content_loop.py doctor",
+    "positive": "python -B scripts/small_model_content_loop.py run --input fixtures/small-model-content-loop-v1/input.valid.json --run-root outputs/controlled-blind-20260828/luna-low-positive",
+    "pause": "python -B scripts/small_model_content_loop.py run --input fixtures/small-model-content-loop-v1/input.valid.json --run-root outputs/controlled-blind-20260828/luna-low-resume --pause-after candidate",
+    "resume": "python -B scripts/small_model_content_loop.py resume --run-root outputs/controlled-blind-20260828/luna-low-resume",
+    "negatives": "python -B scripts/small_model_content_loop.py check-negatives --cases fixtures/small-model-content-loop-v1/negative-cases.json --run-root outputs/controlled-blind-20260828/luna-low-negatives"
+  },
+  "execution_budget": {
+    "max_stages": 5,
+    "automatic_retries": 0,
+    "max_source_files_to_read": 3,
+    "stop_on_first_failure": true
+  },
+  "acceptance": [
+    "doctor status is pass",
+    "positive run status is completed",
+    "pause status is paused and resume completes",
+    "six generated variants are standalone and the other six registered platforms are validated only",
+    "at least five negative mutations are rejected with automatic_retries=0"
+  ],
+  "hard_boundaries": {
+    "synthetic_only": true,
+    "provider_calls": false,
+    "network": false,
+    "real_customer_or_account_data": false,
+    "publication": "manual-only",
+    "external_send": false,
+    "crm_or_knowledge_write": false,
+    "source_code_read_required": false,
+    "test_source_read_required": false
+  },
+  "receipt": {
+    "path": "outputs/controlled-blind-20260828/luna-low-blind-receipt.json",
+    "required_fields": ["status", "doctor", "positive", "pause_resume", "negative_cases", "boundaries", "files_read"]
+  }
+}

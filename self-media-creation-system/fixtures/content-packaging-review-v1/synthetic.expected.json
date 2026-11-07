@@ -1,0 +1,45 @@
+{
+  "artifact_status": "candidate-only",
+  "authority": {
+    "execution_authorized": false,
+    "external_send_authorized": false,
+    "publish_authorized": false
+  },
+  "content_binding": {
+    "body_ref": "fixtures/content-packaging-review-v1/synthetic-body.md",
+    "body_sha256": "6dd9f86f4e68eac0098583c81bfd45ccb94bbb537dd14fe2e826239f34ea7fb4",
+    "content_id": "content-synthetic-policy-inventory-001",
+    "platform": "xiaohongshu"
+  },
+  "data_classification": "synthetic-only",
+  "generated_at": "2026-08-24T11:00:00+08:00",
+  "human_review": {
+    "credential_ref": "fixtures/content-packaging-review-v1/human-review-credential.json",
+    "credential_sha256": "650a768b959ec6ef039aeb42a13bfa26a1b8ec6e7850e24774316b4c88ac8c1f",
+    "decision": "approved",
+    "review_scope_sha256": "db7a34044f823fe137c9630ee23dd82a64fa8cea8787858b53a3f2c6af35f597",
+    "reviewed_at": "2026-08-24T11:00:00+08:00",
+    "reviewer": "synthetic-human-reviewer"
+  },
+  "packaging": {
+    "cover_brief": {
+      "headline": "家里买过几份保险？",
+      "supporting_text": "一张表先把保障、缴费和受益人理清",
+      "visual_direction": "用完全虚构的保单卡片和清单，表现先盘点、再归类，不展示真实合同或身份信息。"
+    },
+    "cover_brief_sha256": "6def239b7ab018c935a9052b472ff8debc24aa9efee9ad159a2f1ab95f076f10",
+    "opening_sha256": "06521d011188ae093fc706d4b91763c20eb534576ef14c59272937e22b6f6f7e",
+    "standalone_review_sha256": "199c538674a6adfdcb2d0d0bec95527f7c2e205871f72c5db43df4e9dbc21af8",
+    "title": "家里买过几份保险，怎么整理才不容易漏",
+    "title_sha256": "73c30c395f4650e0f70b6954695b5d5cc8a3671c27f8724c39e885eadbe42372"
+  },
+  "privacy_review": null,
+  "publication_boundary": "manual-only",
+  "receipt_id": "packaging-review-708be8f2e1d69e26acf61054",
+  "receipt_payload_sha256": "455cb7253baf54c702c8307ade112b79c2cf33ba1478888d319e759ac8516fbb",
+  "reviewed_input_binding": {
+    "input_ref": "fixtures/content-packaging-review-v1/synthetic.input.json",
+    "input_sha256": "1c3f4bea3b40f012ef823536af2f1c3b89da973c620dd6b7afb09917485fe7e9"
+  },
+  "schema_version": "content-packaging-review.v1"
+}

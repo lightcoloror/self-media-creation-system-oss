@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/lightcoloror/self-media-creation-system/schemas/analysis-result.v1.schema.json",
+  "title": "analysis-result.v1",
+  "description": "Offline batch diagnostic result. It does not represent reach, recommendation weight, real comments, publication, or a final compliance decision.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "result_id", "bundle_id", "generated_at", "status", "mode", "engine", "summary", "items"],
+  "properties": {
+    "schema_version": {"const": "analysis-result.v1"},
+    "result_id": {"type": "string", "minLength": 1},
+    "bundle_id": {"type": "string", "minLength": 1},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["completed", "review_required"]},
+    "mode": {"const": "dry_run"},
+    "engine": {"type": "object", "additionalProperties": false, "required": ["id", "version", "network_calls", "models_called", "comments_simulated", "published"], "properties": {"id": {"const": "self-media-offline-rules-p0"}, "version": {"const": "1.0.0"}, "network_calls": {"const": 0}, "models_called": {"type": "array", "maxItems": 0}, "comments_simulated": {"const": false}, "published": {"const": false}}},
+    "summary": {"type": "object", "additionalProperties": false, "required": ["item_count", "finding_count", "block_count", "human_review_required"], "properties": {"item_count": {"type": "integer", "minimum": 1}, "finding_count": {"type": "integer", "minimum": 0}, "block_count": {"type": "integer", "minimum": 0}, "human_review_required": {"const": true}}},
+    "items": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/item"}}
+  },
+  "$defs": {
+    "item": {"type": "object", "additionalProperties": false, "required": ["input_ref", "roles", "cross_review", "findings", "warnings"], "properties": {"input_ref": {"type": "object", "additionalProperties": false, "required": ["profile_id", "content_id"], "properties": {"profile_id": {"type": "string", "pattern": "^profile-[a-f0-9]{64}$"}, "content_id": {"type": "string", "minLength": 1}}}, "roles": {"type": "array", "minItems": 4, "items": {"$ref": "#/$defs/role"}}, "cross_review": {"type": "object", "additionalProperties": false, "required": ["summary", "challenges"], "properties": {"summary": {"type": "string"}, "challenges": {"type": "array", "items": {"type": "string"}}}}, "findings": {"type": "array", "items": {"$ref": "#/$defs/finding"}}, "warnings": {"type": "array", "items": {"type": "string"}}}},
+    "finding": {"type": "object", "additionalProperties": false, "required": ["id", "severity", "category", "issue", "evidence_refs", "recommendation", "confidence", "confidence_reason"], "properties": {"id": {"type": "string"}, "severity": {"enum": ["info", "warning", "block"]}, "category": {"enum": ["clarity", "route", "evidence", "privacy", "medical-insurance", "voice-visual", "rights"]}, "issue": {"type": "string"}, "evidence_refs": {"type": "array", "items": {"type": "string"}}, "recommendation": {"type": "string"}, "confidence": {"enum": ["high", "medium", "low"]}, "confidence_reason": {"type": "string"}}},
+    "role": {"type": "object", "additionalProperties": false, "required": ["role_id", "purpose", "finding_ids"], "properties": {"role_id": {"enum": ["clarity-reader", "route-adapter", "evidence-safety", "voice-visual"]}, "purpose": {"type": "string"}, "finding_ids": {"type": "array", "items": {"type": "string"}}}}
+  }
+}

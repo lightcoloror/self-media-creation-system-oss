@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lightcolor/content-operations/experiment-run.schema.json",
+  "title": "自媒体内容观察性测试记录",
+  "description": "记录测试前假设、唯一主变量、观察窗口、护栏、混杂因素和有限结论。默认是观察性测试，不把日常发帖包装成因果实验。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "data_classification",
+    "experiment_run_id",
+    "account_id",
+    "test_type",
+    "state",
+    "registered_at",
+    "hypothesis",
+    "primary_variable",
+    "primary_signal",
+    "observation_window",
+    "variants",
+    "guardrails",
+    "stop_conditions",
+    "confounders",
+    "causal_scope",
+    "conclusion",
+    "authority"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "data_classification": { "enum": ["synthetic-only", "deidentified-operational"] },
+    "experiment_run_id": { "type": "string", "pattern": "^exp_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "account_id": { "type": "string", "pattern": "^acct_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "topic_ids": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^topic_[0-9A-HJKMNP-TV-Z]{26}$" },
+      "uniqueItems": true
+    },
+    "content_ids": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{5,79}$" },
+      "uniqueItems": true
+    },
+    "publication_ids": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^pub_[0-9A-HJKMNP-TV-Z]{26}$" },
+      "uniqueItems": true
+    },
+    "test_type": { "enum": ["observational-content-test", "controlled-test"] },
+    "state": { "enum": ["pre-registered", "running", "completed", "stopped"] },
+    "registered_at": { "type": "string", "format": "date-time" },
+    "started_at": { "type": ["string", "null"], "format": "date-time" },
+    "completed_at": { "type": ["string", "null"], "format": "date-time" },
+    "hypothesis": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "primary_variable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "change", "held_constant"],
+      "properties": {
+        "key": { "enum": ["title", "cover", "opening", "format", "publish-time", "cta", "other"] },
+        "change": { "type": "string", "minLength": 1, "maxLength": 800 },
+        "held_constant": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 200 },
+          "uniqueItems": true
+        }
+      }
+    },
+    "primary_signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layer", "metric_key", "direction"],
+      "properties": {
+        "layer": { "enum": ["admission", "attraction", "consumption", "value", "negative_feedback", "business"] },
+        "metric_key": { "type": "string", "pattern": "^[a-z][a-z0-9._-]{1,79}$" },
+        "direction": { "enum": ["increase", "decrease", "non-inferiority", "descriptive-only"] }
+      }
+    },
+    "observation_window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum_hours", "evaluate_after", "sample_rule"],
+      "properties": {
+        "minimum_hours": { "type": "integer", "minimum": 1 },
+        "evaluate_after": { "type": "string", "format": "date-time" },
+        "sample_rule": { "type": "string", "minLength": 1, "maxLength": 500 }
+      }
+    },
+    "variants": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["variant_id", "label", "publication_ids"],
+        "properties": {
+          "variant_id": { "type": "string", "pattern": "^[a-z][a-z0-9_-]{1,39}$" },
+          "label": { "type": "string", "minLength": 1, "maxLength": 160 },
+          "publication_ids": {
+            "type": "array",
+            "items": { "type": "string", "pattern": "^pub_[0-9A-HJKMNP-TV-Z]{26}$" },
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "allocation_method": { "type": ["string", "null"], "maxLength": 500 },
+    "guardrails": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1, "maxLength": 300 },
+      "uniqueItems": true
+    },
+    "stop_conditions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1, "maxLength": 300 },
+      "uniqueItems": true
+    },
+    "confounders": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "maxLength": 300 },
+      "uniqueItems": true
+    },
+    "causal_scope": { "enum": ["association-only", "controlled-eligible"] },
+    "conclusion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "effect_direction", "data_quality", "evidence_refs", "limitations"],
+      "properties": {
+        "status": { "enum": ["pending", "supports", "does-not-support", "inconclusive"] },
+        "effect_direction": { "enum": ["unknown", "positive", "negative", "neutral", "mixed"] },
+        "data_quality": { "enum": ["not-evaluated", "low", "medium", "high"] },
+        "evidence_refs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 1000 },
+          "uniqueItems": true
+        },
+        "limitations": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 500 },
+          "uniqueItems": true
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["execution_authorized", "publication_authority", "automatic_winner_selection"],
+      "properties": {
+        "execution_authorized": { "const": false },
+        "publication_authority": { "const": "never" },
+        "automatic_winner_selection": { "const": false }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "test_type": { "const": "observational-content-test" } }, "required": ["test_type"] },
+      "then": { "properties": { "causal_scope": { "const": "association-only" } } }
+    },
+    {
+      "if": { "properties": { "test_type": { "const": "controlled-test" } }, "required": ["test_type"] },
+      "then": {
+        "required": ["allocation_method"],
+        "properties": {
+          "allocation_method": { "type": "string", "minLength": 1, "maxLength": 500 },
+          "causal_scope": { "const": "controlled-eligible" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "state": { "const": "pre-registered" } }, "required": ["state"] },
+      "then": {
+        "required": ["started_at", "completed_at"],
+        "properties": {
+          "started_at": { "type": "null" },
+          "completed_at": { "type": "null" },
+          "conclusion": {
+            "properties": {
+              "status": { "const": "pending" },
+              "effect_direction": { "const": "unknown" },
+              "data_quality": { "const": "not-evaluated" },
+              "evidence_refs": { "maxItems": 0 }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "state": { "const": "running" } }, "required": ["state"] },
+      "then": {
+        "required": ["started_at", "completed_at"],
+        "properties": {
+          "started_at": { "type": "string", "format": "date-time" },
+          "completed_at": { "type": "null" },
+          "conclusion": {
+            "properties": {
+              "status": { "const": "pending" },
+              "effect_direction": { "const": "unknown" },
+              "data_quality": { "const": "not-evaluated" },
+              "evidence_refs": { "maxItems": 0 }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["pre-registered", "running"] } }, "required": ["state"] },
+      "then": { "properties": { "conclusion": { "properties": { "status": { "const": "pending" } } } } }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["completed", "stopped"] } }, "required": ["state"] },
+      "then": {
+        "required": ["completed_at"],
+        "properties": {
+          "completed_at": { "type": "string", "format": "date-time" },
+          "conclusion": {
+            "properties": {
+              "status": { "enum": ["supports", "does-not-support", "inconclusive"] },
+              "evidence_refs": { "minItems": 1 },
+              "limitations": { "minItems": 1 }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

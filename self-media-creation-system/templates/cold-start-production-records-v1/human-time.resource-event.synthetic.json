@@ -1,0 +1,30 @@
+{
+  "schema_version": "0.1",
+  "data_classification": "synthetic-only",
+  "resource_event_id": "res_7K04SKXBWAMWPX3AT2D64RN7BG",
+  "account_id": "acct_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+  "content_id": "synthetic-cold-start-piece-001",
+  "publication_id": null,
+  "resource_type": "human-time",
+  "occurred_at": "2026-08-29T10:30:00+08:00",
+  "quantity": {
+    "value": 1.5,
+    "unit": "hours"
+  },
+  "cost": {
+    "amount": 0,
+    "currency": "CNY",
+    "tax_included": null
+  },
+  "evidence_status": "manual-record",
+  "evidence_refs": [],
+  "notes": "production_metric=total_production_time_hours; scope=topic_to_publish_ready; synthetic_only=true",
+  "privacy": {
+    "personal_payment_data_included": false,
+    "account_credentials_included": false
+  },
+  "authority": {
+    "payment_authorized": false,
+    "execution_authorized": false
+  }
+}

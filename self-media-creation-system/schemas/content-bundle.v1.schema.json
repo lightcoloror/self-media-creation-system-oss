@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/lightcoloror/self-media-creation-system/schemas/content-bundle.v1.schema.json",
+  "title": "content-bundle.v1",
+  "description": "Deidentified, local-only batch input. It is neither a publishing payload nor a platform-data archive.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "bundle_id", "created_at", "platform", "privacy", "items"],
+  "properties": {
+    "schema_version": {"const": "content-bundle.v1"},
+    "bundle_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "created_at": {"type": "string", "format": "date-time"},
+    "platform": {"type": "string", "minLength": 1, "maxLength": 80},
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["local_only", "mode", "comments_included", "metrics_included", "raw_media_included", "content_text_may_contain_personal_data"],
+      "properties": {
+        "local_only": {"const": true},
+        "mode": {"const": "dry_run"},
+        "comments_included": {"const": false},
+        "metrics_included": {"const": false},
+        "raw_media_included": {"const": false},
+        "content_text_may_contain_personal_data": {"type": "boolean"}
+      }
+    },
+    "items": {"type": "array", "minItems": 1, "maxItems": 100, "items": {"$ref": "#/$defs/item"}}
+  },
+  "$defs": {
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile_id", "content_id", "content", "evidence_refs"],
+      "properties": {
+        "profile_id": {"type": "string", "pattern": "^profile-[a-f0-9]{64}$"},
+        "content_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "content": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["title", "body", "visual_description", "tags"],
+          "properties": {
+            "title": {"type": "string", "maxLength": 200},
+            "body": {"type": "string", "maxLength": 50000},
+            "visual_description": {"type": "string", "maxLength": 5000},
+            "tags": {"type": "array", "maxItems": 30, "items": {"type": "string", "minLength": 1, "maxLength": 100}}
+          }
+        },
+        "routing_context": {"$ref": "#/$defs/routing_context"},
+        "evidence_refs": {"type": "array", "maxItems": 100, "items": {"$ref": "#/$defs/evidence_ref"}}
+      }
+    },
+    "routing_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "task_type": {"type": "string"},
+        "account_ip": {"type": "string"},
+        "content_job": {"type": "string"},
+        "primary_audience": {"type": "string"},
+        "primary_goal": {"type": "string"},
+        "format": {"type": "string"},
+        "evidence_risk": {"type": "string"},
+        "voice_visual_route": {"type": "string"},
+        "structure_route": {"enum": ["direct-answer", "decision-reframe", "scenario-branch", "gap-diagnosis", "tradeoff-comparison", "case-review", "mechanism-explanation", "tool-action", "boundary-map", "story-arc", "opinion-argument", "custom"]},
+        "structure_route_note": {"type": "string", "maxLength": 2000},
+        "planning_scope": {"enum": ["single", "series"]},
+        "series_question": {"type": "string", "maxLength": 1000},
+        "current_piece_decision": {"type": "string", "maxLength": 1000},
+        "next_piece_candidates": {"type": "array", "maxItems": 30, "items": {"type": "string", "minLength": 1, "maxLength": 500}},
+        "manual_route_override": {"$ref": "#/$defs/manual_route_override"},
+        "question_structure_route": {"enum": ["direct-answer", "decision-reframe", "not-applicable"]},
+        "audience_entry_question": {"type": "string", "maxLength": 500},
+        "surface_answer": {"type": "string", "maxLength": 1000},
+        "professional_core_question": {"type": "string", "maxLength": 1000},
+        "client_decision": {"type": "string", "maxLength": 1000},
+        "scope_boundary": {"type": "string", "maxLength": 2000},
+        "public_expertise_level": {"enum": ["client-usable", "peer-technical", "not-applicable"]}
+      },
+      "allOf": [
+        {
+          "if": {"required": ["structure_route"], "properties": {"structure_route": {"const": "custom"}}},
+          "then": {"required": ["structure_route_note"], "properties": {"structure_route_note": {"minLength": 1}}}
+        },
+        {
+          "if": {"required": ["planning_scope"], "properties": {"planning_scope": {"const": "series"}}},
+          "then": {"required": ["series_question", "current_piece_decision"], "properties": {"series_question": {"minLength": 1}, "current_piece_decision": {"minLength": 1}}}
+        }
+      ]
+    },
+    "manual_route_override": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stage", "from", "to", "reason", "changed_by"],
+      "properties": {
+        "stage": {"enum": ["topic", "research", "outline", "draft", "review"]},
+        "from": {"type": "string", "minLength": 1, "maxLength": 100},
+        "to": {"type": "string", "minLength": 1, "maxLength": 100},
+        "reason": {"type": "string", "minLength": 1, "maxLength": 2000},
+        "changed_by": {"const": "human"}
+      }
+    },
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref_id", "source_type", "status", "privacy_status"],
+      "properties": {
+        "ref_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "source_type": {"enum": ["user-confirmed", "local-logseq-fact", "obsidian-synthesis", "ai-draft", "official-source", "candidate-evidence", "published-content", "unknown"]},
+        "status": {"enum": ["verified", "candidate", "unknown"]},
+        "privacy_status": {"enum": ["cleared", "deidentified", "not-applicable", "unknown"]},
+        "claim_scope": {"type": "string", "maxLength": 500}
+      }
+    }
+  }
+}

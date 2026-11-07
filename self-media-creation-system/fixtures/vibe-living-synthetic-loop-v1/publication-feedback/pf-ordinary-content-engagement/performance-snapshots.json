@@ -1,0 +1,83 @@
+{
+  "items": [
+    {
+      "as_of": "2026-08-18T00:01:00+08:00",
+      "captured_at": "2026-08-18T00:02:00+08:00",
+      "data_completeness": "complete",
+      "metric_dictionary_version": "synthetic.content-signals.0.1",
+      "metrics": [
+        {
+          "dimensions": {
+            "synthetic": true
+          },
+          "metric_key": "views",
+          "unit": "count",
+          "value": 120
+        },
+        {
+          "dimensions": {
+            "synthetic": true
+          },
+          "metric_key": "likes",
+          "unit": "count",
+          "value": 8
+        },
+        {
+          "dimensions": {
+            "synthetic": true
+          },
+          "metric_key": "saves",
+          "unit": "count",
+          "value": 3
+        }
+      ],
+      "notes": "Fully synthetic metrics for offline contract verification only.",
+      "publication_id": "pub_8P7WP5K3A1RXS7F2S2J9HJEPXM",
+      "schema_version": "0.1",
+      "snapshot_id": "snap_HVV7EZHD3QKEYX31KPGMAV749C",
+      "source_type": "other",
+      "timezone": "Asia/Shanghai",
+      "window_label": "early"
+    },
+    {
+      "as_of": "2026-08-22T12:01:00+08:00",
+      "captured_at": "2026-08-22T12:02:00+08:00",
+      "data_completeness": "complete",
+      "metric_dictionary_version": "synthetic.content-signals.0.1",
+      "metrics": [
+        {
+          "dimensions": {
+            "synthetic": true
+          },
+          "metric_key": "views",
+          "unit": "count",
+          "value": 170
+        },
+        {
+          "dimensions": {
+            "synthetic": true
+          },
+          "metric_key": "likes",
+          "unit": "count",
+          "value": 10
+        },
+        {
+          "dimensions": {
+            "synthetic": true
+          },
+          "metric_key": "saves",
+          "unit": "count",
+          "value": 5
+        }
+      ],
+      "notes": "Fully synthetic metrics for offline contract verification only.",
+      "publication_id": "pub_8P7WP5K3A1RXS7F2S2J9HJEPXM",
+      "schema_version": "0.1",
+      "snapshot_id": "snap_14PYCHNMT2AXGR6H1VEP5TTTE1",
+      "source_type": "other",
+      "timezone": "Asia/Shanghai",
+      "window_label": "d7"
+    }
+  ],
+  "synthetic_only": true
+}

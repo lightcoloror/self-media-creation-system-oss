@@ -1,0 +1,8 @@
+{
+  "schema_version": "self-media-agent-request.v1",
+  "request_id": "synthetic-rework-001",
+  "workflow_goal": "context_efficient_rework",
+  "synthetic_only": true,
+  "available_inputs": ["change_description", "decision_sheet", "rough_cut_workspace", "source_media"],
+  "input_refs": []
+}

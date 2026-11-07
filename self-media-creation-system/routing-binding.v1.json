@@ -1,0 +1,118 @@
+{
+  "schema_version": "self-media-routing-binding.v1",
+  "binding_id": "self-media-to-registered-content-routing",
+  "binding_version": "1.9.0",
+  "workspace_root_relative_to_repository": "..",
+  "canonical_root_relative_to_workspace": "docs/content-creation-system/routing",
+  "canonical_contract_set_id": "registered-content-routing",
+  "canonical_contract_set_version": "1.9.1",
+  "load_policy": "whole-contract-set-only",
+  "fallback_policy": "fail-closed-no-legacy-fallback",
+  "mixed_roots_prohibited": true,
+  "legacy_root_snapshots": [
+    {
+      "path": "task-router.json",
+      "schema_version": "0.7",
+      "canonical_json_sha256": "40c04b17dbb476ed6c5730f5bcb280826ba48bcb35cfd8a82294c8165b6cff7a",
+      "authority": "deprecated-snapshot-only"
+    },
+    {
+      "path": "format-adapters.json",
+      "schema_version": "0.2",
+      "canonical_json_sha256": "a440f443d2121da5b4900376ead4031c772dd9548a6faa4a419f4221798a5c2e",
+      "authority": "deprecated-snapshot-only"
+    },
+    {
+      "path": "platform-overlays.json",
+      "schema_version": "0.2",
+      "canonical_json_sha256": "a009a0bb4fc779e4914fd1b46a8427bab6684857e182f383a302621e9181006d",
+      "authority": "deprecated-snapshot-only"
+    },
+    {
+      "path": "skill-registry.json",
+      "schema_version": "0.3",
+      "canonical_json_sha256": "17fecd993a02ec10489d57b48b5187915f10e7c976a52b0b3bca8e9675b71b30",
+      "authority": "deprecated-snapshot-only"
+    },
+    {
+      "path": "quality-gates.json",
+      "schema_version": "0.6",
+      "canonical_json_sha256": "210a8be7fba964e7d2143ea5073e7fa03fc203186799e4220a863688d03bc0c7",
+      "authority": "deprecated-snapshot-only"
+    }
+  ],
+  "operational_extensions": [
+    {
+      "path": "config/creation-routes.v1.json",
+      "role": "creation-route-selection",
+      "may_replace_canonical_component": false
+    },
+    {
+      "path": "channel-portfolio.v1.json",
+      "role": "channel-portfolio",
+      "may_replace_canonical_component": false
+    },
+    {
+      "path": "structure-route-playbook.md",
+      "role": "structure-playbook",
+      "may_replace_canonical_component": false
+    },
+    {
+      "path": "content-effect-mechanisms.md",
+      "role": "effect-mechanism-playbook",
+      "may_replace_canonical_component": false
+    },
+    {
+      "path": "schemas/serious-content-translation-review.v1.schema.json",
+      "role": "serious-content-translation-review",
+      "may_replace_canonical_component": false
+    },
+    {
+      "path": "schemas/science-popularization-review.v1.schema.json",
+      "role": "science-popularization-review",
+      "may_replace_canonical_component": false
+    },
+    {
+      "path": "schemas/cross-platform-fact-consistency-review.v1.schema.json",
+      "role": "cross-platform-fact-consistency-review",
+      "may_replace_canonical_component": false
+    },
+    {
+      "path": "schemas/story-design-card.v1.schema.json",
+      "role": "story-emotion-design",
+      "may_replace_canonical_component": false
+    },
+    {
+      "path": "schemas/story-material-observation.v1.schema.json",
+      "role": "story-material-candidate",
+      "may_replace_canonical_component": false
+    },
+    {
+      "path": "schemas/topic-angle-decision.v1.schema.json",
+      "role": "topic-angle-editorial-decision",
+      "may_replace_canonical_component": false
+    },
+    {
+      "path": "schemas/story-five-question-adapter.v1.schema.json",
+      "role": "story-five-question-view-adapter",
+      "may_replace_canonical_component": false
+    },
+    {
+      "path": "schemas/topic-angle-decision.v2.schema.json",
+      "role": "framework-four-outcome-editorial-decision",
+      "may_replace_canonical_component": false
+    }
+  ],
+  "boundaries": {
+    "publication": "manual-only",
+    "external_send": "not-authorized",
+    "customer_contact": "not-authorized",
+    "crm_write": "not-authorized",
+    "knowledge_base_write": "not-authorized"
+  },
+  "provenance": {
+    "created_at": "2026-08-21T16:29:46+08:00",
+    "updated_at": "2026-11-02T20:20:30+08:00",
+    "acting_tool_model": "Codex (gpt-6.1-sol)"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Persisted author revision bound to the actual delivered draft",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "synthetic_only", "context_ref", "draft_ref", "revision_ref", "review_ref", "publication_authorized", "payload_sha256"],
+  "properties": {
+    "schema_version": {"const": "author-writing-revision.v1"},
+    "request_id": {"type": "string", "minLength": 1},
+    "synthetic_only": {"type": "boolean"},
+    "context_ref": {"$ref": "#/$defs/file"},
+    "draft_ref": {"$ref": "#/$defs/file"},
+    "revision_ref": {"$ref": "#/$defs/record"},
+    "review_ref": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/record"}]},
+    "publication_authorized": {"const": false},
+    "payload_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "$defs": {
+    "file": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}},
+    "record": {"type": "object", "additionalProperties": false, "required": ["record_id", "record_sha256"], "properties": {"record_id": {"type": "string", "minLength": 1}, "record_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}}
+  }
+}

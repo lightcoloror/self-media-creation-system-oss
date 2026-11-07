@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/video-review-plan.v1.schema.json",
+  "title": "Self-media source-time-range review plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "plan_id", "task_id", "mode", "inputs", "review_scope", "human_review_requests", "review_interface", "loading_strategy", "proxy_profile", "owner_binding", "execution_policy_ref", "downstream_invalidations", "required_checks", "authority_boundary", "plan_payload_sha256"],
+  "properties": {
+    "schema_version": {"const": "self-media-video-review-plan.v1"},
+    "plan_id": {"type": "string", "minLength": 7},
+    "task_id": {"type": "string", "minLength": 6},
+    "mode": {"enum": ["initial_review", "limited_rework"]},
+    "inputs": {"type": "object"},
+    "review_scope": {"type": "object"},
+    "human_review_requests": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/humanReviewRequest"}
+    },
+    "review_interface": {"const": {"tool_id": "video-knowledge-pipeline", "surface": "targeted-review", "delivery": "source_time_range_manifest"}},
+    "loading_strategy": {
+      "const": {
+        "proxy_first": false,
+        "full_resolution_inline": true,
+        "full_resolution_load_condition": "source_time_range_review"
+      }
+    },
+    "proxy_profile": {
+      "const": {"enabled": false, "reason": "source_time_range_review"}
+    },
+    "owner_binding": {
+      "type": "object",
+      "required": ["tool_id", "rough_cut_contract", "material_cli", "ffmpeg_outlet", "execution_authority"],
+      "properties": {
+        "tool_id": {"const": "mvp-video-pipeline"},
+        "rough_cut_contract": {"const": "video_creation_pipeline.rough_cut_workspace.v2"},
+        "material_cli": {"const": "video-material-workflow"},
+        "ffmpeg_outlet": {"const": "video_creation_pipeline.single_ffmpeg_outlet"},
+        "execution_authority": {"const": "explicit_executor_handoff_required"}
+      },
+      "additionalProperties": false
+    },
+    "execution_policy_ref": {
+      "const": {
+        "canonical_owner": "video_creation_pipeline.single_ffmpeg_outlet",
+        "policy_id": "video-review-resource-guard-v1",
+        "heavy_media_concurrency": 1,
+        "full_decode_once_per": "exact_media_sha256_and_check_profile_sha256",
+        "proxy_first": false,
+        "limited_rework_scope": "changed_windows_only",
+        "cached_report_analysis_parallel_allowed": true
+      }
+    },
+    "downstream_invalidations": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+    "required_checks": {"type": "array", "minItems": 5, "uniqueItems": true, "items": {"type": "string"}},
+    "authority_boundary": {
+      "const": {"plan_only": true, "media_rendered": false, "final_candidate_approved": false, "automatic_publish": false, "second_ffmpeg_orchestrator_created": false}
+    },
+    "plan_payload_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "humanReviewRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "review_id", "source_window_id", "artifact_sha256", "issue_start_seconds",
+        "issue_end_seconds", "review_start_seconds", "review_end_seconds",
+        "timecode_start", "timecode_end", "workflow_stage", "review_lane", "review_purpose", "review_question",
+        "playback_mode", "review_access_mode", "decision_options"
+      ],
+      "properties": {
+        "review_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,119}$"},
+        "source_window_id": {"type": "string", "minLength": 1},
+        "artifact_sha256": {"$ref": "#/$defs/sha256"},
+        "issue_start_seconds": {"type": "number", "minimum": 0},
+        "issue_end_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "review_start_seconds": {"type": "number", "minimum": 0},
+        "review_end_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "timecode_start": {"type": "string", "pattern": "^[0-9]{2,}:[0-5][0-9]\\.[0-9]{3}$"},
+        "timecode_end": {"type": "string", "pattern": "^[0-9]{2,}:[0-5][0-9]\\.[0-9]{3}$"},
+        "workflow_stage": {"type": "string", "minLength": 1, "maxLength": 80},
+        "review_lane": {"enum": ["audio", "subtitle", "picture", "privacy", "compliance", "publication", "mixed"]},
+        "review_purpose": {"type": "string", "minLength": 1, "maxLength": 240},
+        "review_question": {"type": "string", "minLength": 1, "maxLength": 500},
+        "reference_text": {"type": "string", "maxLength": 2000},
+        "playback_mode": {"enum": ["normal", "audio_only", "muted", "frame_step"]},
+        "review_access_mode": {"const": "source_time_range"},
+        "decision_options": {"const": ["pass", "needs_rework", "uncertain"]}
+      }
+    }
+  }
+}

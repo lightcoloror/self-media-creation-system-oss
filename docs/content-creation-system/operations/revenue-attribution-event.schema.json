@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lightcolor/content-operations/revenue-attribution-event.schema.json",
+  "title": "自媒体收益归因事件",
+  "description": "人工确认后的去标识化经营归因记录。归因是证据支持的信用分配，不是因果证明；内容互动不能单独创建收益事件。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "data_classification",
+    "revenue_event_id",
+    "account_id",
+    "occurred_at",
+    "amount",
+    "attribution_type",
+    "attribution_model",
+    "publication_ids",
+    "lead_event_ids",
+    "evidence_refs",
+    "review",
+    "causal_claim",
+    "privacy",
+    "authority"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "data_classification": { "enum": ["synthetic-only", "deidentified-operational"] },
+    "revenue_event_id": { "type": "string", "pattern": "^rev_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "account_id": { "type": "string", "pattern": "^acct_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "occurred_at": { "type": "string", "format": "date-time" },
+    "amount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "currency", "disclosure"],
+      "properties": {
+        "value": { "type": ["number", "null"], "minimum": 0 },
+        "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+        "disclosure": { "enum": ["recorded", "withheld"] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "disclosure": { "const": "recorded" } }, "required": ["disclosure"] },
+          "then": { "properties": { "value": { "type": "number", "minimum": 0 } } }
+        },
+        {
+          "if": { "properties": { "disclosure": { "const": "withheld" } }, "required": ["disclosure"] },
+          "then": { "properties": { "value": { "type": "null" } } }
+        }
+      ]
+    },
+    "attribution_type": { "enum": ["direct", "assisted", "unknown"] },
+    "attribution_model": { "enum": ["manual-evidence", "first-touch", "last-touch", "unknown"] },
+    "publication_ids": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^pub_[0-9A-HJKMNP-TV-Z]{26}$" },
+      "uniqueItems": true
+    },
+    "lead_event_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "pattern": "^lead_[0-9A-HJKMNP-TV-Z]{26}$" },
+      "uniqueItems": true
+    },
+    "evidence_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1, "maxLength": 1000 },
+      "uniqueItems": true
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["human_confirmed", "reviewer_ref", "reviewed_at"],
+      "properties": {
+        "human_confirmed": { "const": true },
+        "reviewer_ref": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "reviewed_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "causal_claim": { "const": false },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["deidentified", "customer_identity_included", "payment_details_included"],
+      "properties": {
+        "deidentified": { "const": true },
+        "customer_identity_included": { "const": false },
+        "payment_details_included": { "const": false }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["execution_authorized", "crm_write_performed", "content_metrics_used_as_proof"],
+      "properties": {
+        "execution_authorized": { "const": false },
+        "crm_write_performed": { "const": false },
+        "content_metrics_used_as_proof": { "const": false }
+      }
+    }
+  }
+}

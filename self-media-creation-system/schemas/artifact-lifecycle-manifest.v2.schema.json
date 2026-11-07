@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/artifact-lifecycle-manifest.v2.schema.json",
+  "title": "Executable self-media artifact lifecycle manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "revision",
+    "updated_at",
+    "workspace_ref",
+    "quarantine_dir",
+    "policy",
+    "artifacts",
+    "history"
+  ],
+  "properties": {
+    "schema_version": {"const": "self-media-artifact-lifecycle-manifest.v2"},
+    "manifest_id": {"$ref": "#/$defs/id"},
+    "revision": {"type": "integer", "minimum": 0},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "workspace_ref": {"type": "string", "minLength": 1, "maxLength": 240},
+    "quarantine_dir": {"$ref": "#/$defs/relativePath"},
+    "policy": {"$ref": "#/$defs/policy"},
+    "artifacts": {"type": "array", "items": {"$ref": "#/$defs/artifact"}},
+    "history": {"type": "array", "items": {"$ref": "#/$defs/history"}}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$"},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![A-Za-z]:[\\\\/])(?!/)(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$"
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "large_file_threshold_bytes",
+        "task_intermediate_limit_bytes",
+        "keep_previous_review_versions",
+        "retention_hours",
+        "automatic_purge_authorized"
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "minimum_free_bytes",
+            "warning_free_bytes",
+            "output_headroom_multiplier"
+          ]
+        },
+        {"required": ["min_free_ratio"]}
+      ],
+      "properties": {
+        "large_file_threshold_bytes": {"type": "integer", "minimum": 1},
+        "task_intermediate_limit_bytes": {"type": "integer", "minimum": 1},
+        "min_free_ratio": {"type": "number", "minimum": 0.01, "maximum": 0.95},
+        "minimum_free_bytes": {"type": "integer", "minimum": 0},
+        "warning_free_bytes": {"type": "integer", "minimum": 0},
+        "output_headroom_multiplier": {"type": "number", "minimum": 1},
+        "keep_previous_review_versions": {"type": "integer", "minimum": 0, "maximum": 10},
+        "retention_hours": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["machine_failure", "user_rejected", "superseded", "task_cache"],
+          "properties": {
+            "machine_failure": {"type": "integer", "minimum": 0},
+            "user_rejected": {"type": "integer", "minimum": 0},
+            "superseded": {"type": "integer", "minimum": 0},
+            "task_cache": {"type": "integer", "minimum": 0}
+          }
+        },
+        "automatic_purge_authorized": {"type": "boolean"}
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_id",
+        "video_id",
+        "path",
+        "bytes",
+        "artifact_kind",
+        "status",
+        "source_sha256",
+        "created_at",
+        "updated_at",
+        "superseded_by",
+        "depends_on",
+        "referenced_by",
+        "retain_reason",
+        "failure_reason",
+        "delete_after",
+        "quarantine_path",
+        "original_path",
+        "purge_approved"
+      ],
+      "properties": {
+        "artifact_id": {"$ref": "#/$defs/id"},
+        "video_id": {"$ref": "#/$defs/id"},
+        "path": {"$ref": "#/$defs/relativePath"},
+        "bytes": {"type": "integer", "minimum": 0},
+        "artifact_kind": {
+          "enum": [
+            "raw_source",
+            "reviewed_source",
+            "fine_cut",
+            "candidate",
+            "locked_master",
+            "final",
+            "recipe",
+            "proxy",
+            "cache",
+            "frame_extract",
+            "chunk",
+            "browser_profile",
+            "receipt",
+            "other"
+          ]
+        },
+        "status": {
+          "enum": [
+            "created",
+            "candidate",
+            "qa_pass",
+            "qa_fail",
+            "locked",
+            "superseded",
+            "quarantine",
+            "purged"
+          ]
+        },
+        "source_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "created_at": {"type": "string", "format": "date-time"},
+        "updated_at": {"type": "string", "format": "date-time"},
+        "superseded_by": {"oneOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]},
+        "depends_on": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "referenced_by": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "retain_reason": {"type": ["string", "null"], "maxLength": 500},
+        "failure_reason": {"type": ["string", "null"], "maxLength": 500},
+        "delete_after": {"type": ["string", "null"], "format": "date-time"},
+        "quarantine_path": {"oneOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]},
+        "original_path": {"oneOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]},
+        "purge_approved": {"type": "boolean"}
+      }
+    },
+    "history": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation_id", "at", "action", "artifact_ids", "reason"],
+      "properties": {
+        "operation_id": {"$ref": "#/$defs/id"},
+        "at": {"type": "string", "format": "date-time"},
+        "action": {"type": "string", "minLength": 1, "maxLength": 80},
+        "artifact_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "reason": {"type": "string", "minLength": 1, "maxLength": 500}
+      }
+    }
+  }
+}

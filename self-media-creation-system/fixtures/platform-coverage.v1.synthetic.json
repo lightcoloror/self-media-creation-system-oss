@@ -1,0 +1,124 @@
+{
+  "schema_version": "self-media-platform-coverage-fixture.v1",
+  "synthetic_only": true,
+  "authority": "test-expectation-only-not-a-platform-enum-source",
+  "canonical_contract_set_ref": "docs/content-creation-system/routing/routing-contract-set.v1.json#registered-content-routing@1.9.1",
+  "platform_cases": [
+    {
+      "platform": "wechat-moments",
+      "priority": "P0",
+      "acquisition_mode": "manual-private-input",
+      "runtime_status": "not-verified",
+      "real_media_download": "not-authorized"
+    },
+    {
+      "platform": "wechat-groups-wecom",
+      "priority": "service-only",
+      "acquisition_mode": "manual-private-input",
+      "runtime_status": "not-verified",
+      "real_media_download": "not-authorized"
+    },
+    {
+      "platform": "xiaohongshu",
+      "priority": "P0",
+      "acquisition_mode": "public-readonly-tools",
+      "runtime_status": "not-verified",
+      "real_media_download": "not-authorized"
+    },
+    {
+      "platform": "wechat-video",
+      "priority": "P1",
+      "acquisition_mode": "share-link-assisted",
+      "runtime_status": "not-verified",
+      "real_media_download": "not-authorized"
+    },
+    {
+      "platform": "douyin",
+      "priority": "pause",
+      "acquisition_mode": "overlay-only",
+      "runtime_status": "not-verified",
+      "real_media_download": "not-authorized"
+    },
+    {
+      "platform": "bilibili",
+      "priority": "P2",
+      "acquisition_mode": "public-readonly-tools",
+      "runtime_status": "not-verified",
+      "real_media_download": "not-authorized"
+    },
+    {
+      "platform": "wechat-article",
+      "priority": "P2",
+      "acquisition_mode": "public-readonly-tools",
+      "runtime_status": "not-verified",
+      "real_media_download": "not-authorized"
+    },
+    {
+      "platform": "zhihu",
+      "priority": "observe",
+      "acquisition_mode": "general-web-best-effort",
+      "runtime_status": "not-verified",
+      "real_media_download": "not-authorized"
+    },
+    {
+      "platform": "kuaishou",
+      "priority": "observe",
+      "acquisition_mode": "overlay-only",
+      "runtime_status": "not-verified",
+      "real_media_download": "not-authorized"
+    },
+    {
+      "platform": "toutiao",
+      "priority": "observe",
+      "acquisition_mode": "general-web-best-effort",
+      "runtime_status": "not-verified",
+      "real_media_download": "not-authorized"
+    },
+    {
+      "platform": "weibo",
+      "priority": "observe",
+      "acquisition_mode": "general-web-best-effort",
+      "runtime_status": "not-verified",
+      "real_media_download": "not-authorized"
+    },
+    {
+      "platform": "youtube",
+      "priority": "observe",
+      "acquisition_mode": "public-readonly-tools",
+      "runtime_status": "not-verified",
+      "real_media_download": "not-authorized"
+    }
+  ],
+  "negative_cases": [
+    {
+      "id": "unknown-platform",
+      "mutation": "append an unregistered platform",
+      "expected_error": "channel portfolio must cover every task-router platform exactly once"
+    },
+    {
+      "id": "automatic-execution-authority",
+      "mutation": "set acquisition_runtime.execution_authority to publish",
+      "expected_error": "schema acquisition_runtime.execution_authority"
+    },
+    {
+      "id": "account-access-escalation",
+      "mutation": "set acquisition_runtime.account_access to authorized",
+      "expected_error": "schema acquisition_runtime.account_access"
+    },
+    {
+      "id": "wechat-video-real-runtime-overclaim",
+      "mutation": "set wechat-video runtime_status to available-with-boundaries",
+      "expected_error": "acquisition/runtime fixture drift: wechat-video"
+    },
+    {
+      "id": "public-adaptation-limit-escalation",
+      "mutation": "set public_adaptation_max to 3",
+      "expected_error": "schema weekly_core_unit.public_adaptation_max"
+    },
+    {
+      "id": "publication-authority-escalation",
+      "mutation": "set publication_boundary to automatic",
+      "expected_error": "schema publication_boundary"
+    }
+  ]
+}

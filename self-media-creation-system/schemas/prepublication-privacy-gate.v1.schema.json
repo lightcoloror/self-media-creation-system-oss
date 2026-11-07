@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/prepublication-privacy-gate.v1.schema.json",
+  "title": "Prepublication voice and face-treatment gate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "gate_id",
+    "evaluated_at",
+    "decision_sha256",
+    "review_sha256",
+    "candidate",
+    "status",
+    "manual_publication_eligible",
+    "automatic_publish",
+    "customer_contact_performed_by_system",
+    "reuse_local_recipes",
+    "stop_reasons",
+    "rework_request"
+  ],
+  "properties": {
+    "schema_version": {"const": "self-media-prepublication-privacy-gate.v1"},
+    "gate_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{5,99}$"},
+    "evaluated_at": {"type": "string", "format": "date-time"},
+    "decision_sha256": {"$ref": "#/$defs/sha256"},
+    "review_sha256": {"$ref": "#/$defs/sha256"},
+    "candidate": {"$ref": "#/$defs/candidate"},
+    "status": {
+      "enum": [
+        "internal_preview_only",
+        "customer_confirmed_candidate",
+        "limited_rework_required",
+        "withdrawn"
+      ]
+    },
+    "manual_publication_eligible": {"type": "boolean"},
+    "automatic_publish": {"const": false},
+    "customer_contact_performed_by_system": {"const": false},
+    "reuse_local_recipes": {"const": true},
+    "stop_reasons": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1, "maxLength": 120}
+    },
+    "rework_request": {"oneOf": [{"$ref": "#/$defs/rework"}, {"type": "null"}]}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "customer_confirmed_candidate"}}},
+      "then": {
+        "properties": {
+          "manual_publication_eligible": {"const": true},
+          "rework_request": {"type": "null"}
+        }
+      },
+      "else": {"properties": {"manual_publication_eligible": {"const": false}}}
+    },
+    {
+      "if": {"properties": {"status": {"const": "limited_rework_required"}}},
+      "then": {"properties": {"rework_request": {"$ref": "#/$defs/rework"}}},
+      "else": {"properties": {"rework_request": {"type": "null"}}}
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![A-Za-z]:[\\\\/])(?!/)(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "expected_sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/relativePath"},
+        "expected_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "nullableArtifact": {"oneOf": [{"$ref": "#/$defs/artifact"}, {"type": "null"}]},
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "expected_sha256", "duration_seconds"],
+      "properties": {
+        "path": {"$ref": "#/$defs/relativePath"},
+        "expected_sha256": {"$ref": "#/$defs/sha256"},
+        "duration_seconds": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "localEditState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_edl",
+        "speaker_segments",
+        "face_tracks",
+        "identity_reference_manifest",
+        "visible_window_manifest",
+        "mask_recipe_catalog",
+        "voice_recipe_catalog",
+        "motion_recipe_catalog"
+      ],
+      "properties": {
+        "source_edl": {"$ref": "#/$defs/nullableArtifact"},
+        "speaker_segments": {"$ref": "#/$defs/nullableArtifact"},
+        "face_tracks": {"$ref": "#/$defs/nullableArtifact"},
+        "identity_reference_manifest": {"$ref": "#/$defs/nullableArtifact"},
+        "visible_window_manifest": {"$ref": "#/$defs/nullableArtifact"},
+        "mask_recipe_catalog": {"$ref": "#/$defs/nullableArtifact"},
+        "voice_recipe_catalog": {"$ref": "#/$defs/nullableArtifact"},
+        "motion_recipe_catalog": {"$ref": "#/$defs/nullableArtifact"}
+      }
+    },
+    "changedWindow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "window_id",
+        "subject_ref",
+        "kind",
+        "start_seconds",
+        "end_seconds",
+        "requested_action",
+        "reason_summary",
+        "local_recipe_ref"
+      ],
+      "properties": {
+        "window_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,79}$"},
+        "subject_ref": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,79}$"},
+        "kind": {"enum": ["voice", "face", "mask_strength", "motion", "segment"]},
+        "start_seconds": {"type": "number", "minimum": 0},
+        "end_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "requested_action": {"type": "string", "minLength": 1, "maxLength": 160},
+        "reason_summary": {"type": "string", "minLength": 1, "maxLength": 240},
+        "local_recipe_ref": {"oneOf": [{"type": "string", "minLength": 1, "maxLength": 160}, {"type": "null"}]}
+      }
+    },
+    "rework": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "recalculation_scope",
+        "frozen_scope",
+        "source_candidate",
+        "local_edit_state",
+        "changed_windows",
+        "change_kinds",
+        "downstream_invalidations",
+        "required_followups",
+        "review_interface"
+      ],
+      "properties": {
+        "mode": {"const": "limited_rework"},
+        "recalculation_scope": {"const": "changed_windows_only"},
+        "frozen_scope": {"const": "all_unlisted_windows"},
+        "source_candidate": {"$ref": "#/$defs/candidate"},
+        "local_edit_state": {"$ref": "#/$defs/localEditState"},
+        "changed_windows": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/changedWindow"}
+        },
+        "change_kinds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["audio", "timing", "visual_source", "mask"]}
+        },
+        "downstream_invalidations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "maxLength": 120}
+        },
+        "required_followups": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "maxLength": 120}
+        },
+        "review_interface": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["tool_id", "surface", "delivery"],
+          "properties": {
+            "tool_id": {"const": "video-knowledge-pipeline"},
+            "surface": {"const": "targeted-review"},
+            "delivery": {"const": "source_time_range_manifest"}
+          }
+        }
+      }
+    }
+  }
+}

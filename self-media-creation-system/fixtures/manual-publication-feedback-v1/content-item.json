@@ -1,0 +1,507 @@
+{
+  "channels": {
+    "article": {
+      "adapter_version": "0.2.0",
+      "body_ref": "research-edca758a6ed755c9e91aecb8.article.md",
+      "platform_metadata": {
+        "audience": "synthetic insurance education reader",
+        "draft_basis": "verified",
+        "mode": "draft_only",
+        "research_refs": {
+          "claim_ids": [
+            "claim_synthetic_claims_preparation"
+          ],
+          "contradiction_refs": [],
+          "evidence_ids": [
+            "evidence_synthetic_claims_preparation"
+          ],
+          "research_id": "research_synthetic_claims_preparation",
+          "source_ids": [
+            "source_synthetic_claims_preparation"
+          ],
+          "unknown_ids": [],
+          "upstream_provenance": {
+            "external_api_called": false,
+            "input_files": [
+              {
+                "path": "sources/synthetic-source.md",
+                "sha256": "3398844a6bd09430c4498a363e4f472d8a66d4e181fe9631e7155941824639ae",
+                "status": "present"
+              }
+            ],
+            "model_memory_used_as_evidence": false,
+            "offline_only": true,
+            "source_systems": [
+              "synthetic-fixture-generator"
+            ]
+          }
+        },
+        "research_status_snapshot": {
+          "claims": [
+            {
+              "claim_id": "claim_synthetic_claims_preparation",
+              "claim_status": "open",
+              "evidence_status": "verified",
+              "review_status": "verified"
+            }
+          ],
+          "completeness": {
+            "blocking_gates": [],
+            "coverage": {
+              "candidate_evidence": 0,
+              "claim_count": 1,
+              "claims_with_counter_or_context": 0,
+              "claims_with_evidence": 1,
+              "claims_with_verified_evidence": 1,
+              "claims_with_verified_support_evidence": 1,
+              "draft_exists": false,
+              "gate_audit_passed": false,
+              "human_review_count": 2,
+              "poor_source_evidence": 0,
+              "required_review_queue_count": 0,
+              "review_queue_count": 0,
+              "source_count": 1,
+              "source_types": [
+                "local_fixture"
+              ],
+              "unknown_source_quality": 0
+            },
+            "ready_for_answer": true,
+            "warnings": [
+              "synthetic-only fixture; the frequency count and content do not describe real users or markets"
+            ]
+          },
+          "contradictions": [],
+          "evidence": [
+            {
+              "ai_synthesis": false,
+              "claim_id": "claim_synthetic_claims_preparation",
+              "evidence_id": "evidence_synthetic_claims_preparation",
+              "evidence_status": "verified",
+              "relation": "supports",
+              "review_status": "reviewed",
+              "source_id": "source_synthetic_claims_preparation"
+            }
+          ],
+          "evidence_status": {
+            "counts": {
+              "candidate": 0,
+              "contradictions": 0,
+              "rejected": 0,
+              "verified": 1
+            },
+            "overall": "verified"
+          },
+          "guarded_final_answer": {
+            "blocking_gates": [],
+            "claim_ids": [
+              "claim_synthetic_claims_preparation"
+            ],
+            "evidence_ids": [
+              "evidence_synthetic_claims_preparation"
+            ],
+            "ready": true,
+            "source_ids": [
+              "source_synthetic_claims_preparation"
+            ],
+            "status": "verified",
+            "warnings": [
+              "synthetic-only fixture; the frequency count and content do not describe real users or markets"
+            ]
+          },
+          "media_refs": [],
+          "review_status": {
+            "events": [
+              {
+                "decision": "good",
+                "kind": "source",
+                "reviewed_at": "2026-08-05T12:00:00+08:00",
+                "reviewer": "synthetic-fixture-reviewer",
+                "target_id": "source_synthetic_claims_preparation"
+              },
+              {
+                "decision": "verified",
+                "kind": "evidence",
+                "reviewed_at": "2026-08-05T12:00:00+08:00",
+                "reviewer": "synthetic-fixture-reviewer",
+                "target_id": "evidence_synthetic_claims_preparation"
+              }
+            ],
+            "human_review_required": false,
+            "overall": "verified"
+          },
+          "sources": [
+            {
+              "freshness": "not_applicable",
+              "hash_status": "verified",
+              "quality": "good",
+              "ref_status": "resolved",
+              "review_status": "reviewed",
+              "source_id": "source_synthetic_claims_preparation"
+            }
+          ],
+          "unknowns": [],
+          "visual_leads": []
+        },
+        "sections": [
+          {
+            "body": "理赔准备应从保障责任、就医范围、通知要求和材料留存四方面核对，不能只在治疗结束后看发票。",
+            "evidence_refs": [
+              {
+                "ref_id": "claim_synthetic_claims_preparation",
+                "ref_type": "claim"
+              },
+              {
+                "ref_id": "evidence_synthetic_claims_preparation",
+                "ref_type": "evidence"
+              },
+              {
+                "ref_id": "source_synthetic_claims_preparation",
+                "ref_type": "source"
+              }
+            ],
+            "section_id": "section-01",
+            "title": "证据结论 1"
+          }
+        ],
+        "thesis": "理赔准备应从保障责任、就医范围、通知要求和材料留存四方面核对，不能只在治疗结束后看发票。"
+      },
+      "status": "published",
+      "summary": "理赔准备应从保障责任、就医范围、通知要求和材料留存四方面核对，不能只在治疗结束后看发票。",
+      "title": "买了保险，真到理赔时需要提前准备什么？"
+    }
+  },
+  "composition": {
+    "canonical_body": "<!-- draft_only: human review required; do not publish automatically -->\n# 买了保险，真到理赔时需要提前准备什么？\n\n> 适用读者：synthetic insurance education reader\n> 草稿状态：基于已核验证据生成；发布前仍需完成事实、隐私、合规、版权与声纹复核。\n\n## 核心判断\n\n理赔准备应从保障责任、就医范围、通知要求和材料留存四方面核对，不能只在治疗结束后看发票。\n\n## 证据结论 1\n\n理赔准备应从保障责任、就医范围、通知要求和材料留存四方面核对，不能只在治疗结束后看发票。\n\n证据引用：claim:claim_synthetic_claims_preparation；evidence:evidence_synthetic_claims_preparation；source:source_synthetic_claims_preparation\n\n## 使用边界\n\nOnly synthetic, reviewed, non-synthesis fixture evidence is included; no real-world frequency or suitability conclusion is implied.\n\n## 来源索引\n\n- [source_synthetic_claims_preparation] Synthetic source for sq-insurance-claims-preparation — sources/synthetic-source.md\n\n_本文为 draft_only；事实、隐私、合规与版权仍需人工复核。_\n",
+    "canonical_summary": "理赔准备应从保障责任、就医范围、通知要求和材料留存四方面核对，不能只在治疗结束后看发票。",
+    "expression_mode": "evidence-led-synthesis",
+    "retention_mode": "full-text",
+    "semantic_reversibility": {
+      "meaning_drift": [],
+      "reverse_paraphrase": "理赔准备应从保障责任、就医范围、通知要求和材料留存四方面核对，不能只在治疗结束后看发票。",
+      "status": "needs-review"
+    },
+    "voice_profile": "voice/source-preserved",
+    "voice_profile_version": "1.0"
+  },
+  "content_id": "research-edca758a6ed755c9e91aecb8",
+  "created_at": "2026-08-05T12:00:00+08:00",
+  "feedback": {
+    "business_signal_status": "not-observed",
+    "business_signals": {
+      "crm_write_performed": false,
+      "manual_confirmation_required": false,
+      "qualifying_event_types": []
+    },
+    "content_signal_status": "observed",
+    "learning_decision": "none",
+    "measurement_layers": {
+      "admission": [
+        {
+          "name": "early.admission",
+          "note": "Synthetic aggregate observation; no raw comments or customer data.",
+          "source": "snapshot:snap_ACP0NZGMPHHFSAANSSZB605DV7",
+          "value": "observed"
+        },
+        {
+          "name": "d7.admission",
+          "note": "Synthetic aggregate observation; no raw comments or customer data.",
+          "source": "snapshot:snap_93Q64VA179VE3WPW2BFH9Z8R5H",
+          "value": "observed"
+        }
+      ],
+      "attraction": [
+        {
+          "name": "early.attraction",
+          "note": "Synthetic aggregate observation; no raw comments or customer data.",
+          "source": "snapshot:snap_ACP0NZGMPHHFSAANSSZB605DV7",
+          "value": "observed"
+        },
+        {
+          "name": "d7.attraction",
+          "note": "Synthetic aggregate observation; no raw comments or customer data.",
+          "source": "snapshot:snap_93Q64VA179VE3WPW2BFH9Z8R5H",
+          "value": "observed"
+        }
+      ],
+      "business": [
+        {
+          "name": "early.business",
+          "note": "Synthetic aggregate observation; no raw comments or customer data.",
+          "source": "snapshot:snap_ACP0NZGMPHHFSAANSSZB605DV7",
+          "value": "not_observed"
+        },
+        {
+          "name": "d7.business",
+          "note": "Synthetic aggregate observation; no raw comments or customer data.",
+          "source": "snapshot:snap_93Q64VA179VE3WPW2BFH9Z8R5H",
+          "value": "not_observed"
+        }
+      ],
+      "consumption": [
+        {
+          "name": "early.consumption",
+          "note": "Synthetic aggregate observation; no raw comments or customer data.",
+          "source": "snapshot:snap_ACP0NZGMPHHFSAANSSZB605DV7",
+          "value": "observed"
+        },
+        {
+          "name": "d7.consumption",
+          "note": "Synthetic aggregate observation; no raw comments or customer data.",
+          "source": "snapshot:snap_93Q64VA179VE3WPW2BFH9Z8R5H",
+          "value": "observed"
+        }
+      ],
+      "negative_feedback": [
+        {
+          "name": "early.negative_feedback",
+          "note": "Synthetic aggregate observation; no raw comments or customer data.",
+          "source": "snapshot:snap_ACP0NZGMPHHFSAANSSZB605DV7",
+          "value": "not_observed"
+        },
+        {
+          "name": "d7.negative_feedback",
+          "note": "Synthetic aggregate observation; no raw comments or customer data.",
+          "source": "snapshot:snap_93Q64VA179VE3WPW2BFH9Z8R5H",
+          "value": "not_observed"
+        }
+      ],
+      "value": [
+        {
+          "name": "early.value",
+          "note": "Synthetic aggregate observation; no raw comments or customer data.",
+          "source": "snapshot:snap_ACP0NZGMPHHFSAANSSZB605DV7",
+          "value": "observed"
+        },
+        {
+          "name": "d7.value",
+          "note": "Synthetic aggregate observation; no raw comments or customer data.",
+          "source": "snapshot:snap_93Q64VA179VE3WPW2BFH9Z8R5H",
+          "value": "observed"
+        }
+      ]
+    },
+    "next_test": "Human review only; do not infer customer sentiment or write CRM state.",
+    "platform_signals": {
+      "d7": {
+        "admission.status": 1,
+        "attributed_new_followers": 5,
+        "average_watch_time": 20,
+        "completion_rate": 33,
+        "follows_per_1000_views": 23.809524,
+        "likes": 7,
+        "major_dropoff_second": 13,
+        "meaningful_comments": 2,
+        "profile_follow_conversion_rate": 27.777778,
+        "profile_visit_rate": 8.571429,
+        "profile_visits": 18,
+        "reach": 260,
+        "retention_10s_rate": 44,
+        "retention_3s_rate": 74,
+        "retention_5s_rate": 62,
+        "saves": 5,
+        "shares": 1,
+        "views": 210
+      },
+      "early": {
+        "admission.status": 1,
+        "attributed_new_followers": 2,
+        "average_watch_time": 18,
+        "completion_rate": 30,
+        "follows_per_1000_views": 16.666667,
+        "likes": 4,
+        "major_dropoff_second": 12,
+        "meaningful_comments": 1,
+        "profile_follow_conversion_rate": 22.222222,
+        "profile_visit_rate": 7.5,
+        "profile_visits": 9,
+        "reach": 150,
+        "retention_10s_rate": 42,
+        "retention_3s_rate": 72,
+        "retention_5s_rate": 60,
+        "saves": 2,
+        "shares": 0,
+        "views": 120
+      }
+    },
+    "qualitative_feedback": [],
+    "signal_status": "observed"
+  },
+  "gates": {
+    "compliance": {
+      "reason": "渠道、行业和表达合规需由发布者人工确认。",
+      "reviewed_at": null,
+      "reviewed_by": null,
+      "status": "needs-review"
+    },
+    "fact": {
+      "reason": "只纳入 guarded_final_answer 已验证且具备 verified support 的 claims；成稿仍需人工事实复核。",
+      "reviewed_at": null,
+      "reviewed_by": null,
+      "status": "needs-review"
+    },
+    "privacy": {
+      "reason": "research-output.v1 不替代发布前的隐私与脱敏复核。",
+      "reviewed_at": null,
+      "reviewed_by": null,
+      "status": "needs-review"
+    },
+    "rights": {
+      "reason": "引用总量已通过适配器上限检查；视觉线索和最终素材版权仍需人工核验。",
+      "reviewed_at": null,
+      "reviewed_by": null,
+      "status": "needs-review"
+    }
+  },
+  "intent": {
+    "audience": "synthetic insurance education reader",
+    "content_object": "证据型综合文章草稿",
+    "desired_action": "帮助读者理解已核验证据、已知边界和仍待确认的问题",
+    "main_angle": "理赔准备应从保障责任、就医范围、通知要求和材料留存四方面核对，不能只在治疗结束后看发票。",
+    "platform_intent": "draft_only；平台适配与发布均需人工完成",
+    "risk_boundary": "Only synthetic, reviewed, non-synthesis fixture evidence is included; no real-world frequency or suitability conclusion is implied.",
+    "speaker_role": "证据型综合稿编辑",
+    "topic": "买了保险，真到理赔时需要提前准备什么？"
+  },
+  "operating_plan": {
+    "origin_kind": "research-synthesis",
+    "private_validation": {
+      "channel": "private_conversation",
+      "note": "完成事实、隐私、合规和声纹人工复核后才可进入发布判断。",
+      "status": "blocked"
+    },
+    "production_unit": "real-problem-or-service-action"
+  },
+  "operating_refs": {
+    "account_ids": [
+      "acct_1RNQ220TWEF0K9RGMTYS1B47WB"
+    ],
+    "publication_ids": [
+      "pub_TY3ZH2KQWQ5W7JB7VHPDMN4A1H"
+    ],
+    "topic_ids": [
+      "topic_8M8Q9T4FAA15S6H55ZTVND7VQ7"
+    ]
+  },
+  "owner_thread": null,
+  "primary_format": "longform",
+  "provenance": {
+    "forbidden_claims": [
+      "Only synthetic, reviewed, non-synthesis fixture evidence is included; no real-world frequency or suitability conclusion is implied.",
+      "不得把 candidate、reviewed 或 AI synthesis 升级为 verified fact。",
+      "不得把候选视觉线索描述成已经拍摄或已经取得的素材。"
+    ],
+    "sources": [
+      {
+        "evidence_status": "verified",
+        "note": "research source source_synthetic_claims_preparation; publisher=Synthetic Insurance Fixture Lab; freshness=not_applicable; hash=verified",
+        "ref": "sources/synthetic-source.md",
+        "source_type": "workspace-file"
+      }
+    ],
+    "uncertainties": [
+      "synthetic-only fixture; the frequency count and content do not describe real users or markets"
+    ],
+    "verified_facts": [
+      "理赔准备应从保障责任、就医范围、通知要求和材料留存四方面核对，不能只在治疗结束后看发票。"
+    ]
+  },
+  "publication": {
+    "boundary": "manual-only",
+    "receipts": [
+      {
+        "channel": "synthetic-surface",
+        "published_at": "2026-08-06T10:00:00+08:00",
+        "published_by": "synthetic-fixture-user",
+        "url_or_id": null
+      }
+    ]
+  },
+  "qa": {
+    "deterministic": [
+      {
+        "details": "Input validates against question-research-poc research-output.v1.",
+        "name": "canonical-research-schema",
+        "status": "pass"
+      },
+      {
+        "details": "Every included claim has reviewed, verified, non-AI supporting evidence and reviewed sources.",
+        "name": "evidence-reference-graph",
+        "status": "pass"
+      },
+      {
+        "details": "No publishing action or real media asset is produced by this adapter.",
+        "name": "draft-only-boundary",
+        "status": "pass"
+      },
+      {
+        "details": "Fixture contains no real customer, product, account, publication, or platform data.",
+        "name": "synthetic-only-boundary",
+        "status": "pass"
+      }
+    ],
+    "human_review": {
+      "note": "复核事实、隐私、合规、版权、本人声纹和渠道适配。",
+      "reviewed_at": null,
+      "reviewer": null,
+      "status": "required"
+    },
+    "promptfoo": {
+      "status": "not-run",
+      "suite": "research-output-adapter"
+    }
+  },
+  "schema_version": "0.2",
+  "status": "feedback",
+  "tags": [
+    "draft-only",
+    "manual-only",
+    "research-synthesis",
+    "synthetic-only"
+  ],
+  "title": "买了保险，真到理赔时需要提前准备什么？",
+  "updated_at": "2026-08-13T10:10:00+08:00",
+  "visual": {
+    "article_visual_plan": {
+      "ai_generation_policy": "explicit-opt-in-only",
+      "article_ref": "research-edca758a6ed755c9e91aecb8.article.md",
+      "slots": [
+        {
+          "anchor": {
+            "kind": "heading",
+            "occurrence": 1,
+            "value": "证据结论 1"
+          },
+          "caption": "结构图候选；不代表已经存在镜头或素材。",
+          "layout": "full-width",
+          "media_role": "explanatory",
+          "purpose": "把证据关系整理成解释性结构图；具体素材和版式待人工确认",
+          "route": "diagram",
+          "slot_id": "research-visual-01",
+          "status": "planned"
+        }
+      ],
+      "visual_mode": "diagram-led",
+      "workflow": "human-in-the-loop"
+    },
+    "assets": [],
+    "cognitive_anchors": [
+      "理赔准备应从保障责任、就医范围、通知要求和材料留存四方面核对，不能只在治疗结束后看发票。"
+    ],
+    "render_recipe": {
+      "height": null,
+      "output_format": "html",
+      "output_refs": [
+        "research-edca758a6ed755c9e91aecb8.article.html"
+      ],
+      "renderer": "html-playwright",
+      "renderer_version": "article_visual_pipeline.render_article_html",
+      "width": 1200
+    },
+    "route": "none",
+    "template": "article-visual-plan-candidate-only",
+    "theme": "evidence-led-synthesis",
+    "visual_profile": "visual/evidence-led-article",
+    "visual_profile_version": "0.1"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "short-video-timing-profile.v1",
+  "profile_id": "current-operating-hypothesis",
+  "status": "operating-hypothesis-not-platform-fact",
+  "applies_to": "short-video-narration",
+  "thresholds": {
+    "audience_stake_max_seconds": 2,
+    "reason_to_continue_max_seconds": 5,
+    "first_information_advance_max_seconds": 15,
+    "information_advance_gap_max_seconds": 15,
+    "main_payoff_max_completion_ratio": 0.8,
+    "minimum_information_advances": 2
+  },
+  "interpretation": {
+    "faster_advances_allowed": true,
+    "main_payoff_may_appear_earlier": true,
+    "thresholds_are_platform_guarantees": false,
+    "final_cut_must_be_measured_separately": true
+  }
+}

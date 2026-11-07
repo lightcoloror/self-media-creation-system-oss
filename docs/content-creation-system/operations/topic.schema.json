@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lightcolor/content-operations/topic.schema.json",
+  "title": "自媒体选题对象",
+  "description": "把选题与经营目标、受众问题、证据来源和目标账号连接起来。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "topic_id",
+    "title",
+    "status",
+    "audience_problem",
+    "evidence_status",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "topic_id": {
+      "type": "string",
+      "pattern": "^topic_[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "status": { "enum": ["backlog", "qualified", "briefed", "producing", "published", "paused", "archived"] },
+    "audience_problem": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "goal_ids": {
+      "type": "array",
+      "description": "优先使用 goal_ ULID；点分 legacy ID 仅为既有对象只读兼容，新的原子经营闭环必须解析到 operating-goal。",
+      "items": {
+        "type": "string",
+        "oneOf": [
+          { "pattern": "^goal_[0-9A-HJKMNP-TV-Z]{26}$" },
+          { "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$" }
+        ]
+      },
+      "uniqueItems": true
+    },
+    "target_account_ids": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^acct_[0-9A-HJKMNP-TV-Z]{26}$" },
+      "uniqueItems": true
+    },
+    "relationship_types": {
+      "type": "array",
+      "items": { "enum": ["supports-goal", "tests-positioning", "answers-question", "reuses-evidence"] },
+      "uniqueItems": true
+    },
+    "parent_topic_id": {
+      "type": ["string", "null"],
+      "pattern": "^topic_[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "cluster_key": { "type": ["string", "null"], "maxLength": 160 },
+    "evidence_status": { "enum": ["verified", "partially-verified", "personal-observation", "candidate", "unverified"] },
+    "source_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/sourceRef" },
+      "minItems": 1
+    },
+    "notes": { "type": "string", "maxLength": 2000 },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "ref", "evidence_status"],
+      "properties": {
+        "source_type": { "enum": ["logseq-fact", "obsidian-synthesis", "workspace-file", "official-web", "user-confirmed", "personal-observation", "ai-draft", "course-material"] },
+        "ref": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "evidence_status": { "enum": ["verified", "partially-verified", "candidate", "unverified"] },
+        "note": { "type": "string", "maxLength": 500 }
+      }
+    }
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/customer-video-effect-review.v1.schema.json",
+  "title": "Customer video-effect review receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "review_id",
+    "reviewed_at",
+    "recorded_by_role",
+    "candidate",
+    "decision_sha256",
+    "privacy_render_qa",
+    "result",
+    "requested_changes",
+    "customer_contact_performed_by_system",
+    "raw_customer_text_stored"
+  ],
+  "properties": {
+    "schema_version": {"const": "self-media-customer-video-effect-review.v1"},
+    "review_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{5,99}$"},
+    "reviewed_at": {"type": "string", "format": "date-time"},
+    "recorded_by_role": {"enum": ["human_editor", "human_project_owner"]},
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "expected_sha256", "duration_seconds"],
+      "properties": {
+        "path": {"$ref": "#/$defs/relativePath"},
+        "expected_sha256": {"$ref": "#/$defs/sha256"},
+        "duration_seconds": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "decision_sha256": {"$ref": "#/$defs/sha256"},
+    "privacy_render_qa": {"$ref": "#/$defs/privacyRenderQa"},
+    "result": {"enum": ["confirmed", "request_changes", "withdrawn"]},
+    "requested_changes": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/change"}
+    },
+    "customer_contact_performed_by_system": {"const": false},
+    "raw_customer_text_stored": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![A-Za-z]:[\\\\/])(?!/)(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "expected_sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/relativePath"},
+        "expected_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "checkStatus": {"enum": ["passed", "failed", "not_applicable"]},
+    "windowCheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subject_ref",
+        "visible_window_ref",
+        "pre_entry_non_target_clear",
+        "first_visible_target_protected",
+        "midpoint_target_protected",
+        "last_visible_target_protected",
+        "post_exit_non_target_clear"
+      ],
+      "properties": {
+        "subject_ref": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,79}$"},
+        "visible_window_ref": {"type": "string", "minLength": 1, "maxLength": 120},
+        "pre_entry_non_target_clear": {"$ref": "#/$defs/checkStatus"},
+        "first_visible_target_protected": {"$ref": "#/$defs/checkStatus"},
+        "midpoint_target_protected": {"$ref": "#/$defs/checkStatus"},
+        "last_visible_target_protected": {"$ref": "#/$defs/checkStatus"},
+        "post_exit_non_target_clear": {"$ref": "#/$defs/checkStatus"}
+      }
+    },
+    "privacyRenderQa": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "qa_id",
+        "candidate_sha256",
+        "status",
+        "target_faces_complete",
+        "non_target_faces_unaffected",
+        "authorization_overlay_status",
+        "window_checks",
+        "verification_artifact"
+      ],
+      "properties": {
+        "qa_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{5,99}$"},
+        "candidate_sha256": {"$ref": "#/$defs/sha256"},
+        "status": {"enum": ["passed", "needs_rework"]},
+        "target_faces_complete": {"type": "boolean"},
+        "non_target_faces_unaffected": {"type": "boolean"},
+        "authorization_overlay_status": {"enum": ["passed", "failed", "not_applicable"]},
+        "window_checks": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/windowCheck"}
+        },
+        "verification_artifact": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "change_id",
+        "subject_ref",
+        "kind",
+        "start_seconds",
+        "end_seconds",
+        "requested_action",
+        "reason_summary"
+      ],
+      "properties": {
+        "change_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,79}$"},
+        "subject_ref": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,79}$"},
+        "kind": {"enum": ["voice", "face", "mask_strength", "motion", "segment"]},
+        "start_seconds": {"type": "number", "minimum": 0},
+        "end_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "requested_action": {"type": "string", "minLength": 1, "maxLength": 160},
+        "local_recipe_ref": {"type": "string", "minLength": 1, "maxLength": 160},
+        "reason_summary": {"type": "string", "minLength": 1, "maxLength": 240}
+      }
+    }
+  }
+}

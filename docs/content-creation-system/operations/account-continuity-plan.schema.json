@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lightcolor/content-operations/account-continuity-plan.schema.json",
+  "title": "多账号恢复与业务连续性计划",
+  "description": "记录账号关键性、依赖、备份责任、恢复顺序和演练状态。只保存安全状态和受保护位置类别，不保存密码、验证码、恢复码或 TOTP 种子。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "data_classification",
+    "continuity_plan_id",
+    "plan_version",
+    "accounts",
+    "dependencies",
+    "recovery_order",
+    "backup_owner_refs",
+    "backup_state",
+    "drill",
+    "reviewed_at",
+    "privacy",
+    "authority"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "data_classification": { "enum": ["synthetic-only", "deidentified-operational"] },
+    "continuity_plan_id": { "type": "string", "pattern": "^continuity_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "plan_version": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "accounts": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["account_id", "criticality", "rto_hours", "rpo_hours"],
+        "properties": {
+          "account_id": { "type": "string", "pattern": "^acct_[0-9A-HJKMNP-TV-Z]{26}$" },
+          "criticality": { "enum": ["critical", "important", "standard", "archive"] },
+          "rto_hours": { "type": "integer", "minimum": 1 },
+          "rpo_hours": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["dependency_class", "status", "protected_location_class"],
+        "properties": {
+          "dependency_class": { "enum": ["primary-email", "password-manager", "identity-verification", "content-backup", "device", "team-role", "other"] },
+          "status": { "enum": ["verified", "partial", "unverified", "not-applicable"] },
+          "protected_location_class": { "enum": ["password-manager", "offline-secure", "platform-only", "managed-backup", "not-recorded", "not-applicable"] }
+        }
+      }
+    },
+    "recovery_order": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "pattern": "^acct_[0-9A-HJKMNP-TV-Z]{26}$" },
+      "uniqueItems": true
+    },
+    "backup_owner_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1, "maxLength": 160 },
+      "uniqueItems": true
+    },
+    "backup_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["content_backup_status", "last_verified_at", "restore_instructions_ref"],
+      "properties": {
+        "content_backup_status": { "enum": ["verified", "partial", "unverified", "not-applicable"] },
+        "last_verified_at": { "type": ["string", "null"], "format": "date-time" },
+        "restore_instructions_ref": { "type": ["string", "null"], "maxLength": 1000 }
+      }
+    },
+    "drill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "last_drill_at", "result", "next_due_at"],
+      "properties": {
+        "status": { "enum": ["not-run", "planned", "completed", "failed"] },
+        "last_drill_at": { "type": ["string", "null"], "format": "date-time" },
+        "result": { "enum": ["not-evaluated", "pass", "partial", "fail"] },
+        "next_due_at": { "type": ["string", "null"], "format": "date-time" }
+      }
+    },
+    "incident_response_ref": { "type": ["string", "null"], "maxLength": 1000 },
+    "reviewed_at": { "type": "string", "format": "date-time" },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["secrets_included", "recovery_codes_included", "totp_seed_included", "direct_recovery_identifiers_included"],
+      "properties": {
+        "secrets_included": { "const": false },
+        "recovery_codes_included": { "const": false },
+        "totp_seed_included": { "const": false },
+        "direct_recovery_identifiers_included": { "const": false }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["execution_authorized", "credential_rotation_authorized", "account_action_authorized"],
+      "properties": {
+        "execution_authorized": { "const": false },
+        "credential_rotation_authorized": { "const": false },
+        "account_action_authorized": { "const": false }
+      }
+    }
+  }
+}

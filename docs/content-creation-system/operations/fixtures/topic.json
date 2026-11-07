@@ -1,0 +1,31 @@
+{
+  "schema_version": "0.1",
+  "topic_id": "topic_01ARZ3NDEKTSV4RRFFQ69G5FAW",
+  "title": "虚构：回声花园观察卡",
+  "status": "published",
+  "audience_problem": "仅验证选题与内容、发布实例之间的稳定 ID 关系。",
+  "goal_ids": [
+    "goal_01ARZ3NDEKTSV4RRFFQ69G5FBA"
+  ],
+  "target_account_ids": [
+    "acct_01ARZ3NDEKTSV4RRFFQ69G5FAV"
+  ],
+  "relationship_types": [
+    "supports-goal",
+    "answers-question"
+  ],
+  "parent_topic_id": null,
+  "cluster_key": "synthetic-contract-regression",
+  "evidence_status": "verified",
+  "source_refs": [
+    {
+      "source_type": "workspace-file",
+      "ref": "synthetic:echo-garden:topic",
+      "evidence_status": "verified",
+      "note": "合成对象。"
+    }
+  ],
+  "notes": "不包含真实用户问题或业务判断。",
+  "created_at": "2026-05-05T08:10:00+08:00",
+  "updated_at": "2026-05-05T09:01:00+08:00"
+}

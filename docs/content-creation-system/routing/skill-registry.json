@@ -1,0 +1,686 @@
+{
+  "schema_version": "1.2",
+  "updated_at": "2026-11-02T20:20:30+08:00",
+  "priority": [
+    "explicit-user-request",
+    "user-confirmed-facts-and-edits",
+    "account-ip",
+    "local-voice-visual",
+    "fact-privacy-compliance-rights",
+    "format-adapter",
+    "platform-overlay",
+    "specialized-skill",
+    "generic-skill",
+    "formula"
+  ],
+  "skills": [
+    {
+      "id": "content-strategy",
+      "use_for": [
+        "audience",
+        "goals",
+        "pillars",
+        "channel-role",
+        "calendar"
+      ],
+      "not_for": [
+        "final-personal-voice",
+        "medical-facts",
+        "algorithm-facts"
+      ]
+    },
+    {
+      "id": "social-content",
+      "use_for": [
+        "generic-format-ideas",
+        "repurposing-options"
+      ],
+      "not_for": [
+        "hardcoded-frequency",
+        "best-times",
+        "algorithm-tips",
+        "automatic-dm",
+        "bulk-scraping",
+        "chinese-platform-facts"
+      ]
+    },
+    {
+      "id": "copywriting",
+      "use_for": [
+        "explicit-conversion-task"
+      ],
+      "not_for": [
+        "default-moments",
+        "personal-story",
+        "medical-case"
+      ]
+    },
+    {
+      "id": "blog-writer",
+      "use_for": [
+        "longform-structure"
+      ],
+      "not_for": [
+        "personal-voice",
+        "source-verification",
+        "wechat-final-layout"
+      ]
+    },
+    {
+      "id": "wechat-article",
+      "use_for": [
+        "research-workflow",
+        "author-editor-reader-review",
+        "source-image-integration"
+      ],
+      "not_for": [
+        "forced-strong-hook",
+        "forced-data-opening",
+        "personal-moments",
+        "client-jargon"
+      ]
+    },
+    {
+      "id": "dbs-content",
+      "use_for": [
+        "format-fit-diagnosis",
+        "clarity",
+        "expression-efficiency",
+        "distinctiveness"
+      ],
+      "not_for": [
+        "ghostwriting",
+        "product-first-dogma",
+        "psychological-control-framing",
+        "platform-facts"
+      ]
+    },
+    {
+      "id": "dbs-title-cover-intro",
+      "status": "preferred",
+      "use_for": [
+        "platform-text-title",
+        "cover-title-text-and-line-breaks",
+        "short-video-opening-candidates",
+        "spoken-language-check",
+        "title-cover-opening-promise-alignment"
+      ],
+      "not_for": [
+        "full-script-without-explicit-request",
+        "cover-image-generation",
+        "video-navigation",
+        "publication-risk-clearance",
+        "invented-data",
+        "invented-case",
+        "invented-result",
+        "source-less-authority",
+        "medical-insurance-fear",
+        "automatic-publication",
+        "automatic-research-or-render"
+      ],
+      "requires": [
+        "body-version-reference",
+        "fact-pass",
+        "applicable-compliance-pass",
+        "stage-appropriate-review",
+        "formal-output-requires-author-confirmed-body",
+        "title-body-alignment",
+        "hook-body-alignment",
+        "missing-material-marked-needs-source",
+        "reuse-confirmed-angle-without-repeated-expansion",
+        "recorded-media-no-invented-quotes"
+      ],
+      "upstream_version_at_integration": "2.18.47",
+      "local_adaptation_ref": "skill-invocation-runbook.md#dbs-新版调用约定"
+    },
+    {
+      "id": "dbs-hook",
+      "status": "deprecated-compatibility-only",
+      "selection_policy": "explicit-user-request-only",
+      "replaced_by": "dbs-title-cover-intro",
+      "use_for": [
+        "short-video-opening-candidates",
+        "spoken-language-check"
+      ],
+      "not_for": [
+        "full-script",
+        "health-fear-hook",
+        "title",
+        "invented-data",
+        "invented-case",
+        "invented-result",
+        "source-less-authority"
+      ],
+      "requires": [
+        "stable-body",
+        "fact-pass",
+        "hook-body-alignment",
+        "missing-material-marked-needs-source"
+      ]
+    },
+    {
+      "id": "title-matrix",
+      "use_for": [
+        "cross-platform-title-candidates-after-body-confirmation",
+        "title-diagnosis",
+        "title-body-promise-audit",
+        "publication-title-retrospective"
+      ],
+      "not_for": [
+        "story-or-emotion-rewrite-substitute",
+        "invented-facts-or-emotions",
+        "traffic-prediction",
+        "automatic-publication",
+        "platform-algorithm-claims"
+      ],
+      "requires": [
+        "stable-body-or-labelled-exploration",
+        "fact-pass",
+        "applicable-compliance-pass",
+        "title-body-alignment",
+        "actual-before-after-or-evidenced-keep",
+        "body-version-reference"
+      ],
+      "source_commit": "10a1ee1ba5cd1a5a5cfabdb776ac8e93c7b93065",
+      "local_skill_path": "../../../self-media-creation-system/skills/title-matrix/SKILL.md"
+    },
+    {
+      "id": "dbs-xhs-title",
+      "status": "deprecated-compatibility-only",
+      "selection_policy": "explicit-user-request-only",
+      "replaced_by": "dbs-title-cover-intro",
+      "use_for": [
+        "title-candidates-after-content-stable"
+      ],
+      "not_for": [
+        "facts",
+        "body",
+        "medical-insurance-fear",
+        "unverified-results",
+        "forced-topic-expansion"
+      ],
+      "requires": [
+        "fact-pass",
+        "compliance-pass",
+        "title-body-alignment"
+      ]
+    },
+    {
+      "id": "dbs-ai-check",
+      "use_for": [
+        "post-draft-ai-pattern-diagnosis",
+        "genre-aware-check"
+      ],
+      "not_for": [
+        "rewrite-without-user-voice",
+        "fact-check",
+        "proof-of-ai-authorship"
+      ]
+    },
+    {
+      "id": "dbs-benchmark",
+      "use_for": [
+        "benchmark-candidate-filtering",
+        "structure-deconstruction",
+        "format-and-shot-learning",
+        "adopt-reject-decision"
+      ],
+      "not_for": [
+        "prove-business-profitability",
+        "copy-assets-or-wording",
+        "import-external-case-as-fact",
+        "medical-or-insurance-authority"
+      ],
+      "requires": [
+        "locked-fact-revision",
+        "primary-audience",
+        "primary-goal",
+        "benchmark-review-card",
+        "human-review"
+      ]
+    },
+    {
+      "id": "agent-reach",
+      "use_for": [
+        "discover-current-public-examples",
+        "search-official-platform-guidance",
+        "retrieve-public-video-and-channel-metadata"
+      ],
+      "not_for": [
+        "treat-search-result-as-verified-fact",
+        "bypass-platform-access",
+        "upload-sensitive-customer-data"
+      ],
+      "requires": [
+        "source-links",
+        "checked-at",
+        "evidence-status"
+      ]
+    },
+    {
+      "id": "local-content-fact-card",
+      "use_for": [
+        "sources",
+        "facts",
+        "uncertainties",
+        "privacy",
+        "rights",
+        "quantitative-scope",
+        "forbidden-claims"
+      ],
+      "status": "hard-gate",
+      "loader": {
+        "skill_path": "../../../skills/content-fact-card/SKILL.md",
+        "skill_sha256": "4432086c7e71ace39ce12cc3ab5e727cd2e082d7a7e2fcc6a11aefc8381c20b6",
+        "contract_binding_path": "../../../skills/content-fact-card/references/contract-binding.json",
+        "contract_binding_sha256": "6d42e42f76921a4edc84460997c5585da2466fae3a5207c4ca0369c15282bd3e",
+        "deployment_mode": "copy-only",
+        "on_mismatch": "fail-closed"
+      }
+    },
+    {
+      "id": "local-insurance-storycraft",
+      "use_for": [
+        "first-person-story-discovery",
+        "narrative-nonfiction",
+        "interview-scene-extraction",
+        "short-video-story",
+        "wechat-article-story",
+        "personal-brand-story",
+        "real-experience",
+        "service-actions",
+        "causal-story-arc",
+        "pressure-choice",
+        "format-aware-turning-point-value-change",
+        "action-feedback",
+        "evidence-bound-emotional-resonance",
+        "sensitivity-proportional-humor",
+        "fun-integrity-review",
+        "cross-media-fact-preservation",
+        "cross-platform-claim-consistency",
+        "advisory-craft-diagnostics",
+        "eleven-gate-initial-draft-review"
+      ],
+      "not_for": [
+        "medical-decision",
+        "invented-scene",
+        "invented-dialogue",
+        "invented-internal-state",
+        "coverage-guarantee",
+        "case-as-population-proof",
+        "forced-story-route",
+        "book-as-current-case-fact"
+      ],
+      "loader": {
+        "skill_path": "../../../skills/insurance-content-storycraft/SKILL.md",
+        "skill_sha256": "413d50a09ca61d734c87ae0c60aa181ab6209c9ebfa50a39df91bf317628ed79",
+        "contract_binding_path": "../../../skills/insurance-content-storycraft/references/contract-binding.json",
+        "contract_binding_sha256": "4cb148d1378ba84e0791a874dc84d4dbc0bff813e45342b3bbe3579fc889d111",
+        "deployment_mode": "copy-only",
+        "on_mismatch": "fail-closed"
+      }
+    },
+    {
+      "id": "local-account-diagnosis-playbook",
+      "use_for": [
+        "account-distribution-anomaly",
+        "official-status-check",
+        "self-baseline",
+        "comparable-content-test",
+        "48-72h-and-d7-review"
+      ],
+      "not_for": [
+        "prove-shadow-ban-from-low-views",
+        "fixed-platform-thresholds",
+        "magic-score",
+        "mass-deletion",
+        "engagement-ritual",
+        "risk-control-circumvention"
+      ],
+      "requires": [
+        "account-id",
+        "input-window",
+        "missingness",
+        "evidence-refs",
+        "human-review"
+      ]
+    },
+    {
+      "id": "local-voice-profile",
+      "use_for": [
+        "personal-wording",
+        "rhythm",
+        "banned-cliches",
+        "dual-ip-voice"
+      ],
+      "status": "user-confirmed-priority"
+    },
+    {
+      "id": "local-content-effect-mechanisms",
+      "use_for": [
+        "optional-emotional-resonance",
+        "evidence-backed-friction",
+        "traceable-audience-voice",
+        "choice-based-value-alignment",
+        "mechanism-specific-validation"
+      ],
+      "not_for": [
+        "mandatory-emotion",
+        "outrage-optimization",
+        "invented-user-language",
+        "identity-polarization",
+        "traffic-prediction"
+      ],
+      "requires": [
+        "primary-audience",
+        "single-primary-goal",
+        "audience-or-event-evidence",
+        "quality-gate-pass"
+      ]
+    },
+    {
+      "id": "local-evidence-synthesis",
+      "use_for": [
+        "question-clustering",
+        "omission-map",
+        "contradiction-map",
+        "claim-ledger",
+        "primary-source-verification",
+        "evidence-based-rewrite",
+        "framework-angle-candidate-matrix"
+      ],
+      "not_for": [
+        "article-splicing",
+        "peer-post-as-fact",
+        "invented-consensus",
+        "unattributed-copying",
+        "simulated-famous-person-quote",
+        "unverified-person-position"
+      ],
+      "requires": [
+        "source-role-labels",
+        "claim-status",
+        "official-evidence-for-final-factual-claims",
+        "perspective-type",
+        "misattribution-risk",
+        "source-required-flag"
+      ]
+    },
+    {
+      "id": "local-ai-interview-graphic-workflow",
+      "use_for": [
+        "question-led-extraction",
+        "human-edit",
+        "card-task-splitting",
+        "visual-brief"
+      ],
+      "not_for": [
+        "auto-publish",
+        "replace-user-judgment"
+      ]
+    },
+    {
+      "id": "huashu-design-method-contracts",
+      "source_commit": "ec9ec0fff8a66a932c4049b200ea4c2b09f8d25b",
+      "use_for": [
+        "design-context-review",
+        "brand-asset-spec",
+        "optional-visible-direction-exploration",
+        "five-dimension-design-review",
+        "keep-fix-quick-wins"
+      ],
+      "not_for": [
+        "monolithic-runtime",
+        "automatic-three-variant-generation",
+        "automatic-ai-image-generation",
+        "unverified-asset-download",
+        "default-html2pptx-backbone",
+        "absolute-style-bans"
+      ],
+      "requires": [
+        "explicit-user-request-or-ambiguous-direction-for-exploration",
+        "registered-assets",
+        "rendered-artifact",
+        "human-review"
+      ],
+      "status": "method-layer-integrated"
+    },
+    {
+      "id": "dbs-content-value",
+      "use_for": [
+        "framework-audience-gain-diagnosis",
+        "audience-business-fit",
+        "material-promise-cost-review"
+      ],
+      "not_for": [
+        "fact-verification",
+        "traffic-prediction",
+        "automatic-discard",
+        "rewrite-substitute"
+      ],
+      "requires": [
+        "declared-single-goal",
+        "current-material",
+        "labelled-inferences",
+        "actual-revision-or-evidenced-keep"
+      ]
+    },
+    {
+      "id": "dbs-title-cover-intro",
+      "use_for": [
+        "production-scope-aware-framework-exploration",
+        "coordinated-title-cover-text-opening",
+        "frozen-body-promise-review"
+      ],
+      "not_for": [
+        "invented-facts",
+        "cover-image-generation",
+        "duplicate-angle-or-title-pipelines",
+        "bypassing-initial-draft-review"
+      ],
+      "requires": [
+        "explicit-exploration-or-stable-body",
+        "single-coordinator",
+        "current-production-scope",
+        "framework-decision-before-draft",
+        "fact-and-body-promise-alignment"
+      ]
+    }
+  ],
+  "legacy_aliases": {
+    "agent-reach-platform-discovery": "agent-reach",
+    "dbs-hook": "dbs-title-cover-intro",
+    "dbs-xhs-title": "dbs-title-cover-intro"
+  },
+  "tool_refs": [
+    {
+      "id": "self-media-story-material-inbox",
+      "use_for": [
+        "deidentified-story-moment-capture",
+        "story-source-and-authorization-status",
+        "story-readiness-and-missing-fields"
+      ],
+      "authority": "append-only-candidate-local",
+      "requires": [
+        "deidentified-input",
+        "source-hash",
+        "privacy-pass",
+        "authorization-when-required"
+      ],
+      "not_for": [
+        "knowledge-base-scanning",
+        "raw-customer-material",
+        "automatic-story-generation",
+        "publication"
+      ]
+    },
+    {
+      "id": "self-media-story-design-gate",
+      "use_for": [
+        "story-arc-pre-draft-causal-design",
+        "fact-bound-pressure-choice",
+        "turning-point-value-shift",
+        "evidence-bound-emotional-beats",
+        "story-explanation-boundary"
+      ],
+      "authority": "candidate-review-only",
+      "requires": [
+        "locked-fact-card",
+        "story-arc-route",
+        "story-design-card.v1",
+        "human-review"
+      ],
+      "not_for": [
+        "automatic-story-generation",
+        "invented-dialogue",
+        "invented-internal-state",
+        "emotion-escalation",
+        "case-generalization",
+        "publication"
+      ]
+    },
+    {
+      "id": "self-media-serious-content-translation-gate",
+      "use_for": [
+        "serious-professional-content-precreative-review",
+        "fine-grained-sensitivity-profile",
+        "risk-proportional-audience-translation-plan",
+        "near-zero-humor-default-for-severe-illness-customer-loss-and-privacy-high-risk",
+        "related-versus-decorative-or-misleading-fun-review",
+        "frozen-body-misinterpretation-review",
+        "insurance-health-evidence-boundary-safety-score"
+      ],
+      "authority": "candidate-review-only",
+      "requires": [
+        "verified-evidence-spine",
+        "privacy-cleared-or-not-applicable",
+        "declared-content-nature",
+        "declared-sensitivity-profile",
+        "frozen-body-sha256-for-final-receipt",
+        "human-review"
+      ],
+      "not_for": [
+        "fact-generation",
+        "permission-to-publish",
+        "automatic-humor-insertion",
+        "affected-person-as-humor-target",
+        "individual-case-generalization",
+        "automatic-publication"
+      ]
+    },
+    {
+      "id": "self-media-cross-platform-fact-consistency-gate",
+      "use_for": [
+        "two-or-more-platform-adaptations",
+        "shared-canonical-fact-revision",
+        "normalized-claim-hash-comparison",
+        "density-format-and-duration-omission-review"
+      ],
+      "authority": "candidate-review-only",
+      "requires": [
+        "locked-canonical-fact-card",
+        "canonical-claim-ledger",
+        "platform-artifact-hashes",
+        "human-claim-binding-review"
+      ],
+      "not_for": [
+        "automatic-claim-extraction",
+        "copy-generation",
+        "fact-generation",
+        "permission-to-publish",
+        "automatic-publication"
+      ]
+    },
+    {
+      "id": "wechat-tools-manual-feed",
+      "use_for": [
+        "user-directed-visible-browsing",
+        "deidentified-content-bundle-export"
+      ],
+      "authority": "read-only-manual",
+      "not_for": [
+        "automatic-feed-scrolling",
+        "cookie-extraction",
+        "automatic-publication"
+      ]
+    },
+    {
+      "id": "web-content-fetcher",
+      "use_for": [
+        "public-url-acquisition",
+        "official-page-and-document-fetch",
+        "source-archive-and-inspection"
+      ],
+      "authority": "source-acquisition-only",
+      "not_for": [
+        "paywall-or-captcha-bypass",
+        "credential-evasion",
+        "claim-verification-without-source-review"
+      ]
+    },
+    {
+      "id": "content-studio-render-router",
+      "use_for": [
+        "graphic-note-card-splitting",
+        "html-static-render",
+        "data-chart-routing",
+        "flow-diagram-routing",
+        "editable-handoff"
+      ],
+      "authority": "candidate-render-only",
+      "not_for": [
+        "fact-generation",
+        "single-template-for-all-topics",
+        "automatic-publication"
+      ]
+    },
+    {
+      "id": "content-studio-wechat-article-format-adapter",
+      "alias_for": "content-studio-poc/scripts/wechat_article_format_adapter.py",
+      "use_for": [
+        "reviewed-wechat-markdown-to-inline-html",
+        "manual-wechat-preview",
+        "dark-mode-preview"
+      ],
+      "authority": "candidate-render-only",
+      "requires": [
+        "frozen-canonical-body",
+        "explicit-render-mode-synthetic-or-public-review",
+        "manual-only-publication-boundary",
+        "reviewed-pinned-formatter-source"
+      ],
+      "mode_requirements": {
+        "synthetic": [
+          "synthetic-only-fixture",
+          "fact-privacy-compliance-rights-pass",
+          "human-review-approved-fixture-only"
+        ],
+        "public-review": [
+          "public-material-review-declaration",
+          "privacy-pass",
+          "no-blocked-content-or-human-gate",
+          "draft-or-review-only",
+          "exact-markdown-sha256",
+          "text-only-supported-markdown",
+          "pending-author-state-preserved",
+          "no-publication-receipts"
+        ]
+      },
+      "not_for": [
+        "article-writing",
+        "fact-generation",
+        "auto-open",
+        "upload",
+        "draft-creation",
+        "publication"
+      ]
+    }
+  ],
+  "missing_formal_skills": [
+    "interview-video-script",
+    "demo-video-script",
+    "long-video-script",
+    "live-script",
+    "platform-spec-verifier"
+  ]
+}

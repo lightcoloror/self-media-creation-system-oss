@@ -1,0 +1,38 @@
+{
+  "license": "Apache-2.0",
+  "resources": [
+    {
+      "public_path": "self-media-creation-system/schemas/review-intake.v0.2.schema.json",
+      "source_sha256": "b4994455c99e0a367198981fa93526432e65e922ff8c2cf74dd3eaedef7f6131",
+      "public_sha256": "b4994455c99e0a367198981fa93526432e65e922ff8c2cf74dd3eaedef7f6131",
+      "kind": "first-party contract snapshot only; no owner runtime or P1 rough-cut code"
+    },
+    {
+      "public_path": "self-media-creation-system/schemas/typography-gates.v1.policy.json",
+      "source_sha256": "cd8019d7a25463ca0d4e51e66130547281745f0fc5c02e2e53afe43fbd2ca593",
+      "public_sha256": "86a126a0e0737e8df7bd44755bb3c4c6e3288af95d4fbb9a74436cf52dd17420",
+      "kind": "first-party contract snapshot only; no owner runtime or P1 rough-cut code"
+    },
+    {
+      "public_path": "self-media-creation-system/scripts/outcome_contract.py",
+      "source_sha256": "28177f2115bafa5fffeeaac643cd036a1a9adb1e1a4582e08edf33daacf7536e",
+      "public_sha256": "8e4aebdb0813f969d55cd2d897cb9e266751d8403e9ca985a759fca3111e8baf",
+      "kind": "first-party exact AST excerpt of four pure contract functions and seven constants"
+    }
+  ],
+  "adaptation": "Typography governance removes private note path and historical approval assertion; all profile values remain unchanged.",
+  "boundaries": "Contract inspection only. No renderer, attention-state executor, actual device result or publication authority.",
+  "outcome_contract_symbols": [
+    "DIMENSIONS",
+    "FORBIDDEN_KEYS",
+    "OUTCOMES",
+    "RISK_DOMAINS",
+    "SAFE_PRIVACY_KEYS",
+    "SCHEMA_VERSION",
+    "SECRET_VALUE",
+    "adapt_call_record",
+    "has_forbidden",
+    "review_packet",
+    "validate"
+  ]
+}

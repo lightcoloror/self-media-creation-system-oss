@@ -1,0 +1,49 @@
+{
+  "analysis_only": true,
+  "content_id": "research-215a50fc4d541536dfa18e2d",
+  "content_observation": {
+    "interpretation": "content-metrics-remain-separate-from-business-evidence",
+    "status": "observed"
+  },
+  "crm_candidate": {
+    "confirmed": false,
+    "eligible": true,
+    "manual_confirmation_required": true,
+    "reason": "An explicit qualifying synthetic event exists; no CRM record or action is created.",
+    "status": "pending_human_confirmation"
+  },
+  "do_not_auto_contact": true,
+  "evidence_refs": [
+    "snapshot:snap_EECX35Y85XEKXQ5ASRGF510A8R",
+    "snapshot:snap_X0W6MXXMKDC6BQ2Y44PMYEBMQK",
+    "synthetic-feedback-event:pf-explicit-business-signal:continued_consultation"
+  ],
+  "execution_allowed": false,
+  "feedback_contract": "insurance-client-action-recording-decision-2026-06-22",
+  "feedback_id": "feedback-bea9881222b415791011",
+  "feedback_type": "continued_consultation",
+  "manual_confirmation_required": true,
+  "material_reuse_level": "first_use",
+  "next_waiting_on": "human_confirmation",
+  "no_geolocation_detail": true,
+  "no_relationship_graph_trace": true,
+  "no_time_sequence_fingerprint": true,
+  "privacy_status": "synthetic_only",
+  "published_content_ref": "pub_QTMRG4H2PGAQJ40HD0791Z9X5N",
+  "qualifying_business_evidence": [
+    {
+      "event_ref": "synthetic-feedback-event:pf-explicit-business-signal:continued_consultation",
+      "event_type": "continued_consultation",
+      "review_status": "reviewed_synthetic_evidence"
+    }
+  ],
+  "relationship_signal": {
+    "eligible": false,
+    "reason": "Views, likes, saves, and no_signal do not establish a relationship signal."
+  },
+  "review_status": "pending_human_confirmation",
+  "sanitized_summary": "虚构对象明确提出继续咨询并预约下一步，但仍必须人工确认。",
+  "signal_layer": "crm_candidate",
+  "source_service_card_id": "synthetic-service-card-pf-explicit-business-signal",
+  "synthetic_only": true
+}

@@ -1,0 +1,440 @@
+{
+  "account": {
+    "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+    "artifact_ref": "account.json",
+    "contract_ref": "docs/content-creation-system/operations/account.schema.json",
+    "synthetic_only": true
+  },
+  "artifact_index": [
+    {
+      "path": "account.json",
+      "sha256": "d9bdd5932918ba6a7f07a88fd2f799a8d9408c6546222140a2c2a8de838f4774"
+    },
+    {
+      "path": "negative-cases.json",
+      "sha256": "144f3416274c63ca9cd406e59d98c7b9c815bb98bb2b3d78442c4764dcf964ee"
+    },
+    {
+      "path": "publication-feedback/pf-content-no-signal/feedback-handoff.json",
+      "sha256": "b19a084015d0a4a626f95012b86706ed6a16af5a98a93c635852e9ca83bb8eb4"
+    },
+    {
+      "path": "publication-feedback/pf-content-no-signal/performance-snapshots.json",
+      "sha256": "606748ed54279d0abf72dd4513676123e1011b601fc65b9b8219aa8978ae9cfc"
+    },
+    {
+      "path": "publication-feedback/pf-content-no-signal/publication-events.json",
+      "sha256": "fdc5a3b5b7aad166ba68ca7612295bd96a5def9f58f0eb773cdadb5699631802"
+    },
+    {
+      "path": "publication-feedback/pf-explicit-business-signal/feedback-handoff.json",
+      "sha256": "2951fb4454d9e06da714f072ba9a873d22ff33ec559595b9d7f3a73f318620e6"
+    },
+    {
+      "path": "publication-feedback/pf-explicit-business-signal/performance-snapshots.json",
+      "sha256": "6b83586427166ccdef93851fb4a4c7ddc2eb117388ee899070ec6ec087fd719e"
+    },
+    {
+      "path": "publication-feedback/pf-explicit-business-signal/publication-events.json",
+      "sha256": "c9addbf98251a5eeb8a478b20dddd936b03e3cb6b789296131e34b7c4734015b"
+    },
+    {
+      "path": "publication-feedback/pf-ordinary-content-engagement/feedback-handoff.json",
+      "sha256": "d168684477e60d998f560c25aea6a76d2e4b284ba6ad596ebd79c2c197e57a2f"
+    },
+    {
+      "path": "publication-feedback/pf-ordinary-content-engagement/performance-snapshots.json",
+      "sha256": "4df6c1959c50cddc8feeabb862801dcb83942dd9cba9b8bdc1ff26719819feaf"
+    },
+    {
+      "path": "publication-feedback/pf-ordinary-content-engagement/publication-events.json",
+      "sha256": "d1acc2db90c47ed91700c833b0f4ec6003a17e8f4d8e7b9f1d0e828969367133"
+    },
+    {
+      "path": "questions/claims-preparation/adapter/research-edca758a6ed755c9e91aecb8.article.html",
+      "sha256": "ab89d818f9b2d75addc8ea28c99ceb2702d8cfbfcdf5547787d18eeeb4461284"
+    },
+    {
+      "path": "questions/claims-preparation/adapter/research-edca758a6ed755c9e91aecb8.article.md",
+      "sha256": "1243fc88fd734689536588ddb427396cb9faa1e7bdb52ab0325d1c0f8272be3e"
+    },
+    {
+      "path": "questions/claims-preparation/adapter/research-edca758a6ed755c9e91aecb8.content-item.json",
+      "sha256": "41d4191923a3a048b198ca0bd7d67a84e4be8018b1a0010ac5461556bf2cdf77"
+    },
+    {
+      "path": "questions/claims-preparation/adapter/research-edca758a6ed755c9e91aecb8.content-video-brief.json",
+      "sha256": "992de2d5a713d2aff2a0e956562bedefd0b3a31bd85122b14dce0b99935e1c4b"
+    },
+    {
+      "path": "questions/claims-preparation/adapter/research-edca758a6ed755c9e91aecb8.manifest.json",
+      "sha256": "0f12ed00f1b9865d4cd8b9729a9c964327ce9a6251c8c4b8e2493219fdbd15be"
+    },
+    {
+      "path": "questions/claims-preparation/draft.content-item.json",
+      "sha256": "6ba2894e5e1714a24553fcd31e19e62b5d17cc1530c9f6865a5caa2af0cb5ad2"
+    },
+    {
+      "path": "questions/claims-preparation/material.content-item.json",
+      "sha256": "c7bfe6b3f23e4a4e7d9748321d2f57c8c2e029112164d0472443b131ad4839a0"
+    },
+    {
+      "path": "questions/claims-preparation/research-output.v1.json",
+      "sha256": "07edf3a8e2df82894a980d47fcb35628a5501b69c28479c61a070d241e1a0546"
+    },
+    {
+      "path": "questions/claims-preparation/sources/synthetic-source.md",
+      "sha256": "3398844a6bd09430c4498a363e4f472d8a66d4e181fe9631e7155941824639ae"
+    },
+    {
+      "path": "questions/claims-preparation/topic.json",
+      "sha256": "b5458d4703bb89127cb8154067a1cea048d3e23917ba6766055805cdf1425f93"
+    },
+    {
+      "path": "questions/family-priority/adapter/research-215a50fc4d541536dfa18e2d.article.html",
+      "sha256": "bc2faee0b3a79a4ac4be0fe4bf7d9f4078f6a1c69731d2f404cccfe5d4c6c99c"
+    },
+    {
+      "path": "questions/family-priority/adapter/research-215a50fc4d541536dfa18e2d.article.md",
+      "sha256": "3b01f849de99bef1b0d2e9c299829543368e84cac7c81f5c51506e927d771f2b"
+    },
+    {
+      "path": "questions/family-priority/adapter/research-215a50fc4d541536dfa18e2d.content-item.json",
+      "sha256": "f9b56beaac2fe83e61c724f86f3acd1c1a04204d432e0215c7dd4f9aa5d9cd30"
+    },
+    {
+      "path": "questions/family-priority/adapter/research-215a50fc4d541536dfa18e2d.content-video-brief.json",
+      "sha256": "2fcb32e634e9c38bda02e9a48a3e9558ea3307d4b1e0e67dcfb89114c0f1f1fb"
+    },
+    {
+      "path": "questions/family-priority/adapter/research-215a50fc4d541536dfa18e2d.manifest.json",
+      "sha256": "38fffd0806b32bad68d703f68e84838bbc5d95601b1817bbb06f73c78de29136"
+    },
+    {
+      "path": "questions/family-priority/draft.content-item.json",
+      "sha256": "9cb503b2040c63d4bf604703a98c0085493edf0fff61f3472b6ac8f4c9471b10"
+    },
+    {
+      "path": "questions/family-priority/material.content-item.json",
+      "sha256": "632480739640cad4a40b50b8ba3a56e8018d0641bf12cc992716abb87d31bdb5"
+    },
+    {
+      "path": "questions/family-priority/research-output.v1.json",
+      "sha256": "a674c8f134bfdb4c4eb5ceb174f1b0ac754016d7152849047d1c8bbdfc2dcc91"
+    },
+    {
+      "path": "questions/family-priority/sources/synthetic-source.md",
+      "sha256": "3574e80a06ddb73c315253770ad1fdd136ee73864bdb745f5faa9b68bbcd57bd"
+    },
+    {
+      "path": "questions/family-priority/topic.json",
+      "sha256": "5494d7b2170a1d16325fa30d7c239535b9e16fc23597a3cdf1badf8938f4ab65"
+    },
+    {
+      "path": "questions/health-underwriting/adapter/research-ec0ac601678f4ec4f7840645.article.html",
+      "sha256": "7b6d815b7f0b824c94d1e6868fe5b573f0990a6dc48da41a164f5564e1a50d18"
+    },
+    {
+      "path": "questions/health-underwriting/adapter/research-ec0ac601678f4ec4f7840645.article.md",
+      "sha256": "81fbd900c8d11a35d3ae987380ba1d66818b3d9230e18ac412b2ea6634329946"
+    },
+    {
+      "path": "questions/health-underwriting/adapter/research-ec0ac601678f4ec4f7840645.content-item.json",
+      "sha256": "52bd79387e0f82b929258566a6e9d2d7876191725e8cf89d66d2bb4b4959605c"
+    },
+    {
+      "path": "questions/health-underwriting/adapter/research-ec0ac601678f4ec4f7840645.content-video-brief.json",
+      "sha256": "55140308bc7c2f3d72f1573d9bd13a71eea4194c6e1beaf6fd43f1cbbcf8e72f"
+    },
+    {
+      "path": "questions/health-underwriting/adapter/research-ec0ac601678f4ec4f7840645.manifest.json",
+      "sha256": "2c20fd6a676e5912906a7a8199de277ad7417287ebef8a4889652533b77d7cdb"
+    },
+    {
+      "path": "questions/health-underwriting/draft.content-item.json",
+      "sha256": "7f382a09ce5f1a56f8e20002b296c4ea4734f9fc403738f67c8a632b3bb9416e"
+    },
+    {
+      "path": "questions/health-underwriting/material.content-item.json",
+      "sha256": "c506bf7e3533dfe3072fa135e9da261573f3b715c0ba2a249e61a8a0146f2e61"
+    },
+    {
+      "path": "questions/health-underwriting/research-output.v1.json",
+      "sha256": "75aba0761efaa208fa9f3582296a072d95e49f6a254d1b5f330957bc363bbec4"
+    },
+    {
+      "path": "questions/health-underwriting/sources/synthetic-source.md",
+      "sha256": "27f4707ba6cc6f8bb1c1f4138e8ea0b8ee0918bebbabd7131ee231c4c00804ff"
+    },
+    {
+      "path": "questions/health-underwriting/topic.json",
+      "sha256": "7791a560c6f743189ec091f34753494ac3366b19ed546a304e24d1f3cfdafc81"
+    },
+    {
+      "path": "questions/medical-reimbursement/adapter/research-9af53d1845bc537784dd42b4.article.html",
+      "sha256": "450631bce542642eaa9bd8507f6cfbc58b835197c3aac9da6a50e67ff80413ea"
+    },
+    {
+      "path": "questions/medical-reimbursement/adapter/research-9af53d1845bc537784dd42b4.article.md",
+      "sha256": "f5b412068a4035862d0edd5ebee3c172556dd71853d47bf38c7334e3661e582e"
+    },
+    {
+      "path": "questions/medical-reimbursement/adapter/research-9af53d1845bc537784dd42b4.content-item.json",
+      "sha256": "c575aefd9ed73d6c7305a4d2d2349e951872260f5bb638fac9da2f68a010e85a"
+    },
+    {
+      "path": "questions/medical-reimbursement/adapter/research-9af53d1845bc537784dd42b4.content-video-brief.json",
+      "sha256": "d10714599c06af6c0834bc0969b85fd0713a0b9fefc0bce01115cf73e16d59ad"
+    },
+    {
+      "path": "questions/medical-reimbursement/adapter/research-9af53d1845bc537784dd42b4.manifest.json",
+      "sha256": "115bb6f42c4591eca54a7e9e81bab461cfb8f03ad4995ff6a17fe66d4cdf1f2d"
+    },
+    {
+      "path": "questions/medical-reimbursement/draft.content-item.json",
+      "sha256": "9183a5a6a85da4e96d47849d4faba334f8563e9a0ca83bb6090bde6dae5f82d7"
+    },
+    {
+      "path": "questions/medical-reimbursement/material.content-item.json",
+      "sha256": "10f08d93c4a6ee6e9fa2c1a79279a2a8f842be992b05ae2e186fe8b2c44df268"
+    },
+    {
+      "path": "questions/medical-reimbursement/research-output.v1.json",
+      "sha256": "3fb63634c7eb6643b7433a2dfab50cf497e0913c73be0f2a941335b41bbf09f6"
+    },
+    {
+      "path": "questions/medical-reimbursement/sources/synthetic-source.md",
+      "sha256": "ebb94ea18bc67395e75e4d912c71fd78048ebee06cb66b3c4f2997485070b766"
+    },
+    {
+      "path": "questions/medical-reimbursement/topic.json",
+      "sha256": "edab89cba49077108795906259a71997ba85d38c0cbe55029a2c82b40b8f4542"
+    },
+    {
+      "path": "questions/product-comparison/adapter/research-616adfe808782c09b28d4922.article.html",
+      "sha256": "25d40a3b150f7cd31f7f35f863d391ff6e86d3376672556973cb0827f85bd410"
+    },
+    {
+      "path": "questions/product-comparison/adapter/research-616adfe808782c09b28d4922.article.md",
+      "sha256": "ec61820226dd08e7177b47528ae4b7240047dc7e73f40b2c0fdb3a8d1f3f5ca8"
+    },
+    {
+      "path": "questions/product-comparison/adapter/research-616adfe808782c09b28d4922.content-item.json",
+      "sha256": "50c8082a9cdc5cc246cde6b74b9b7552bab2034560d0f14c9688638f4e3016aa"
+    },
+    {
+      "path": "questions/product-comparison/adapter/research-616adfe808782c09b28d4922.content-video-brief.json",
+      "sha256": "860de358f3991cab71e7245d573af208b1ee92415c1fb941e21afdcc5b940d05"
+    },
+    {
+      "path": "questions/product-comparison/adapter/research-616adfe808782c09b28d4922.manifest.json",
+      "sha256": "13a4b19da82238662470010682e2c3ef9fdb8db11249441f01233cc4491f7d65"
+    },
+    {
+      "path": "questions/product-comparison/draft.content-item.json",
+      "sha256": "bd136697f0fd477d6552503a49ab527d07a3cb7efec70453beafbb582219e8c4"
+    },
+    {
+      "path": "questions/product-comparison/material.content-item.json",
+      "sha256": "ce0f1f8e2836a4177b280991d7db88a0f339b7a5e4ef0a416ad9b96319e08e7d"
+    },
+    {
+      "path": "questions/product-comparison/research-output.v1.json",
+      "sha256": "9522dd0d69ed4071e224071e1550ebcd20620f559e4a3d681611f9ea72a387af"
+    },
+    {
+      "path": "questions/product-comparison/sources/synthetic-source.md",
+      "sha256": "6a6912a47793a588ffe6c81a999a16a0a50562733cf521c0a7589b010a332924"
+    },
+    {
+      "path": "questions/product-comparison/topic.json",
+      "sha256": "3ef07b07f99784aa12b55848c27ff29696690bd7b4edd4f6a275951cb53baa21"
+    }
+  ],
+  "canonical_contracts": [
+    {
+      "path": "question-research-poc/schemas/research-output.v1.schema.json",
+      "sha256": "3c2e0e9a05034b1ffa3693735da128c7d3e114ddb155f11668120b974fee1009"
+    },
+    {
+      "path": "docs/content-creation-system/content-item.schema.json",
+      "sha256": "202b827b10c448594a37810fd307831d8410344df8d17f62896a2064f09885ad"
+    },
+    {
+      "path": "docs/content-creation-system/operations/account.schema.json",
+      "sha256": "f0f66be6e47e6c5c9b6c7398a18499c2aab5c56da1ae2fa7c2cb561f62dcf5b6"
+    },
+    {
+      "path": "docs/content-creation-system/operations/topic.schema.json",
+      "sha256": "911a832e11e6298c6cce24d73591ec8a9c429c6cf58c0134bf89658efd73abb9"
+    },
+    {
+      "path": "docs/content-creation-system/operations/publication-event.schema.json",
+      "sha256": "a6b3d941c26ee86dbfb734b4c541917b3f3655459ec138855a7bb653dc78982d"
+    },
+    {
+      "path": "docs/content-creation-system/operations/performance-snapshot.schema.json",
+      "sha256": "ed795d13ec646956bdc99eee18e7893753d7c55e92e549e707bf5d980e81e936"
+    },
+    {
+      "path": "content-studio-poc/schemas/content-video-brief.v1.schema.json",
+      "sha256": "be290561df0fa8dbfb2b235df4abdc91978b4bb40169e0cdf3a61f48100bfbcd"
+    }
+  ],
+  "consumer_policy": {
+    "analysis_only": true,
+    "content_metrics_are_crm_candidate": false,
+    "content_metrics_are_relationship_signal": false,
+    "content_no_signal_layer": "content_observation",
+    "crm_candidate_requires_manual_confirmation": true,
+    "crm_qualifying_events": [
+      "continued_consultation",
+      "necessary_documents_provided",
+      "next_step_booked"
+    ],
+    "do_not_auto_contact": true,
+    "execution_allowed": false
+  },
+  "fixture_classification": {
+    "external_api_called": false,
+    "policy": "synthetic_only is carried by this manifest and every handoff record because canonical production schemas use additionalProperties=false.",
+    "published": false,
+    "real_account_or_platform_data_used": false,
+    "real_customer_data_used": false,
+    "real_product_data_used": false,
+    "real_world_frequency_claimed": false
+  },
+  "fixture_pack": "vibe-living-synthetic-content-loop.v1",
+  "generated_at": "2026-08-05T12:00:00+08:00",
+  "mode": "draft_only",
+  "negative_cases_ref": "negative-cases.json",
+  "no_parallel_schema_created": true,
+  "publication_feedback_cases": [
+    {
+      "case_id": "pf-content-no-signal",
+      "content_id": "research-ec0ac601678f4ec4f7840645",
+      "expected_signal_layer": "content_observation",
+      "feedback_handoff_ref": "publication-feedback/pf-content-no-signal/feedback-handoff.json",
+      "performance_snapshots_ref": "publication-feedback/pf-content-no-signal/performance-snapshots.json",
+      "publication_events_ref": "publication-feedback/pf-content-no-signal/publication-events.json",
+      "publication_id": "pub_S70HVYTTV20AZ2CED5DWD1K606",
+      "review_status": "reviewed",
+      "synthetic_only": true
+    },
+    {
+      "case_id": "pf-ordinary-content-engagement",
+      "content_id": "research-edca758a6ed755c9e91aecb8",
+      "expected_signal_layer": "content_observation",
+      "feedback_handoff_ref": "publication-feedback/pf-ordinary-content-engagement/feedback-handoff.json",
+      "performance_snapshots_ref": "publication-feedback/pf-ordinary-content-engagement/performance-snapshots.json",
+      "publication_events_ref": "publication-feedback/pf-ordinary-content-engagement/publication-events.json",
+      "publication_id": "pub_8P7WP5K3A1RXS7F2S2J9HJEPXM",
+      "review_status": "reviewed",
+      "synthetic_only": true
+    },
+    {
+      "case_id": "pf-explicit-business-signal",
+      "content_id": "research-215a50fc4d541536dfa18e2d",
+      "expected_signal_layer": "crm_candidate",
+      "feedback_handoff_ref": "publication-feedback/pf-explicit-business-signal/feedback-handoff.json",
+      "performance_snapshots_ref": "publication-feedback/pf-explicit-business-signal/performance-snapshots.json",
+      "publication_events_ref": "publication-feedback/pf-explicit-business-signal/publication-events.json",
+      "publication_id": "pub_QTMRG4H2PGAQJ40HD0791Z9X5N",
+      "review_status": "pending_human_confirmation",
+      "synthetic_only": true
+    }
+  ],
+  "questions": [
+    {
+      "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+      "adapter_status": "generated_draft_only",
+      "article_ref": "questions/health-underwriting/adapter/research-ec0ac601678f4ec4f7840645.article.md",
+      "content_draft_ref": "questions/health-underwriting/draft.content-item.json",
+      "content_id": "research-ec0ac601678f4ec4f7840645",
+      "frequency_status": "synthetic_priority_only_not_real_frequency",
+      "material_ref": "questions/health-underwriting/material.content-item.json",
+      "question_id": "sq-insurance-health-underwriting",
+      "research_output_ref": "questions/health-underwriting/research-output.v1.json",
+      "review_status": "human_review_required",
+      "slug": "health-underwriting",
+      "synthetic_frequency_count": 5,
+      "synthetic_only": true,
+      "topic_id": "topic_WKS9F15JCD7KCBPW0FSGVZTH18",
+      "topic_ref": "questions/health-underwriting/topic.json",
+      "video_brief_ref": "questions/health-underwriting/adapter/research-ec0ac601678f4ec4f7840645.content-video-brief.json"
+    },
+    {
+      "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+      "adapter_status": "generated_draft_only",
+      "article_ref": "questions/medical-reimbursement/adapter/research-9af53d1845bc537784dd42b4.article.md",
+      "content_draft_ref": "questions/medical-reimbursement/draft.content-item.json",
+      "content_id": "research-9af53d1845bc537784dd42b4",
+      "frequency_status": "synthetic_priority_only_not_real_frequency",
+      "material_ref": "questions/medical-reimbursement/material.content-item.json",
+      "question_id": "sq-insurance-medical-reimbursement",
+      "research_output_ref": "questions/medical-reimbursement/research-output.v1.json",
+      "review_status": "human_review_required",
+      "slug": "medical-reimbursement",
+      "synthetic_frequency_count": 4,
+      "synthetic_only": true,
+      "topic_id": "topic_HT8MKVXH5AE1QDZ63QXEKGDZ58",
+      "topic_ref": "questions/medical-reimbursement/topic.json",
+      "video_brief_ref": "questions/medical-reimbursement/adapter/research-9af53d1845bc537784dd42b4.content-video-brief.json"
+    },
+    {
+      "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+      "adapter_status": "generated_draft_only",
+      "article_ref": "questions/claims-preparation/adapter/research-edca758a6ed755c9e91aecb8.article.md",
+      "content_draft_ref": "questions/claims-preparation/draft.content-item.json",
+      "content_id": "research-edca758a6ed755c9e91aecb8",
+      "frequency_status": "synthetic_priority_only_not_real_frequency",
+      "material_ref": "questions/claims-preparation/material.content-item.json",
+      "question_id": "sq-insurance-claims-preparation",
+      "research_output_ref": "questions/claims-preparation/research-output.v1.json",
+      "review_status": "human_review_required",
+      "slug": "claims-preparation",
+      "synthetic_frequency_count": 4,
+      "synthetic_only": true,
+      "topic_id": "topic_8M8Q9T4FAA15S6H55ZTVND7VQ7",
+      "topic_ref": "questions/claims-preparation/topic.json",
+      "video_brief_ref": "questions/claims-preparation/adapter/research-edca758a6ed755c9e91aecb8.content-video-brief.json"
+    },
+    {
+      "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+      "adapter_status": "generated_draft_only",
+      "article_ref": "questions/family-priority/adapter/research-215a50fc4d541536dfa18e2d.article.md",
+      "content_draft_ref": "questions/family-priority/draft.content-item.json",
+      "content_id": "research-215a50fc4d541536dfa18e2d",
+      "frequency_status": "synthetic_priority_only_not_real_frequency",
+      "material_ref": "questions/family-priority/material.content-item.json",
+      "question_id": "sq-insurance-family-priority",
+      "research_output_ref": "questions/family-priority/research-output.v1.json",
+      "review_status": "human_review_required",
+      "slug": "family-priority",
+      "synthetic_frequency_count": 3,
+      "synthetic_only": true,
+      "topic_id": "topic_VW0ZG1XS8G4BEFAZZT0673SX0S",
+      "topic_ref": "questions/family-priority/topic.json",
+      "video_brief_ref": "questions/family-priority/adapter/research-215a50fc4d541536dfa18e2d.content-video-brief.json"
+    },
+    {
+      "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+      "adapter_status": "generated_draft_only",
+      "article_ref": "questions/product-comparison/adapter/research-616adfe808782c09b28d4922.article.md",
+      "content_draft_ref": "questions/product-comparison/draft.content-item.json",
+      "content_id": "research-616adfe808782c09b28d4922",
+      "frequency_status": "synthetic_priority_only_not_real_frequency",
+      "material_ref": "questions/product-comparison/material.content-item.json",
+      "question_id": "sq-insurance-product-comparison",
+      "research_output_ref": "questions/product-comparison/research-output.v1.json",
+      "review_status": "human_review_required",
+      "slug": "product-comparison",
+      "synthetic_frequency_count": 3,
+      "synthetic_only": true,
+      "topic_id": "topic_XXFZFC8E15J2VAB7MTZCNX68BA",
+      "topic_ref": "questions/product-comparison/topic.json",
+      "video_brief_ref": "questions/product-comparison/adapter/research-616adfe808782c09b28d4922.content-video-brief.json"
+    }
+  ],
+  "synthetic_only": true
+}

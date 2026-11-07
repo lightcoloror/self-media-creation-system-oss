@@ -1,0 +1,17 @@
+{
+  "schema_version": "content-operations-cycle.interaction-input.v1",
+  "data_classification": "synthetic-only",
+  "interaction_key": "synthetic-continued-consultation-001",
+  "publication_id": "pub_M4SFWHX1HS3T64SWRG3T0WRZKW",
+  "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+  "source_type": "private-message",
+  "occurred_at": "2026-08-12T11:00:00+08:00",
+  "recorded_at": "2026-08-12T11:10:00+08:00",
+  "deidentified_summary": "A fully synthetic person explicitly continued the consultation.",
+  "question_category": "synthetic-follow-up",
+  "evidence_status": "user-confirmed",
+  "evidence_refs": ["fixture:event:continued-consultation-001"],
+  "signal_class": "business-candidate",
+  "disposition": "lead-candidate",
+  "business_event_type": "continued_consultation"
+}

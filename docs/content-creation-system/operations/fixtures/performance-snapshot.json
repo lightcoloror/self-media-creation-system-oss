@@ -1,0 +1,27 @@
+{
+  "schema_version": "0.1",
+  "snapshot_id": "snap_01ARZ3NDEKTSV4RRFFQ69G5FAY",
+  "publication_id": "pub_01ARZ3NDEKTSV4RRFFQ69G5FAX",
+  "as_of": "2026-10-21T00:00:00+08:00",
+  "captured_at": "2026-10-21T00:01:00+08:00",
+  "window_label": "early",
+  "timezone": "Asia/Shanghai",
+  "metric_dictionary_version": "synthetic.manual.0.1",
+  "source_type": "manual-platform-backend",
+  "data_completeness": "unavailable",
+  "missing_reasons": [
+    "Synthetic example has no platform backend or collected metrics."
+  ],
+  "metrics": [
+    {
+      "metric_key": "views",
+      "value": null,
+      "unit": "count",
+      "dimensions": {
+        "window": "early"
+      },
+      "unavailable_reason": "No real metric exists."
+    }
+  ],
+  "notes": "Unknown remains null; no observation, account access or collection was performed."
+}

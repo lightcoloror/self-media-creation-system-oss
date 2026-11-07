@@ -1,0 +1,142 @@
+{
+  "schema_version": "0.1",
+  "data_classification": "synthetic-only",
+  "operating_review_id": "review_01ARZ3NDEKTSV4RRFFQ69G5FB9",
+  "review_type": "monthly",
+  "period": {
+    "start": "2026-09-29T00:00:00+08:00",
+    "end": "2026-10-28T23:59:59+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "account_ids": [
+    "acct_01ARZ3NDEKTSV4RRFFQ69G5FAV"
+  ],
+  "goal_reviews": [
+    {
+      "goal_id": "goal_01ARZ3NDEKTSV4RRFFQ69G5FBA",
+      "status": "insufficient-evidence",
+      "summary": "只保存了一次不可用快照，尚不能判断目标是否推进。",
+      "criterion_results": [
+        {
+          "criterion_id": "criterion_complete-cycle",
+          "status": "insufficient-evidence",
+          "actual_summary": "缺少可比较的 early 与 d7 数据。",
+          "evidence_refs": [
+            "snap_01ARZ3NDEKTSV4RRFFQ69G5FAY"
+          ]
+        }
+      ],
+      "evidence_refs": [
+        "pub_01ARZ3NDEKTSV4RRFFQ69G5FAX",
+        "snap_01ARZ3NDEKTSV4RRFFQ69G5FAY"
+      ]
+    }
+  ],
+  "input_refs": {
+    "publication_ids": [
+      "pub_01ARZ3NDEKTSV4RRFFQ69G5FAX"
+    ],
+    "snapshot_ids": [
+      "snap_01ARZ3NDEKTSV4RRFFQ69G5FAY"
+    ],
+    "interaction_event_ids": [
+      "int_01ARZ3NDEKTSV4RRFFQ69G5FB1"
+    ],
+    "lead_event_ids": [
+      "lead_01ARZ3NDEKTSV4RRFFQ69G5FB2"
+    ],
+    "experiment_run_ids": [
+      "exp_01ARZ3NDEKTSV4RRFFQ69G5FB3"
+    ],
+    "diagnostic_run_ids": [
+      "diag_01ARZ3NDEKTSV4RRFFQ69G5FB4"
+    ],
+    "resource_event_ids": [
+      "res_01ARZ3NDEKTSV4RRFFQ69G5FB5"
+    ],
+    "revenue_event_ids": [
+      "rev_01ARZ3NDEKTSV4RRFFQ69G5FB6"
+    ]
+  },
+  "layer_summaries": [
+    {
+      "layer": "admission",
+      "status": "insufficient-evidence",
+      "summary": "没有保存准入数据。",
+      "evidence_refs": []
+    },
+    {
+      "layer": "attraction",
+      "status": "insufficient-evidence",
+      "summary": "没有保存曝光或点击数据。",
+      "evidence_refs": []
+    },
+    {
+      "layer": "consumption",
+      "status": "insufficient-evidence",
+      "summary": "没有保存阅读深度。",
+      "evidence_refs": []
+    },
+    {
+      "layer": "value",
+      "status": "no-signal",
+      "summary": "没有可验证的内容互动数据。",
+      "evidence_refs": [
+        "snap_01ARZ3NDEKTSV4RRFFQ69G5FAY"
+      ]
+    },
+    {
+      "layer": "negative_feedback",
+      "status": "no-signal",
+      "summary": "没有观察到负反馈；这不等于证明内容安全有效。",
+      "evidence_refs": []
+    },
+    {
+      "layer": "business",
+      "status": "observed",
+      "summary": "完全虚构的继续咨询事件经人工确认。",
+      "evidence_refs": [
+        "lead_01ARZ3NDEKTSV4RRFFQ69G5FB2"
+      ]
+    }
+  ],
+  "resource_summary": {
+    "human_time_hours": 1.5,
+    "tool_cost": 0,
+    "external_cost": 0,
+    "paid_distribution_cost": 0,
+    "currency": "CNY"
+  },
+  "revenue_summary": {
+    "direct_count": 1,
+    "assisted_count": 0,
+    "unknown_count": 0,
+    "causal_claim": false
+  },
+  "decisions": [
+    {
+      "scope": "content-line:synthetic-echo-garden-question",
+      "decision": "insufficient-evidence",
+      "reason": "内容侧数据缺失，不能由单个业务事件推断内容效果。",
+      "evidence_refs": [
+        "snap_01ARZ3NDEKTSV4RRFFQ69G5FAY",
+        "lead_01ARZ3NDEKTSV4RRFFQ69G5FB2"
+      ]
+    }
+  ],
+  "data_gaps": [
+    "缺少 early 与 d7 可比指标",
+    "账号历史样本不足"
+  ],
+  "next_experiment_ids": [
+    "exp_01ARZ3NDEKTSV4RRFFQ69G5FB3"
+  ],
+  "review_state": "draft-only",
+  "authority": {
+    "execution_authorized": false,
+    "publication_authority": "never",
+    "crm_write_performed": false,
+    "automatic_resource_reallocation": false
+  },
+  "created_at": "2026-10-28T16:00:00+08:00"
+}

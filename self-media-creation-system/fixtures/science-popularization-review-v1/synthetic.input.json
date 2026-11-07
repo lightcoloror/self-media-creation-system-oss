@@ -1,0 +1,41 @@
+{
+  "generated_at": "2026-09-03T19:15:38+08:00",
+  "content_id": "synthetic-science-public-draft-001",
+  "content_domains": ["health", "insurance-medical-cross"],
+  "body_binding": {
+    "body_ref": "fixtures/science-popularization-review-v1/synthetic-body.md",
+    "body_sha256": "f71683d3d36ebac5c89c97c165d7144ca5c21ff86dd7a38a573ded7d68d41eaf"
+  },
+  "source_card_ref": "docs/references/cast-science-popularization-guide-2026.v1.json",
+  "scientific_review": {
+    "decision": "passed",
+    "claims_checked_against_current_authoritative_sources": true,
+    "source_ledger_complete": true,
+    "data_and_citation_currency_checked": true,
+    "concepts_and_definitions_checked": true,
+    "ai_output_not_used_as_evidence": true,
+    "individual_case_not_generalized": true,
+    "controversy_status": "none",
+    "material_limitations_visible": true,
+    "subject_matter_review_status": "passed",
+    "evidence_refs": ["fixtures/science-popularization-review-v1/synthetic-evidence.md"]
+  },
+  "audience_readability_review": {
+    "decision": "passed",
+    "primary_audience": "non-specialist adults",
+    "reviewer_roles": ["target-audience-representative"],
+    "jargon_explained": true,
+    "structure_and_information_density_fit": true,
+    "feedback_resolved": true,
+    "review_evidence_refs": ["fixtures/science-popularization-review-v1/synthetic-audience-review.md"]
+  },
+  "ai_assistance": {
+    "used": true,
+    "functions": ["outline", "plain-language-rewrite"],
+    "nonpublic_or_sensitive_input_provided": false,
+    "input_deidentification_status": "passed",
+    "factual_output_review": "passed",
+    "disclosure_assessment": "label-not-required-with-rationale",
+    "disclosure_rationale": "Synthetic offline fixture; a real platform package must reassess current labeling rules."
+  }
+}

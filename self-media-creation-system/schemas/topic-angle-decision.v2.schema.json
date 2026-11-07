@@ -1,0 +1,853 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lightcolor/self-media/topic-angle-decision.v2.schema.json",
+  "title": "Evidence-bound framework decision with four editorial routes",
+  "description": "A candidate-only decision layer between topic observations and the existing content lifecycle. It does not rank by platform formula or authorize publication.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "decision_id",
+    "generated_at",
+    "source_observations",
+    "material",
+    "editorial_goal",
+    "evidence_registry",
+    "angle_candidates",
+    "selected_angle_id",
+    "heuristic_policy",
+    "human_review",
+    "artifact_status",
+    "publication_boundary",
+    "authority",
+    "receipt_payload_sha256",
+    "framework_decision"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "topic-angle-decision.v2"
+    },
+    "decision_id": {
+      "type": "string",
+      "pattern": "^angle-decision-[a-f0-9]{24}$"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_observations": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/source_observation"
+      }
+    },
+    "material": {
+      "$ref": "#/$defs/material"
+    },
+    "editorial_goal": {
+      "$ref": "#/$defs/editorial_goal"
+    },
+    "evidence_registry": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "angle_candidates": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 8,
+      "items": {
+        "$ref": "#/$defs/angle"
+      }
+    },
+    "selected_angle_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^angle-[a-z0-9-]{3,60}$"
+    },
+    "heuristic_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "fixed_platform_weights_prohibited",
+        "platform_fact_claim",
+        "causal_claim_prohibited"
+      ],
+      "properties": {
+        "mode": {
+          "const": "transparent-advisory-only"
+        },
+        "fixed_platform_weights_prohibited": {
+          "const": true
+        },
+        "platform_fact_claim": {
+          "const": false
+        },
+        "causal_claim_prohibited": {
+          "const": true
+        }
+      }
+    },
+    "human_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "reviewer",
+        "decision_confirmed",
+        "notes"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "confirmed"
+          ]
+        },
+        "reviewer": {
+          "enum": [
+            "not-yet",
+            "human"
+          ]
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "decision_confirmed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "artifact_status": {
+      "const": "candidate-only"
+    },
+    "publication_boundary": {
+      "const": "manual-only"
+    },
+    "authority": {
+      "$ref": "#/$defs/authority"
+    },
+    "receipt_payload_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "framework_decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "outcome",
+        "rationale",
+        "business_mode",
+        "offer",
+        "buyer",
+        "content_role",
+        "current_artifact",
+        "production_scope",
+        "allowed_changes",
+        "planned_changes",
+        "rewrite_scope",
+        "missing_material",
+        "next_action",
+        "resume_condition",
+        "assessments"
+      ],
+      "properties": {
+        "outcome": {
+          "enum": [
+            "continue",
+            "reframe",
+            "supplement",
+            "defer"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 1200
+        },
+        "business_mode": {
+          "enum": [
+            "known",
+            "unknown",
+            "not-goal"
+          ]
+        },
+        "offer": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 3
+        },
+        "buyer": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 3
+        },
+        "content_role": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 1200
+        },
+        "current_artifact": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ref",
+            "sha256"
+          ],
+          "properties": {
+            "ref": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1200
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          }
+        },
+        "production_scope": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 1200
+        },
+        "allowed_changes": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "enum": [
+              "revise-body",
+              "reshoot",
+              "edit-existing",
+              "package-only",
+              "collect-material"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "planned_changes": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "enum": [
+              "revise-body",
+              "reshoot",
+              "edit-existing",
+              "package-only",
+              "collect-material"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "rewrite_scope": {
+          "enum": [
+            "none",
+            "partial",
+            "full"
+          ]
+        },
+        "missing_material": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 1200
+          },
+          "uniqueItems": true
+        },
+        "next_action": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 1200
+        },
+        "resume_condition": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 1200
+        },
+        "assessments": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "angle_id",
+              "audience",
+              "viewer_gain",
+              "business_fit",
+              "business_reason",
+              "material_support",
+              "effort",
+              "worth_cost",
+              "reason",
+              "evidence_refs"
+            ],
+            "properties": {
+              "angle_id": {
+                "type": "string",
+                "pattern": "^angle-[a-z0-9-]{3,60}$"
+              },
+              "audience": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 1200
+              },
+              "viewer_gain": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 1200
+              },
+              "business_fit": {
+                "enum": [
+                  "matched",
+                  "indirect",
+                  "mismatch",
+                  "unknown",
+                  "not-applicable"
+                ]
+              },
+              "business_reason": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 1200
+              },
+              "material_support": {
+                "enum": [
+                  "sufficient",
+                  "needs-material",
+                  "unsupported"
+                ]
+              },
+              "effort": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 1200
+              },
+              "worth_cost": {
+                "enum": [
+                  "yes",
+                  "no",
+                  "unknown"
+                ]
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 1200
+              },
+              "evidence_refs": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "pattern": "^evidence-[a-z0-9-]{3,60}$"
+                }
+              }
+            }
+          },
+          "uniqueItems": true
+        }
+      }
+    }
+  },
+  "$defs": {
+    "source_observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "signal_id",
+        "ref",
+        "sha256"
+      ],
+      "properties": {
+        "signal_id": {
+          "type": "string",
+          "pattern": "^sig_[A-Za-z0-9-]{8,80}$"
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "material": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "material_id",
+        "source_type",
+        "summary",
+        "case_truth_status",
+        "synthetic_only"
+      ],
+      "properties": {
+        "material_id": {
+          "type": "string",
+          "pattern": "^material-[a-z0-9-]{3,60}$"
+        },
+        "source_type": {
+          "enum": [
+            "observation",
+            "user-experience",
+            "customer-case",
+            "public-post",
+            "comment-cluster",
+            "search-query",
+            "synthetic"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 800
+        },
+        "case_truth_status": {
+          "enum": [
+            "not-applicable",
+            "user-confirmed-deidentified",
+            "synthetic-only",
+            "unverified"
+          ]
+        },
+        "synthetic_only": {
+          "type": "boolean"
+        }
+      }
+    },
+    "editorial_goal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "goal_id",
+        "primary_goal",
+        "target_audience",
+        "what_to_consider",
+        "how_to_frame",
+        "account_fit"
+      ],
+      "properties": {
+        "goal_id": {
+          "type": "string",
+          "pattern": "^goal-[a-z0-9-]{3,60}$"
+        },
+        "primary_goal": {
+          "enum": [
+            "reach",
+            "trust",
+            "save",
+            "discussion",
+            "education",
+            "consultation"
+          ]
+        },
+        "target_audience": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 300
+        },
+        "what_to_consider": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 500
+        },
+        "how_to_frame": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 500
+        },
+        "account_fit": {
+          "enum": [
+            "cange-risk-diagnosis",
+            "cange-growth",
+            "dual-account-shared",
+            "personal-wechat-moments"
+          ]
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id",
+        "source_kind",
+        "status",
+        "ref",
+        "sha256",
+        "fact_support_eligible",
+        "synthetic_only"
+      ],
+      "properties": {
+        "evidence_id": {
+          "type": "string",
+          "pattern": "^evidence-[a-z0-9-]{3,60}$"
+        },
+        "source_kind": {
+          "enum": [
+            "topic-observation",
+            "official-source",
+            "contract-clause",
+            "user-confirmed",
+            "public-post",
+            "comment",
+            "search-query",
+            "secondary-summary",
+            "synthetic-fixture"
+          ]
+        },
+        "status": {
+          "enum": [
+            "verified_source",
+            "verified_position",
+            "user_confirmed",
+            "framework_application",
+            "candidate_experience",
+            "agent_inference",
+            "unverified"
+          ]
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "fact_support_eligible": {
+          "type": "boolean"
+        },
+        "synthetic_only": {
+          "type": "boolean"
+        }
+      }
+    },
+    "angle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "angle_id",
+        "angle",
+        "dispute_or_tension",
+        "audience_question",
+        "audience_value",
+        "editorial_alignment",
+        "evidence_readiness",
+        "trust_value",
+        "business_relevance",
+        "reach_hypothesis",
+        "claim_mode",
+        "evidence_refs",
+        "hook_hypothesis",
+        "novelty_or_timeliness",
+        "compliance_risk",
+        "risk",
+        "selection_status",
+        "selection_reason",
+        "rejection_reason"
+      ],
+      "properties": {
+        "angle_id": {
+          "type": "string",
+          "pattern": "^angle-[a-z0-9-]{3,60}$"
+        },
+        "angle": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 500
+        },
+        "dispute_or_tension": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 500
+        },
+        "audience_question": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 500
+        },
+        "audience_value": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 500
+        },
+        "editorial_alignment": {
+          "enum": [
+            "aligned",
+            "partial",
+            "off-goal"
+          ]
+        },
+        "evidence_readiness": {
+          "enum": [
+            "ready-for-framing",
+            "needs-verification",
+            "blocked"
+          ]
+        },
+        "trust_value": {
+          "enum": [
+            "strengthens-trust",
+            "neutral",
+            "risks-trust"
+          ]
+        },
+        "business_relevance": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "reach_hypothesis": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "level",
+            "basis_status",
+            "claim_as_platform_fact"
+          ],
+          "properties": {
+            "level": {
+              "enum": [
+                "low",
+                "medium",
+                "high",
+                "unknown"
+              ]
+            },
+            "basis_status": {
+              "enum": [
+                "verified_source",
+                "candidate_experience",
+                "agent_inference",
+                "unverified"
+              ]
+            },
+            "claim_as_platform_fact": {
+              "const": false
+            }
+          }
+        },
+        "claim_mode": {
+          "enum": [
+            "non-factual-framing",
+            "audience-hypothesis",
+            "factual-claim"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^evidence-[a-z0-9-]{3,60}$"
+          }
+        },
+        "hook_hypothesis": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "text",
+            "support_status"
+          ],
+          "properties": {
+            "text": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 300
+            },
+            "support_status": {
+              "enum": [
+                "body-supported",
+                "evidence-supported",
+                "candidate-only",
+                "unsupported"
+              ]
+            }
+          }
+        },
+        "novelty_or_timeliness": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "level",
+            "basis_status",
+            "notes"
+          ],
+          "properties": {
+            "level": {
+              "enum": [
+                "low",
+                "medium",
+                "high",
+                "unknown"
+              ]
+            },
+            "basis_status": {
+              "enum": [
+                "verified_source",
+                "candidate_experience",
+                "agent_inference",
+                "unverified"
+              ]
+            },
+            "notes": {
+              "type": "string",
+              "maxLength": 400
+            }
+          }
+        },
+        "compliance_risk": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "risk": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "level",
+            "flags",
+            "notes"
+          ],
+          "properties": {
+            "level": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            },
+            "flags": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "none",
+                  "privacy",
+                  "medical",
+                  "insurance",
+                  "fabricated-conflict",
+                  "outrage-targeting",
+                  "fear-escalation",
+                  "unsupported-authority",
+                  "customer-case-unverified"
+                ]
+              }
+            },
+            "notes": {
+              "type": "string",
+              "maxLength": 500
+            }
+          }
+        },
+        "selection_status": {
+          "enum": [
+            "proposed",
+            "not-selected"
+          ]
+        },
+        "selection_reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 500
+        },
+        "rejection_reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 500
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "selection_status": {
+                "const": "proposed"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "selection_reason": {
+                "type": "string",
+                "minLength": 3
+              },
+              "rejection_reason": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "selection_reason": {
+                "type": "null"
+              },
+              "rejection_reason": {
+                "type": "string",
+                "minLength": 3
+              }
+            }
+          }
+        }
+      ]
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "publication",
+        "external_send",
+        "customer_contact",
+        "crm_write",
+        "knowledge_base_write"
+      ],
+      "properties": {
+        "publication": {
+          "const": false
+        },
+        "external_send": {
+          "const": false
+        },
+        "customer_contact": {
+          "const": false
+        },
+        "crm_write": {
+          "const": false
+        },
+        "knowledge_base_write": {
+          "const": false
+        }
+      }
+    }
+  }
+}

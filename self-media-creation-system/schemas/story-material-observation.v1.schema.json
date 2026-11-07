@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/story-material-observation.v1.schema.json",
+  "title": "De-identified append-only story material observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "material_id", "captured_at", "story_source_mode",
+    "source_ref", "source_hash", "authorization_status", "identity_treatment",
+    "evidence_status", "privacy_status", "content_status", "fields", "quotation",
+    "story_route_readiness", "missing_story_fields", "created_by", "synthetic_only",
+    "authority", "record_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "story-material-observation.v1"},
+    "material_id": {"type": "string", "pattern": "^storymat-[a-f0-9]{24}$"},
+    "captured_at": {"type": "string", "format": "date-time"},
+    "story_source_mode": {"enum": ["first-person-memory", "observed-scene", "authorized-interview", "documented-case"]},
+    "source_ref": {"type": "string", "minLength": 1, "maxLength": 500, "pattern": "^(?![A-Za-z]:[\\\\/])(?![\\\\/])(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$"},
+    "source_hash": {"$ref": "#/$defs/sha256"},
+    "authorization_status": {"enum": ["not-required", "confirmed", "blocked"]},
+    "identity_treatment": {"enum": ["synthetic", "deidentified", "authorized-identifiable"]},
+    "evidence_status": {"enum": ["user-confirmed", "verified-source", "candidate", "unverified"]},
+    "privacy_status": {"const": "passed"},
+    "content_status": {"const": "candidate-only"},
+    "fields": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protagonist_goal", "prior_balance", "inciting_event", "first_attempt",
+        "unexpected_feedback", "hardest_choice", "final_result_and_cost",
+        "sensory_detail", "audience_meaning"
+      ],
+      "properties": {
+        "protagonist_goal": {"$ref": "#/$defs/material_field"},
+        "prior_balance": {"$ref": "#/$defs/material_field"},
+        "inciting_event": {"$ref": "#/$defs/material_field"},
+        "first_attempt": {"$ref": "#/$defs/material_field"},
+        "unexpected_feedback": {"$ref": "#/$defs/material_field"},
+        "hardest_choice": {"$ref": "#/$defs/material_field"},
+        "final_result_and_cost": {"$ref": "#/$defs/material_field"},
+        "sensory_detail": {"$ref": "#/$defs/material_field"},
+        "audience_meaning": {"$ref": "#/$defs/material_field"}
+      }
+    },
+    "quotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "text", "fact_refs"],
+      "properties": {
+        "mode": {"enum": ["none", "confirmed-exact", "labelled-paraphrase"]},
+        "text": {"type": ["string", "null"], "maxLength": 500},
+        "fact_refs": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/fact_ref"}}
+      }
+    },
+    "story_route_readiness": {"enum": ["ready-for-story-design", "incomplete", "blocked"]},
+    "missing_story_fields": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 80}},
+    "created_by": {"enum": ["human", "deterministic-adapter", "agent-candidate"]},
+    "synthetic_only": {"type": "boolean"},
+    "authority": {
+      "const": {"publish_authorized": false, "execution_authorized": false, "external_send_authorized": false}
+    },
+    "record_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "fact_ref": {"type": "string", "minLength": 1, "maxLength": 120},
+    "material_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "text", "fact_refs"],
+      "properties": {
+        "status": {"enum": ["supplied", "unknown"]},
+        "text": {"type": ["string", "null"], "maxLength": 500},
+        "fact_refs": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/fact_ref"}}
+      }
+    }
+  }
+}

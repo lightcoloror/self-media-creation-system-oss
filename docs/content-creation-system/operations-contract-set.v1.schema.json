@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/operations-contract-set.v1.schema.json",
+  "title": "Atomic content operations and diagnostics contract set",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_set_id",
+    "contract_set_version",
+    "canonical_root",
+    "hash_mode",
+    "components",
+    "mixing_policy",
+    "boundaries",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {"const": "operations-contract-set.v1"},
+    "contract_set_id": {"const": "content-operations-and-diagnostics"},
+    "contract_set_version": {"const": "1.1.0"},
+    "canonical_root": {"const": "."},
+    "hash_mode": {"const": "canonical-json-v1"},
+    "components": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operating-goal",
+        "account",
+        "topic",
+        "publication-event",
+        "performance-snapshot",
+        "interaction-event",
+        "lead-event",
+        "experiment-run",
+        "resource-ledger-event",
+        "revenue-attribution-event",
+        "account-continuity-plan",
+        "account-security-event",
+        "operating-review",
+        "diagnostic-run"
+      ],
+      "properties": {
+        "operating-goal": {"$ref": "#/$defs/component"},
+        "account": {"$ref": "#/$defs/component"},
+        "topic": {"$ref": "#/$defs/component"},
+        "publication-event": {"$ref": "#/$defs/component"},
+        "performance-snapshot": {"$ref": "#/$defs/component"},
+        "interaction-event": {"$ref": "#/$defs/component"},
+        "lead-event": {"$ref": "#/$defs/component"},
+        "experiment-run": {"$ref": "#/$defs/component"},
+        "resource-ledger-event": {"$ref": "#/$defs/component"},
+        "revenue-attribution-event": {"$ref": "#/$defs/component"},
+        "account-continuity-plan": {"$ref": "#/$defs/component"},
+        "account-security-event": {"$ref": "#/$defs/component"},
+        "operating-review": {"$ref": "#/$defs/component"},
+        "diagnostic-run": {"$ref": "#/$defs/component"}
+      }
+    },
+    "mixing_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mixed_roots_prohibited",
+        "single_contract_set_per_run",
+        "on_mismatch"
+      ],
+      "properties": {
+        "mixed_roots_prohibited": {"const": true},
+        "single_contract_set_per_run": {"const": true},
+        "on_mismatch": {"const": "fail-closed"}
+      }
+    },
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "execution",
+        "publication",
+        "external_send",
+        "customer_contact",
+        "crm_write",
+        "account_action",
+        "secret_storage",
+        "evidence_scope"
+      ],
+      "properties": {
+        "execution": {"const": "record-validate-review-only"},
+        "publication": {"const": "manual-only"},
+        "external_send": {"const": "not-authorized"},
+        "customer_contact": {"const": "not-authorized"},
+        "crm_write": {"const": "not-authorized"},
+        "account_action": {"const": "not-authorized"},
+        "secret_storage": {"const": "prohibited"},
+        "evidence_scope": {"const": "synthetic-or-deidentified-contract-evidence-only"}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["created_at", "acting_tool_model", "supersedes"],
+      "properties": {
+        "created_at": {"type": "string", "format": "date-time"},
+        "acting_tool_model": {"type": "string", "minLength": 1},
+        "supersedes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "fixture"],
+      "properties": {
+        "schema": {"$ref": "#/$defs/schemaArtifact"},
+        "fixture": {"$ref": "#/$defs/fixtureArtifact"}
+      }
+    },
+    "schemaArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "schema_version", "canonical_json_sha256"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(operations|diagnostics)/[a-z0-9-]+\\.schema\\.json$"
+        },
+        "schema_version": {"const": "0.1"},
+        "canonical_json_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "fixtureArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "schema_version", "canonical_json_sha256"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(operations|diagnostics)/fixtures/[a-z0-9-]+\\.json$"
+        },
+        "schema_version": {"const": "0.1"},
+        "canonical_json_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    }
+  }
+}

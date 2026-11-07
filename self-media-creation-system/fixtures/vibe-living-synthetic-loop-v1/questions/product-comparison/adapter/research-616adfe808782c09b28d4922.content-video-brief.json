@@ -1,0 +1,124 @@
+{
+  "audience": "synthetic insurance education reader",
+  "brief_id": "vbrief-52d63496bd7ed56f0b6e",
+  "chapters": [
+    {
+      "chapter_id": "chapter-01",
+      "evidence_refs": [
+        {
+          "ref_id": "claim_synthetic_product_comparison",
+          "ref_type": "claim"
+        },
+        {
+          "ref_id": "evidence_synthetic_product_comparison",
+          "ref_type": "evidence"
+        },
+        {
+          "ref_id": "source_synthetic_product_comparison",
+          "ref_type": "source"
+        }
+      ],
+      "narration_draft": "比较时应统一版本、责任、除外、续保或保障期限、适用条件与保费口径，不能只看宣传页上的一个数字。",
+      "purpose": "呈现一条经过审核且有来源支持的核心判断",
+      "target_duration_seconds": 45,
+      "title": "证据结论 1"
+    }
+  ],
+  "content_id": "research-616adfe808782c09b28d4922",
+  "forbidden_expressions": [
+    "Only synthetic, reviewed, non-synthesis fixture evidence is included; no real-world frequency or suitability conclusion is implied.",
+    "不得把 candidate、reviewed 或 AI synthesis 表述为 verified fact。",
+    "不得把视觉候选写成已经拍到、已经取得或真实发生的镜头。"
+  ],
+  "mode": "draft_only",
+  "provenance": {
+    "adapter": "research-output-to-content",
+    "adapter_version": "0.2.0",
+    "external_api_called": false,
+    "generated_at": "2026-08-05T12:00:00+08:00",
+    "input_schema_id": "https://local.invalid/schemas/research-output.v1.schema.json",
+    "input_sha256": "23a5c1641514bd7f6e1ab118b04017ce5edc25f6c1036a03dcd82753419620ce",
+    "manifest_ref": "research-616adfe808782c09b28d4922.manifest.json",
+    "model_memory_used_as_evidence": false,
+    "offline_only": true,
+    "research_id": "research_synthetic_product_comparison",
+    "upstream_input_files": [
+      {
+        "path": "sources/synthetic-source.md",
+        "sha256": "6a6912a47793a588ffe6c81a999a16a0a50562733cf521c0a7589b010a332924",
+        "status": "present"
+      }
+    ]
+  },
+  "review_gate": {
+    "publication_boundary": "manual-only",
+    "reasons": [
+      "旁白、字幕、视觉和平台合规均需人工复核。",
+      "所有 visual_leads 只是候选，不代表素材已存在或权利已核验。",
+      "synthetic-only fixture; the frequency count and content do not describe real users or markets"
+    ],
+    "required_reviews": [
+      "fact",
+      "privacy",
+      "compliance",
+      "rights",
+      "voice",
+      "video-production"
+    ],
+    "status": "required"
+  },
+  "scenes": [
+    {
+      "chapter_ref": "chapter-01",
+      "evidence_refs": [
+        {
+          "ref_id": "claim_synthetic_product_comparison",
+          "ref_type": "claim"
+        },
+        {
+          "ref_id": "evidence_synthetic_product_comparison",
+          "ref_type": "evidence"
+        },
+        {
+          "ref_id": "source_synthetic_product_comparison",
+          "ref_type": "source"
+        }
+      ],
+      "narration_draft": "比较时应统一版本、责任、除外、续保或保障期限、适用条件与保费口径，不能只看宣传页上的一个数字。",
+      "purpose": "用口语化旁白说明一条证据结论",
+      "scene_id": "scene-01",
+      "subtitle_candidates": [
+        "比较时应统一版本、责任、除外、续保或保障期限、适用条件与保费口径，不能只看宣传页上的一个数字。"
+      ],
+      "visual_leads": [
+        {
+          "boundary_note": "这不是已存在镜头，也不是事实性画面承诺。",
+          "description": "候选：用证据卡、关键词或关系图解释本段；具体镜头和素材待人工确认",
+          "evidence_refs": [
+            {
+              "ref_id": "claim_synthetic_product_comparison",
+              "ref_type": "claim"
+            },
+            {
+              "ref_id": "evidence_synthetic_product_comparison",
+              "ref_type": "evidence"
+            },
+            {
+              "ref_id": "source_synthetic_product_comparison",
+              "ref_type": "source"
+            }
+          ],
+          "evidence_role": "explanatory",
+          "lead_id": "visual-lead-01",
+          "rights_note": "未指定实际素材；后续需单独完成版权审核。",
+          "status": "candidate"
+        }
+      ]
+    }
+  ],
+  "schema_version": "content-video-brief.v1",
+  "target_duration_seconds": 45,
+  "thesis": "比较时应统一版本、责任、除外、续保或保障期限、适用条件与保费口径，不能只看宣传页上的一个数字。",
+  "title": "两个保险看起来差不多，应该怎么比较？",
+  "unknowns": []
+}

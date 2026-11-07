@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lightcolor/content-operations/operating-review.schema.json",
+  "title": "自媒体周月经营复盘",
+  "description": "汇总经营外围对象并追加人工复盘结论；不覆盖原始事件，不从内容信号推断客户结论或自动执行调整。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "data_classification",
+    "operating_review_id",
+    "review_type",
+    "period",
+    "account_ids",
+    "goal_reviews",
+    "input_refs",
+    "layer_summaries",
+    "resource_summary",
+    "revenue_summary",
+    "decisions",
+    "data_gaps",
+    "next_experiment_ids",
+    "review_state",
+    "authority",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "data_classification": { "enum": ["synthetic-only", "deidentified-operational"] },
+    "operating_review_id": { "type": "string", "pattern": "^review_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "review_type": { "enum": ["weekly", "monthly"] },
+    "period": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end", "timezone"],
+      "properties": {
+        "start": { "type": "string", "format": "date-time" },
+        "end": { "type": "string", "format": "date-time" },
+        "timezone": { "type": "string", "minLength": 1, "maxLength": 80 }
+      }
+    },
+    "account_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "pattern": "^acct_[0-9A-HJKMNP-TV-Z]{26}$" },
+      "uniqueItems": true
+    },
+    "goal_reviews": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["goal_id", "status", "summary", "criterion_results", "evidence_refs"],
+        "properties": {
+          "goal_id": { "type": "string", "pattern": "^goal_[0-9A-HJKMNP-TV-Z]{26}$" },
+          "status": { "enum": ["progressing", "met", "not-met", "insufficient-evidence", "not-due"] },
+          "summary": { "type": "string", "minLength": 1, "maxLength": 1000 },
+          "criterion_results": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["criterion_id", "status", "actual_summary", "evidence_refs"],
+              "properties": {
+                "criterion_id": { "type": "string", "pattern": "^criterion_[a-z0-9][a-z0-9-]{0,63}$" },
+                "status": { "enum": ["met", "not-met", "insufficient-evidence", "not-due"] },
+                "actual_summary": { "type": "string", "minLength": 1, "maxLength": 800 },
+                "evidence_refs": {
+                  "type": "array",
+                  "items": { "type": "string", "minLength": 1, "maxLength": 1000 },
+                  "uniqueItems": true
+                }
+              }
+            }
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1, "maxLength": 1000 },
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "input_refs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["publication_ids", "snapshot_ids", "interaction_event_ids", "lead_event_ids", "experiment_run_ids", "diagnostic_run_ids", "resource_event_ids", "revenue_event_ids"],
+      "properties": {
+        "publication_ids": { "type": "array", "items": { "type": "string", "pattern": "^pub_[0-9A-HJKMNP-TV-Z]{26}$" }, "uniqueItems": true },
+        "snapshot_ids": { "type": "array", "items": { "type": "string", "pattern": "^snap_[0-9A-HJKMNP-TV-Z]{26}$" }, "uniqueItems": true },
+        "interaction_event_ids": { "type": "array", "items": { "type": "string", "pattern": "^int_[0-9A-HJKMNP-TV-Z]{26}$" }, "uniqueItems": true },
+        "lead_event_ids": { "type": "array", "items": { "type": "string", "pattern": "^lead_[0-9A-HJKMNP-TV-Z]{26}$" }, "uniqueItems": true },
+        "experiment_run_ids": { "type": "array", "items": { "type": "string", "pattern": "^exp_[0-9A-HJKMNP-TV-Z]{26}$" }, "uniqueItems": true },
+        "diagnostic_run_ids": { "type": "array", "items": { "type": "string", "pattern": "^diag_[0-9A-HJKMNP-TV-Z]{26}$" }, "uniqueItems": true },
+        "resource_event_ids": { "type": "array", "items": { "type": "string", "pattern": "^res_[0-9A-HJKMNP-TV-Z]{26}$" }, "uniqueItems": true },
+        "revenue_event_ids": { "type": "array", "items": { "type": "string", "pattern": "^rev_[0-9A-HJKMNP-TV-Z]{26}$" }, "uniqueItems": true }
+      }
+    },
+    "layer_summaries": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["layer", "status", "summary", "evidence_refs"],
+        "properties": {
+          "layer": { "enum": ["admission", "attraction", "consumption", "value", "negative_feedback", "business"] },
+          "status": { "enum": ["observed", "no-signal", "insufficient-evidence", "not-applicable"] },
+          "summary": { "type": "string", "minLength": 1, "maxLength": 800 },
+          "evidence_refs": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1, "maxLength": 1000 },
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "resource_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["human_time_hours", "tool_cost", "external_cost", "paid_distribution_cost", "currency"],
+      "properties": {
+        "human_time_hours": { "type": "number", "minimum": 0 },
+        "tool_cost": { "type": "number", "minimum": 0 },
+        "external_cost": { "type": "number", "minimum": 0 },
+        "paid_distribution_cost": { "type": "number", "minimum": 0 },
+        "currency": { "type": "string", "pattern": "^[A-Z]{3}$" }
+      }
+    },
+    "revenue_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["direct_count", "assisted_count", "unknown_count", "causal_claim"],
+      "properties": {
+        "direct_count": { "type": "integer", "minimum": 0 },
+        "assisted_count": { "type": "integer", "minimum": 0 },
+        "unknown_count": { "type": "integer", "minimum": 0 },
+        "causal_claim": { "const": false }
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["scope", "decision", "reason", "evidence_refs"],
+        "properties": {
+          "scope": { "type": "string", "minLength": 1, "maxLength": 160 },
+          "decision": { "enum": ["retain", "modify", "pause", "retire", "insufficient-evidence"] },
+          "reason": { "type": "string", "minLength": 1, "maxLength": 1000 },
+          "evidence_refs": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1, "maxLength": 1000 },
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "data_gaps": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "maxLength": 500 },
+      "uniqueItems": true
+    },
+    "next_experiment_ids": {
+      "type": "array",
+      "maxItems": 2,
+      "items": { "type": "string", "pattern": "^exp_[0-9A-HJKMNP-TV-Z]{26}$" },
+      "uniqueItems": true
+    },
+    "review_state": { "enum": ["draft-only", "human-reviewed"] },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["human_confirmed", "reviewer_ref", "reviewed_at", "receipt_ref"],
+      "properties": {
+        "human_confirmed": { "const": true },
+        "reviewer_ref": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "reviewed_at": { "type": "string", "format": "date-time" },
+        "receipt_ref": { "type": "string", "minLength": 1, "maxLength": 1000 }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["execution_authorized", "publication_authority", "crm_write_performed", "automatic_resource_reallocation"],
+      "properties": {
+        "execution_authorized": { "const": false },
+        "publication_authority": { "const": "never" },
+        "crm_write_performed": { "const": false },
+        "automatic_resource_reallocation": { "const": false }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "review_state": { "const": "human-reviewed" } }, "required": ["review_state"] },
+      "then": { "required": ["review"] }
+    }
+  ]
+}

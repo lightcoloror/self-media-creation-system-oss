@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/self-media-sequence-status.v1.schema.json",
+  "title": "Derived self-media workflow sequence status",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "capsule_id",
+    "request_id",
+    "recipe_id",
+    "sequence_state",
+    "accepted_steps",
+    "next_step",
+    "blocked_step",
+    "semantic_evidence_pending",
+    "completion",
+    "publication_authority",
+    "payload_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "self-media-sequence-status.v1"},
+    "capsule_id": {"type": "string", "pattern": "^capsule-[a-f0-9]{16}$"},
+    "request_id": {"type": "string", "minLength": 1},
+    "recipe_id": {"type": "string", "minLength": 1},
+    "sequence_state": {
+      "enum": [
+        "next_step_required",
+        "blocked",
+        "sequence_complete_owner_semantics_pending",
+        "sequence_complete"
+      ]
+    },
+    "accepted_steps": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/accepted_step"}
+    },
+    "next_step": {
+      "anyOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/next_step"}
+      ]
+    },
+    "blocked_step": {
+      "anyOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/blocked_step"}
+      ]
+    },
+    "semantic_evidence_pending": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "completion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "all_steps_recorded",
+        "all_owner_semantics_verified",
+        "managed_pipeline_completion_claim_allowed"
+      ],
+      "properties": {
+        "all_steps_recorded": {"type": "boolean"},
+        "all_owner_semantics_verified": {"type": "boolean"},
+        "managed_pipeline_completion_claim_allowed": {"type": "boolean"}
+      }
+    },
+    "publication_authority": {"const": false},
+    "payload_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"sequence_state": {"const": "next_step_required"}}},
+      "then": {
+        "properties": {
+          "next_step": {"$ref": "#/$defs/next_step"},
+          "blocked_step": {"type": "null"},
+          "completion": {
+            "properties": {
+              "all_steps_recorded": {"const": false},
+              "managed_pipeline_completion_claim_allowed": {"const": false}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"sequence_state": {"const": "blocked"}}},
+      "then": {
+        "properties": {
+          "next_step": {"type": "null"},
+          "blocked_step": {"$ref": "#/$defs/blocked_step"},
+          "completion": {
+            "properties": {
+              "all_steps_recorded": {"const": false},
+              "managed_pipeline_completion_claim_allowed": {"const": false}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "sequence_state": {
+            "enum": ["sequence_complete_owner_semantics_pending", "sequence_complete"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "next_step": {"type": "null"},
+          "blocked_step": {"type": "null"},
+          "completion": {"properties": {"all_steps_recorded": {"const": true}}}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"sequence_state": {"const": "sequence_complete_owner_semantics_pending"}}},
+      "then": {
+        "properties": {
+          "semantic_evidence_pending": {"minItems": 1},
+          "completion": {
+            "properties": {
+              "all_owner_semantics_verified": {"const": false},
+              "managed_pipeline_completion_claim_allowed": {"const": false}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"sequence_state": {"const": "sequence_complete"}}},
+      "then": {
+        "properties": {
+          "semantic_evidence_pending": {"maxItems": 0},
+          "completion": {
+            "properties": {
+              "all_owner_semantics_verified": {"const": true},
+              "managed_pipeline_completion_claim_allowed": {"const": true}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "accepted_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "step_id",
+        "receipt_sha256",
+        "handoff_id",
+        "validation_scope",
+        "workflow_step_completed"
+      ],
+      "properties": {
+        "step_id": {"type": "string", "minLength": 1},
+        "receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "handoff_id": {"type": "string", "pattern": "^handoff-[a-f0-9]{16}$"},
+        "validation_scope": {"type": "string", "minLength": 1},
+        "workflow_step_completed": {"type": "boolean"}
+      }
+    },
+    "next_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "step_id",
+        "tool_id",
+        "interface",
+        "context_stage",
+        "input_roles",
+        "output_contract",
+        "stop_on_error",
+        "handoff_required",
+        "output_receipt_required"
+      ],
+      "properties": {
+        "step_id": {"type": "string", "minLength": 1},
+        "tool_id": {"type": "string", "minLength": 1},
+        "interface": {"enum": ["cli", "agent_task", "human_gate"]},
+        "context_stage": {"type": "string", "minLength": 1},
+        "input_roles": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "output_contract": {"type": "string", "minLength": 1},
+        "stop_on_error": {"const": true},
+        "handoff_required": {"const": true},
+        "output_receipt_required": {"const": true}
+      }
+    },
+    "blocked_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["step_id", "receipt_sha256", "handoff_id"],
+      "properties": {
+        "step_id": {"type": "string", "minLength": 1},
+        "receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "handoff_id": {"type": "string", "pattern": "^handoff-[a-f0-9]{16}$"}
+      }
+    }
+  }
+}

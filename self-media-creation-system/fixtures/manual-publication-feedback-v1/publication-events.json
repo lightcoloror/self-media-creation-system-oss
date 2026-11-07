@@ -1,0 +1,36 @@
+{
+  "items": [
+    {
+      "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+      "actor_type": "user",
+      "canonical_url": null,
+      "content_id": "research-edca758a6ed755c9e91aecb8",
+      "event_id": "evt_V0SVSWZ7RBMM0EG1SDPFF9Z7MS",
+      "event_sequence": 1,
+      "event_type": "published",
+      "evidence_status": "manual-observation",
+      "frozen_version": {
+        "body_ref": null,
+        "body_sha256": null,
+        "channel_variant": "synthetic-manual-publication",
+        "cover_refs": [],
+        "cta": null,
+        "freeze_status": "partial",
+        "frozen_at": "2026-08-06T10:00:00+08:00",
+        "media_refs": [],
+        "title": "买了保险，真到理赔时需要提前准备什么？",
+        "unavailable_reason": "Synthetic fixture does not store a published body or media."
+      },
+      "occurred_at": "2026-08-06T10:00:00+08:00",
+      "platform": "synthetic-surface",
+      "platform_content_id": null,
+      "publication_id": "pub_TY3ZH2KQWQ5W7JB7VHPDMN4A1H",
+      "reason": "Synthetic manual-entry fixture; no platform account or API was accessed.",
+      "recorded_at": "2026-08-06T10:05:00+08:00",
+      "schema_version": "0.1",
+      "supersedes_event_id": null,
+      "version_id": "ver_R1A7RX50F2KXE1ARAQWSPPPXXN"
+    }
+  ],
+  "synthetic_only": true
+}

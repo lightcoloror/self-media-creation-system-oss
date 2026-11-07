@@ -1,0 +1,21 @@
+{
+  "schema_version": "creation-route-context.v1",
+  "task_id": "synthetic-activity-route",
+  "revision_id": "synthetic-v1",
+  "task_kind": "replan",
+  "topic_domain": "travel-experience",
+  "primary_intent": "activity-highlights",
+  "requested_route": "auto",
+  "requested_vlog_style": "auto",
+  "material_state": "planned",
+  "material_summary": "完全虚构的活动集锦练习：计划拍摄两项活动，没有真实原片或反馈。",
+  "assessment_reason": "合成情境以活动集锦为目的，未提供因果变化证据，不强制故事结构。未声称已重新观看任何真实原片。",
+  "avoid_forced_story": true,
+  "causal_change": {
+    "status": "unknown",
+    "evidence_refs": []
+  },
+  "source_refs": [
+    "synthetic-only-invented-route-example-no-real-media"
+  ]
+}

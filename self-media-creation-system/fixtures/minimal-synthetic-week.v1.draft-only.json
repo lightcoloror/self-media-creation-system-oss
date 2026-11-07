@@ -1,0 +1,42 @@
+{
+  "schema_version": "1",
+  "package_status": "draft_only",
+  "week_start": "2026-11-02",
+  "topic_key": "synthetic-information-inventory",
+  "account_ip": "cange-risk-diagnosis",
+  "primary_goal": "Synthetic ranking and draft handoff only; no real audience or service.",
+  "voice_profile": "voice/synthetic-example",
+  "private_draft": {
+    "status": "draft",
+    "body": "虚构回声花园的观察卡散在桌上。这个例子只演示整理标题和待确认项，不对应任何真实经历。",
+    "cta": "合成示例，不发布、不联系任何人。",
+    "release_gate": "No publication authorized; operator review required.",
+    "visual_description": "Self-authored schematic only; no media bundled."
+  },
+  "public_candidates": [
+    {
+      "status": "draft",
+      "account_ip": "cange-risk-diagnosis",
+      "title": "虚构回声花园的观察卡",
+      "carousel_pages": [
+        "明确虚构情境",
+        "记录未知项",
+        "交给操作者审核"
+      ],
+      "caption": "此处仅示范一份待审核草稿，所有输入和状态均虚构。",
+      "cta": "不发布、不承诺服务。",
+      "release_gate": "No publication authorized; operator review required."
+    }
+  ],
+  "week_schedule": [
+    {
+      "day": "example",
+      "action": "Review synthetic inputs",
+      "output": "Draft only"
+    }
+  ],
+  "minimum_user_confirmation": {
+    "question": "本例不发布；真实稿件须另行审阅。",
+    "default_if_unanswered": "不阻塞当前草稿；保留待确认，不发布、不承诺服务。"
+  }
+}

@@ -1,0 +1,239 @@
+{
+  "schema_version": "topic-angle-decision-input.v2",
+  "generated_at": "2026-09-03T20:39:37+08:00",
+  "source_observations": [
+    {
+      "signal_id": "sig_synthetic-angle-001",
+      "ref": "fixtures/topic-angle-decision-v1/synthetic-observation.json",
+      "sha256": "6d90f322646c106b5135aa8099a70bbf8234f8b8ef102dbbcfbbe1fdd5e2516e"
+    }
+  ],
+  "material": {
+    "material_id": "material-family-policy-list",
+    "source_type": "synthetic",
+    "summary": "一个完全虚构的家庭准备新增保险，却发现没人能完整说出已经持有哪些保障。",
+    "case_truth_status": "synthetic-only",
+    "synthetic_only": true
+  },
+  "editorial_goal": {
+    "goal_id": "goal-practical-trust",
+    "primary_goal": "trust",
+    "target_audience": "已经买过多份保险、但缺乏统一整理方法的家庭",
+    "what_to_consider": "新增保险之前，先把已有保障和资料位置整理清楚",
+    "how_to_frame": "把保单整理理解为家庭风险管理的起点，而不是推销某款产品",
+    "account_fit": "cange-risk-diagnosis"
+  },
+  "evidence_registry": [
+    {
+      "evidence_id": "evidence-topic-observation",
+      "source_kind": "topic-observation",
+      "status": "candidate_experience",
+      "ref": "fixtures/topic-angle-decision-v1/synthetic-observation.json",
+      "sha256": "6d90f322646c106b5135aa8099a70bbf8234f8b8ef102dbbcfbbe1fdd5e2516e",
+      "fact_support_eligible": false,
+      "synthetic_only": true
+    }
+  ],
+  "angle_candidates": [
+    {
+      "angle_id": "angle-first-inventory",
+      "angle": "不是急着再买一份，而是先确认家里到底已经有什么",
+      "dispute_or_tension": "行动冲动与信息不完整之间的冲突",
+      "audience_question": "已经买过几份保险，新增之前第一步应该做什么？",
+      "audience_value": "帮助观众理解下一步先做信息盘点，而不是直接比较产品",
+      "editorial_alignment": "aligned",
+      "evidence_readiness": "ready-for-framing",
+      "trust_value": "strengthens-trust",
+      "business_relevance": "high",
+      "reach_hypothesis": {
+        "level": "medium",
+        "basis_status": "candidate_experience",
+        "claim_as_platform_fact": false
+      },
+      "claim_mode": "audience-hypothesis",
+      "evidence_refs": [
+        "evidence-topic-observation"
+      ],
+      "hook_hypothesis": {
+        "text": "家里明明买了好几份保险，真要用时为什么还可能漏掉？",
+        "support_status": "body-supported"
+      },
+      "novelty_or_timeliness": {
+        "level": "medium",
+        "basis_status": "agent_inference",
+        "notes": "仅是待验证的角度判断，不代表平台偏好。"
+      },
+      "compliance_risk": "low",
+      "risk": {
+        "level": "low",
+        "flags": [
+          "none"
+        ],
+        "notes": "不涉及真实产品、客户或赔付结论。"
+      },
+      "selection_status": "proposed",
+      "selection_reason": "与账号的家庭风险梳理定位一致，并为观众提供明确的第一步。",
+      "rejection_reason": null
+    },
+    {
+      "angle_id": "angle-document-chaos",
+      "angle": "保单散在不同手机和抽屉里，问题首先出在资料没有统一入口",
+      "dispute_or_tension": "买过与找得到、说得清之间的落差",
+      "audience_question": "为什么买过保险以后仍可能找不齐资料？",
+      "audience_value": "提供一个容易识别的生活场景，便于继续发展成整理清单",
+      "editorial_alignment": "partial",
+      "evidence_readiness": "needs-verification",
+      "trust_value": "neutral",
+      "business_relevance": "medium",
+      "reach_hypothesis": {
+        "level": "medium",
+        "basis_status": "agent_inference",
+        "claim_as_platform_fact": false
+      },
+      "claim_mode": "non-factual-framing",
+      "evidence_refs": [
+        "evidence-topic-observation"
+      ],
+      "hook_hypothesis": {
+        "text": "很多家庭不是没买保险，而是根本找不齐。",
+        "support_status": "candidate-only"
+      },
+      "novelty_or_timeliness": {
+        "level": "low",
+        "basis_status": "agent_inference",
+        "notes": "场景常见度尚未核验。"
+      },
+      "compliance_risk": "low",
+      "risk": {
+        "level": "low",
+        "flags": [
+          "none"
+        ],
+        "notes": "进入正文前仍需把‘很多家庭’改为非统计表达或补证据。"
+      },
+      "selection_status": "not-selected",
+      "selection_reason": null,
+      "rejection_reason": "当前素材没有足够证据支持家庭资料散落这一具体场景。"
+    },
+    {
+      "angle_id": "angle-industry-outrage",
+      "angle": "把资料混乱归咎于整个保险行业故意让消费者看不懂",
+      "dispute_or_tension": "消费者与行业的对立",
+      "audience_question": "资料混乱是否能够直接归因于整个行业？",
+      "audience_value": "可能制造讨论，但不能帮助观众完成保单整理",
+      "editorial_alignment": "off-goal",
+      "evidence_readiness": "blocked",
+      "trust_value": "risks-trust",
+      "business_relevance": "low",
+      "reach_hypothesis": {
+        "level": "high",
+        "basis_status": "unverified",
+        "claim_as_platform_fact": false
+      },
+      "claim_mode": "factual-claim",
+      "evidence_refs": [
+        "evidence-topic-observation"
+      ],
+      "hook_hypothesis": {
+        "text": "保险行业就是故意让普通人看不懂。",
+        "support_status": "unsupported"
+      },
+      "novelty_or_timeliness": {
+        "level": "high",
+        "basis_status": "unverified",
+        "notes": "没有证据证明其新颖度或传播能力。"
+      },
+      "compliance_risk": "high",
+      "risk": {
+        "level": "high",
+        "flags": [
+          "outrage-targeting",
+          "unsupported-authority"
+        ],
+        "notes": "制造无证据对立，偏离实用议程。"
+      },
+      "selection_status": "not-selected",
+      "selection_reason": null,
+      "rejection_reason": "虽被假设具有传播性，但偏离议程、缺乏事实证据并制造对立。"
+    }
+  ],
+  "selected_angle_id": "angle-first-inventory",
+  "heuristic_policy": {
+    "mode": "transparent-advisory-only",
+    "fixed_platform_weights_prohibited": true,
+    "platform_fact_claim": false,
+    "causal_claim_prohibited": true
+  },
+  "human_review": {
+    "status": "pending",
+    "reviewer": "not-yet",
+    "notes": "Luna low may prepare this proposal; a human must confirm the angle before downstream drafting.",
+    "decision_confirmed": false
+  },
+  "framework_decision": {
+    "outcome": "continue",
+    "rationale": "Synthetic fixture: the first angle serves the declared goal and current evidence.",
+    "business_mode": "not-goal",
+    "offer": null,
+    "buyer": null,
+    "content_role": "Synthetic trust-building exercise; no conversion assertion.",
+    "current_artifact": {
+      "ref": "fixtures/topic-angle-decision-v1/synthetic-observation.json",
+      "sha256": "6d90f322646c106b5135aa8099a70bbf8234f8b8ef102dbbcfbbe1fdd5e2516e"
+    },
+    "production_scope": "Text is editable; no new filming is permitted in this fixture.",
+    "allowed_changes": [
+      "revise-body",
+      "collect-material"
+    ],
+    "planned_changes": [],
+    "rewrite_scope": "none",
+    "missing_material": [],
+    "next_action": "Confirm the proposed decision, then enter the existing draft review.",
+    "resume_condition": "Author confirms this exact framework decision and source bytes remain current.",
+    "assessments": [
+      {
+        "angle_id": "angle-first-inventory",
+        "audience": "已经买过几份保险，新增之前第一步应该做什么？",
+        "viewer_gain": "帮助观众理解下一步先做信息盘点，而不是直接比较产品",
+        "business_fit": "not-applicable",
+        "business_reason": "The declared goal is trust rather than conversion.",
+        "material_support": "sufficient",
+        "effort": "One existing text revision; no new recording.",
+        "worth_cost": "yes",
+        "reason": "与账号的家庭风险梳理定位一致，并为观众提供明确的第一步。",
+        "evidence_refs": [
+          "evidence-topic-observation"
+        ]
+      },
+      {
+        "angle_id": "angle-document-chaos",
+        "audience": "为什么买过保险以后仍可能找不齐资料？",
+        "viewer_gain": "提供一个容易识别的生活场景，便于继续发展成整理清单",
+        "business_fit": "not-applicable",
+        "business_reason": "The declared goal is trust rather than conversion.",
+        "material_support": "needs-material",
+        "effort": "One existing text revision; no new recording.",
+        "worth_cost": "unknown",
+        "reason": "当前素材没有足够证据支持家庭资料散落这一具体场景。",
+        "evidence_refs": [
+          "evidence-topic-observation"
+        ]
+      },
+      {
+        "angle_id": "angle-industry-outrage",
+        "audience": "资料混乱是否能够直接归因于整个行业？",
+        "viewer_gain": "可能制造讨论，但不能帮助观众完成保单整理",
+        "business_fit": "not-applicable",
+        "business_reason": "The declared goal is trust rather than conversion.",
+        "material_support": "needs-material",
+        "effort": "One existing text revision; no new recording.",
+        "worth_cost": "unknown",
+        "reason": "虽被假设具有传播性，但偏离议程、缺乏事实证据并制造对立。",
+        "evidence_refs": [
+          "evidence-topic-observation"
+        ]
+      }
+    ]
+  }
+}

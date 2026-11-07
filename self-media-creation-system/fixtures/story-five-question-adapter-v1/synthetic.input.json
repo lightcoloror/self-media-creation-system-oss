@@ -1,0 +1,28 @@
+{
+  "schema_version": "story-five-question-input.v1",
+  "generated_at": "2026-09-03T20:39:37+08:00",
+  "story_card_input_ref": "fixtures/story-design-card-v1/synthetic.input.json",
+  "story_card_input_sha256": "f2fe7c54781c4c48544839fcdff5bd44acb497e1a1764b21a778b1c5210aab32",
+  "answers": {
+    "protagonist": {
+      "text": "fictional household member",
+      "fact_refs": ["fact-01"]
+    },
+    "goal": {
+      "text": "work out what insurance the family already has",
+      "fact_refs": ["fact-01"]
+    },
+    "obstacle": {
+      "text": "The family has incomplete records and does not know which person holds each document.",
+      "fact_refs": ["fact-02"]
+    },
+    "stakes": {
+      "text": "the purchase discussion is delayed while documents are collected",
+      "fact_refs": ["fact-02", "fact-03"]
+    },
+    "why_now": {
+      "text": "A fictional family asks whether it should add another policy but cannot list its existing coverage.",
+      "fact_refs": ["fact-01"]
+    }
+  }
+}

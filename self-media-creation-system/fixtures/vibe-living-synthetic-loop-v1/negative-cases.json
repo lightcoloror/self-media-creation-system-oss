@@ -1,0 +1,42 @@
+{
+  "base_pack_ref": "consumer-manifest.json",
+  "cases": [
+    {
+      "base_case": "pf-content-no-signal",
+      "expected_code": "no_signal_scope_violation",
+      "id": "no-signal-promoted-to-crm",
+      "mutation": "promote_no_signal_to_crm"
+    },
+    {
+      "base_case": "pf-ordinary-content-engagement",
+      "expected_code": "content_metrics_scope_violation",
+      "id": "engagement-promoted-to-relationship",
+      "mutation": "promote_metrics_to_relationship"
+    },
+    {
+      "base_case": "pf-ordinary-content-engagement",
+      "expected_code": "content_metrics_scope_violation",
+      "id": "engagement-promoted-to-crm",
+      "mutation": "promote_metrics_to_crm"
+    },
+    {
+      "base_case": "pf-explicit-business-signal",
+      "expected_code": "crm_candidate_missing_qualifying_evidence",
+      "id": "crm-candidate-without-qualifying-event",
+      "mutation": "remove_qualifying_business_evidence"
+    },
+    {
+      "base_case": "pf-explicit-business-signal",
+      "expected_code": "crm_candidate_manual_gate_required",
+      "id": "crm-candidate-without-manual-confirmation",
+      "mutation": "disable_manual_confirmation"
+    },
+    {
+      "base_case": "pf-content-no-signal",
+      "expected_code": "synthetic_only_required",
+      "id": "non-synthetic-feedback",
+      "mutation": "disable_synthetic_only"
+    }
+  ],
+  "synthetic_only": true
+}

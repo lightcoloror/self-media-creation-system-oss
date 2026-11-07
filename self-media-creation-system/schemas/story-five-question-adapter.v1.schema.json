@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lightcolor/self-media/story-five-question-adapter.v1.schema.json",
+  "title": "Five-question view over Story Design Card",
+  "description": "A portable consistency receipt. The five questions do not form a second story model and cannot add facts to the bound Story Design Card input.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "adapter_id",
+    "generated_at",
+    "story_card_input_ref",
+    "story_card_input_sha256",
+    "target_contract",
+    "answers",
+    "field_mapping",
+    "artifact_status",
+    "publication_boundary",
+    "authority",
+    "receipt_payload_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "story-five-question-adapter.v1"},
+    "adapter_id": {"type": "string", "pattern": "^story-five-[a-f0-9]{24}$"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "story_card_input_ref": {"type": "string", "minLength": 1, "maxLength": 500},
+    "story_card_input_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "target_contract": {"const": "story-design-card.v1"},
+    "answers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["protagonist", "goal", "obstacle", "stakes", "why_now"],
+      "properties": {
+        "protagonist": {"$ref": "#/$defs/answer"},
+        "goal": {"$ref": "#/$defs/answer"},
+        "obstacle": {"$ref": "#/$defs/answer"},
+        "stakes": {"$ref": "#/$defs/answer"},
+        "why_now": {"$ref": "#/$defs/answer"}
+      }
+    },
+    "field_mapping": {
+      "const": {
+        "protagonist": ["protagonist.role"],
+        "goal": ["protagonist.immediate_goal"],
+        "obstacle": ["pressure[*].description"],
+        "stakes": ["choice_under_pressure.cost_or_tradeoff"],
+        "why_now": ["inciting_incident.event"]
+      }
+    },
+    "artifact_status": {"const": "candidate-only"},
+    "publication_boundary": {"const": "manual-only"},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["publication", "external_send", "customer_contact", "crm_write", "knowledge_base_write"],
+      "properties": {
+        "publication": {"const": false},
+        "external_send": {"const": false},
+        "customer_contact": {"const": false},
+        "crm_write": {"const": false},
+        "knowledge_base_write": {"const": false}
+      }
+    },
+    "receipt_payload_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "$defs": {
+    "answer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "fact_refs"],
+      "properties": {
+        "text": {"type": "string", "minLength": 1, "maxLength": 500},
+        "fact_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 120}}
+      }
+    }
+  }
+}

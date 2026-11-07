@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/localized-subtitle-review.v1.schema.json",
+  "title": "Human-reviewed cross-language subtitle receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "reviewed_at",
+    "reviewer",
+    "source_media",
+    "source_language",
+    "source_dialect",
+    "display_language",
+    "timing_authority",
+    "display_timing_policy",
+    "machine_translation_is_timing_authority",
+    "segments",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {"const": "self-media-localized-subtitle-review.v1"},
+    "receipt_id": {"$ref": "#/$defs/id"},
+    "reviewed_at": {"type": "string", "format": "date-time"},
+    "reviewer": {"type": "string", "minLength": 1, "maxLength": 120},
+    "source_media": {"$ref": "#/$defs/artifact"},
+    "source_language": {"type": "string", "minLength": 2, "maxLength": 40},
+    "source_dialect": {"type": ["string", "null"], "maxLength": 80},
+    "display_language": {"type": "string", "minLength": 2, "maxLength": 40},
+    "timing_authority": {"const": "source_audio_utterance_boundaries"},
+    "display_timing_policy": {"const": "inherit_source_utterance"},
+    "machine_translation_is_timing_authority": {"const": false},
+    "segments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/segment"}
+    },
+    "status": {"enum": ["human_confirmed", "rework_required"]}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,99}$"},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![A-Za-z]:[\\\\/])(?!/)(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "expected_sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/relativePath"},
+        "expected_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "segment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "segment_id",
+        "speaker_ref",
+        "start_seconds",
+        "end_seconds",
+        "source_text",
+        "display_text",
+        "review_status",
+        "high_risk_tags"
+      ],
+      "properties": {
+        "segment_id": {"$ref": "#/$defs/id"},
+        "speaker_ref": {"$ref": "#/$defs/id"},
+        "start_seconds": {"type": "number", "minimum": 0},
+        "end_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "source_text": {"type": "string", "minLength": 1, "maxLength": 1000},
+        "display_text": {"type": "string", "minLength": 1, "maxLength": 1000},
+        "review_status": {"enum": ["human_confirmed", "rework_required"]},
+        "high_risk_tags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["medical", "insurance", "amount", "privacy", "name_place", "none"]}
+        }
+      }
+    }
+  }
+}

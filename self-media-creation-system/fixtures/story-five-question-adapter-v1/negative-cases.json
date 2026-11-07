@@ -1,0 +1,10 @@
+{
+  "schema_version": "story-five-question-negative-fixtures.v1",
+  "base_fixture": "fixtures/story-five-question-adapter-v1/synthetic.input.json",
+  "cases": [
+    {"case_id": "invented-obstacle", "mutation": "change_obstacle_text", "expected_code": "answer_not_in_story_card"},
+    {"case_id": "invented-stakes", "mutation": "change_stakes_text", "expected_code": "answer_not_in_story_card"},
+    {"case_id": "wrong-fact-reference", "mutation": "change_goal_fact_ref", "expected_code": "answer_fact_ref_drift"},
+    {"case_id": "story-card-drift", "mutation": "change_story_card_hash", "expected_code": "story_card_hash_drift"}
+  ]
+}

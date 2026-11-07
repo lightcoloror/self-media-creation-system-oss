@@ -1,0 +1,102 @@
+{
+  "schema_version": "1",
+  "synthetic_only": true,
+  "base_fixture": "operations-contract-regression.v1.synthetic.json",
+  "scenarios": [
+    {
+      "scenario_id": "private_to_public_no_signal",
+      "theme_key": "synthetic-private-to-public",
+      "title": "虚构：纸飞机问题卡",
+      "topic_status": "published",
+      "content_status": "feedback",
+      "terminal_event_type": "published",
+      "expected_publication_state": "published",
+      "content_signal_status": "content_no_signal",
+      "business_signal_status": "not-observed",
+      "journey_trace": [
+        "private-candidate",
+        "public-rewrite",
+        "prepared",
+        "published",
+        "early-snapshot",
+        "d7-review"
+      ],
+      "ids": {
+        "account_id": "acct_01J8Z8R0E7X7K7Q8M6D3C2C1A0",
+        "topic_id": "topic_01J8Z8R0E7X7K7Q8M6D3C2C1A1",
+        "publication_id": "pub_01J8Z8R0E7X7K7Q8M6D3C2C1A2",
+        "prepared_event_id": "evt_01J8Z8R0E7X7K7Q8M6D3C2C1A3",
+        "version_id": "ver_01J8Z8R0E7X7K7Q8M6D3C2C1A4",
+        "published_event_id": "evt_01J8Z8R0E7X7K7Q8M6D3C2C1A5",
+        "early_snapshot_id": "snap_01J8Z8R0E7X7K7Q8M6D3C2C1A6",
+        "terminal_event_id": "evt_01J8Z8R0E7X7K7Q8M6D3C2C1A7",
+        "d7_snapshot_id": "snap_01J8Z8R0E7X7K7Q8M6D3C2C1A8"
+      },
+      "expected_bundle_sha256": "be6e75575eb2bf576f7698a17618a6b3d9fd6b1485abd102dea4cf204fef367e"
+    },
+    {
+      "scenario_id": "private_to_public_deleted",
+      "theme_key": "synthetic-publication-deleted",
+      "title": "虚构：云朵收纳清单",
+      "topic_status": "archived",
+      "content_status": "archived",
+      "terminal_event_type": "deleted",
+      "expected_publication_state": "deleted",
+      "content_signal_status": "content_no_signal",
+      "business_signal_status": "not-observed",
+      "journey_trace": [
+        "private-candidate",
+        "public-rewrite",
+        "prepared",
+        "published",
+        "early-snapshot",
+        "d7-review",
+        "deleted"
+      ],
+      "ids": {
+        "account_id": "acct_01J8Z8R0E7X7K7Q8M6D3C2D1A0",
+        "topic_id": "topic_01J8Z8R0E7X7K7Q8M6D3C2D1A1",
+        "publication_id": "pub_01J8Z8R0E7X7K7Q8M6D3C2D1A2",
+        "prepared_event_id": "evt_01J8Z8R0E7X7K7Q8M6D3C2D1A3",
+        "version_id": "ver_01J8Z8R0E7X7K7Q8M6D3C2D1A4",
+        "published_event_id": "evt_01J8Z8R0E7X7K7Q8M6D3C2D1A5",
+        "early_snapshot_id": "snap_01J8Z8R0E7X7K7Q8M6D3C2D1A6",
+        "terminal_event_id": "evt_01J8Z8R0E7X7K7Q8M6D3C2D1A7",
+        "d7_snapshot_id": "snap_01J8Z8R0E7X7K7Q8M6D3C2D1A8"
+      },
+      "expected_bundle_sha256": "ed3171218ea005ac8f90e8252a4d13844f0b8206d6c4a84bbf53496ce3e46b63"
+    },
+    {
+      "scenario_id": "private_to_public_business_observed",
+      "theme_key": "synthetic-business-signal",
+      "title": "虚构：星光路线问答",
+      "topic_status": "published",
+      "content_status": "feedback",
+      "terminal_event_type": "published",
+      "expected_publication_state": "published",
+      "content_signal_status": "observed",
+      "business_signal_status": "observed",
+      "journey_trace": [
+        "private-candidate",
+        "public-rewrite",
+        "prepared",
+        "published",
+        "early-snapshot",
+        "d7-review",
+        "synthetic-valid-question"
+      ],
+      "ids": {
+        "account_id": "acct_01J8Z8R0E7X7K7Q8M6D3C2E1A0",
+        "topic_id": "topic_01J8Z8R0E7X7K7Q8M6D3C2E1A1",
+        "publication_id": "pub_01J8Z8R0E7X7K7Q8M6D3C2E1A2",
+        "prepared_event_id": "evt_01J8Z8R0E7X7K7Q8M6D3C2E1A3",
+        "version_id": "ver_01J8Z8R0E7X7K7Q8M6D3C2E1A4",
+        "published_event_id": "evt_01J8Z8R0E7X7K7Q8M6D3C2E1A5",
+        "early_snapshot_id": "snap_01J8Z8R0E7X7K7Q8M6D3C2E1A6",
+        "terminal_event_id": "evt_01J8Z8R0E7X7K7Q8M6D3C2E1A7",
+        "d7_snapshot_id": "snap_01J8Z8R0E7X7K7Q8M6D3C2E1A8"
+      },
+      "expected_bundle_sha256": "3e9bbf76f7f5b7e5bb0a457a581fca008a8a8590eaf34a0d60708fdc0e746362"
+    }
+  ]
+}

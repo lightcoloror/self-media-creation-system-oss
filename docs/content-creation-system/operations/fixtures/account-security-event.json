@@ -1,0 +1,27 @@
+{
+  "schema_version": "0.1",
+  "data_classification": "synthetic-only",
+  "security_event_id": "sec_01ARZ3NDEKTSV4RRFFQ69G5FB8",
+  "account_id": "acct_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+  "event_type": "permission-review",
+  "occurred_at": "2026-10-28T15:00:00+08:00",
+  "recorded_at": "2026-10-28T15:05:00+08:00",
+  "status": "partial",
+  "evidence_status": "local-record",
+  "summary": "完全虚构：已检查角色清单，但恢复方式仍待人工核验。",
+  "evidence_refs": [
+    "synthetic:security-review:001"
+  ],
+  "next_review_at": "2027-01-28T00:00:00+08:00",
+  "privacy": {
+    "secrets_included": false,
+    "recovery_codes_included": false,
+    "totp_seed_included": false,
+    "direct_identifiers_included": false
+  },
+  "authority": {
+    "execution_authorized": false,
+    "credential_action_authorized": false,
+    "account_action_authorized": false
+  }
+}

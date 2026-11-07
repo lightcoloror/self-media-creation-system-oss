@@ -1,0 +1,9 @@
+{
+  "schema_version": "self-media-agent-request.v1",
+  "request_id": "synthetic-moments-001",
+  "workflow_goal": "moments_short_post",
+  "synthetic_only": true,
+  "author_identity": {"account_id": "fixture-account", "genre": "moments"},
+  "available_inputs": ["account_ip", "real_event_or_observation", "voice_profile_ref"],
+  "input_refs": []
+}

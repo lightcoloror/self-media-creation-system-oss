@@ -1,0 +1,55 @@
+{
+  "items": [
+    {
+      "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+      "actor_type": "local-tool",
+      "canonical_url": null,
+      "content_id": "research-ec0ac601678f4ec4f7840645",
+      "event_id": "evt_3M6G23XGYYEZS12YEBDDKFNFMG",
+      "event_sequence": 1,
+      "event_type": "prepared",
+      "evidence_status": "local-record",
+      "occurred_at": "2026-08-05T12:00:00+08:00",
+      "platform": "synthetic-surface",
+      "platform_content_id": null,
+      "publication_id": "pub_S70HVYTTV20AZ2CED5DWD1K606",
+      "reason": "Synthetic prepared event; no publication occurred.",
+      "recorded_at": "2026-08-05T12:00:00+08:00",
+      "schema_version": "0.1",
+      "supersedes_event_id": null,
+      "version_id": "ver_0Z94BP3H71ZK85TVFEKAHE606N"
+    },
+    {
+      "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+      "actor_type": "local-tool",
+      "canonical_url": null,
+      "content_id": "research-ec0ac601678f4ec4f7840645",
+      "event_id": "evt_A6KGQ9KDKZ62DKRWY959RRV256",
+      "event_sequence": 2,
+      "event_type": "published",
+      "evidence_status": "local-record",
+      "frozen_version": {
+        "body_ref": "questions/health-underwriting/adapter/research-ec0ac601678f4ec4f7840645.article.md",
+        "body_sha256": "81fbd900c8d11a35d3ae987380ba1d66818b3d9230e18ac412b2ea6634329946",
+        "channel_variant": "synthetic-article",
+        "cover_refs": [],
+        "cta": null,
+        "freeze_status": "complete",
+        "frozen_at": "2026-08-05T12:01:00+08:00",
+        "media_refs": [],
+        "title": "体检发现小问题以后，还能不能买保险？",
+        "unavailable_reason": null
+      },
+      "occurred_at": "2026-08-05T12:01:00+08:00",
+      "platform": "synthetic-surface",
+      "platform_content_id": null,
+      "publication_id": "pub_S70HVYTTV20AZ2CED5DWD1K606",
+      "reason": "Synthetic published event used only to exercise the feedback contract.",
+      "recorded_at": "2026-08-05T12:01:00+08:00",
+      "schema_version": "0.1",
+      "supersedes_event_id": "evt_3M6G23XGYYEZS12YEBDDKFNFMG",
+      "version_id": "ver_0Z94BP3H71ZK85TVFEKAHE606N"
+    }
+  ],
+  "synthetic_only": true
+}

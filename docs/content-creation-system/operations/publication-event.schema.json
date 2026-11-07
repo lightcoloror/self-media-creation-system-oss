@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lightcolor/content-operations/publication-event.schema.json",
+  "title": "自媒体发布事件",
+  "description": "追加式记录一次发布实例的准备、发布、编辑、隐藏、删除、限制、申诉和恢复。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "event_id",
+    "publication_id",
+    "event_sequence",
+    "content_id",
+    "version_id",
+    "account_id",
+    "platform",
+    "event_type",
+    "occurred_at",
+    "recorded_at",
+    "actor_type",
+    "evidence_status"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "event_id": { "type": "string", "pattern": "^evt_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "publication_id": { "type": "string", "pattern": "^pub_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "event_sequence": { "type": "integer", "minimum": 1 },
+    "content_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{5,79}$" },
+    "version_id": { "type": "string", "pattern": "^ver_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "account_id": { "type": "string", "pattern": "^acct_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "platform": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "platform_content_id": { "type": ["string", "null"], "maxLength": 300 },
+    "canonical_url": { "type": ["string", "null"], "format": "uri", "maxLength": 2000 },
+    "event_type": { "enum": ["prepared", "published", "edited", "hidden", "deleted", "restricted", "appeal-submitted", "restored"] },
+    "occurred_at": { "type": "string", "format": "date-time" },
+    "recorded_at": { "type": "string", "format": "date-time" },
+    "actor_type": { "enum": ["user", "authorized-editor", "platform", "local-tool", "unknown"] },
+    "evidence_status": { "enum": ["platform-receipt", "manual-observation", "local-record", "inferred", "unknown"] },
+    "supersedes_event_id": { "type": ["string", "null"], "pattern": "^evt_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "reason": { "type": ["string", "null"], "maxLength": 2000 },
+    "frozen_version": { "$ref": "#/$defs/frozenVersion" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "event_type": { "const": "published" } }, "required": ["event_type"] },
+      "then": { "required": ["frozen_version"] }
+    }
+  ],
+  "$defs": {
+    "frozenVersion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "channel_variant", "freeze_status", "frozen_at"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "channel_variant": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "freeze_status": { "enum": ["complete", "partial", "unavailable"] },
+        "body_ref": { "type": ["string", "null"], "maxLength": 1000 },
+        "body_sha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
+        "cover_refs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 1000 }
+        },
+        "media_refs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 1000 }
+        },
+        "cta": { "type": ["string", "null"], "maxLength": 1000 },
+        "unavailable_reason": { "type": ["string", "null"], "maxLength": 1000 },
+        "frozen_at": { "type": "string", "format": "date-time" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "freeze_status": { "const": "complete" } }, "required": ["freeze_status"] },
+          "then": {
+            "properties": {
+              "body_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+            },
+            "required": ["body_sha256"]
+          }
+        },
+        {
+          "if": { "properties": { "freeze_status": { "enum": ["partial", "unavailable"] } }, "required": ["freeze_status"] },
+          "then": {
+            "properties": {
+              "unavailable_reason": { "type": "string", "minLength": 1, "maxLength": 1000 }
+            },
+            "required": ["unavailable_reason"]
+          }
+        }
+      ]
+    }
+  }
+}

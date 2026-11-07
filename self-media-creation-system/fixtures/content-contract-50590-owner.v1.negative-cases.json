@@ -1,0 +1,357 @@
+{
+  "schema_version": "content-contract-50590-owner-negative-fixture.v1",
+  "synthetic_only": true,
+  "cases": [
+    {
+      "id": "invalid_audience_entry_question",
+      "kind": "field_negative",
+      "field": "audience_entry_question",
+      "operations": [
+        {
+          "action": "set",
+          "path": "intent.audience_entry_question",
+          "value": 7
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "invalid_client_decision",
+      "kind": "field_negative",
+      "field": "client_decision",
+      "operations": [
+        {
+          "action": "set",
+          "path": "intent.client_decision",
+          "value": [
+            "not",
+            "a",
+            "string"
+          ]
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "invalid_hidden_assumptions",
+      "kind": "field_negative",
+      "field": "hidden_assumptions",
+      "operations": [
+        {
+          "action": "set",
+          "path": "intent.hidden_assumptions",
+          "value": "not-an-array"
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "invalid_professional_core_question",
+      "kind": "field_negative",
+      "field": "professional_core_question",
+      "operations": [
+        {
+          "action": "set",
+          "path": "intent.professional_core_question",
+          "value": false
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "invalid_public_expertise_level",
+      "kind": "field_negative",
+      "field": "public_expertise_level",
+      "operations": [
+        {
+          "action": "set",
+          "path": "intent.public_expertise_level",
+          "value": "automatic-expert"
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "invalid_question_structure_route",
+      "kind": "field_negative",
+      "field": "question_structure_route",
+      "operations": [
+        {
+          "action": "set",
+          "path": "intent.question_structure_route",
+          "value": "auto-route"
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "invalid_scope_boundary",
+      "kind": "field_negative",
+      "field": "scope_boundary",
+      "operations": [
+        {
+          "action": "set",
+          "path": "intent.scope_boundary",
+          "value": {
+            "publication_authorized": true
+          }
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "invalid_surface_answer",
+      "kind": "field_negative",
+      "field": "surface_answer",
+      "operations": [
+        {
+          "action": "set",
+          "path": "intent.surface_answer",
+          "value": null
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "invalid_current_piece_decision",
+      "kind": "field_negative",
+      "field": "current_piece_decision",
+      "operations": [
+        {
+          "action": "set",
+          "path": "intent.current_piece_decision",
+          "value": 0
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "override_nonhuman",
+      "kind": "field_negative",
+      "field": "manual_route_override",
+      "operations": [
+        {
+          "action": "set",
+          "path": "intent.manual_route_override.changed_by",
+          "value": "agent"
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "invalid_next_piece_candidates",
+      "kind": "field_negative",
+      "field": "next_piece_candidates",
+      "operations": [
+        {
+          "action": "set",
+          "path": "intent.next_piece_candidates",
+          "value": "not-an-array"
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "invalid_planning_scope",
+      "kind": "field_negative",
+      "field": "planning_scope",
+      "operations": [
+        {
+          "action": "set",
+          "path": "intent.planning_scope",
+          "value": "auto-publish"
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "invalid_series_question",
+      "kind": "field_negative",
+      "field": "series_question",
+      "operations": [
+        {
+          "action": "set",
+          "path": "intent.series_question",
+          "value": []
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "invalid_structure_route",
+      "kind": "field_negative",
+      "field": "structure_route",
+      "operations": [
+        {
+          "action": "set",
+          "path": "intent.structure_route",
+          "value": "automatic-send"
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "invalid_structure_route_note",
+      "kind": "field_negative",
+      "field": "structure_route_note",
+      "operations": [
+        {
+          "action": "set",
+          "path": "intent.structure_route_note",
+          "value": false
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "override_missing_reason",
+      "operations": [
+        {
+          "action": "delete",
+          "path": "intent.manual_route_override.reason"
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "override_unknown_stage",
+      "operations": [
+        {
+          "action": "set",
+          "path": "intent.manual_route_override.stage",
+          "value": "publish"
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "publication_boundary_automatic",
+      "operations": [
+        {
+          "action": "set",
+          "path": "publication.boundary",
+          "value": "automatic"
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "publication_receipt_attached",
+      "operations": [
+        {
+          "action": "set",
+          "path": "publication.receipts",
+          "value": [
+            {
+              "channel": "synthetic",
+              "published_at": "2026-08-14T00:00:00Z"
+            }
+          ]
+        }
+      ],
+      "expect_schema_valid": true,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "status_publish_ready",
+      "operations": [
+        {
+          "action": "set",
+          "path": "status",
+          "value": "publish-ready"
+        }
+      ],
+      "expect_schema_valid": true,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "status_published",
+      "operations": [
+        {
+          "action": "set",
+          "path": "status",
+          "value": "published"
+        }
+      ],
+      "expect_schema_valid": true,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "execution_authorized_extra",
+      "operations": [
+        {
+          "action": "set",
+          "path": "execution_authorized",
+          "value": true
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "privacy_gate_removed",
+      "operations": [
+        {
+          "action": "delete",
+          "path": "gates.privacy"
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    },
+    {
+      "id": "privacy_gate_blocked_preserved",
+      "operations": [
+        {
+          "action": "set",
+          "path": "gates.privacy.status",
+          "value": "blocked"
+        }
+      ],
+      "expect_schema_valid": true,
+      "expect_facade_accepted": true
+    },
+    {
+      "id": "review_gate_needs_review_preserved",
+      "operations": [
+        {
+          "action": "set",
+          "path": "gates.compliance.status",
+          "value": "needs-review"
+        }
+      ],
+      "expect_schema_valid": true,
+      "expect_facade_accepted": true
+    },
+    {
+      "id": "unknown_intent_field",
+      "operations": [
+        {
+          "action": "set",
+          "path": "intent.send_externally",
+          "value": true
+        }
+      ],
+      "expect_schema_valid": false,
+      "expect_facade_accepted": false
+    }
+  ]
+}

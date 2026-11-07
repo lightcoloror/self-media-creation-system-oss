@@ -1,0 +1,21 @@
+{
+  "schema_version": "content-skill-contract-binding.v1",
+  "skill_id": "content-fact-card",
+  "contract_owner": {
+    "tool_id": "content-studio-poc",
+    "repository": "https://github.com/lightcoloror/content-visual-studio-oss",
+    "public_commit": "e5bdff31cd2598d681a2b71e701e596673e9e7c6"
+  },
+  "contracts": [
+    {
+      "contract_id": "content-fact-card.v0",
+      "relative_path": "schemas/content-fact-card.v0.schema.json",
+      "sha256": "039423a2c8192284e8a2e594d105e31675ff0284c407455014919599a79ea648"
+    }
+  ],
+  "fixture": "synthetic-content-fact-card.v0.json",
+  "conflict_policy": "machine-schema-wins",
+  "on_missing_or_drift": "fail-closed",
+  "publication_authority": "none",
+  "external_send_authority": "none"
+}

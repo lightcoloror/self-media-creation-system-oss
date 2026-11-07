@@ -1,0 +1,6 @@
+# Optional owner packages for source-contract/case and artifact integrations.
+# Obtain the sibling source trees in public_toolchain.lock.json as well when a
+# selected consumer or fixture needs them. These pins grant no execution rights.
+question-research-poc @ git+https://github.com/lightcoloror/question-research-poc-oss.git@646b3871257b0861446615e7c96390f5dc714bde
+content-visual-studio @ git+https://github.com/lightcoloror/content-visual-studio-oss.git@2b09061f3a250bb50a0492509b83302cc4aa5c57
+artifact-lifecycle-core @ git+https://github.com/lightcoloror/artifact-lifecycle-core-oss.git@fab239085724458c2a6b9452d0a1ba4f4012593e

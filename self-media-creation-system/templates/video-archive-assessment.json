@@ -1,0 +1,12 @@
+{
+  "project_id": "replace-with-project-id",
+  "restore_goal": "继续修改字幕、音量、片尾或少量剪辑",
+  "factors": {
+    "cross_machine_rebuild": null,
+    "long_term_regeneration": null,
+    "dependency_sensitive_effects": null,
+    "evidence_processing_replay": null,
+    "costly_recovery": null
+  },
+  "missing_materials": []
+}

@@ -1,0 +1,124 @@
+{
+  "audience": "synthetic insurance education reader",
+  "brief_id": "vbrief-74025fdbcebf73e9c225",
+  "chapters": [
+    {
+      "chapter_id": "chapter-01",
+      "evidence_refs": [
+        {
+          "ref_id": "claim_synthetic_health_underwriting",
+          "ref_type": "claim"
+        },
+        {
+          "ref_id": "evidence_synthetic_health_underwriting",
+          "ref_type": "evidence"
+        },
+        {
+          "ref_id": "source_synthetic_health_underwriting",
+          "ref_type": "source"
+        }
+      ],
+      "narration_draft": "能否投保不能只看诊断名称；需要结合险种、告知问法、检查结果与当前状态逐项核对。",
+      "purpose": "呈现一条经过审核且有来源支持的核心判断",
+      "target_duration_seconds": 45,
+      "title": "证据结论 1"
+    }
+  ],
+  "content_id": "research-ec0ac601678f4ec4f7840645",
+  "forbidden_expressions": [
+    "Only synthetic, reviewed, non-synthesis fixture evidence is included; no real-world frequency or suitability conclusion is implied.",
+    "不得把 candidate、reviewed 或 AI synthesis 表述为 verified fact。",
+    "不得把视觉候选写成已经拍到、已经取得或真实发生的镜头。"
+  ],
+  "mode": "draft_only",
+  "provenance": {
+    "adapter": "research-output-to-content",
+    "adapter_version": "0.2.0",
+    "external_api_called": false,
+    "generated_at": "2026-08-05T12:00:00+08:00",
+    "input_schema_id": "https://local.invalid/schemas/research-output.v1.schema.json",
+    "input_sha256": "c37802cf0b9b1b07a248ec96bfeca635bf2e8652b72f0ad85c73dd68994c0923",
+    "manifest_ref": "research-ec0ac601678f4ec4f7840645.manifest.json",
+    "model_memory_used_as_evidence": false,
+    "offline_only": true,
+    "research_id": "research_synthetic_health_underwriting",
+    "upstream_input_files": [
+      {
+        "path": "sources/synthetic-source.md",
+        "sha256": "27f4707ba6cc6f8bb1c1f4138e8ea0b8ee0918bebbabd7131ee231c4c00804ff",
+        "status": "present"
+      }
+    ]
+  },
+  "review_gate": {
+    "publication_boundary": "manual-only",
+    "reasons": [
+      "旁白、字幕、视觉和平台合规均需人工复核。",
+      "所有 visual_leads 只是候选，不代表素材已存在或权利已核验。",
+      "synthetic-only fixture; the frequency count and content do not describe real users or markets"
+    ],
+    "required_reviews": [
+      "fact",
+      "privacy",
+      "compliance",
+      "rights",
+      "voice",
+      "video-production"
+    ],
+    "status": "required"
+  },
+  "scenes": [
+    {
+      "chapter_ref": "chapter-01",
+      "evidence_refs": [
+        {
+          "ref_id": "claim_synthetic_health_underwriting",
+          "ref_type": "claim"
+        },
+        {
+          "ref_id": "evidence_synthetic_health_underwriting",
+          "ref_type": "evidence"
+        },
+        {
+          "ref_id": "source_synthetic_health_underwriting",
+          "ref_type": "source"
+        }
+      ],
+      "narration_draft": "能否投保不能只看诊断名称；需要结合险种、告知问法、检查结果与当前状态逐项核对。",
+      "purpose": "用口语化旁白说明一条证据结论",
+      "scene_id": "scene-01",
+      "subtitle_candidates": [
+        "能否投保不能只看诊断名称；需要结合险种、告知问法、检查结果与当前状态逐项核对。"
+      ],
+      "visual_leads": [
+        {
+          "boundary_note": "这不是已存在镜头，也不是事实性画面承诺。",
+          "description": "候选：用证据卡、关键词或关系图解释本段；具体镜头和素材待人工确认",
+          "evidence_refs": [
+            {
+              "ref_id": "claim_synthetic_health_underwriting",
+              "ref_type": "claim"
+            },
+            {
+              "ref_id": "evidence_synthetic_health_underwriting",
+              "ref_type": "evidence"
+            },
+            {
+              "ref_id": "source_synthetic_health_underwriting",
+              "ref_type": "source"
+            }
+          ],
+          "evidence_role": "explanatory",
+          "lead_id": "visual-lead-01",
+          "rights_note": "未指定实际素材；后续需单独完成版权审核。",
+          "status": "candidate"
+        }
+      ]
+    }
+  ],
+  "schema_version": "content-video-brief.v1",
+  "target_duration_seconds": 45,
+  "thesis": "能否投保不能只看诊断名称；需要结合险种、告知问法、检查结果与当前状态逐项核对。",
+  "title": "体检发现小问题以后，还能不能买保险？",
+  "unknowns": []
+}

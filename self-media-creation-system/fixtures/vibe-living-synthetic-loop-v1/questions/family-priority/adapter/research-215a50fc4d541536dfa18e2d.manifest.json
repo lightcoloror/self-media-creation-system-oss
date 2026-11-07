@@ -1,0 +1,175 @@
+{
+  "adapter": "research-output-to-content",
+  "adapter_version": "0.2.0",
+  "artifacts": [
+    {
+      "path": "research-215a50fc4d541536dfa18e2d.article.html",
+      "sha256": "bc2faee0b3a79a4ac4be0fe4bf7d9f4078f6a1c69731d2f404cccfe5d4c6c99c"
+    },
+    {
+      "path": "research-215a50fc4d541536dfa18e2d.article.md",
+      "sha256": "3b01f849de99bef1b0d2e9c299829543368e84cac7c81f5c51506e927d771f2b"
+    },
+    {
+      "path": "research-215a50fc4d541536dfa18e2d.content-item.json",
+      "sha256": "f9b56beaac2fe83e61c724f86f3acd1c1a04204d432e0215c7dd4f9aa5d9cd30"
+    },
+    {
+      "path": "research-215a50fc4d541536dfa18e2d.content-video-brief.json",
+      "sha256": "2fcb32e634e9c38bda02e9a48a3e9558ea3307d4b1e0e67dcfb89114c0f1f1fb"
+    }
+  ],
+  "content_id": "research-215a50fc4d541536dfa18e2d",
+  "draft_basis": "verified",
+  "generated_at": "2026-08-05T12:00:00+08:00",
+  "input": {
+    "path": "research-output.v1.json",
+    "schema_id": "https://local.invalid/schemas/research-output.v1.schema.json",
+    "sha256": "c33e6383c83a4e6ac8d00ef4be930f1e0311ba4f173704b6ecabd4adcfc302fa"
+  },
+  "mode": "draft_only",
+  "provenance": {
+    "claim_ids": [
+      "claim_synthetic_family_priority"
+    ],
+    "contradiction_refs": [],
+    "evidence_ids": [
+      "evidence_synthetic_family_priority"
+    ],
+    "source_ids": [
+      "source_synthetic_family_priority"
+    ],
+    "status_snapshot": {
+      "claims": [
+        {
+          "claim_id": "claim_synthetic_family_priority",
+          "claim_status": "open",
+          "evidence_status": "verified",
+          "review_status": "verified"
+        }
+      ],
+      "completeness": {
+        "blocking_gates": [],
+        "coverage": {
+          "candidate_evidence": 0,
+          "claim_count": 1,
+          "claims_with_counter_or_context": 0,
+          "claims_with_evidence": 1,
+          "claims_with_verified_evidence": 1,
+          "claims_with_verified_support_evidence": 1,
+          "draft_exists": false,
+          "gate_audit_passed": false,
+          "human_review_count": 2,
+          "poor_source_evidence": 0,
+          "required_review_queue_count": 0,
+          "review_queue_count": 0,
+          "source_count": 1,
+          "source_types": [
+            "local_fixture"
+          ],
+          "unknown_source_quality": 0
+        },
+        "ready_for_answer": true,
+        "warnings": [
+          "synthetic-only fixture; the frequency count and content do not describe real users or markets"
+        ]
+      },
+      "contradictions": [],
+      "evidence": [
+        {
+          "ai_synthesis": false,
+          "claim_id": "claim_synthetic_family_priority",
+          "evidence_id": "evidence_synthetic_family_priority",
+          "evidence_status": "verified",
+          "relation": "supports",
+          "review_status": "reviewed",
+          "source_id": "source_synthetic_family_priority"
+        }
+      ],
+      "evidence_status": {
+        "counts": {
+          "candidate": 0,
+          "contradictions": 0,
+          "rejected": 0,
+          "verified": 1
+        },
+        "overall": "verified"
+      },
+      "guarded_final_answer": {
+        "blocking_gates": [],
+        "claim_ids": [
+          "claim_synthetic_family_priority"
+        ],
+        "evidence_ids": [
+          "evidence_synthetic_family_priority"
+        ],
+        "ready": true,
+        "source_ids": [
+          "source_synthetic_family_priority"
+        ],
+        "status": "verified",
+        "warnings": [
+          "synthetic-only fixture; the frequency count and content do not describe real users or markets"
+        ]
+      },
+      "media_refs": [],
+      "review_status": {
+        "events": [
+          {
+            "decision": "good",
+            "kind": "source",
+            "reviewed_at": "2026-08-05T12:00:00+08:00",
+            "reviewer": "synthetic-fixture-reviewer",
+            "target_id": "source_synthetic_family_priority"
+          },
+          {
+            "decision": "verified",
+            "kind": "evidence",
+            "reviewed_at": "2026-08-05T12:00:00+08:00",
+            "reviewer": "synthetic-fixture-reviewer",
+            "target_id": "evidence_synthetic_family_priority"
+          }
+        ],
+        "human_review_required": false,
+        "overall": "verified"
+      },
+      "sources": [
+        {
+          "freshness": "not_applicable",
+          "hash_status": "verified",
+          "quality": "good",
+          "ref_status": "resolved",
+          "review_status": "reviewed",
+          "source_id": "source_synthetic_family_priority"
+        }
+      ],
+      "unknowns": [],
+      "visual_leads": []
+    },
+    "unknown_ids": [],
+    "upstream": {
+      "external_api_called": false,
+      "input_files": [
+        {
+          "path": "sources/synthetic-source.md",
+          "sha256": "3574e80a06ddb73c315253770ad1fdd136ee73864bdb745f5faa9b68bbcd57bd",
+          "status": "present"
+        }
+      ],
+      "model_memory_used_as_evidence": false,
+      "offline_only": true,
+      "source_systems": [
+        "synthetic-fixture-generator"
+      ]
+    }
+  },
+  "quality": {
+    "publication_boundary": "manual-only",
+    "status": "human_review_required",
+    "warnings": [
+      "synthetic-only fixture; the frequency count and content do not describe real users or markets"
+    ]
+  },
+  "research_id": "research_synthetic_family_priority",
+  "schema_version": "research-content-adapter-manifest.v1"
+}

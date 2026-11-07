@@ -1,0 +1,44 @@
+{
+  "schema_version": "content-packaging-review-input.v1",
+  "content_id": "content-synthetic-policy-inventory-001",
+  "platform": "xiaohongshu",
+  "body_ref": "fixtures/content-packaging-review-v1/synthetic-body.md",
+  "body_sha256": "6dd9f86f4e68eac0098583c81bfd45ccb94bbb537dd14fe2e826239f34ea7fb4",
+  "title": "家里买过几份保险，怎么整理才不容易漏",
+  "cover_brief": {
+    "headline": "家里买过几份保险？",
+    "visual_direction": "用完全虚构的保单卡片和清单，表现先盘点、再归类，不展示真实合同或身份信息。",
+    "supporting_text": "一张表先把保障、缴费和受益人理清"
+  },
+  "opening_text": "很多家庭不是没有买保险，而是买过以后，慢慢不知道自己到底有什么。",
+  "standalone_review": {
+    "audience_question": "家里买过几份保险，怎么整理才不容易漏",
+    "entry_strategy": "search-intent",
+    "title_cover_opening_same_promise": true,
+    "context_excerpt": "很多家庭不是没有买保险，而是买过以后，慢慢不知道自己到底有什么。",
+    "progression_excerpts": [
+      "很多家庭不是没有买保险，而是买过以后，慢慢不知道自己到底有什么。",
+      "先把每份保单找齐，再按保障对象、责任、缴费和受益人整理到一张表里。",
+      "这样可以先看清已有保障，再决定哪些地方需要补充或调整。"
+    ],
+    "core_answer_excerpt": "先把每份保单找齐，再按保障对象、责任、缴费和受益人整理到一张表里。",
+    "payoff_excerpt": "这样可以先看清已有保障，再决定哪些地方需要补充或调整。",
+    "current_item_payoff_delivered": true,
+    "insurance_entry_mode": "search-intent-direct",
+    "prior_item_required": false,
+    "future_item_required_for_payoff": false
+  },
+  "data_classification": "deidentified-operational",
+  "human_review": {
+    "credential_ref": "fixtures/content-packaging-review-v1/human-review-deidentified-credential.json",
+    "credential_sha256": "03c266bf19b3e16cd83aecc0f92dc14404fb50e7d13ecb17ef6b72d06f848606",
+    "reviewer": "synthetic-human-reviewer",
+    "reviewed_at": "2026-08-24T11:00:00+08:00"
+  },
+  "privacy_review": {
+    "credential_ref": "fixtures/content-packaging-review-v1/privacy-review-credential.json",
+    "credential_sha256": "09ecd0e6c7a52b6c3fb8d6dedd1eeef1ce755ae96b4c463202ed5c5891c52343",
+    "reviewer": "synthetic-privacy-reviewer",
+    "reviewed_at": "2026-08-24T11:05:00+08:00"
+  }
+}

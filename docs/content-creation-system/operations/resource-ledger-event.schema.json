@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lightcolor/content-operations/resource-ledger-event.schema.json",
+  "title": "自媒体经营资源台账事件",
+  "description": "追加式记录内容经营所用时间、工具、外包或投流资源。只保存经营聚合，不保存付款凭证中的个人或账户信息。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "data_classification",
+    "resource_event_id",
+    "account_id",
+    "resource_type",
+    "occurred_at",
+    "quantity",
+    "cost",
+    "evidence_status",
+    "privacy",
+    "authority"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "data_classification": { "enum": ["synthetic-only", "deidentified-operational"] },
+    "resource_event_id": { "type": "string", "pattern": "^res_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "account_id": { "type": "string", "pattern": "^acct_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "content_id": { "type": ["string", "null"], "pattern": "^[a-z0-9][a-z0-9._-]{5,79}$" },
+    "publication_id": { "type": ["string", "null"], "pattern": "^pub_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "resource_type": { "enum": ["human-time", "tool-subscription", "external-service", "paid-distribution", "other"] },
+    "occurred_at": { "type": "string", "format": "date-time" },
+    "quantity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "unit"],
+      "properties": {
+        "value": { "type": "number", "minimum": 0 },
+        "unit": { "enum": ["hours", "count", "month", "item", "other"] }
+      }
+    },
+    "cost": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["amount", "currency", "tax_included"],
+      "properties": {
+        "amount": { "type": "number", "minimum": 0 },
+        "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+        "tax_included": { "type": ["boolean", "null"] }
+      }
+    },
+    "evidence_status": { "enum": ["receipt-verified", "manual-record", "estimated", "unknown"] },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "maxLength": 1000 },
+      "uniqueItems": true
+    },
+    "notes": { "type": "string", "maxLength": 800 },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["personal_payment_data_included", "account_credentials_included"],
+      "properties": {
+        "personal_payment_data_included": { "const": false },
+        "account_credentials_included": { "const": false }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["payment_authorized", "execution_authorized"],
+      "properties": {
+        "payment_authorized": { "const": false },
+        "execution_authorized": { "const": false }
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "content_id": "synthetic-author-writing-example",
+  "account_id": "synthetic-account",
+  "genre": "moments",
+  "synthetic_only": true,
+  "privacy_status": "non_sensitive",
+  "source_ref": "fixture:author-writing/example",
+  "judgments": [{"id": "j1", "original_text": "我反对用统一模板替每个人做判断。", "target": "统一模板替人判断", "stance": "反对", "intensity": "明确反对", "basis": "合成示例，不是用户事实", "uncertainty": "不讨论辅助整理信息的模板"}]
+}

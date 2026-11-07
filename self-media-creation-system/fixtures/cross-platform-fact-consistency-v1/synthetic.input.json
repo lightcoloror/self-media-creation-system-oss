@@ -1,0 +1,57 @@
+{
+  "schema_version": "cross-platform-fact-consistency-input.v1",
+  "generated_at": "2026-09-03T19:00:00+08:00",
+  "content_family_id": "synthetic-policy-inventory",
+  "canonical_fact_binding": {
+    "fact_card_ref": "skills/content-fact-card/references/synthetic-content-fact-card.v0.json",
+    "fact_card_sha256": "47eb329c8eb4d255031640ab26e003638e9918513f6f0e5a7e31ff1abe24c5ff",
+    "revision_id": "fact-rev-synthetic-policy-list"
+  },
+  "canonical_claims": [
+    {
+      "fact_id": "fact-inventory-created",
+      "normalized_claim": "A fictional household created a policy-document inventory.",
+      "normalized_claim_sha256": "0b8e0ad761ac65a53ea51e66aa4670f4283f24b299ffc7aafb54d0ac4c9cf9b7",
+      "required_core": true
+    }
+  ],
+  "variants": [
+    {
+      "platform": "xiaohongshu",
+      "artifact_ref": "self-media-creation-system/fixtures/cross-platform-fact-consistency-v1/xiaohongshu-body.md",
+      "artifact_sha256": "71b88c9630e2d95ce9ab7592fda0c9414914c56d4aead3f4c391cad9edcb16d6",
+      "fact_binding": {
+        "fact_card_ref": "skills/content-fact-card/references/synthetic-content-fact-card.v0.json",
+        "fact_card_sha256": "47eb329c8eb4d255031640ab26e003638e9918513f6f0e5a7e31ff1abe24c5ff",
+        "revision_id": "fact-rev-synthetic-policy-list"
+      },
+      "claims": [
+        {
+          "fact_id": "fact-inventory-created",
+          "state": "present",
+          "normalized_claim_sha256": "0b8e0ad761ac65a53ea51e66aa4670f4283f24b299ffc7aafb54d0ac4c9cf9b7",
+          "omission_reason": null
+        }
+      ]
+    },
+    {
+      "platform": "douyin",
+      "artifact_ref": "self-media-creation-system/fixtures/cross-platform-fact-consistency-v1/douyin-body.md",
+      "artifact_sha256": "b11424e80bab20345a28b9a9876ea01f6edd9db3eda029d72a64533b869fc72e",
+      "fact_binding": {
+        "fact_card_ref": "skills/content-fact-card/references/synthetic-content-fact-card.v0.json",
+        "fact_card_sha256": "47eb329c8eb4d255031640ab26e003638e9918513f6f0e5a7e31ff1abe24c5ff",
+        "revision_id": "fact-rev-synthetic-policy-list"
+      },
+      "claims": [
+        {
+          "fact_id": "fact-inventory-created",
+          "state": "present",
+          "normalized_claim_sha256": "0b8e0ad761ac65a53ea51e66aa4670f4283f24b299ffc7aafb54d0ac4c9cf9b7",
+          "omission_reason": null
+        }
+      ]
+    }
+  ],
+  "decision": "passed"
+}

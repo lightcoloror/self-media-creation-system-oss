@@ -1,0 +1,113 @@
+{
+  "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+  "artifacts": [
+    {
+      "path": "account.json",
+      "sha256": "f688a6907f5453212f0c3f29014f48d41a3ca79d8361dbba8b700939a53b571c"
+    },
+    {
+      "path": "content-item.json",
+      "sha256": "c49951ad97a6b08fa22168b20a6ca602b46d199367af739435acc4f658414deb"
+    },
+    {
+      "path": "manual-input.json",
+      "sha256": "0a56faeb2fb294ebc30dd7b213c3b7a68c3bbbe5eab2825ffdf8a5254f436322"
+    },
+    {
+      "path": "negative-cases.json",
+      "sha256": "38343d4c63967a1e1f2b8cd996e867811968340052a9cb31a4a60c661b4e4d34"
+    },
+    {
+      "path": "performance-snapshots.json",
+      "sha256": "1f6066a56bcfe846dfd9c1c86f4d139a2880a05f439731c30b787a9f5c3034ca"
+    },
+    {
+      "path": "publication-events.json",
+      "sha256": "1d80531dff4319947fe4ecf3908ccd90615bbed6cdd611261a229ffee0664db8"
+    },
+    {
+      "path": "review-packet.json",
+      "sha256": "ef595b4f6e0d2e71cca66faf0c8f12cea7d1424e4f54d74b7ad915753457453c"
+    },
+    {
+      "path": "topic.json",
+      "sha256": "3e1d34dcd554419d7d7c7875222fdb570e052312710f96cc3e25c0aa1966adc3"
+    }
+  ],
+  "boundaries": {
+    "customer_data_included": false,
+    "execution_authorized": false,
+    "external_io_performed": false,
+    "manual_publication_only": true,
+    "platform_access_performed": false,
+    "raw_comments_included": false
+  },
+  "content_id": "research-edca758a6ed755c9e91aecb8",
+  "contracts": [
+    {
+      "name": "account",
+      "path": "docs/content-creation-system/operations/account.schema.json",
+      "sha256": "f0f66be6e47e6c5c9b6c7398a18499c2aab5c56da1ae2fa7c2cb561f62dcf5b6"
+    },
+    {
+      "name": "topic",
+      "path": "docs/content-creation-system/operations/topic.schema.json",
+      "sha256": "911a832e11e6298c6cce24d73591ec8a9c429c6cf58c0134bf89658efd73abb9"
+    },
+    {
+      "name": "content-item",
+      "path": "docs/content-creation-system/content-item.schema.json",
+      "sha256": "202b827b10c448594a37810fd307831d8410344df8d17f62896a2064f09885ad"
+    },
+    {
+      "name": "publication-event",
+      "path": "docs/content-creation-system/operations/publication-event.schema.json",
+      "sha256": "a6b3d941c26ee86dbfb734b4c541917b3f3655459ec138855a7bb653dc78982d"
+    },
+    {
+      "name": "performance-snapshot",
+      "path": "docs/content-creation-system/operations/performance-snapshot.schema.json",
+      "sha256": "ed795d13ec646956bdc99eee18e7893753d7c55e92e549e707bf5d980e81e936"
+    },
+    {
+      "name": "review-packet-intake",
+      "path": "self-media-creation-system/schemas/review-intake.v0.2.schema.json",
+      "sha256": "b4994455c99e0a367198981fa93526432e65e922ff8c2cf74dd3eaedef7f6131"
+    }
+  ],
+  "dispatch_id": "SYNTHETIC-PUBLICATION-FEEDBACK-EXAMPLE",
+  "input_sha256": "2374aa18e652137d7a7de06b112f0e7d6baf3092ddf72ad61c7e5bde652bf2e3",
+  "mode": "manual_entry_only",
+  "publication_id": "pub_TY3ZH2KQWQ5W7JB7VHPDMN4A1H",
+  "schema_version": "manual-publication-feedback-pack.v1",
+  "signal_policy": {
+    "business_qualifying_events": [
+      "continued_consultation",
+      "necessary_documents_provided",
+      "next_step_booked"
+    ],
+    "content_metrics_are_business_signals": false,
+    "content_no_signal_is_customer_negative": false,
+    "crm_write_authorized": false,
+    "layers": [
+      "admission",
+      "attraction",
+      "consumption",
+      "value",
+      "negative_feedback",
+      "business"
+    ]
+  },
+  "synthetic_only": true,
+  "topic_id": "topic_8M8Q9T4FAA15S6H55ZTVND7VQ7",
+  "window_policy_hours": {
+    "d7": [
+      156,
+      180
+    ],
+    "early": [
+      48,
+      72
+    ]
+  }
+}

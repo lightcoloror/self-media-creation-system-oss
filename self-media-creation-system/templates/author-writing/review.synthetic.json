@@ -1,0 +1,5 @@
+{
+  "actor": "synthetic_fixture",
+  "source_ref": "fixture:author-writing/explicit-review",
+  "decisions": [{"judgment_id": "j1", "decision": "preserved", "reason": "仅用于测试版本绑定，不是真人审阅。", "source_ref": "fixture:author-writing/explicit-review"}]
+}

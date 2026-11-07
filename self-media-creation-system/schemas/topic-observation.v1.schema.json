@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lightcolor/self-media/topic-observation.v1.schema.json",
+  "title": "De-identified topic observation",
+  "description": "Append-only discovery signal. It is an input event, not a second topic lifecycle or a publication instruction.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "signal_id",
+    "observed_at",
+    "source_lane",
+    "source_ref",
+    "source_hash",
+    "independence_group",
+    "topic_key",
+    "deidentified_question",
+    "normalized_question",
+    "audience_hint",
+    "account_ip_hint",
+    "historical_priority",
+    "risk_level",
+    "fact_dependency",
+    "personal_experience_status",
+    "current_product_status",
+    "evidence_status",
+    "frequency_eligible",
+    "fact_support_eligible",
+    "privacy_status",
+    "content_signal_only",
+    "cluster_review_status",
+    "repeat_confirmation",
+    "created_by",
+    "synthetic_only"
+  ],
+  "properties": {
+    "schema_version": {"const": "topic-observation.v1"},
+    "signal_id": {"type": "string", "pattern": "^sig_[A-Za-z0-9-]{8,80}$"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "source_lane": {
+      "enum": [
+        "customer-question",
+        "service-event",
+        "publication-feedback",
+        "public-discovery",
+        "knowledge-allowlist",
+        "strategy-gap"
+      ]
+    },
+    "source_ref": {"type": "string", "minLength": 1, "maxLength": 1000},
+    "source_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "independence_group": {"type": "string", "pattern": "^[A-Za-z0-9._:-]{3,160}$"},
+    "topic_key": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,119}$"},
+    "deidentified_question": {"type": "string", "minLength": 3, "maxLength": 500},
+    "normalized_question": {"type": "string", "minLength": 2, "maxLength": 500},
+    "audience_hint": {"type": "string", "minLength": 1, "maxLength": 300},
+    "account_ip_hint": {
+      "enum": [
+        "cange-risk-diagnosis",
+        "cange-growth",
+        "dual-account-shared",
+        "personal-wechat-moments"
+      ]
+    },
+    "historical_priority": {"enum": ["P0", "P1"]},
+    "risk_level": {"enum": ["low", "medium", "high"]},
+    "fact_dependency": {"enum": ["low", "medium", "high"]},
+    "personal_experience_status": {"type": "string", "minLength": 1, "maxLength": 160},
+    "current_product_status": {"type": "string", "minLength": 1, "maxLength": 160},
+    "evidence_status": {
+      "enum": [
+        "user_confirmed",
+        "verified_source",
+        "verified_position",
+        "candidate",
+        "unverified"
+      ]
+    },
+    "frequency_eligible": {"type": "boolean"},
+    "fact_support_eligible": {"type": "boolean"},
+    "privacy_status": {"enum": ["passed", "blocked"]},
+    "content_signal_only": {"type": "boolean"},
+    "cluster_review_status": {"enum": ["human_confirmed", "deterministic_exact", "agent_candidate"]},
+    "repeat_confirmation": {"enum": ["human_confirmed", "not_confirmed"]},
+    "created_by": {"enum": ["human", "deterministic_adapter", "agent_candidate"]},
+    "synthetic_only": {"type": "boolean"}
+  }
+}

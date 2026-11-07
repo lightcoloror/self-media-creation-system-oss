@@ -1,0 +1,59 @@
+{
+  "items": [
+    {
+      "as_of": "2026-08-08T00:01:00+08:00",
+      "captured_at": "2026-08-08T00:02:00+08:00",
+      "data_completeness": "unavailable",
+      "metric_dictionary_version": "synthetic.content-signals.0.1",
+      "metrics": [
+        {
+          "dimensions": {
+            "synthetic": true
+          },
+          "metric_key": "impressions",
+          "unavailable_reason": "Synthetic observation unavailable.",
+          "unit": "count",
+          "value": null
+        }
+      ],
+      "missing_reasons": [
+        "Synthetic fixture intentionally provides no observable platform metrics."
+      ],
+      "notes": "Fully synthetic metrics for offline contract verification only.",
+      "publication_id": "pub_S70HVYTTV20AZ2CED5DWD1K606",
+      "schema_version": "0.1",
+      "snapshot_id": "snap_1DN8GRE91H8CH02G7H4P8RZ6MS",
+      "source_type": "other",
+      "timezone": "Asia/Shanghai",
+      "window_label": "early"
+    },
+    {
+      "as_of": "2026-08-12T12:01:00+08:00",
+      "captured_at": "2026-08-12T12:02:00+08:00",
+      "data_completeness": "unavailable",
+      "metric_dictionary_version": "synthetic.content-signals.0.1",
+      "metrics": [
+        {
+          "dimensions": {
+            "synthetic": true
+          },
+          "metric_key": "impressions",
+          "unavailable_reason": "Synthetic observation unavailable.",
+          "unit": "count",
+          "value": null
+        }
+      ],
+      "missing_reasons": [
+        "Synthetic fixture intentionally provides no observable platform metrics."
+      ],
+      "notes": "Fully synthetic metrics for offline contract verification only.",
+      "publication_id": "pub_S70HVYTTV20AZ2CED5DWD1K606",
+      "schema_version": "0.1",
+      "snapshot_id": "snap_CCMX19ETJ6Z8NSAHQ8B2C33MYY",
+      "source_type": "other",
+      "timezone": "Asia/Shanghai",
+      "window_label": "d7"
+    }
+  ],
+  "synthetic_only": true
+}

@@ -1,0 +1,39 @@
+{
+  "analysis_only": true,
+  "content_id": "research-edca758a6ed755c9e91aecb8",
+  "content_observation": {
+    "interpretation": "content-metrics-only",
+    "status": "observed"
+  },
+  "crm_candidate": {
+    "eligible": false,
+    "reason": "No explicit qualifying business event."
+  },
+  "do_not_auto_contact": true,
+  "evidence_refs": [
+    "snapshot:snap_HVV7EZHD3QKEYX31KPGMAV749C",
+    "snapshot:snap_14PYCHNMT2AXGR6H1VEP5TTTE1"
+  ],
+  "execution_allowed": false,
+  "feedback_contract": "insurance-client-action-recording-decision-2026-06-22",
+  "feedback_id": "feedback-458fcb16635071dc9de2",
+  "feedback_type": "ordinary_content_engagement",
+  "manual_confirmation_required": false,
+  "material_reuse_level": "first_use",
+  "next_waiting_on": "content_review_only",
+  "no_geolocation_detail": true,
+  "no_relationship_graph_trace": true,
+  "no_time_sequence_fingerprint": true,
+  "privacy_status": "synthetic_only",
+  "published_content_ref": "pub_8P7WP5K3A1RXS7F2S2J9HJEPXM",
+  "qualifying_business_evidence": [],
+  "relationship_signal": {
+    "eligible": false,
+    "reason": "Views, likes, saves, and no_signal do not establish a relationship signal."
+  },
+  "review_status": "reviewed",
+  "sanitized_summary": "合成数据仅出现播放、点赞和收藏；这些仍然只是内容互动。",
+  "signal_layer": "content_observation",
+  "source_service_card_id": "synthetic-service-card-pf-ordinary-content-engagement",
+  "synthetic_only": true
+}

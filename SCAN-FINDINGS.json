@@ -1,0 +1,88 @@
+{
+  "scanner": "gitleaks 8.30.1",
+  "initial_findings": 8,
+  "reviewed_exceptions": [
+    {
+      "file": "self-media-creation-system/fixtures/content-operations-cycle-v1/record-interaction-business.input.json",
+      "key": "interaction_key",
+      "line": 4,
+      "sha256_matches_candidate_file": null,
+      "has_synthetic_identity": true,
+      "length": 36,
+      "reason": "Deterministic synthetic interaction id used for local event idempotency",
+      "match_scope": "exact relative file and exact complete line; default rules retained"
+    },
+    {
+      "file": "self-media-creation-system/fixtures/content-operations-cycle-v1/record-interaction-no-signal.input.json",
+      "key": "interaction_key",
+      "line": 4,
+      "sha256_matches_candidate_file": null,
+      "has_synthetic_identity": true,
+      "length": 23,
+      "reason": "Deterministic synthetic interaction id used for local event idempotency",
+      "match_scope": "exact relative file and exact complete line; default rules retained"
+    },
+    {
+      "file": "self-media-creation-system/fixtures/content-packaging-review-v1/deidentified-operational.input.json",
+      "key": "credential_sha256",
+      "line": 34,
+      "sha256_matches_candidate_file": "self-media-creation-system/fixtures/content-packaging-review-v1/human-review-deidentified-credential.json",
+      "has_synthetic_identity": false,
+      "length": 64,
+      "reason": "Exact SHA-256 of an inert synthetic review fixture, not an API credential",
+      "match_scope": "exact relative file and exact complete line; default rules retained"
+    },
+    {
+      "file": "self-media-creation-system/fixtures/content-packaging-review-v1/deidentified-operational.input.json",
+      "key": "credential_sha256",
+      "line": 40,
+      "sha256_matches_candidate_file": "self-media-creation-system/fixtures/content-packaging-review-v1/privacy-review-credential.json",
+      "has_synthetic_identity": false,
+      "length": 64,
+      "reason": "Exact SHA-256 of an inert synthetic review fixture, not an API credential",
+      "match_scope": "exact relative file and exact complete line; default rules retained"
+    },
+    {
+      "file": "self-media-creation-system/fixtures/content-packaging-review-v1/deidentified-operational.expected.json",
+      "key": "credential_sha256",
+      "line": 18,
+      "sha256_matches_candidate_file": "self-media-creation-system/fixtures/content-packaging-review-v1/human-review-deidentified-credential.json",
+      "has_synthetic_identity": false,
+      "length": 64,
+      "reason": "Exact SHA-256 of an inert synthetic review fixture, not an API credential",
+      "match_scope": "exact relative file and exact complete line; default rules retained"
+    },
+    {
+      "file": "self-media-creation-system/fixtures/content-packaging-review-v1/deidentified-operational.expected.json",
+      "key": "credential_sha256",
+      "line": 38,
+      "sha256_matches_candidate_file": "self-media-creation-system/fixtures/content-packaging-review-v1/privacy-review-credential.json",
+      "has_synthetic_identity": false,
+      "length": 64,
+      "reason": "Exact SHA-256 of an inert synthetic review fixture, not an API credential",
+      "match_scope": "exact relative file and exact complete line; default rules retained"
+    },
+    {
+      "file": "self-media-creation-system/fixtures/content-packaging-review-v1/synthetic.input.json",
+      "key": "credential_sha256",
+      "line": 34,
+      "sha256_matches_candidate_file": "self-media-creation-system/fixtures/content-packaging-review-v1/human-review-credential.json",
+      "has_synthetic_identity": false,
+      "length": 64,
+      "reason": "Exact SHA-256 of an inert synthetic review fixture, not an API credential",
+      "match_scope": "exact relative file and exact complete line; default rules retained"
+    },
+    {
+      "file": "self-media-creation-system/fixtures/content-packaging-review-v1/synthetic.expected.json",
+      "key": "credential_sha256",
+      "line": 18,
+      "sha256_matches_candidate_file": "self-media-creation-system/fixtures/content-packaging-review-v1/human-review-credential.json",
+      "has_synthetic_identity": false,
+      "length": 64,
+      "reason": "Exact SHA-256 of an inert synthetic review fixture, not an API credential",
+      "match_scope": "exact relative file and exact complete line; default rules retained"
+    }
+  ],
+  "default_rules_preserved": true,
+  "final_scan_status": "pass_for_reviewed_candidate_with_exact_exceptions"
+}

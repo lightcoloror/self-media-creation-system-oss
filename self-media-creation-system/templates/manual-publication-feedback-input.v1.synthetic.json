@@ -1,0 +1,94 @@
+{
+  "schema_version": "manual-publication-feedback-input.v1",
+  "synthetic_only": true,
+  "mode": "manual_entry_only",
+  "content_id": "research-edca758a6ed755c9e91aecb8",
+  "source_objects": {
+    "account_ref": "fixtures/vibe-living-synthetic-loop-v1/account.json",
+    "account_sha256": "d9bdd5932918ba6a7f07a88fd2f799a8d9408c6546222140a2c2a8de838f4774",
+    "topic_ref": "fixtures/vibe-living-synthetic-loop-v1/questions/claims-preparation/topic.json",
+    "topic_sha256": "b5458d4703bb89127cb8154067a1cea048d3e23917ba6766055805cdf1425f93",
+    "content_item_ref": "fixtures/vibe-living-synthetic-loop-v1/questions/claims-preparation/draft.content-item.json",
+    "content_item_sha256": "6ba2894e5e1714a24553fcd31e19e62b5d17cc1530c9f6865a5caa2af0cb5ad2"
+  },
+  "publication": {
+    "published_at": "2026-08-06T10:00:00+08:00",
+    "recorded_at": "2026-08-06T10:05:00+08:00",
+    "platform": "synthetic-surface",
+    "title": "买了保险，真到理赔时需要提前准备什么？",
+    "channel_variant": "synthetic-manual-publication",
+    "body_unavailable_reason": "Synthetic fixture does not store a published body or media."
+  },
+  "privacy": {
+    "raw_comments_included": false,
+    "tracking_parameters_included": false,
+    "direct_identifiers_included": false,
+    "customer_text_included": false
+  },
+  "observations": [
+    {
+      "window_label": "early",
+      "as_of": "2026-08-08T22:00:00+08:00",
+      "captured_at": "2026-08-08T22:10:00+08:00",
+      "data_completeness": "complete",
+      "layers": {
+        "admission": "observed",
+        "attraction": "observed",
+        "consumption": "observed",
+        "value": "observed",
+        "negative_feedback": "not_observed",
+        "business": "not_observed"
+      },
+      "metrics": [
+        {"layer": "admission", "metric_key": "admission.status", "value": 1, "unit": "other"},
+        {"layer": "attraction", "metric_key": "reach", "value": 150, "unit": "count"},
+        {"layer": "attraction", "metric_key": "views", "value": 120, "unit": "count"},
+        {"layer": "consumption", "metric_key": "retention_3s_rate", "value": 72, "unit": "percent"},
+        {"layer": "consumption", "metric_key": "retention_5s_rate", "value": 60, "unit": "percent"},
+        {"layer": "consumption", "metric_key": "retention_10s_rate", "value": 42, "unit": "percent"},
+        {"layer": "consumption", "metric_key": "average_watch_time", "value": 18, "unit": "seconds"},
+        {"layer": "consumption", "metric_key": "completion_rate", "value": 30, "unit": "percent"},
+        {"layer": "consumption", "metric_key": "major_dropoff_second", "value": 12, "unit": "seconds"},
+        {"layer": "value", "metric_key": "likes", "value": 4, "unit": "count"},
+        {"layer": "value", "metric_key": "saves", "value": 2, "unit": "count"},
+        {"layer": "value", "metric_key": "shares", "value": 0, "unit": "count"},
+        {"layer": "value", "metric_key": "meaningful_comments", "value": 1, "unit": "count"},
+        {"layer": "value", "metric_key": "profile_visits", "value": 9, "unit": "count"},
+        {"layer": "value", "metric_key": "attributed_new_followers", "value": 2, "unit": "count"}
+      ],
+      "business_events": []
+    },
+    {
+      "window_label": "d7",
+      "as_of": "2026-08-13T10:00:00+08:00",
+      "captured_at": "2026-08-13T10:10:00+08:00",
+      "data_completeness": "complete",
+      "layers": {
+        "admission": "observed",
+        "attraction": "observed",
+        "consumption": "observed",
+        "value": "observed",
+        "negative_feedback": "not_observed",
+        "business": "not_observed"
+      },
+      "metrics": [
+        {"layer": "admission", "metric_key": "admission.status", "value": 1, "unit": "other"},
+        {"layer": "attraction", "metric_key": "reach", "value": 260, "unit": "count"},
+        {"layer": "attraction", "metric_key": "views", "value": 210, "unit": "count"},
+        {"layer": "consumption", "metric_key": "retention_3s_rate", "value": 74, "unit": "percent"},
+        {"layer": "consumption", "metric_key": "retention_5s_rate", "value": 62, "unit": "percent"},
+        {"layer": "consumption", "metric_key": "retention_10s_rate", "value": 44, "unit": "percent"},
+        {"layer": "consumption", "metric_key": "average_watch_time", "value": 20, "unit": "seconds"},
+        {"layer": "consumption", "metric_key": "completion_rate", "value": 33, "unit": "percent"},
+        {"layer": "consumption", "metric_key": "major_dropoff_second", "value": 13, "unit": "seconds"},
+        {"layer": "value", "metric_key": "likes", "value": 7, "unit": "count"},
+        {"layer": "value", "metric_key": "saves", "value": 5, "unit": "count"},
+        {"layer": "value", "metric_key": "shares", "value": 1, "unit": "count"},
+        {"layer": "value", "metric_key": "meaningful_comments", "value": 2, "unit": "count"},
+        {"layer": "value", "metric_key": "profile_visits", "value": 18, "unit": "count"},
+        {"layer": "value", "metric_key": "attributed_new_followers", "value": 5, "unit": "count"}
+      ],
+      "business_events": []
+    }
+  ]
+}

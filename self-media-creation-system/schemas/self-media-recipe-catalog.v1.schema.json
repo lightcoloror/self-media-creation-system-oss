@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/self-media-recipe-catalog.v1.schema.json",
+  "title": "Self-media operational recipe catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "catalog_version",
+    "canonical_parent",
+    "boundaries",
+    "context_defaults",
+    "route_execution_policy",
+    "error_catalog",
+    "recipes"
+  ],
+  "properties": {
+    "schema_version": {"const": "self-media-recipe-catalog.v1"},
+    "catalog_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "canonical_parent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tool_id", "routing_binding", "load_policy"],
+      "properties": {
+        "tool_id": {"const": "content-creation-system"},
+        "routing_binding": {"const": "routing-binding.v1.json"},
+        "load_policy": {"const": "whole-contract-set-only"}
+      }
+    },
+    "boundaries": {"$ref": "#/$defs/boundaries"},
+    "context_defaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["capsule_max_bytes", "tool_receipt_max_bytes", "full_logs", "large_artifacts"],
+      "properties": {
+        "capsule_max_bytes": {"type": "integer", "minimum": 1024, "maximum": 16384},
+        "tool_receipt_max_bytes": {"type": "integer", "minimum": 256, "maximum": 4096},
+        "full_logs": {"const": "reference_only_unless_failure"},
+        "large_artifacts": {"const": "hash_bound_reference_only"}
+      }
+    },
+    "route_execution_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "canonical_order_is_universal_checklist", "skip_reason_required", "unknown_applicability"],
+      "properties": {
+        "mode": {"const": "selected-recipe-subset-only"},
+        "canonical_order_is_universal_checklist": {"const": false},
+        "skip_reason_required": {"const": true},
+        "unknown_applicability": {"const": "fail-closed"}
+      }
+    },
+    "error_catalog": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["recovery_action", "automatic_retry"],
+        "properties": {
+          "recovery_action": {"type": "string", "minLength": 1, "maxLength": 400},
+          "automatic_retry": {"const": false}
+        }
+      }
+    },
+    "recipes": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {"$ref": "#/$defs/recipe"}
+    }
+  },
+  "$defs": {
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["publication", "external_send", "customer_contact", "crm_write", "knowledge_base_write", "provider_call"],
+      "properties": {
+        "publication": {"const": "manual-only"},
+        "external_send": {"const": "not-authorized"},
+        "customer_contact": {"const": "not-authorized"},
+        "crm_write": {"const": "not-authorized"},
+        "knowledge_base_write": {"const": "not-authorized"},
+        "provider_call": {"const": "not-authorized-by-this-entry"}
+      }
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["step_id", "interface", "tool_id", "instruction", "input_roles", "output_contract", "stop_on_error"],
+      "properties": {
+        "step_id": {"type": "string", "pattern": "^[a-z][a-z0-9._-]{2,79}$"},
+        "interface": {"enum": ["cli", "agent_task", "human_gate"]},
+        "tool_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{1,79}$"},
+        "instruction": {"type": "string", "minLength": 1, "maxLength": 500},
+        "command": {"type": "string", "minLength": 1, "maxLength": 500},
+        "input_roles": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "output_contract": {"type": "string", "minLength": 1},
+        "stop_on_error": {"const": true}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"interface": {"const": "cli"}}},
+          "then": {"required": ["command"]},
+          "else": {"not": {"required": ["command"]}}
+        }
+      ]
+    },
+    "recipe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recipe_id",
+        "workflow_goal",
+        "description",
+        "required_initial_inputs",
+        "always_load",
+        "on_demand",
+        "never_inline",
+        "steps",
+        "quality_gates",
+        "outputs",
+        "stop_conditions"
+      ],
+      "properties": {
+        "recipe_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{2,79}$"},
+        "workflow_goal": {"type": "string"},
+        "description": {"type": "string", "minLength": 1, "maxLength": 400},
+        "prerecording": {
+          "type": "object", "additionalProperties": false,
+          "required": ["required_initial_inputs", "steps", "outputs"],
+          "properties": {
+            "required_initial_inputs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+            "steps": {"type": "array", "minItems": 2, "maxItems": 12, "items": {"$ref": "#/$defs/step"}},
+            "interview_steps": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"$ref": "#/$defs/step"}},
+            "outputs": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+          }
+        },
+        "required_initial_inputs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "always_load": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "on_demand": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "never_inline": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "steps": {"type": "array", "minItems": 2, "maxItems": 12, "items": {"$ref": "#/$defs/step"}},
+        "quality_gates": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "outputs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "stop_conditions": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
+      }
+    }
+  }
+}

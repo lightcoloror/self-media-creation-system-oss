@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lightcolor/self-media/legacy-feedback.v0.schema.json",
+  "title": "历史反馈汇总夹具（仅回归）",
+  "description": "描述旧版汇总反馈的合成输入；不承载账号、客户或发布平台数据。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "fixture_id", "synthetic_only", "feedback"],
+  "properties": {
+    "schema_version": { "const": "legacy-feedback.v0" },
+    "fixture_id": { "type": "string", "pattern": "^fixture_[a-z0-9._-]{6,80}$" },
+    "synthetic_only": { "const": true },
+    "feedback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["signal_status", "platform_signals", "business_signals", "learning_decision"],
+      "properties": {
+        "signal_status": { "enum": ["not-observed", "no_signal", "observed"] },
+        "platform_signals": { "type": "object" },
+        "business_signals": { "type": "object" },
+        "qualitative_feedback": { "type": "array", "items": { "type": "string" } },
+        "learning_decision": { "enum": ["none", "retain", "modify", "retire", "insufficient-evidence"] }
+      }
+    }
+  }
+}

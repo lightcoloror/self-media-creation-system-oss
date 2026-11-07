@@ -1,0 +1,250 @@
+{
+  "schema_version": "1",
+  "fixture_id": "fixture_synthetic_echo_garden_v1",
+  "synthetic_only": true,
+  "account": {
+    "schema_version": "0.1",
+    "account_id": "acct_01J8Z8R0E7X7K7Q8M6D3C2B1A0",
+    "platform": "synthetic-platform",
+    "platform_account_id": null,
+    "display_name": "虚构回归账号：回声花园",
+    "account_role": "experiment",
+    "status": "active",
+    "goal_ids": ["goal_01ARZ3NDEKTSV4RRFFQ69G5FBA"],
+    "positioning": {
+      "summary": "仅用于验证自媒体经营数据合同。",
+      "audience_segments": ["虚构测试受众"],
+      "business_boundary": "没有真实读者、客户、平台账号或发布行为。"
+    },
+    "ownership": {
+      "owner_ref": "synthetic-fixture",
+      "manager_refs": [],
+      "access_model": "single-owner",
+      "last_permission_review_at": null
+    },
+    "security": {
+      "mfa_status": "unknown",
+      "mfa_method": "unknown",
+      "recovery_status": "unknown",
+      "backup_codes_status": "unknown",
+      "secret_location_class": "not-recorded",
+      "last_security_review_at": null,
+      "last_recovery_drill_at": null,
+      "notes": "虚构 fixture，不含账户凭据。"
+    },
+    "source_refs": [
+      {
+        "ref": "fixture://operations-contract-regression/account",
+        "evidence_status": "local-fact",
+        "note": "合成对象。"
+      }
+    ],
+    "created_at": "2026-01-05T08:00:00+08:00",
+    "updated_at": "2026-01-05T08:00:00+08:00"
+  },
+  "topic": {
+    "schema_version": "0.1",
+    "topic_id": "topic_01J8Z8R0E7X7K7Q8M6D3C2B1A1",
+    "title": "虚构：回声花园观察卡",
+    "status": "published",
+    "audience_problem": "仅验证选题与内容、发布实例之间的稳定 ID 关系。",
+    "goal_ids": ["goal_01ARZ3NDEKTSV4RRFFQ69G5FBA"],
+    "target_account_ids": ["acct_01J8Z8R0E7X7K7Q8M6D3C2B1A0"],
+    "relationship_types": ["supports-goal", "answers-question"],
+    "parent_topic_id": null,
+    "cluster_key": "synthetic-contract-regression",
+    "evidence_status": "verified",
+    "source_refs": [
+      {
+        "source_type": "workspace-file",
+        "ref": "fixture://operations-contract-regression/topic",
+        "evidence_status": "verified",
+        "note": "合成对象。"
+      }
+    ],
+    "notes": "不包含真实用户问题或业务判断。",
+    "created_at": "2026-01-05T08:10:00+08:00",
+    "updated_at": "2026-01-05T09:01:00+08:00"
+  },
+  "content_item": {
+    "schema_version": "0.2",
+    "content_id": "synthetic-echo-garden-001",
+    "title": "虚构回归：回声花园的观察卡",
+    "primary_format": "graphic-note",
+    "status": "feedback",
+    "owner_thread": null,
+    "provenance": {
+      "sources": [],
+      "verified_facts": [],
+      "uncertainties": ["本内容完全虚构，仅用于合同回归。"],
+      "forbidden_claims": ["不得被解释为真实发布、真实账号表现或客户反馈。"]
+    },
+    "gates": {
+      "fact": { "status": "pass", "reason": "明确是合成 fixture。" },
+      "privacy": { "status": "pass", "reason": "不含真实个人或客户信息。" },
+      "compliance": { "status": "pass", "reason": "不提供医疗、保险或投资建议。" },
+      "rights": { "status": "pass", "reason": "不含外部媒体。" }
+    },
+    "intent": {
+      "topic": "虚构的回声花园观察卡",
+      "speaker_role": "合同回归夹具",
+      "audience": "自动化测试",
+      "content_object": "一条没有真实受众的虚构图文",
+      "desired_action": "验证对象关系，不诱导任何外部行为。",
+      "risk_boundary": "不得推断真实客户结论或平台推荐机制。"
+    },
+    "composition": {
+      "expression_mode": "fixture",
+      "voice_profile": "voice/synthetic-contract-regression",
+      "voice_profile_version": "1",
+      "semantic_reversibility": { "status": "pass" },
+      "retention_mode": "summary-only",
+      "canonical_summary": "虚构的回声花园观察卡，用于验证经营数据合同。"
+    },
+    "channels": {},
+    "visual": {
+      "visual_profile": "visual/synthetic-contract-regression",
+      "visual_profile_version": "1",
+      "route": "none",
+      "cognitive_anchors": [],
+      "assets": [],
+      "render_recipe": { "renderer": "none", "output_format": "none", "output_refs": [] }
+    },
+    "qa": {
+      "deterministic": [],
+      "promptfoo": { "status": "not-run" },
+      "human_review": { "status": "required", "reviewer": null, "reviewed_at": null }
+    },
+    "publication": { "boundary": "manual-only", "receipts": [] },
+    "feedback": {
+      "signal_status": "no_signal",
+      "platform_signals": {},
+      "business_signals": {},
+      "qualitative_feedback": [],
+      "learning_decision": "insufficient-evidence",
+      "content_signal_status": "content_no_signal",
+      "business_signal_status": "not-observed",
+      "measurement_layers": {
+        "admission": [{ "name": "synthetic_contract_admitted", "value": "yes", "source": "fixture" }],
+        "attraction": [],
+        "consumption": [],
+        "value": [],
+        "negative_feedback": [],
+        "business": []
+      }
+    },
+    "operating_plan": {
+      "production_unit": "real-problem-or-service-action",
+      "origin_kind": "research-synthesis",
+      "private_validation": { "channel": "private_conversation", "status": "feedback-recorded", "note": "仅模拟时序，不代表发布。" }
+    },
+    "operating_refs": {
+      "account_ids": ["acct_01J8Z8R0E7X7K7Q8M6D3C2B1A0"],
+      "topic_ids": ["topic_01J8Z8R0E7X7K7Q8M6D3C2B1A1"],
+      "publication_ids": ["pub_01J8Z8R0E7X7K7Q8M6D3C2B1A2"]
+    }
+  },
+  "publication_events": [
+    {
+      "schema_version": "0.1",
+      "event_id": "evt_01J8Z8R0E7X7K7Q8M6D3C2B1A3",
+      "publication_id": "pub_01J8Z8R0E7X7K7Q8M6D3C2B1A2",
+      "event_sequence": 1,
+      "content_id": "synthetic-echo-garden-001",
+      "version_id": "ver_01J8Z8R0E7X7K7Q8M6D3C2B1A4",
+      "account_id": "acct_01J8Z8R0E7X7K7Q8M6D3C2B1A0",
+      "platform": "synthetic-platform",
+      "platform_content_id": null,
+      "canonical_url": null,
+      "event_type": "prepared",
+      "occurred_at": "2026-01-05T09:00:00+08:00",
+      "recorded_at": "2026-01-05T09:00:00+08:00",
+      "actor_type": "local-tool",
+      "evidence_status": "local-record",
+      "supersedes_event_id": null,
+      "reason": "合成生命周期事件。"
+    },
+    {
+      "schema_version": "0.1",
+      "event_id": "evt_01J8Z8R0E7X7K7Q8M6D3C2B1A5",
+      "publication_id": "pub_01J8Z8R0E7X7K7Q8M6D3C2B1A2",
+      "event_sequence": 2,
+      "content_id": "synthetic-echo-garden-001",
+      "version_id": "ver_01J8Z8R0E7X7K7Q8M6D3C2B1A4",
+      "account_id": "acct_01J8Z8R0E7X7K7Q8M6D3C2B1A0",
+      "platform": "synthetic-platform",
+      "platform_content_id": null,
+      "canonical_url": null,
+      "event_type": "published",
+      "occurred_at": "2026-01-05T09:01:00+08:00",
+      "recorded_at": "2026-01-05T09:01:00+08:00",
+      "actor_type": "local-tool",
+      "evidence_status": "local-record",
+      "supersedes_event_id": "evt_01J8Z8R0E7X7K7Q8M6D3C2B1A3",
+      "reason": "合成生命周期事件；不代表真实发布。",
+      "frozen_version": {
+        "title": "虚构回归：回声花园的观察卡",
+        "channel_variant": "synthetic-graphic-note",
+        "freeze_status": "complete",
+        "body_ref": "fixture://operations-contract-regression/synthetic-body-v1",
+        "body_sha256": "430898f7b7df49ed30fc13df40a086b752ad165ec9613a6f46c39c5911e855c0",
+        "cover_refs": [],
+        "media_refs": [],
+        "cta": null,
+        "unavailable_reason": null,
+        "frozen_at": "2026-01-05T09:01:00+08:00"
+      }
+    }
+  ],
+  "performance_snapshots": [
+    {
+      "schema_version": "0.1",
+      "snapshot_id": "snap_01J8Z8R0E7X7K7Q8M6D3C2B1A6",
+      "publication_id": "pub_01J8Z8R0E7X7K7Q8M6D3C2B1A2",
+      "as_of": "2026-01-07T21:01:00+08:00",
+      "captured_at": "2026-01-07T21:02:00+08:00",
+      "window_label": "early",
+      "timezone": "Asia/Shanghai",
+      "metric_dictionary_version": "synthetic.0.1",
+      "source_type": "other",
+      "data_completeness": "complete",
+      "metrics": [
+        { "metric_key": "impressions", "value": 42, "unit": "count", "dimensions": { "window": "early" }, "unavailable_reason": null },
+        { "metric_key": "saves", "value": 3, "unit": "count", "dimensions": { "window": "early" }, "unavailable_reason": null }
+      ],
+      "notes": "虚构指标，只用于时序校验。"
+    },
+    {
+      "schema_version": "0.1",
+      "snapshot_id": "snap_01J8Z8R0E7X7K7Q8M6D3C2B1A5",
+      "publication_id": "pub_01J8Z8R0E7X7K7Q8M6D3C2B1A2",
+      "as_of": "2026-01-12T09:01:00+08:00",
+      "captured_at": "2026-01-12T09:02:00+08:00",
+      "window_label": "d7",
+      "timezone": "Asia/Shanghai",
+      "metric_dictionary_version": "synthetic.0.1",
+      "source_type": "other",
+      "data_completeness": "complete",
+      "metrics": [
+        { "metric_key": "impressions", "value": 56, "unit": "count", "dimensions": { "window": "d7" }, "unavailable_reason": null },
+        { "metric_key": "saves", "value": 4, "unit": "count", "dimensions": { "window": "d7" }, "unavailable_reason": null }
+      ],
+      "notes": "虚构指标，只用于时序校验。"
+    }
+  ],
+  "reviews": [
+    { "layer": "admission", "signal_domain": "content", "signal_status": "observed", "evidence_refs": ["fixture://operations-contract-regression/admission"], "note": "合同被本地验证器读取。" },
+    { "layer": "attraction", "signal_domain": "content", "signal_status": "content_no_signal", "evidence_refs": ["fixture://operations-contract-regression/early"], "note": "内容信号中性，无客户含义。" },
+    { "layer": "consumption", "signal_domain": "content", "signal_status": "content_no_signal", "evidence_refs": ["fixture://operations-contract-regression/early"], "note": "内容信号中性。" },
+    { "layer": "value", "signal_domain": "content", "signal_status": "content_no_signal", "evidence_refs": ["fixture://operations-contract-regression/d7"], "note": "内容信号中性。" },
+    { "layer": "negative_feedback", "signal_domain": "content", "signal_status": "content_no_signal", "evidence_refs": ["fixture://operations-contract-regression/d7"], "note": "没有把未观察到信号解释为负反馈。" },
+    { "layer": "business", "signal_domain": "business", "signal_status": "business_no_signal", "evidence_refs": ["fixture://operations-contract-regression/business"], "note": "不产生客户正面或负面结论。" }
+  ],
+  "legacy_feedback": {
+    "signal_status": "no_signal",
+    "platform_signals": { "synthetic.impressions": 42 },
+    "business_signals": {},
+    "qualitative_feedback": [],
+    "learning_decision": "insufficient-evidence"
+  }
+}

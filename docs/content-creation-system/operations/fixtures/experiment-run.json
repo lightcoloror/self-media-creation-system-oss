@@ -1,0 +1,80 @@
+{
+  "schema_version": "0.1",
+  "data_classification": "synthetic-only",
+  "experiment_run_id": "exp_01ARZ3NDEKTSV4RRFFQ69G5FB3",
+  "account_id": "acct_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+  "topic_ids": [
+    "topic_01ARZ3NDEKTSV4RRFFQ69G5FAW"
+  ],
+  "content_ids": [
+    "synthetic-echo-garden-operations-001"
+  ],
+  "publication_ids": [],
+  "test_type": "observational-content-test",
+  "state": "pre-registered",
+  "registered_at": "2026-10-22T09:00:00+08:00",
+  "started_at": null,
+  "completed_at": null,
+  "hypothesis": "完全虚构：把标题改成读者原问题，可能提高进入后的阅读意愿。",
+  "primary_variable": {
+    "key": "title",
+    "change": "只改变标题的进入方式。",
+    "held_constant": [
+      "正文事实",
+      "视觉层级",
+      "发布账号",
+      "CTA"
+    ]
+  },
+  "primary_signal": {
+    "layer": "consumption",
+    "metric_key": "read_depth",
+    "direction": "increase"
+  },
+  "observation_window": {
+    "minimum_hours": 168,
+    "evaluate_after": "2026-10-29T09:00:00+08:00",
+    "sample_rule": "窗口未到或样本不足时结论保持 inconclusive。"
+  },
+  "variants": [
+    {
+      "variant_id": "baseline",
+      "label": "现有标题结构",
+      "publication_ids": []
+    },
+    {
+      "variant_id": "question_title",
+      "label": "读者原问题标题",
+      "publication_ids": []
+    }
+  ],
+  "allocation_method": null,
+  "guardrails": [
+    "事实与合规边界不变",
+    "负反馈上升时停止",
+    "不自动发布"
+  ],
+  "stop_conditions": [
+    "出现事实或合规风险",
+    "观察窗口结束但样本仍不足"
+  ],
+  "confounders": [
+    "发布时间不同",
+    "自然流量波动"
+  ],
+  "causal_scope": "association-only",
+  "conclusion": {
+    "status": "pending",
+    "effect_direction": "unknown",
+    "data_quality": "not-evaluated",
+    "evidence_refs": [],
+    "limitations": [
+      "尚未开始发布观察"
+    ]
+  },
+  "authority": {
+    "execution_authorized": false,
+    "publication_authority": "never",
+    "automatic_winner_selection": false
+  }
+}

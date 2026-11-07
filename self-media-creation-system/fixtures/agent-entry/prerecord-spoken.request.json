@@ -1,0 +1,11 @@
+{
+  "schema_version": "self-media-agent-request.v1",
+  "request_id": "synthetic-prerecord-spoken-001",
+  "workflow_goal": "case_video_candidate",
+  "creation_phase": "prerecording",
+  "preparation_kind": "spoken_script",
+  "synthetic_only": true,
+  "author_identity": {"account_id": "fixture-account", "genre": "spoken_script"},
+  "available_inputs": ["account_ip", "primary_audience", "topic_question", "fact_card_ref", "authorization_status", "voice_profile_ref"],
+  "input_refs": []
+}

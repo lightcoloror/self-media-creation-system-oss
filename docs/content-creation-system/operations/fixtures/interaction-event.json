@@ -1,0 +1,31 @@
+{
+  "schema_version": "0.1",
+  "data_classification": "synthetic-only",
+  "interaction_event_id": "int_01ARZ3NDEKTSV4RRFFQ69G5FB1",
+  "publication_id": "pub_01ARZ3NDEKTSV4RRFFQ69G5FAX",
+  "account_id": "acct_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+  "source_type": "private-message",
+  "occurred_at": "2026-10-21T09:00:00+08:00",
+  "recorded_at": "2026-10-21T10:00:00+08:00",
+  "deidentified_summary": "完全虚构：读者明确提出希望继续讨论需要准备哪些资料。",
+  "question_category": "synthetic-echo-garden-question",
+  "evidence_status": "manual-observation",
+  "evidence_refs": [
+    "synthetic:event:continued-consultation-001"
+  ],
+  "signal_class": "business-candidate",
+  "disposition": "lead-candidate",
+  "lead_promotion_status": "promoted",
+  "privacy": {
+    "deidentified": true,
+    "raw_text_included": false,
+    "direct_identifiers_included": false,
+    "retention_class": "synthetic-only"
+  },
+  "authority": {
+    "execution_authorized": false,
+    "contact_authorized": false,
+    "crm_write_authorized": false,
+    "publication_authority": "never"
+  }
+}

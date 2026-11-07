@@ -1,0 +1,430 @@
+{
+  "schema_version": "1.6",
+  "updated_at": "2026-10-10T13:20:00+08:00",
+  "execution_boundary": "draft-diagnose-review-only",
+  "contract_set_ref": "routing-contract-set.v1.json",
+  "required_inputs": [
+    "task_type",
+    "account_ip",
+    "content_job",
+    "primary_audience",
+    "primary_goal",
+    "format",
+    "platform",
+    "evidence_risk",
+    "voice_visual_route"
+  ],
+  "enums": {
+    "task_type": [
+      "topic-selection",
+      "research",
+      "planning",
+      "interview",
+      "draft",
+      "rewrite",
+      "title",
+      "script",
+      "visual-brief",
+      "review",
+      "retrospective",
+      "account-diagnosis"
+    ],
+    "account_ip": [
+      "cange-risk-diagnosis",
+      "cange-growth",
+      "dual-account-shared",
+      "personal-wechat-moments"
+    ],
+    "content_job": [
+      "story",
+      "travel-experience",
+      "mechanism-explanation",
+      "tool-or-checklist",
+      "case-review",
+      "trust-building",
+      "collaborator-recruitment",
+      "product-demo",
+      "question-answer",
+      "opinion",
+      "business-conversion",
+      "account-diagnosis"
+    ],
+    "primary_goal": [
+      "experience",
+      "personal-memory",
+      "entertainment",
+      "travel-decision",
+      "relationship-touch",
+      "search-discovery",
+      "understanding",
+      "save-for-later",
+      "trust",
+      "discussion",
+      "consultation",
+      "collaboration",
+      "conversion",
+      "learning"
+    ],
+    "content_role": [
+      "growth",
+      "trust",
+      "tool",
+      "professional"
+    ],
+    "effect_mechanism": [
+      "none",
+      "emotional-resonance",
+      "evidence-backed-friction",
+      "audience-voice",
+      "value-alignment"
+    ],
+    "structure_route": [
+      "direct-answer",
+      "decision-reframe",
+      "scenario-branch",
+      "gap-diagnosis",
+      "tradeoff-comparison",
+      "case-review",
+      "mechanism-explanation",
+      "tool-action",
+      "boundary-map",
+      "story-arc",
+      "opinion-argument",
+      "custom"
+    ],
+    "question_structure_route": [
+      "direct-answer",
+      "decision-reframe",
+      "not-applicable"
+    ],
+    "format": [
+      "moments-short-text",
+      "graphic-note",
+      "short-video-narration",
+      "demo-video",
+      "interview-video",
+      "long-video",
+      "live",
+      "longform-article"
+    ],
+    "platform": [
+      "wechat-moments",
+      "wechat-groups-wecom",
+      "xiaohongshu",
+      "wechat-video",
+      "douyin",
+      "bilibili",
+      "wechat-article",
+      "zhihu",
+      "kuaishou",
+      "toutiao",
+      "weibo",
+      "youtube"
+    ]
+  },
+  "routing_order": [
+    "source-intake",
+    "task-type",
+    "account-ip",
+    "content-job-and-single-primary-goal",
+    "primary-audience",
+    "shared-communication-job",
+    "per-task-creation-route-selection",
+    "optional-structure-route",
+    "conditional-question-route-direct-answer-or-decision-reframe",
+    "channel-portfolio-and-stage",
+    "format-adapter",
+    "platform-overlay",
+    "conditional-research-plan-execute-and-verified-output",
+    "conditional-canonical-fact-card",
+    "conditional-fact-revision-lock",
+    "optional-effect-mechanism",
+    "conditional-story-material-readiness",
+    "conditional-story-design-card",
+    "conditional-serious-content-translation-precheck",
+    "optional-perspective-angle-candidates",
+    "optional-structural-benchmark",
+    "voice-profile",
+    "visual-profile",
+    "design-context-review",
+    "brand-asset-spec-if-needed",
+    "visual-role-map",
+    "shared-media-adapter",
+    "optional-design-direction",
+    "optional-visible-design-exploration",
+    "specialized-skills",
+    "initial-draft-quality-gate",
+    "voice-and-ai-trace-gate",
+    "post-freeze-hook",
+    "conditional-serious-content-translation-postcheck",
+    "conditional-cross-platform-fact-consistency",
+    "final-quality-gates",
+    "rendered-output-review",
+    "five-dimension-design-review",
+    "exact-final-cut-compliance-gate",
+    "manual-publication",
+    "layered-feedback"
+  ],
+  "hard_stops": [
+    {
+      "when": "factual claim source status is unknown",
+      "result": "evidence-needed"
+    },
+    {
+      "when": "research is applicable but no schema-valid ready verified research output exists",
+      "result": "research-output-blocked"
+    },
+    {
+      "when": "canonical fact revision is missing or not locked_for_draft",
+      "result": "fact-revision-blocked"
+    },
+    {
+      "when": "a fact correction is recorded after a downstream artifact review",
+      "result": "invalidate-derived-artifacts"
+    },
+    {
+      "when": "medical or insurance conclusion lacks verified boundary",
+      "result": "subject-matter-review-required"
+    },
+    {
+      "when": "customer patient family or child privacy is not cleared",
+      "result": "privacy-blocked"
+    },
+    {
+      "when": "asset or quotation rights are unknown",
+      "result": "rights-review-required"
+    },
+    {
+      "when": "peer content or comments are used as final fact authority",
+      "result": "evidence-needed"
+    },
+    {
+      "when": "external benchmark narrative case claim or customer quote is imported as local fact",
+      "result": "evidence-needed"
+    },
+    {
+      "when": "third-party video image music or wording is copied without known rights",
+      "result": "rights-review-required"
+    },
+    {
+      "when": "distribution restriction is inferred from low metrics or cross-platform difference alone",
+      "result": "evidence-needed"
+    },
+    {
+      "when": "fixed platform threshold or recovery formula lacks current official evidence",
+      "result": "candidate-only"
+    },
+    {
+      "when": "routing components come from different contract sets or roots",
+      "result": "route-contract-mismatch"
+    },
+    {
+      "when": "an agent treats the canonical routing order as a universal checklist instead of selecting the applicable recipe subset",
+      "result": "route-applicability-review-required"
+    },
+    {
+      "when": "a route stage is skipped without an explicit not-applicable reason or applicability is unknown",
+      "result": "route-applicability-blocked"
+    },
+    {
+      "when": "verified quote or verified position lacks a reviewed source reference",
+      "result": "evidence-needed"
+    },
+    {
+      "when": "framework application or agent inference is phrased as a person's quote or verified position",
+      "result": "misattribution-blocked"
+    },
+    {
+      "when": "hook candidate promotes missing data case result or authority into a factual claim",
+      "result": "evidence-needed"
+    },
+    {
+      "when": "insurance health high-risk or other serious professional content lacks its applicable translation precheck or frozen-body postcheck",
+      "result": "serious-content-translation-review-required"
+    },
+    {
+      "when": "serious content translation receipt body hash or review payload drifts after review",
+      "result": "invalidate-serious-content-translation-review"
+    },
+    {
+      "when": "two or more platform adaptations do not share one canonical fact revision and normalized claim ledger",
+      "result": "cross-platform-fact-consistency-review-required"
+    },
+    {
+      "when": "a platform adds an undeclared claim changes a normalized claim or omits a core claim for density",
+      "result": "cross-platform-fact-drift-blocked"
+    },
+    {
+      "when": "story reveal delays the reason to watch beyond two seconds, uses empty suspense, reveals the complete answer immediately, or does not fulfill its opening",
+      "result": "story-reveal-review-required"
+    },
+    {
+      "when": "structure_route is story-arc and story material is incomplete blocked identifiable without authorization or missing its source status",
+      "result": "story-material-review-required"
+    },
+    {
+      "when": "structure_route is story-arc and a passed fact-bound story-design-card is missing or drifted",
+      "result": "story-design-review-required"
+    },
+    {
+      "when": "story emotion invents internal state or dialogue, exceeds evidence, or turns an individual case into general proof",
+      "result": "story-integrity-blocked"
+    },
+    {
+      "when": "integrity evidence privacy causality or medical-insurance boundary fails regardless of attention strength",
+      "result": "blocked-no-score-averaging"
+    },
+    {
+      "when": "integrity passes but immediate relevance tension-or-utility progression judgment explanation-budget or packaging alignment fails",
+      "result": "return-for-attention-revision"
+    },
+    {
+      "when": "manual route override requests publication external-send or execution authority",
+      "result": "prohibited"
+    },
+    {
+      "when": "automatic posting fake engagement circumvention or hidden diversion is requested",
+      "result": "prohibited"
+    },
+    "framework-reframe-supplement-or-defer-blocks-drafting-and-packaging",
+    "framework-pending-human-decision-blocks-drafting",
+    "legacy-angle-v1-does-not-prove-framework-review"
+  ],
+  "defaults": {
+    "creation_route_selection": "AI assesses every creative task from current intent and material evidence; validate context-bound decision before writing",
+    "creation_routes": ["story", "travel-experience", "expository", "technical-rework"],
+    "travel_experience_route": "independent; diary|activity-highlights|guide|review|atmospheric|observational; story-design-not-applicable",
+    "shared_material_analysis": "full-source-visual-audio-event-and-unused-selects-review-regardless-of-route-or-output-length",
+    "publication_boundary": "manual-only",
+    "route_execution_mode": "selected-recipe-applicable-subset-only",
+    "canonical_routing_order_role": "precedence-not-universal-checklist",
+    "skip_receipt_policy": "explicit-reason-required",
+    "unknown_applicability": "fail-closed",
+    "research_output_gate": "verified-research-output-or-explicit-not-applicable",
+    "fact_card_requirement": "required-before-factual-draft-or-explicit-not-applicable-for-pure-observation",
+    "current_capacity_distribution_mode": "one-frozen-master-manual-synchronous-distribution",
+    "distinct_public_variant_generation": "deferred-nonblocking",
+    "primary_goal_count": 1,
+    "structure_route": "optional-human-overridable",
+    "structure_route_primary_count_max": 1,
+    "question_structure_route": "not-applicable-unless-question-answer-or-search-discovery",
+    "effect_mechanism": "none",
+    "primary_effect_mechanism_count_max": 1,
+    "secondary_effect_mechanism_count_max": 1,
+    "channel_portfolio_ref": "self-media-creation-system/channel-portfolio.v1.json#current_stage",
+    "public_adaptation_max": 2,
+    "public_adaptation_max_semantics": "distinct-platform-variants-only-excludes-identical-frozen-master-sync",
+    "private_feedback_gate": "helpful-not-required",
+    "platform_algorithm_numbers": "never-assume",
+    "account_diagnosis_conclusion": "evidence-graded-no-magic-score",
+    "mass_deletion": "prohibited-without-item-level-risk-reason",
+    "no_feedback_semantics": "no_signal",
+    "medical_role": "explain-service-process-not-medical-decision",
+    "insurance_role": "explain-contract-and-service-not-guarantee",
+    "benchmark_role": "structure-and-visual-grammar-only-never-fact-source",
+    "benchmark_business_result": "unknown-unless-verifiable-first-party-data",
+    "perspective_angle_status": "candidate-only",
+    "perspective_angle_count_max": 5,
+    "hook_missing_material": "needs-source-never-invent",
+    "serious_content_translation_gate": "conditional-for-insurance-health-high-risk-and-declared-serious-professional-content",
+    "serious_content_translation_humor": "risk-proportional-never-target-affected-person",
+    "serious_content_fun_integrity": "related-only-core-value-survives-memory-target-is-not-gag",
+    "cross_platform_fact_consistency": "required-when-two-or-more-platform-adaptations-exist",
+    "story_reveal_mode": "result-preview-plus-story-reveal-never-empty-suspense",
+    "story_material_gate": "conditional-deidentified-readiness-before-story-design",
+    "story_design_gate": "conditional-for-story-arc-before-initial-draft",
+    "emotional_resonance_policy": "event-and-appraisal-bound-never-invent-feelings-or-use-case-as-general-proof",
+    "attention_integrity_policy": "independent-no-averaging-integrity-hard-attention-revision",
+    "wechat_html_route": "existing-content-studio-adapter-manual-preview-only",
+    "framework_decision": "topic-angle-decision.v2 before structure/draft; revisit on audience, goal, promise, evidence or production-scope change; unchanged locked direction may reuse a current decision"
+  },
+  "output_contract": {
+    "creation_route_decision_ref": "creation-route-decision.v1; required before creative writing",
+    "creation_route_context_ref": "creation-route-context.v1; current goal, material, user constraints and assessment",
+    "creation_route": "story|travel-experience|expository|technical-rework|null",
+    "vlog_style": "chronological-diary|activity-highlights|practical-guide|experience-review|atmospheric-montage|observational|null",
+    "route_id": "string",
+    "routing_contract_set_ref": "routing-contract-set.v1",
+    "applicable_route_steps": "string[]",
+    "skipped_route_steps_with_reason": "{step_id,reason}[]",
+    "research_output_ref": "research-output.v1|null",
+    "research_readiness_status": "not-applicable|verified|blocked",
+    "canonical_fact_card_ref": "content-fact-card.v0-with-canonical-revision|null",
+    "fact_revision_id": "string|null",
+    "fact_lock_status": "draft|locked_for_draft|superseded|null",
+    "design_principles_version": "shared-design-principles.v1",
+    "communication_job": "{audience,outcome,central_takeaway}",
+    "media_adapter": "social-card|article|web|infographic|pptx",
+    "brand_spec_ref": "string|null",
+    "design_exploration_mode": "off|optional|requested",
+    "format_adapter_id": "string",
+    "platform_overlay_id": "string",
+    "channel_portfolio_ref": "string|null",
+    "distribution_scope": "one-frozen-master-manual-synchronous-distribution-or-at-most-two-distinct-public-adaptations",
+    "distribution_mode": "manual-synchronized-frozen-master|distinct-platform-variants|private-only",
+    "frozen_master_ref": "string|null",
+    "voice_profile_ref": "string",
+    "visual_profile_ref": "string",
+    "design_direction_ref": "shared-design-directions.v1#direction|null;explicit-selection-only;inherits-visual-profile",
+    "effect_mechanism": "string",
+    "content_nature": "education|opinion|case-review|product-marketing|individual-advice|medical-insurance-cross|null",
+    "sensitivity_profile": "ordinary|professional-sensitive|medical-sensitive|affected-person-severe-illness|customer-loss|privacy-high-risk|compound-high-sensitivity|null",
+    "serious_content_translation_precheck_ref": "serious-content-translation-review-input.v1#precreative_gate|null",
+    "serious_content_translation_review_ref": "serious-content-translation-review.v1|null",
+    "serious_content_translation_gate_status": "not-applicable|precheck-passed|review-required|passed|blocked",
+    "fun_integrity_review_status": "not-applicable|revision-required|passed|blocked",
+    "cross_platform_fact_consistency_review_ref": "cross-platform-fact-consistency-review.v1|null",
+    "cross_platform_fact_consistency_status": "not-applicable|required|passed|blocked|drifted",
+    "story_reveal_contract_ref": "serious-content-translation-review.v1#translation_plan.story_reveal_contract|null",
+    "story_material_ref": "story-material-observation.v1|null",
+    "story_material_readiness": "not-applicable|incomplete|ready-for-story-design|blocked",
+    "story_design_card_ref": "story-design-card.v1|null",
+    "story_design_gate_status": "not-applicable|required|passed|blocked|drifted",
+    "content_role": "growth|trust|tool|professional|null",
+    "real_tension": "evidence-backed-string|null",
+    "viewer_stakes": "string|null",
+    "central_judgment": "string|null",
+    "explanation_budget": "short|medium|deep|null",
+    "attention_review_status": "not-applicable|revision-required|passed|blocked",
+    "perspective_angle_candidates_ref": "perspective-angle-candidates.v1|null",
+    "perspective_angle_review_status": "not-needed|candidate-only|source-verified|rejected",
+    "structure_route": "enum-or-null",
+    "structure_route_note": "string-or-null",
+    "planning_scope": "single-or-series",
+    "series_question": "string-or-null",
+    "current_piece_decision": "string-or-null",
+    "next_piece_candidates": "array-or-null",
+    "manual_route_override": "route-only-human-record-or-null;never-publish-send-execute-authority",
+    "question_structure_route": "direct-answer-or-decision-reframe-or-not-applicable",
+    "topic_reframing_ref": "string-or-null",
+    "audience_entry_question": "string-or-null",
+    "surface_answer": "string-or-null",
+    "professional_core_question": "string-or-null",
+    "client_decision": "string-or-null",
+    "scope_boundary": "string-or-null",
+    "public_expertise_level": "client-usable-or-peer-technical-or-not-applicable",
+    "benchmark_review_ref": "benchmark-visual-grammar-playbook|null",
+    "benchmark_status": "not-needed|candidate-only|reviewed-for-structure",
+    "visual_role_map_ref": "string|null",
+    "skills": "array",
+    "quality_gates": "array",
+    "volatile_checks": "array",
+    "research_packet_ref": "string-or-null",
+    "diagnostic_status": "normal_variation|suspected_distribution_anomaly|platform_notice_confirmed|content_or_packaging_mismatch|insufficient_evidence|unresolved|null",
+    "diagnostic_run_ref": "string|null",
+    "case_video_script_ref": "case-video-script.v1|null",
+    "case_video_initial_draft_review_ref": "case-video-initial-draft-review.v1|null",
+    "case_video_review_receipt_ref": "case-video-review-receipt.v1|null",
+    "case_video_handoff_manifest_ref": "case-video-script-handoff.v1|null",
+    "case_video_final_cut_compliance_review_ref": "case-video-final-cut-compliance-review.v1|null",
+    "evidence_root_ref": "research-output.v1|null",
+    "wechat_html_adapter_ref": "content-studio-poc/scripts/wechat_article_format_adapter.py|null",
+    "rendered_output_review": "required",
+    "five_dimension_design_review": "required-for-final-visual-artifact",
+    "human_review": "required",
+    "publication_authority": "never",
+    "framework_decision_ref": "topic-angle-decision.v2|null; conditional editorial entry before structure",
+    "framework_outcome": "continue|reframe|supplement|defer|not-applicable",
+    "framework_applicability_reason": "string; existing fixed-scope technical rework can remain not-applicable with reason"
+  }
+}

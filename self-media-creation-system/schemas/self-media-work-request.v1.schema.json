@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Select an existing entry by requested deliverable, not by tool or recipe name",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "requested_output",
+    "selection_basis"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "self-media-work-request.v1"
+    },
+    "request_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{5,99}$"
+    },
+    "requested_output": {
+      "enum": [
+        "continue",
+        "script",
+        "interview_guide",
+        "article",
+        "graphic_note",
+        "short_post",
+        "video_plan",
+        "finished_video",
+        "rough_cut_review",
+        "fine_cut_review",
+        "material_review",
+        "cover_options",
+        "title_options",
+        "publication_page",
+        "publication_record",
+        "performance_review",
+        "archive_plan",
+        "visualization",
+        "workflow_repair",
+        "rough_cut_video",
+        "editable_project"
+      ]
+    },
+    "selection_basis": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000,
+      "pattern": "\\S"
+    },
+    "change_scope": {
+      "enum": [
+        "technical_only",
+        "creative",
+        "unchanged",
+        "unknown"
+      ]
+    },
+    "platform": {
+      "type": "string", "minLength": 1, "maxLength": 100,
+      "description": "Explicit canonical platform name. Never inferred from the content format."
+    },
+    "content_format": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Existing canonical format name, when known from the task; validated against format-adapters, never a new workflow name."
+    },
+    "current": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "topic_decision": {"$ref": "#/$defs/reference"},
+        "author_context": {"$ref": "#/$defs/reference"},
+        "author_revision": {"$ref": "#/$defs/reference"},
+        "article_item": {"$ref": "#/$defs/reference"},
+        "article_source_item": {"$ref": "#/$defs/reference"},
+        "article_render_manifest": {"$ref": "#/$defs/reference"},
+        "article_visual_review": {"$ref": "#/$defs/reference"},
+        "project_state": {"$ref": "#/$defs/reference"},
+        "saved_work_request": {"$ref": "#/$defs/reference"},
+        "context_manifest": {"$ref": "#/$defs/reference"},
+        "capsule": {
+          "$ref": "#/$defs/reference"
+        },
+        "receipts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reference"
+          },
+          "maxItems": 30
+        },
+        "error_receipt": {
+          "$ref": "#/$defs/reference"
+        },
+        "managed_request": {
+          "$ref": "#/$defs/reference"
+        },
+        "creation_context": {
+          "$ref": "#/$defs/reference"
+        },
+        "creation_decision": {
+          "$ref": "#/$defs/reference"
+        },
+        "publication_data": {
+          "$ref": "#/$defs/reference"
+        },
+        "publication_page_build": {"$ref": "#/$defs/reference"},
+        "cover_brief": {"$ref": "#/$defs/reference"},
+        "review_request": {
+          "$ref": "#/$defs/reference"
+        },
+        "delivery_manifest": {
+          "$ref": "#/$defs/reference"
+        },
+        "spoken_edit_plan": {
+          "$ref": "#/$defs/reference"
+        },
+        "spoken_delivery_request": {
+          "$ref": "#/$defs/reference"
+        }
+      }
+    },
+    "editor": {
+      "enum": [
+        "jianying",
+        "premiere"
+      ]
+    }
+  },
+  "$defs": {
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "editor"
+        ]
+      },
+      "then": {
+        "properties": {
+          "requested_output": {
+            "const": "editable_project"
+          }
+        }
+      }
+    }
+  ]
+}

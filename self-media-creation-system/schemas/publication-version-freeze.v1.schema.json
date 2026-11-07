@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/publication-version-freeze.v1.schema.json",
+  "title": "Manual publication version freeze without media copies",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "freeze_id", "frozen_at", "artifact_status", "content_id", "source_content_ref", "capacity_mode", "platforms", "title", "cover", "opening", "body_sha256", "media", "publication_boundary", "authority", "payload_sha256"],
+  "properties": {
+    "schema_version": {"const": "publication-version-freeze.v1"},
+    "freeze_id": {"type": "string", "pattern": "^publication-freeze-[a-f0-9]{24}$"},
+    "frozen_at": {"type": "string", "format": "date-time"},
+    "artifact_status": {"const": "frozen-candidate"},
+    "content_id": {"type": "string", "minLength": 3, "maxLength": 160},
+    "source_content_ref": {"$ref": "#/$defs/safe_ref"},
+    "capacity_mode": {"const": "single-master-synchronized"},
+    "platforms": {"type": "array", "minItems": 1, "maxItems": 12, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z][a-z0-9_-]{1,40}$"}},
+    "title": {"type": "string", "minLength": 1, "maxLength": 180},
+    "cover": {
+      "type": "object", "additionalProperties": false,
+      "required": ["headline", "visual_description", "image_copy_stored"],
+      "properties": {
+        "headline": {"type": "string", "minLength": 1, "maxLength": 120},
+        "visual_description": {"type": "string", "minLength": 1, "maxLength": 500},
+        "image_copy_stored": {"const": false}
+      }
+    },
+    "opening": {
+      "type": "object", "additionalProperties": false,
+      "required": ["first_two_sentences", "sha256"],
+      "properties": {
+        "first_two_sentences": {"type": "array", "minItems": 1, "maxItems": 2, "items": {"type": "string", "minLength": 1, "maxLength": 300}},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "body_sha256": {"$ref": "#/$defs/sha256"},
+    "media": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sha256", "duration_seconds", "media_copy_stored"],
+      "properties": {
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "duration_seconds": {"type": "number", "exclusiveMinimum": 0, "maximum": 14400},
+        "media_copy_stored": {"const": false}
+      }
+    },
+    "publication_boundary": {"const": "manual-only"},
+    "authority": {"const": {"publish_authorized": false, "external_send_authorized": false, "execution_authorized": false}},
+    "payload_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "safe_ref": {"type": "string", "minLength": 1, "maxLength": 400, "pattern": "^(?![A-Za-z]:)(?!/)(?!\\\\)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"}
+  }
+}

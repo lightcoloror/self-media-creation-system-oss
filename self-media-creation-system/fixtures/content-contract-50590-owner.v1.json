@@ -1,0 +1,1794 @@
+{
+  "schema_version": "content-contract-50590-owner-fixture.v1",
+  "synthetic_only": true,
+  "positive_cases": {
+    "legacy_baseline": {
+      "schema_version": "0.2",
+      "content_id": "demo-family-risk-001",
+      "title": "一个家庭风险主题的统一内容样例",
+      "status": "candidate",
+      "owner_thread": null,
+      "provenance": {
+        "sources": [],
+        "verified_facts": [],
+        "uncertainties": [
+          "样例尚未接入真实事实来源"
+        ],
+        "forbidden_claims": []
+      },
+      "gates": {
+        "fact": {
+          "status": "not-checked"
+        },
+        "privacy": {
+          "status": "not-checked"
+        },
+        "compliance": {
+          "status": "not-checked"
+        },
+        "rights": {
+          "status": "not-checked"
+        }
+      },
+      "intent": {
+        "topic": "家庭风险判断",
+        "speaker_role": "家庭风险顾问",
+        "audience": "希望系统梳理保障问题的普通家庭",
+        "content_object": "一个待核实的家庭风险问题",
+        "desired_action": "先识别风险，再决定是否需要进一步了解",
+        "risk_boundary": "不作收益、理赔或产品适用性的保证"
+      },
+      "composition": {
+        "expression_mode": "待定",
+        "voice_profile": "voice/moments-personal-expression",
+        "voice_profile_version": "0.1-review",
+        "semantic_reversibility": {
+          "status": "not-checked"
+        },
+        "retention_mode": "summary-only",
+        "canonical_summary": "用于验证统一内容对象结构的空白样例，尚未接入真实事实来源。"
+      },
+      "channels": {},
+      "visual": {
+        "visual_profile": "visual/personal-ip-professional-trust",
+        "visual_profile_version": "0.1.1",
+        "route": "none",
+        "cognitive_anchors": [],
+        "assets": [],
+        "render_recipe": {
+          "renderer": "none",
+          "output_format": "none",
+          "output_refs": []
+        }
+      },
+      "qa": {
+        "deterministic": [],
+        "promptfoo": {
+          "status": "not-run"
+        },
+        "human_review": {
+          "status": "required",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      },
+      "publication": {
+        "boundary": "manual-only",
+        "receipts": []
+      },
+      "feedback": {
+        "signal_status": "not-observed",
+        "platform_signals": {},
+        "business_signals": {},
+        "qualitative_feedback": [],
+        "learning_decision": "none",
+        "content_signal_status": "not-observed",
+        "business_signal_status": "not-observed",
+        "measurement_layers": {
+          "admission": [],
+          "attraction": [],
+          "consumption": [],
+          "value": [],
+          "negative_feedback": [],
+          "business": []
+        }
+      },
+      "primary_format": "multi-channel",
+      "operating_plan": {
+        "production_unit": "real-problem-or-service-action",
+        "origin_kind": "real-question",
+        "private_validation": {
+          "channel": "wechat_moments",
+          "status": "candidate",
+          "note": "Validate privately before choosing any public adaptation."
+        }
+      }
+    },
+    "audience_entry_question": {
+      "schema_version": "0.2",
+      "content_id": "demo-family-risk-001",
+      "title": "一个家庭风险主题的统一内容样例",
+      "status": "candidate",
+      "owner_thread": null,
+      "provenance": {
+        "sources": [],
+        "verified_facts": [],
+        "uncertainties": [
+          "样例尚未接入真实事实来源"
+        ],
+        "forbidden_claims": []
+      },
+      "gates": {
+        "fact": {
+          "status": "not-checked"
+        },
+        "privacy": {
+          "status": "not-checked"
+        },
+        "compliance": {
+          "status": "not-checked"
+        },
+        "rights": {
+          "status": "not-checked"
+        }
+      },
+      "intent": {
+        "topic": "家庭风险判断",
+        "speaker_role": "家庭风险顾问",
+        "audience": "希望系统梳理保障问题的普通家庭",
+        "content_object": "一个待核实的家庭风险问题",
+        "desired_action": "先识别风险，再决定是否需要进一步了解",
+        "risk_boundary": "不作收益、理赔或产品适用性的保证",
+        "audience_entry_question": "家庭已经有基础保障时，真正要决定什么？"
+      },
+      "composition": {
+        "expression_mode": "待定",
+        "voice_profile": "voice/moments-personal-expression",
+        "voice_profile_version": "0.1-review",
+        "semantic_reversibility": {
+          "status": "not-checked"
+        },
+        "retention_mode": "summary-only",
+        "canonical_summary": "用于验证统一内容对象结构的空白样例，尚未接入真实事实来源。"
+      },
+      "channels": {},
+      "visual": {
+        "visual_profile": "visual/personal-ip-professional-trust",
+        "visual_profile_version": "0.1.1",
+        "route": "none",
+        "cognitive_anchors": [],
+        "assets": [],
+        "render_recipe": {
+          "renderer": "none",
+          "output_format": "none",
+          "output_refs": []
+        }
+      },
+      "qa": {
+        "deterministic": [],
+        "promptfoo": {
+          "status": "not-run"
+        },
+        "human_review": {
+          "status": "required",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      },
+      "publication": {
+        "boundary": "manual-only",
+        "receipts": []
+      },
+      "feedback": {
+        "signal_status": "not-observed",
+        "platform_signals": {},
+        "business_signals": {},
+        "qualitative_feedback": [],
+        "learning_decision": "none",
+        "content_signal_status": "not-observed",
+        "business_signal_status": "not-observed",
+        "measurement_layers": {
+          "admission": [],
+          "attraction": [],
+          "consumption": [],
+          "value": [],
+          "negative_feedback": [],
+          "business": []
+        }
+      },
+      "primary_format": "multi-channel",
+      "operating_plan": {
+        "production_unit": "real-problem-or-service-action",
+        "origin_kind": "real-question",
+        "private_validation": {
+          "channel": "wechat_moments",
+          "status": "candidate",
+          "note": "Validate privately before choosing any public adaptation."
+        }
+      }
+    },
+    "client_decision": {
+      "schema_version": "0.2",
+      "content_id": "demo-family-risk-001",
+      "title": "一个家庭风险主题的统一内容样例",
+      "status": "candidate",
+      "owner_thread": null,
+      "provenance": {
+        "sources": [],
+        "verified_facts": [],
+        "uncertainties": [
+          "样例尚未接入真实事实来源"
+        ],
+        "forbidden_claims": []
+      },
+      "gates": {
+        "fact": {
+          "status": "not-checked"
+        },
+        "privacy": {
+          "status": "not-checked"
+        },
+        "compliance": {
+          "status": "not-checked"
+        },
+        "rights": {
+          "status": "not-checked"
+        }
+      },
+      "intent": {
+        "topic": "家庭风险判断",
+        "speaker_role": "家庭风险顾问",
+        "audience": "希望系统梳理保障问题的普通家庭",
+        "content_object": "一个待核实的家庭风险问题",
+        "desired_action": "先识别风险，再决定是否需要进一步了解",
+        "risk_boundary": "不作收益、理赔或产品适用性的保证",
+        "client_decision": "决定继续补充、暂缓，或先处理现金流问题。"
+      },
+      "composition": {
+        "expression_mode": "待定",
+        "voice_profile": "voice/moments-personal-expression",
+        "voice_profile_version": "0.1-review",
+        "semantic_reversibility": {
+          "status": "not-checked"
+        },
+        "retention_mode": "summary-only",
+        "canonical_summary": "用于验证统一内容对象结构的空白样例，尚未接入真实事实来源。"
+      },
+      "channels": {},
+      "visual": {
+        "visual_profile": "visual/personal-ip-professional-trust",
+        "visual_profile_version": "0.1.1",
+        "route": "none",
+        "cognitive_anchors": [],
+        "assets": [],
+        "render_recipe": {
+          "renderer": "none",
+          "output_format": "none",
+          "output_refs": []
+        }
+      },
+      "qa": {
+        "deterministic": [],
+        "promptfoo": {
+          "status": "not-run"
+        },
+        "human_review": {
+          "status": "required",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      },
+      "publication": {
+        "boundary": "manual-only",
+        "receipts": []
+      },
+      "feedback": {
+        "signal_status": "not-observed",
+        "platform_signals": {},
+        "business_signals": {},
+        "qualitative_feedback": [],
+        "learning_decision": "none",
+        "content_signal_status": "not-observed",
+        "business_signal_status": "not-observed",
+        "measurement_layers": {
+          "admission": [],
+          "attraction": [],
+          "consumption": [],
+          "value": [],
+          "negative_feedback": [],
+          "business": []
+        }
+      },
+      "primary_format": "multi-channel",
+      "operating_plan": {
+        "production_unit": "real-problem-or-service-action",
+        "origin_kind": "real-question",
+        "private_validation": {
+          "channel": "wechat_moments",
+          "status": "candidate",
+          "note": "Validate privately before choosing any public adaptation."
+        }
+      }
+    },
+    "hidden_assumptions": {
+      "schema_version": "0.2",
+      "content_id": "demo-family-risk-001",
+      "title": "一个家庭风险主题的统一内容样例",
+      "status": "candidate",
+      "owner_thread": null,
+      "provenance": {
+        "sources": [],
+        "verified_facts": [],
+        "uncertainties": [
+          "样例尚未接入真实事实来源"
+        ],
+        "forbidden_claims": []
+      },
+      "gates": {
+        "fact": {
+          "status": "not-checked"
+        },
+        "privacy": {
+          "status": "not-checked"
+        },
+        "compliance": {
+          "status": "not-checked"
+        },
+        "rights": {
+          "status": "not-checked"
+        }
+      },
+      "intent": {
+        "topic": "家庭风险判断",
+        "speaker_role": "家庭风险顾问",
+        "audience": "希望系统梳理保障问题的普通家庭",
+        "content_object": "一个待核实的家庭风险问题",
+        "desired_action": "先识别风险，再决定是否需要进一步了解",
+        "risk_boundary": "不作收益、理赔或产品适用性的保证",
+        "hidden_assumptions": [
+          "保额越多越好",
+          "所有家庭的优先顺序相同"
+        ]
+      },
+      "composition": {
+        "expression_mode": "待定",
+        "voice_profile": "voice/moments-personal-expression",
+        "voice_profile_version": "0.1-review",
+        "semantic_reversibility": {
+          "status": "not-checked"
+        },
+        "retention_mode": "summary-only",
+        "canonical_summary": "用于验证统一内容对象结构的空白样例，尚未接入真实事实来源。"
+      },
+      "channels": {},
+      "visual": {
+        "visual_profile": "visual/personal-ip-professional-trust",
+        "visual_profile_version": "0.1.1",
+        "route": "none",
+        "cognitive_anchors": [],
+        "assets": [],
+        "render_recipe": {
+          "renderer": "none",
+          "output_format": "none",
+          "output_refs": []
+        }
+      },
+      "qa": {
+        "deterministic": [],
+        "promptfoo": {
+          "status": "not-run"
+        },
+        "human_review": {
+          "status": "required",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      },
+      "publication": {
+        "boundary": "manual-only",
+        "receipts": []
+      },
+      "feedback": {
+        "signal_status": "not-observed",
+        "platform_signals": {},
+        "business_signals": {},
+        "qualitative_feedback": [],
+        "learning_decision": "none",
+        "content_signal_status": "not-observed",
+        "business_signal_status": "not-observed",
+        "measurement_layers": {
+          "admission": [],
+          "attraction": [],
+          "consumption": [],
+          "value": [],
+          "negative_feedback": [],
+          "business": []
+        }
+      },
+      "primary_format": "multi-channel",
+      "operating_plan": {
+        "production_unit": "real-problem-or-service-action",
+        "origin_kind": "real-question",
+        "private_validation": {
+          "channel": "wechat_moments",
+          "status": "candidate",
+          "note": "Validate privately before choosing any public adaptation."
+        }
+      }
+    },
+    "professional_core_question": {
+      "schema_version": "0.2",
+      "content_id": "demo-family-risk-001",
+      "title": "一个家庭风险主题的统一内容样例",
+      "status": "candidate",
+      "owner_thread": null,
+      "provenance": {
+        "sources": [],
+        "verified_facts": [],
+        "uncertainties": [
+          "样例尚未接入真实事实来源"
+        ],
+        "forbidden_claims": []
+      },
+      "gates": {
+        "fact": {
+          "status": "not-checked"
+        },
+        "privacy": {
+          "status": "not-checked"
+        },
+        "compliance": {
+          "status": "not-checked"
+        },
+        "rights": {
+          "status": "not-checked"
+        }
+      },
+      "intent": {
+        "topic": "家庭风险判断",
+        "speaker_role": "家庭风险顾问",
+        "audience": "希望系统梳理保障问题的普通家庭",
+        "content_object": "一个待核实的家庭风险问题",
+        "desired_action": "先识别风险，再决定是否需要进一步了解",
+        "risk_boundary": "不作收益、理赔或产品适用性的保证",
+        "professional_core_question": "现有风险缺口是否超过家庭可承受范围？"
+      },
+      "composition": {
+        "expression_mode": "待定",
+        "voice_profile": "voice/moments-personal-expression",
+        "voice_profile_version": "0.1-review",
+        "semantic_reversibility": {
+          "status": "not-checked"
+        },
+        "retention_mode": "summary-only",
+        "canonical_summary": "用于验证统一内容对象结构的空白样例，尚未接入真实事实来源。"
+      },
+      "channels": {},
+      "visual": {
+        "visual_profile": "visual/personal-ip-professional-trust",
+        "visual_profile_version": "0.1.1",
+        "route": "none",
+        "cognitive_anchors": [],
+        "assets": [],
+        "render_recipe": {
+          "renderer": "none",
+          "output_format": "none",
+          "output_refs": []
+        }
+      },
+      "qa": {
+        "deterministic": [],
+        "promptfoo": {
+          "status": "not-run"
+        },
+        "human_review": {
+          "status": "required",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      },
+      "publication": {
+        "boundary": "manual-only",
+        "receipts": []
+      },
+      "feedback": {
+        "signal_status": "not-observed",
+        "platform_signals": {},
+        "business_signals": {},
+        "qualitative_feedback": [],
+        "learning_decision": "none",
+        "content_signal_status": "not-observed",
+        "business_signal_status": "not-observed",
+        "measurement_layers": {
+          "admission": [],
+          "attraction": [],
+          "consumption": [],
+          "value": [],
+          "negative_feedback": [],
+          "business": []
+        }
+      },
+      "primary_format": "multi-channel",
+      "operating_plan": {
+        "production_unit": "real-problem-or-service-action",
+        "origin_kind": "real-question",
+        "private_validation": {
+          "channel": "wechat_moments",
+          "status": "candidate",
+          "note": "Validate privately before choosing any public adaptation."
+        }
+      }
+    },
+    "public_expertise_level": {
+      "schema_version": "0.2",
+      "content_id": "demo-family-risk-001",
+      "title": "一个家庭风险主题的统一内容样例",
+      "status": "candidate",
+      "owner_thread": null,
+      "provenance": {
+        "sources": [],
+        "verified_facts": [],
+        "uncertainties": [
+          "样例尚未接入真实事实来源"
+        ],
+        "forbidden_claims": []
+      },
+      "gates": {
+        "fact": {
+          "status": "not-checked"
+        },
+        "privacy": {
+          "status": "not-checked"
+        },
+        "compliance": {
+          "status": "not-checked"
+        },
+        "rights": {
+          "status": "not-checked"
+        }
+      },
+      "intent": {
+        "topic": "家庭风险判断",
+        "speaker_role": "家庭风险顾问",
+        "audience": "希望系统梳理保障问题的普通家庭",
+        "content_object": "一个待核实的家庭风险问题",
+        "desired_action": "先识别风险，再决定是否需要进一步了解",
+        "risk_boundary": "不作收益、理赔或产品适用性的保证",
+        "public_expertise_level": "client-usable"
+      },
+      "composition": {
+        "expression_mode": "待定",
+        "voice_profile": "voice/moments-personal-expression",
+        "voice_profile_version": "0.1-review",
+        "semantic_reversibility": {
+          "status": "not-checked"
+        },
+        "retention_mode": "summary-only",
+        "canonical_summary": "用于验证统一内容对象结构的空白样例，尚未接入真实事实来源。"
+      },
+      "channels": {},
+      "visual": {
+        "visual_profile": "visual/personal-ip-professional-trust",
+        "visual_profile_version": "0.1.1",
+        "route": "none",
+        "cognitive_anchors": [],
+        "assets": [],
+        "render_recipe": {
+          "renderer": "none",
+          "output_format": "none",
+          "output_refs": []
+        }
+      },
+      "qa": {
+        "deterministic": [],
+        "promptfoo": {
+          "status": "not-run"
+        },
+        "human_review": {
+          "status": "required",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      },
+      "publication": {
+        "boundary": "manual-only",
+        "receipts": []
+      },
+      "feedback": {
+        "signal_status": "not-observed",
+        "platform_signals": {},
+        "business_signals": {},
+        "qualitative_feedback": [],
+        "learning_decision": "none",
+        "content_signal_status": "not-observed",
+        "business_signal_status": "not-observed",
+        "measurement_layers": {
+          "admission": [],
+          "attraction": [],
+          "consumption": [],
+          "value": [],
+          "negative_feedback": [],
+          "business": []
+        }
+      },
+      "primary_format": "multi-channel",
+      "operating_plan": {
+        "production_unit": "real-problem-or-service-action",
+        "origin_kind": "real-question",
+        "private_validation": {
+          "channel": "wechat_moments",
+          "status": "candidate",
+          "note": "Validate privately before choosing any public adaptation."
+        }
+      }
+    },
+    "question_structure_route": {
+      "schema_version": "0.2",
+      "content_id": "demo-family-risk-001",
+      "title": "一个家庭风险主题的统一内容样例",
+      "status": "candidate",
+      "owner_thread": null,
+      "provenance": {
+        "sources": [],
+        "verified_facts": [],
+        "uncertainties": [
+          "样例尚未接入真实事实来源"
+        ],
+        "forbidden_claims": []
+      },
+      "gates": {
+        "fact": {
+          "status": "not-checked"
+        },
+        "privacy": {
+          "status": "not-checked"
+        },
+        "compliance": {
+          "status": "not-checked"
+        },
+        "rights": {
+          "status": "not-checked"
+        }
+      },
+      "intent": {
+        "topic": "家庭风险判断",
+        "speaker_role": "家庭风险顾问",
+        "audience": "希望系统梳理保障问题的普通家庭",
+        "content_object": "一个待核实的家庭风险问题",
+        "desired_action": "先识别风险，再决定是否需要进一步了解",
+        "risk_boundary": "不作收益、理赔或产品适用性的保证",
+        "question_structure_route": "decision-reframe"
+      },
+      "composition": {
+        "expression_mode": "待定",
+        "voice_profile": "voice/moments-personal-expression",
+        "voice_profile_version": "0.1-review",
+        "semantic_reversibility": {
+          "status": "not-checked"
+        },
+        "retention_mode": "summary-only",
+        "canonical_summary": "用于验证统一内容对象结构的空白样例，尚未接入真实事实来源。"
+      },
+      "channels": {},
+      "visual": {
+        "visual_profile": "visual/personal-ip-professional-trust",
+        "visual_profile_version": "0.1.1",
+        "route": "none",
+        "cognitive_anchors": [],
+        "assets": [],
+        "render_recipe": {
+          "renderer": "none",
+          "output_format": "none",
+          "output_refs": []
+        }
+      },
+      "qa": {
+        "deterministic": [],
+        "promptfoo": {
+          "status": "not-run"
+        },
+        "human_review": {
+          "status": "required",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      },
+      "publication": {
+        "boundary": "manual-only",
+        "receipts": []
+      },
+      "feedback": {
+        "signal_status": "not-observed",
+        "platform_signals": {},
+        "business_signals": {},
+        "qualitative_feedback": [],
+        "learning_decision": "none",
+        "content_signal_status": "not-observed",
+        "business_signal_status": "not-observed",
+        "measurement_layers": {
+          "admission": [],
+          "attraction": [],
+          "consumption": [],
+          "value": [],
+          "negative_feedback": [],
+          "business": []
+        }
+      },
+      "primary_format": "multi-channel",
+      "operating_plan": {
+        "production_unit": "real-problem-or-service-action",
+        "origin_kind": "real-question",
+        "private_validation": {
+          "channel": "wechat_moments",
+          "status": "candidate",
+          "note": "Validate privately before choosing any public adaptation."
+        }
+      }
+    },
+    "scope_boundary": {
+      "schema_version": "0.2",
+      "content_id": "demo-family-risk-001",
+      "title": "一个家庭风险主题的统一内容样例",
+      "status": "candidate",
+      "owner_thread": null,
+      "provenance": {
+        "sources": [],
+        "verified_facts": [],
+        "uncertainties": [
+          "样例尚未接入真实事实来源"
+        ],
+        "forbidden_claims": []
+      },
+      "gates": {
+        "fact": {
+          "status": "not-checked"
+        },
+        "privacy": {
+          "status": "not-checked"
+        },
+        "compliance": {
+          "status": "not-checked"
+        },
+        "rights": {
+          "status": "not-checked"
+        }
+      },
+      "intent": {
+        "topic": "家庭风险判断",
+        "speaker_role": "家庭风险顾问",
+        "audience": "希望系统梳理保障问题的普通家庭",
+        "content_object": "一个待核实的家庭风险问题",
+        "desired_action": "先识别风险，再决定是否需要进一步了解",
+        "risk_boundary": "不作收益、理赔或产品适用性的保证",
+        "scope_boundary": "这是完全虚构的结构 fixture，不构成产品或个案建议。"
+      },
+      "composition": {
+        "expression_mode": "待定",
+        "voice_profile": "voice/moments-personal-expression",
+        "voice_profile_version": "0.1-review",
+        "semantic_reversibility": {
+          "status": "not-checked"
+        },
+        "retention_mode": "summary-only",
+        "canonical_summary": "用于验证统一内容对象结构的空白样例，尚未接入真实事实来源。"
+      },
+      "channels": {},
+      "visual": {
+        "visual_profile": "visual/personal-ip-professional-trust",
+        "visual_profile_version": "0.1.1",
+        "route": "none",
+        "cognitive_anchors": [],
+        "assets": [],
+        "render_recipe": {
+          "renderer": "none",
+          "output_format": "none",
+          "output_refs": []
+        }
+      },
+      "qa": {
+        "deterministic": [],
+        "promptfoo": {
+          "status": "not-run"
+        },
+        "human_review": {
+          "status": "required",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      },
+      "publication": {
+        "boundary": "manual-only",
+        "receipts": []
+      },
+      "feedback": {
+        "signal_status": "not-observed",
+        "platform_signals": {},
+        "business_signals": {},
+        "qualitative_feedback": [],
+        "learning_decision": "none",
+        "content_signal_status": "not-observed",
+        "business_signal_status": "not-observed",
+        "measurement_layers": {
+          "admission": [],
+          "attraction": [],
+          "consumption": [],
+          "value": [],
+          "negative_feedback": [],
+          "business": []
+        }
+      },
+      "primary_format": "multi-channel",
+      "operating_plan": {
+        "production_unit": "real-problem-or-service-action",
+        "origin_kind": "real-question",
+        "private_validation": {
+          "channel": "wechat_moments",
+          "status": "candidate",
+          "note": "Validate privately before choosing any public adaptation."
+        }
+      }
+    },
+    "surface_answer": {
+      "schema_version": "0.2",
+      "content_id": "demo-family-risk-001",
+      "title": "一个家庭风险主题的统一内容样例",
+      "status": "candidate",
+      "owner_thread": null,
+      "provenance": {
+        "sources": [],
+        "verified_facts": [],
+        "uncertainties": [
+          "样例尚未接入真实事实来源"
+        ],
+        "forbidden_claims": []
+      },
+      "gates": {
+        "fact": {
+          "status": "not-checked"
+        },
+        "privacy": {
+          "status": "not-checked"
+        },
+        "compliance": {
+          "status": "not-checked"
+        },
+        "rights": {
+          "status": "not-checked"
+        }
+      },
+      "intent": {
+        "topic": "家庭风险判断",
+        "speaker_role": "家庭风险顾问",
+        "audience": "希望系统梳理保障问题的普通家庭",
+        "content_object": "一个待核实的家庭风险问题",
+        "desired_action": "先识别风险，再决定是否需要进一步了解",
+        "risk_boundary": "不作收益、理赔或产品适用性的保证",
+        "surface_answer": "先看缺口、现金流和家庭优先事项，再决定是否补充。"
+      },
+      "composition": {
+        "expression_mode": "待定",
+        "voice_profile": "voice/moments-personal-expression",
+        "voice_profile_version": "0.1-review",
+        "semantic_reversibility": {
+          "status": "not-checked"
+        },
+        "retention_mode": "summary-only",
+        "canonical_summary": "用于验证统一内容对象结构的空白样例，尚未接入真实事实来源。"
+      },
+      "channels": {},
+      "visual": {
+        "visual_profile": "visual/personal-ip-professional-trust",
+        "visual_profile_version": "0.1.1",
+        "route": "none",
+        "cognitive_anchors": [],
+        "assets": [],
+        "render_recipe": {
+          "renderer": "none",
+          "output_format": "none",
+          "output_refs": []
+        }
+      },
+      "qa": {
+        "deterministic": [],
+        "promptfoo": {
+          "status": "not-run"
+        },
+        "human_review": {
+          "status": "required",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      },
+      "publication": {
+        "boundary": "manual-only",
+        "receipts": []
+      },
+      "feedback": {
+        "signal_status": "not-observed",
+        "platform_signals": {},
+        "business_signals": {},
+        "qualitative_feedback": [],
+        "learning_decision": "none",
+        "content_signal_status": "not-observed",
+        "business_signal_status": "not-observed",
+        "measurement_layers": {
+          "admission": [],
+          "attraction": [],
+          "consumption": [],
+          "value": [],
+          "negative_feedback": [],
+          "business": []
+        }
+      },
+      "primary_format": "multi-channel",
+      "operating_plan": {
+        "production_unit": "real-problem-or-service-action",
+        "origin_kind": "real-question",
+        "private_validation": {
+          "channel": "wechat_moments",
+          "status": "candidate",
+          "note": "Validate privately before choosing any public adaptation."
+        }
+      }
+    },
+    "current_piece_decision": {
+      "schema_version": "0.2",
+      "content_id": "demo-family-risk-001",
+      "title": "一个家庭风险主题的统一内容样例",
+      "status": "candidate",
+      "owner_thread": null,
+      "provenance": {
+        "sources": [],
+        "verified_facts": [],
+        "uncertainties": [
+          "样例尚未接入真实事实来源"
+        ],
+        "forbidden_claims": []
+      },
+      "gates": {
+        "fact": {
+          "status": "not-checked"
+        },
+        "privacy": {
+          "status": "not-checked"
+        },
+        "compliance": {
+          "status": "not-checked"
+        },
+        "rights": {
+          "status": "not-checked"
+        }
+      },
+      "intent": {
+        "topic": "家庭风险判断",
+        "speaker_role": "家庭风险顾问",
+        "audience": "希望系统梳理保障问题的普通家庭",
+        "content_object": "一个待核实的家庭风险问题",
+        "desired_action": "先识别风险，再决定是否需要进一步了解",
+        "risk_boundary": "不作收益、理赔或产品适用性的保证",
+        "current_piece_decision": "本篇只解释决策顺序，不推荐产品。"
+      },
+      "composition": {
+        "expression_mode": "待定",
+        "voice_profile": "voice/moments-personal-expression",
+        "voice_profile_version": "0.1-review",
+        "semantic_reversibility": {
+          "status": "not-checked"
+        },
+        "retention_mode": "summary-only",
+        "canonical_summary": "用于验证统一内容对象结构的空白样例，尚未接入真实事实来源。"
+      },
+      "channels": {},
+      "visual": {
+        "visual_profile": "visual/personal-ip-professional-trust",
+        "visual_profile_version": "0.1.1",
+        "route": "none",
+        "cognitive_anchors": [],
+        "assets": [],
+        "render_recipe": {
+          "renderer": "none",
+          "output_format": "none",
+          "output_refs": []
+        }
+      },
+      "qa": {
+        "deterministic": [],
+        "promptfoo": {
+          "status": "not-run"
+        },
+        "human_review": {
+          "status": "required",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      },
+      "publication": {
+        "boundary": "manual-only",
+        "receipts": []
+      },
+      "feedback": {
+        "signal_status": "not-observed",
+        "platform_signals": {},
+        "business_signals": {},
+        "qualitative_feedback": [],
+        "learning_decision": "none",
+        "content_signal_status": "not-observed",
+        "business_signal_status": "not-observed",
+        "measurement_layers": {
+          "admission": [],
+          "attraction": [],
+          "consumption": [],
+          "value": [],
+          "negative_feedback": [],
+          "business": []
+        }
+      },
+      "primary_format": "multi-channel",
+      "operating_plan": {
+        "production_unit": "real-problem-or-service-action",
+        "origin_kind": "real-question",
+        "private_validation": {
+          "channel": "wechat_moments",
+          "status": "candidate",
+          "note": "Validate privately before choosing any public adaptation."
+        }
+      }
+    },
+    "manual_route_override": {
+      "schema_version": "0.2",
+      "content_id": "demo-family-risk-001",
+      "title": "一个家庭风险主题的统一内容样例",
+      "status": "candidate",
+      "owner_thread": null,
+      "provenance": {
+        "sources": [],
+        "verified_facts": [],
+        "uncertainties": [
+          "样例尚未接入真实事实来源"
+        ],
+        "forbidden_claims": []
+      },
+      "gates": {
+        "fact": {
+          "status": "not-checked"
+        },
+        "privacy": {
+          "status": "not-checked"
+        },
+        "compliance": {
+          "status": "not-checked"
+        },
+        "rights": {
+          "status": "not-checked"
+        }
+      },
+      "intent": {
+        "topic": "家庭风险判断",
+        "speaker_role": "家庭风险顾问",
+        "audience": "希望系统梳理保障问题的普通家庭",
+        "content_object": "一个待核实的家庭风险问题",
+        "desired_action": "先识别风险，再决定是否需要进一步了解",
+        "risk_boundary": "不作收益、理赔或产品适用性的保证",
+        "manual_route_override": {
+          "stage": "draft",
+          "from": "direct-answer",
+          "to": "decision-reframe",
+          "reason": "人工判断本篇应先澄清家庭决策任务。",
+          "changed_by": "human"
+        }
+      },
+      "composition": {
+        "expression_mode": "待定",
+        "voice_profile": "voice/moments-personal-expression",
+        "voice_profile_version": "0.1-review",
+        "semantic_reversibility": {
+          "status": "not-checked"
+        },
+        "retention_mode": "summary-only",
+        "canonical_summary": "用于验证统一内容对象结构的空白样例，尚未接入真实事实来源。"
+      },
+      "channels": {},
+      "visual": {
+        "visual_profile": "visual/personal-ip-professional-trust",
+        "visual_profile_version": "0.1.1",
+        "route": "none",
+        "cognitive_anchors": [],
+        "assets": [],
+        "render_recipe": {
+          "renderer": "none",
+          "output_format": "none",
+          "output_refs": []
+        }
+      },
+      "qa": {
+        "deterministic": [],
+        "promptfoo": {
+          "status": "not-run"
+        },
+        "human_review": {
+          "status": "required",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      },
+      "publication": {
+        "boundary": "manual-only",
+        "receipts": []
+      },
+      "feedback": {
+        "signal_status": "not-observed",
+        "platform_signals": {},
+        "business_signals": {},
+        "qualitative_feedback": [],
+        "learning_decision": "none",
+        "content_signal_status": "not-observed",
+        "business_signal_status": "not-observed",
+        "measurement_layers": {
+          "admission": [],
+          "attraction": [],
+          "consumption": [],
+          "value": [],
+          "negative_feedback": [],
+          "business": []
+        }
+      },
+      "primary_format": "multi-channel",
+      "operating_plan": {
+        "production_unit": "real-problem-or-service-action",
+        "origin_kind": "real-question",
+        "private_validation": {
+          "channel": "wechat_moments",
+          "status": "candidate",
+          "note": "Validate privately before choosing any public adaptation."
+        }
+      }
+    },
+    "next_piece_candidates": {
+      "schema_version": "0.2",
+      "content_id": "demo-family-risk-001",
+      "title": "一个家庭风险主题的统一内容样例",
+      "status": "candidate",
+      "owner_thread": null,
+      "provenance": {
+        "sources": [],
+        "verified_facts": [],
+        "uncertainties": [
+          "样例尚未接入真实事实来源"
+        ],
+        "forbidden_claims": []
+      },
+      "gates": {
+        "fact": {
+          "status": "not-checked"
+        },
+        "privacy": {
+          "status": "not-checked"
+        },
+        "compliance": {
+          "status": "not-checked"
+        },
+        "rights": {
+          "status": "not-checked"
+        }
+      },
+      "intent": {
+        "topic": "家庭风险判断",
+        "speaker_role": "家庭风险顾问",
+        "audience": "希望系统梳理保障问题的普通家庭",
+        "content_object": "一个待核实的家庭风险问题",
+        "desired_action": "先识别风险，再决定是否需要进一步了解",
+        "risk_boundary": "不作收益、理赔或产品适用性的保证",
+        "next_piece_candidates": [
+          "怎样盘点现金流",
+          "怎样记录已有保障"
+        ]
+      },
+      "composition": {
+        "expression_mode": "待定",
+        "voice_profile": "voice/moments-personal-expression",
+        "voice_profile_version": "0.1-review",
+        "semantic_reversibility": {
+          "status": "not-checked"
+        },
+        "retention_mode": "summary-only",
+        "canonical_summary": "用于验证统一内容对象结构的空白样例，尚未接入真实事实来源。"
+      },
+      "channels": {},
+      "visual": {
+        "visual_profile": "visual/personal-ip-professional-trust",
+        "visual_profile_version": "0.1.1",
+        "route": "none",
+        "cognitive_anchors": [],
+        "assets": [],
+        "render_recipe": {
+          "renderer": "none",
+          "output_format": "none",
+          "output_refs": []
+        }
+      },
+      "qa": {
+        "deterministic": [],
+        "promptfoo": {
+          "status": "not-run"
+        },
+        "human_review": {
+          "status": "required",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      },
+      "publication": {
+        "boundary": "manual-only",
+        "receipts": []
+      },
+      "feedback": {
+        "signal_status": "not-observed",
+        "platform_signals": {},
+        "business_signals": {},
+        "qualitative_feedback": [],
+        "learning_decision": "none",
+        "content_signal_status": "not-observed",
+        "business_signal_status": "not-observed",
+        "measurement_layers": {
+          "admission": [],
+          "attraction": [],
+          "consumption": [],
+          "value": [],
+          "negative_feedback": [],
+          "business": []
+        }
+      },
+      "primary_format": "multi-channel",
+      "operating_plan": {
+        "production_unit": "real-problem-or-service-action",
+        "origin_kind": "real-question",
+        "private_validation": {
+          "channel": "wechat_moments",
+          "status": "candidate",
+          "note": "Validate privately before choosing any public adaptation."
+        }
+      }
+    },
+    "planning_scope": {
+      "schema_version": "0.2",
+      "content_id": "demo-family-risk-001",
+      "title": "一个家庭风险主题的统一内容样例",
+      "status": "candidate",
+      "owner_thread": null,
+      "provenance": {
+        "sources": [],
+        "verified_facts": [],
+        "uncertainties": [
+          "样例尚未接入真实事实来源"
+        ],
+        "forbidden_claims": []
+      },
+      "gates": {
+        "fact": {
+          "status": "not-checked"
+        },
+        "privacy": {
+          "status": "not-checked"
+        },
+        "compliance": {
+          "status": "not-checked"
+        },
+        "rights": {
+          "status": "not-checked"
+        }
+      },
+      "intent": {
+        "topic": "家庭风险判断",
+        "speaker_role": "家庭风险顾问",
+        "audience": "希望系统梳理保障问题的普通家庭",
+        "content_object": "一个待核实的家庭风险问题",
+        "desired_action": "先识别风险，再决定是否需要进一步了解",
+        "risk_boundary": "不作收益、理赔或产品适用性的保证",
+        "planning_scope": "single"
+      },
+      "composition": {
+        "expression_mode": "待定",
+        "voice_profile": "voice/moments-personal-expression",
+        "voice_profile_version": "0.1-review",
+        "semantic_reversibility": {
+          "status": "not-checked"
+        },
+        "retention_mode": "summary-only",
+        "canonical_summary": "用于验证统一内容对象结构的空白样例，尚未接入真实事实来源。"
+      },
+      "channels": {},
+      "visual": {
+        "visual_profile": "visual/personal-ip-professional-trust",
+        "visual_profile_version": "0.1.1",
+        "route": "none",
+        "cognitive_anchors": [],
+        "assets": [],
+        "render_recipe": {
+          "renderer": "none",
+          "output_format": "none",
+          "output_refs": []
+        }
+      },
+      "qa": {
+        "deterministic": [],
+        "promptfoo": {
+          "status": "not-run"
+        },
+        "human_review": {
+          "status": "required",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      },
+      "publication": {
+        "boundary": "manual-only",
+        "receipts": []
+      },
+      "feedback": {
+        "signal_status": "not-observed",
+        "platform_signals": {},
+        "business_signals": {},
+        "qualitative_feedback": [],
+        "learning_decision": "none",
+        "content_signal_status": "not-observed",
+        "business_signal_status": "not-observed",
+        "measurement_layers": {
+          "admission": [],
+          "attraction": [],
+          "consumption": [],
+          "value": [],
+          "negative_feedback": [],
+          "business": []
+        }
+      },
+      "primary_format": "multi-channel",
+      "operating_plan": {
+        "production_unit": "real-problem-or-service-action",
+        "origin_kind": "real-question",
+        "private_validation": {
+          "channel": "wechat_moments",
+          "status": "candidate",
+          "note": "Validate privately before choosing any public adaptation."
+        }
+      }
+    },
+    "series_question": {
+      "schema_version": "0.2",
+      "content_id": "demo-family-risk-001",
+      "title": "一个家庭风险主题的统一内容样例",
+      "status": "candidate",
+      "owner_thread": null,
+      "provenance": {
+        "sources": [],
+        "verified_facts": [],
+        "uncertainties": [
+          "样例尚未接入真实事实来源"
+        ],
+        "forbidden_claims": []
+      },
+      "gates": {
+        "fact": {
+          "status": "not-checked"
+        },
+        "privacy": {
+          "status": "not-checked"
+        },
+        "compliance": {
+          "status": "not-checked"
+        },
+        "rights": {
+          "status": "not-checked"
+        }
+      },
+      "intent": {
+        "topic": "家庭风险判断",
+        "speaker_role": "家庭风险顾问",
+        "audience": "希望系统梳理保障问题的普通家庭",
+        "content_object": "一个待核实的家庭风险问题",
+        "desired_action": "先识别风险，再决定是否需要进一步了解",
+        "risk_boundary": "不作收益、理赔或产品适用性的保证",
+        "series_question": "家庭保障应该按什么顺序梳理？"
+      },
+      "composition": {
+        "expression_mode": "待定",
+        "voice_profile": "voice/moments-personal-expression",
+        "voice_profile_version": "0.1-review",
+        "semantic_reversibility": {
+          "status": "not-checked"
+        },
+        "retention_mode": "summary-only",
+        "canonical_summary": "用于验证统一内容对象结构的空白样例，尚未接入真实事实来源。"
+      },
+      "channels": {},
+      "visual": {
+        "visual_profile": "visual/personal-ip-professional-trust",
+        "visual_profile_version": "0.1.1",
+        "route": "none",
+        "cognitive_anchors": [],
+        "assets": [],
+        "render_recipe": {
+          "renderer": "none",
+          "output_format": "none",
+          "output_refs": []
+        }
+      },
+      "qa": {
+        "deterministic": [],
+        "promptfoo": {
+          "status": "not-run"
+        },
+        "human_review": {
+          "status": "required",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      },
+      "publication": {
+        "boundary": "manual-only",
+        "receipts": []
+      },
+      "feedback": {
+        "signal_status": "not-observed",
+        "platform_signals": {},
+        "business_signals": {},
+        "qualitative_feedback": [],
+        "learning_decision": "none",
+        "content_signal_status": "not-observed",
+        "business_signal_status": "not-observed",
+        "measurement_layers": {
+          "admission": [],
+          "attraction": [],
+          "consumption": [],
+          "value": [],
+          "negative_feedback": [],
+          "business": []
+        }
+      },
+      "primary_format": "multi-channel",
+      "operating_plan": {
+        "production_unit": "real-problem-or-service-action",
+        "origin_kind": "real-question",
+        "private_validation": {
+          "channel": "wechat_moments",
+          "status": "candidate",
+          "note": "Validate privately before choosing any public adaptation."
+        }
+      }
+    },
+    "structure_route": {
+      "schema_version": "0.2",
+      "content_id": "demo-family-risk-001",
+      "title": "一个家庭风险主题的统一内容样例",
+      "status": "candidate",
+      "owner_thread": null,
+      "provenance": {
+        "sources": [],
+        "verified_facts": [],
+        "uncertainties": [
+          "样例尚未接入真实事实来源"
+        ],
+        "forbidden_claims": []
+      },
+      "gates": {
+        "fact": {
+          "status": "not-checked"
+        },
+        "privacy": {
+          "status": "not-checked"
+        },
+        "compliance": {
+          "status": "not-checked"
+        },
+        "rights": {
+          "status": "not-checked"
+        }
+      },
+      "intent": {
+        "topic": "家庭风险判断",
+        "speaker_role": "家庭风险顾问",
+        "audience": "希望系统梳理保障问题的普通家庭",
+        "content_object": "一个待核实的家庭风险问题",
+        "desired_action": "先识别风险，再决定是否需要进一步了解",
+        "risk_boundary": "不作收益、理赔或产品适用性的保证",
+        "structure_route": "decision-reframe"
+      },
+      "composition": {
+        "expression_mode": "待定",
+        "voice_profile": "voice/moments-personal-expression",
+        "voice_profile_version": "0.1-review",
+        "semantic_reversibility": {
+          "status": "not-checked"
+        },
+        "retention_mode": "summary-only",
+        "canonical_summary": "用于验证统一内容对象结构的空白样例，尚未接入真实事实来源。"
+      },
+      "channels": {},
+      "visual": {
+        "visual_profile": "visual/personal-ip-professional-trust",
+        "visual_profile_version": "0.1.1",
+        "route": "none",
+        "cognitive_anchors": [],
+        "assets": [],
+        "render_recipe": {
+          "renderer": "none",
+          "output_format": "none",
+          "output_refs": []
+        }
+      },
+      "qa": {
+        "deterministic": [],
+        "promptfoo": {
+          "status": "not-run"
+        },
+        "human_review": {
+          "status": "required",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      },
+      "publication": {
+        "boundary": "manual-only",
+        "receipts": []
+      },
+      "feedback": {
+        "signal_status": "not-observed",
+        "platform_signals": {},
+        "business_signals": {},
+        "qualitative_feedback": [],
+        "learning_decision": "none",
+        "content_signal_status": "not-observed",
+        "business_signal_status": "not-observed",
+        "measurement_layers": {
+          "admission": [],
+          "attraction": [],
+          "consumption": [],
+          "value": [],
+          "negative_feedback": [],
+          "business": []
+        }
+      },
+      "primary_format": "multi-channel",
+      "operating_plan": {
+        "production_unit": "real-problem-or-service-action",
+        "origin_kind": "real-question",
+        "private_validation": {
+          "channel": "wechat_moments",
+          "status": "candidate",
+          "note": "Validate privately before choosing any public adaptation."
+        }
+      }
+    },
+    "structure_route_note": {
+      "schema_version": "0.2",
+      "content_id": "demo-family-risk-001",
+      "title": "一个家庭风险主题的统一内容样例",
+      "status": "candidate",
+      "owner_thread": null,
+      "provenance": {
+        "sources": [],
+        "verified_facts": [],
+        "uncertainties": [
+          "样例尚未接入真实事实来源"
+        ],
+        "forbidden_claims": []
+      },
+      "gates": {
+        "fact": {
+          "status": "not-checked"
+        },
+        "privacy": {
+          "status": "not-checked"
+        },
+        "compliance": {
+          "status": "not-checked"
+        },
+        "rights": {
+          "status": "not-checked"
+        }
+      },
+      "intent": {
+        "topic": "家庭风险判断",
+        "speaker_role": "家庭风险顾问",
+        "audience": "希望系统梳理保障问题的普通家庭",
+        "content_object": "一个待核实的家庭风险问题",
+        "desired_action": "先识别风险，再决定是否需要进一步了解",
+        "risk_boundary": "不作收益、理赔或产品适用性的保证",
+        "structure_route_note": "先回答表面问题，再向前重构一层。"
+      },
+      "composition": {
+        "expression_mode": "待定",
+        "voice_profile": "voice/moments-personal-expression",
+        "voice_profile_version": "0.1-review",
+        "semantic_reversibility": {
+          "status": "not-checked"
+        },
+        "retention_mode": "summary-only",
+        "canonical_summary": "用于验证统一内容对象结构的空白样例，尚未接入真实事实来源。"
+      },
+      "channels": {},
+      "visual": {
+        "visual_profile": "visual/personal-ip-professional-trust",
+        "visual_profile_version": "0.1.1",
+        "route": "none",
+        "cognitive_anchors": [],
+        "assets": [],
+        "render_recipe": {
+          "renderer": "none",
+          "output_format": "none",
+          "output_refs": []
+        }
+      },
+      "qa": {
+        "deterministic": [],
+        "promptfoo": {
+          "status": "not-run"
+        },
+        "human_review": {
+          "status": "required",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      },
+      "publication": {
+        "boundary": "manual-only",
+        "receipts": []
+      },
+      "feedback": {
+        "signal_status": "not-observed",
+        "platform_signals": {},
+        "business_signals": {},
+        "qualitative_feedback": [],
+        "learning_decision": "none",
+        "content_signal_status": "not-observed",
+        "business_signal_status": "not-observed",
+        "measurement_layers": {
+          "admission": [],
+          "attraction": [],
+          "consumption": [],
+          "value": [],
+          "negative_feedback": [],
+          "business": []
+        }
+      },
+      "primary_format": "multi-channel",
+      "operating_plan": {
+        "production_unit": "real-problem-or-service-action",
+        "origin_kind": "real-question",
+        "private_validation": {
+          "channel": "wechat_moments",
+          "status": "candidate",
+          "note": "Validate privately before choosing any public adaptation."
+        }
+      }
+    },
+    "all_fields": {
+      "schema_version": "0.2",
+      "content_id": "demo-family-risk-001",
+      "title": "一个家庭风险主题的统一内容样例",
+      "status": "candidate",
+      "owner_thread": null,
+      "provenance": {
+        "sources": [],
+        "verified_facts": [],
+        "uncertainties": [
+          "样例尚未接入真实事实来源"
+        ],
+        "forbidden_claims": []
+      },
+      "gates": {
+        "fact": {
+          "status": "not-checked"
+        },
+        "privacy": {
+          "status": "not-checked"
+        },
+        "compliance": {
+          "status": "not-checked"
+        },
+        "rights": {
+          "status": "not-checked"
+        }
+      },
+      "intent": {
+        "topic": "家庭风险判断",
+        "speaker_role": "家庭风险顾问",
+        "audience": "希望系统梳理保障问题的普通家庭",
+        "content_object": "一个待核实的家庭风险问题",
+        "desired_action": "先识别风险，再决定是否需要进一步了解",
+        "risk_boundary": "不作收益、理赔或产品适用性的保证",
+        "audience_entry_question": "家庭已经有基础保障时，真正要决定什么？",
+        "client_decision": "决定继续补充、暂缓，或先处理现金流问题。",
+        "hidden_assumptions": [
+          "保额越多越好",
+          "所有家庭的优先顺序相同"
+        ],
+        "professional_core_question": "现有风险缺口是否超过家庭可承受范围？",
+        "public_expertise_level": "client-usable",
+        "question_structure_route": "decision-reframe",
+        "scope_boundary": "这是完全虚构的结构 fixture，不构成产品或个案建议。",
+        "surface_answer": "先看缺口、现金流和家庭优先事项，再决定是否补充。",
+        "current_piece_decision": "本篇只解释决策顺序，不推荐产品。",
+        "manual_route_override": {
+          "stage": "draft",
+          "from": "direct-answer",
+          "to": "decision-reframe",
+          "reason": "人工判断本篇应先澄清家庭决策任务。",
+          "changed_by": "human"
+        },
+        "next_piece_candidates": [
+          "怎样盘点现金流",
+          "怎样记录已有保障"
+        ],
+        "planning_scope": "single",
+        "series_question": "家庭保障应该按什么顺序梳理？",
+        "structure_route": "decision-reframe",
+        "structure_route_note": "先回答表面问题，再向前重构一层。"
+      },
+      "composition": {
+        "expression_mode": "待定",
+        "voice_profile": "voice/moments-personal-expression",
+        "voice_profile_version": "0.1-review",
+        "semantic_reversibility": {
+          "status": "not-checked"
+        },
+        "retention_mode": "summary-only",
+        "canonical_summary": "用于验证统一内容对象结构的空白样例，尚未接入真实事实来源。"
+      },
+      "channels": {},
+      "visual": {
+        "visual_profile": "visual/personal-ip-professional-trust",
+        "visual_profile_version": "0.1.1",
+        "route": "none",
+        "cognitive_anchors": [],
+        "assets": [],
+        "render_recipe": {
+          "renderer": "none",
+          "output_format": "none",
+          "output_refs": []
+        }
+      },
+      "qa": {
+        "deterministic": [],
+        "promptfoo": {
+          "status": "not-run"
+        },
+        "human_review": {
+          "status": "required",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      },
+      "publication": {
+        "boundary": "manual-only",
+        "receipts": []
+      },
+      "feedback": {
+        "signal_status": "not-observed",
+        "platform_signals": {},
+        "business_signals": {},
+        "qualitative_feedback": [],
+        "learning_decision": "none",
+        "content_signal_status": "not-observed",
+        "business_signal_status": "not-observed",
+        "measurement_layers": {
+          "admission": [],
+          "attraction": [],
+          "consumption": [],
+          "value": [],
+          "negative_feedback": [],
+          "business": []
+        }
+      },
+      "primary_format": "multi-channel",
+      "operating_plan": {
+        "production_unit": "real-problem-or-service-action",
+        "origin_kind": "real-question",
+        "private_validation": {
+          "channel": "wechat_moments",
+          "status": "candidate",
+          "note": "Validate privately before choosing any public adaptation."
+        }
+      }
+    }
+  }
+}

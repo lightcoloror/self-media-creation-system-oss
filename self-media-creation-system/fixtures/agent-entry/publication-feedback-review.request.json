@@ -1,0 +1,8 @@
+{
+  "schema_version": "self-media-agent-request.v1",
+  "request_id": "synthetic-feedback-001",
+  "workflow_goal": "publication_feedback_review",
+  "synthetic_only": true,
+  "available_inputs": ["operations_store_ref", "review_input"],
+  "input_refs": []
+}

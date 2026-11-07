@@ -1,0 +1,197 @@
+{
+  "audience": "synthetic insurance education reader",
+  "claims": [
+    {
+      "claim_id": "claim_synthetic_family_priority",
+      "claim_status": "open",
+      "context_evidence_ids": [],
+      "contradicting_evidence_ids": [],
+      "evidence_ids": [
+        "evidence_synthetic_family_priority"
+      ],
+      "evidence_status": "verified",
+      "review_status": "verified",
+      "source_ids": [
+        "source_synthetic_family_priority"
+      ],
+      "supporting_evidence_ids": [
+        "evidence_synthetic_family_priority"
+      ],
+      "text": "排序应先识别家庭责任与不可承受损失，再分配预算；不能用单一固定顺序替代家庭事实。"
+    }
+  ],
+  "completeness": {
+    "blocking_gates": [],
+    "coverage": {
+      "candidate_evidence": 0,
+      "claim_count": 1,
+      "claims_with_counter_or_context": 0,
+      "claims_with_evidence": 1,
+      "claims_with_verified_evidence": 1,
+      "claims_with_verified_support_evidence": 1,
+      "draft_exists": false,
+      "gate_audit_passed": false,
+      "human_review_count": 2,
+      "poor_source_evidence": 0,
+      "required_review_queue_count": 0,
+      "review_queue_count": 0,
+      "source_count": 1,
+      "source_types": [
+        "local_fixture"
+      ],
+      "unknown_source_quality": 0
+    },
+    "ready_for_answer": true,
+    "warnings": [
+      "synthetic-only fixture; the frequency count and content do not describe real users or markets"
+    ]
+  },
+  "contradictions": [],
+  "created_at": "2026-08-05T12:00:00+08:00",
+  "evidence": [
+    {
+      "ai_synthesis": false,
+      "artifact_sha256": "3574e80a06ddb73c315253770ad1fdd136ee73864bdb745f5faa9b68bbcd57bd",
+      "claim_id": "claim_synthetic_family_priority",
+      "confidence": "high",
+      "evidence_id": "evidence_synthetic_family_priority",
+      "evidence_status": "verified",
+      "excerpt": "本合成材料只验证决策框架，不代表任何真实家庭、年龄或收入结构。",
+      "observed_at": "2026-08-05T12:00:00+08:00",
+      "relation": "supports",
+      "review_status": "reviewed",
+      "source_id": "source_synthetic_family_priority",
+      "source_path": "sources/synthetic-source.md"
+    }
+  ],
+  "evidence_links": [
+    {
+      "claim_id": "claim_synthetic_family_priority",
+      "evidence_id": "evidence_synthetic_family_priority",
+      "evidence_status": "verified",
+      "relation": "supports",
+      "source_id": "source_synthetic_family_priority"
+    }
+  ],
+  "evidence_status": {
+    "counts": {
+      "candidate": 0,
+      "contradictions": 0,
+      "rejected": 0,
+      "verified": 1
+    },
+    "overall": "verified"
+  },
+  "generator": {
+    "component": "research_output",
+    "name": "question-research-poc",
+    "version": "research-output.v1"
+  },
+  "guarded_final_answer": {
+    "answer": "- 排序应先识别家庭责任与不可承受损失，再分配预算；不能用单一固定顺序替代家庭事实。 [claim:claim_synthetic_family_priority; evidence:evidence_synthetic_family_priority; sources:source_synthetic_family_priority]",
+    "blocking_gates": [],
+    "claim_ids": [
+      "claim_synthetic_family_priority"
+    ],
+    "evidence_ids": [
+      "evidence_synthetic_family_priority"
+    ],
+    "guardrail": "Only synthetic, reviewed, non-synthesis fixture evidence is included; no real-world frequency or suitability conclusion is implied.",
+    "ready": true,
+    "source_ids": [
+      "source_synthetic_family_priority"
+    ],
+    "status": "verified",
+    "warnings": [
+      "synthetic-only fixture; the frequency count and content do not describe real users or markets"
+    ]
+  },
+  "media_refs": [],
+  "provenance": {
+    "external_api_called": false,
+    "input_files": [
+      {
+        "path": "sources/synthetic-source.md",
+        "sha256": "3574e80a06ddb73c315253770ad1fdd136ee73864bdb745f5faa9b68bbcd57bd",
+        "status": "present"
+      }
+    ],
+    "model_memory_used_as_evidence": false,
+    "offline_only": true,
+    "source_systems": [
+      "synthetic-fixture-generator"
+    ]
+  },
+  "question": "一家人预算有限，保障顺序怎么排？",
+  "quotable_facts": [],
+  "requested_outputs": [
+    "article",
+    "content-video-brief.v1"
+  ],
+  "research_id": "research_synthetic_family_priority",
+  "review_status": {
+    "events": [
+      {
+        "decision": "good",
+        "kind": "source",
+        "reviewed_at": "2026-08-05T12:00:00+08:00",
+        "reviewer": "synthetic-fixture-reviewer",
+        "target_id": "source_synthetic_family_priority"
+      },
+      {
+        "decision": "verified",
+        "kind": "evidence",
+        "reviewed_at": "2026-08-05T12:00:00+08:00",
+        "reviewer": "synthetic-fixture-reviewer",
+        "target_id": "evidence_synthetic_family_priority"
+      }
+    ],
+    "human_review_required": false,
+    "overall": "verified"
+  },
+  "schema": "research-output.v1",
+  "schema_version": "1.0.0",
+  "scope": {
+    "constraints": [
+      "synthetic-only",
+      "no-external-api",
+      "no-real-product",
+      "no-real-customer"
+    ],
+    "statement": "Fully synthetic insurance content-loop contract verification."
+  },
+  "sources": [
+    {
+      "archive_path": "sources/synthetic-source.md",
+      "fetched_at": "2026-08-05T12:00:00+08:00",
+      "freshness": "not_applicable",
+      "hash": {
+        "algorithm": "sha256",
+        "status": "verified",
+        "value": "3574e80a06ddb73c315253770ad1fdd136ee73864bdb745f5faa9b68bbcd57bd"
+      },
+      "provenance": {
+        "created_at": "2026-08-05T12:00:00+08:00",
+        "note_fields": {
+          "artifact_sha256": "3574e80a06ddb73c315253770ad1fdd136ee73864bdb745f5faa9b68bbcd57bd",
+          "fetched_at": "2026-08-05T12:00:00+08:00",
+          "freshness": "not_applicable",
+          "publisher": "Synthetic Insurance Fixture Lab"
+        },
+        "review_refs": [
+          "review_source_synthetic_family_priority"
+        ]
+      },
+      "publisher": "Synthetic Insurance Fixture Lab",
+      "quality": "good",
+      "ref_status": "resolved",
+      "review_status": "reviewed",
+      "source_id": "source_synthetic_family_priority",
+      "source_type": "local_fixture",
+      "title": "Synthetic source for sq-insurance-family-priority",
+      "url": null
+    }
+  ],
+  "unknowns": [],
+  "visual_leads": []
+}

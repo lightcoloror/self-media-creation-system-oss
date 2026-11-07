@@ -1,0 +1,47 @@
+{
+  "schema_version": "content-bundle.v1",
+  "bundle_id": "synthetic-bundle-001",
+  "created_at": "2026-01-01T00:00:00+00:00",
+  "platform": "xiaohongshu",
+  "privacy": {
+    "local_only": true,
+    "mode": "dry_run",
+    "comments_included": false,
+    "metrics_included": false,
+    "raw_media_included": false,
+    "content_text_may_contain_personal_data": false
+  },
+  "items": [
+    {
+      "profile_id": "profile-14f6caeafe8aa584f0af577c55e44ed1d14f3b9a2d18c4c90cf5da223252015a",
+      "content_id": "content-demo-001",
+      "content": {
+        "title": "虚构练习：怎样整理一份资料清单",
+        "body": "这是一份完全合成的流程练习，不对应任何客户、疾病、保险方案或真实服务。",
+        "visual_description": "合成文字卡，不含真实人物、资料或截图。",
+        "tags": [
+          "合成练习"
+        ]
+      },
+      "routing_context": {
+        "task_type": "draft",
+        "account_ip": "cange-risk-diagnosis",
+        "content_job": "case-review",
+        "primary_audience": "合成测试中的读者",
+        "primary_goal": "trust",
+        "format": "graphic-note",
+        "evidence_risk": "medical-insurance",
+        "voice_visual_route": "synthetic-checklist-v1"
+      },
+      "evidence_refs": [
+        {
+          "ref_id": "synthetic-contract-only-not-real-confirmation",
+          "source_type": "user-confirmed",
+          "status": "verified",
+          "privacy_status": "not-applicable",
+          "claim_scope": "虚构单元测试的清单字段，非真实作者确认或事实核验"
+        }
+      ]
+    }
+  ]
+}

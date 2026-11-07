@@ -1,0 +1,17 @@
+{
+  "account_id": "synthetic-account",
+  "genre": "moments",
+  "text": "这句话只是合成示例。",
+  "kind": "positive",
+  "source_ref": "fixture:author-writing/sample",
+  "source_kind": "ai_draft",
+  "synthetic_only": true,
+  "privacy_status": "non_sensitive",
+  "confirmation": {
+    "status": "confirmed",
+    "actor": "synthetic_fixture",
+    "source_ref": "fixture:author-writing/exact-fragment-confirmation",
+    "scope": "exact_fragment",
+    "text_sha256": "6780ec6fc530598112fd1d9994aabc89dcbc160293d364bcc788135839f6124f"
+  }
+}

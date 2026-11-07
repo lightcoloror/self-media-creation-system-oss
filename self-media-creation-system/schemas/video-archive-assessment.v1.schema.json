@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["project_id", "restore_goal"],
+  "additionalProperties": false,
+  "properties": {
+    "project_id": {"type": "string", "minLength": 1},
+    "restore_goal": {"type": "string", "minLength": 1},
+    "factors": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "cross_machine_rebuild": {"type": ["boolean", "null"]},
+        "long_term_regeneration": {"type": ["boolean", "null"]},
+        "dependency_sensitive_effects": {"type": ["boolean", "null"]},
+        "evidence_processing_replay": {"type": ["boolean", "null"]},
+        "costly_recovery": {"type": ["boolean", "null"]}
+      }
+    },
+    "selected_level": {"enum": ["simple", "rework", "reproducible"]},
+    "decision_reason": {"type": "string", "minLength": 1},
+    "original_backup_reference": {"type": "string", "minLength": 1},
+    "missing_materials": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "rebuild_scope": {"type": "string", "minLength": 1}
+  }
+}

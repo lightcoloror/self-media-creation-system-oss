@@ -1,0 +1,7 @@
+{
+  "before": "",
+  "reasons": [{"text": "根据合成原话起草第一版，尚未作者确认。", "actor": "assistant", "source_ref": "fixture:author-writing/first-draft"}],
+  "source_ref": "fixture:author-writing/first-draft",
+  "privacy_status": "non_sensitive",
+  "risk_notes": []
+}

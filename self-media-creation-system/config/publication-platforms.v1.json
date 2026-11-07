@@ -1,0 +1,98 @@
+{
+  "version": "2026-10-29.1",
+  "default_platforms": ["douyin", "xiaohongshu", "weixin_channels", "kuaishou", "bilibili"],
+  "baseline_source": "agents/codex/handoff/20260826-eight-cover-user-selected-v4/平台发布包-v1/发布辅助台通用数据_v2.json : source_snapshot.platform_strategy and rules; historical account baseline, not current official specifications",
+  "source": "2026-08-28账号界面记录；docs/publication-desk.md验收；2026-10-25用户再次明确短标题仅视频号",
+  "evidence_status": "historical_needs_recheck",
+  "ratio_tolerance": 0.001,
+  "common_checks": {
+    "current_specs": "在当前账号发布界面复核字段、字数限制、封面槽位和比例；旧记录不是当日规则",
+    "crop_preview": "逐个封面槽位预览人物、文字和安全区",
+    "tags": "确认话题或标签已被平台识别",
+    "collection": "确认是否使用合集；不用则记不适用，使用则核对入口、名称、简介和独立封面",
+    "schedule": "确认立即发布或定时；定时窗口按实际提交时间重新核验，计划日期不等于已定时",
+    "disclosure": "核对可见范围、原创及内容声明，按实际素材与账号要求填写"
+  },
+  "optional_checks": ["collection", "schedule", "cover_pk"],
+  "check_dependencies": {
+    "current_specs": ["account"],
+    "crop_preview": ["covers"],
+    "tags": ["tags"],
+    "collection": ["collection"],
+    "schedule": ["schedule"],
+    "disclosure": ["account", "video", "copy"],
+    "cover_slots": ["covers"],
+    "collection_route": ["collection"],
+    "cover_pk": ["covers", "cover_candidates"],
+    "schedule_change": ["schedule"],
+    "short_title_rules": ["short_title", "collection"],
+    "submission": ["account", "video", "copy"],
+    "title_restored": ["title", "tags"]
+  },
+  "platforms": {
+    "douyin": {
+      "field_limits": {"title": 30},
+      "copy_mode": "title_body_tags",
+      "short_title": false,
+      "cover_mode": "all",
+      "cover_ratios": ["4:3", "3:4"],
+      "checks": {
+        "cover_slots": "历史账号要求4:3和3:4两张分别上传，不用一张自动裁切代替",
+        "collection_route": "历史操作：发布页只选已有合集；没有合集则发布后加入。若使用合集，另核对合集封面，不能默认复用视频封面"
+      },
+      "historical_notes": ["定时历史窗口：提交时至少提前2小时、最多14天；改期前往作品管理，当前账号需复核"]
+    },
+    "xiaohongshu": {
+      "field_limits": {"title": 20},
+      "copy_mode": "body_tags",
+      "short_title": false,
+      "cover_mode": "all",
+      "cover_ratios": ["3:4"],
+      "native_cover_test": {"layout": "main_plus_candidates", "min_candidates": 1, "max_candidates": 3, "main_required": true},
+      "cover_test_evidence": "2026-10-29 用户明确：1张主封面，最多3张PK候选；候选可自主上传或智能推荐。主封面不计入候选名额，当前账号状态另行核验。",
+      "checks": {"cover_pk": "是否启用封面PK；启用时单独核对1张主封面及最多3张PK候选，固定其他发布变量；不用则不适用"},
+      "historical_notes": ["2026-10-29用户纠正：1张主封面＋最多3张PK候选，候选可自主上传或智能推荐；替代此前2至10张的记录。"]
+    },
+    "weixin_channels": {
+      "separate_title": false,
+      "field_evidence": "2026-10-25用户确认：视频号标题只能填短标题，没有普通标题字段；替代此前主标题64字的历史配置",
+      "field_limits": {"short_title": 16, "collection_name": 10},
+      "short_title_allowed_symbols": "《》“”‘’\"：:+?？%％℃",
+      "copy_mode": "body_tags",
+      "short_title": true,
+      "cover_mode": "all",
+      "cover_ratios": ["3:4"],
+      "checks": {"short_title_rules": "标题仅填写短标题，不提供普通标题；短标题按16字基线适配，合集名10字；短标题不可截断生成，逗号不可用"},
+      "historical_notes": ["历史短标题符号：书名号、引号、冒号、加号、问号、百分号、摄氏度；不含逗号。历史封面已从9:16纠正为3:4"]
+    },
+    "kuaishou": {
+      "separate_title": false,
+      "field_evidence": "2026-10-25用户确认当前快手投稿页无独立标题输入框；使用作品描述",
+      "field_limits": {},
+      "copy_mode": "body_tags",
+      "short_title": false,
+      "cover_mode": "one",
+      "cover_ratios": ["4:3", "3:4"],
+      "checks": {"cover_pk": "是否使用封面PK；不用则不适用，使用则分别审核候选并固定其他变量", "schedule_change": "提交前再次核对日期时间，不依赖尚未确认的事后改期功能"},
+      "historical_notes": ["历史账号封面4:3或3:4二选一，不是两张都上传；标题上限未核准，不猜数字"]
+    },
+    "bilibili": {
+      "field_limits": {"title": 80},
+      "copy_mode": "separate",
+      "short_title": false,
+      "cover_mode": "all",
+      "cover_ratios": ["4:3", "16:9"],
+      "checks": {"submission": "核对分区、自制或转载、稿件类型及对应声明", "cover_slots": "历史账号要求4:3与16:9两个槽位分别准备，不能仅依赖自动裁切", "title_restored": "如用标题框临时识别标签，提交前恢复最终标题并逐个复核标签；未使用此技巧也需核对最终标题"},
+      "historical_notes": ["历史定时窗口：提交时至少提前6分钟、最多15天；花火、预约和互动视频的改期取消限制需复核"]
+    },
+    "weibo": {
+      "field_limits": {},
+      "copy_mode": "body_tags",
+      "short_title": false,
+      "cover_mode": "unverified",
+      "cover_ratios": [],
+      "checks": {"cover_slots": "本地尚无经核准的封面比例配置，需补充有来源的配置后才能通过完整检查"},
+      "historical_notes": []
+    }
+  }
+}

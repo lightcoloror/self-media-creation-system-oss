@@ -1,0 +1,39 @@
+{
+  "schema_version": "0.1",
+  "data_classification": "synthetic-only",
+  "revenue_event_id": "rev_01ARZ3NDEKTSV4RRFFQ69G5FB6",
+  "account_id": "acct_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+  "occurred_at": "2026-10-28T12:00:00+08:00",
+  "amount": {
+    "value": null,
+    "currency": "CNY",
+    "disclosure": "withheld"
+  },
+  "attribution_type": "direct",
+  "attribution_model": "manual-evidence",
+  "publication_ids": [
+    "pub_01ARZ3NDEKTSV4RRFFQ69G5FAX"
+  ],
+  "lead_event_ids": [
+    "lead_01ARZ3NDEKTSV4RRFFQ69G5FB2"
+  ],
+  "evidence_refs": [
+    "synthetic:business-outcome:001"
+  ],
+  "review": {
+    "human_confirmed": true,
+    "reviewer_ref": "synthetic-reviewer",
+    "reviewed_at": "2026-10-28T13:00:00+08:00"
+  },
+  "causal_claim": false,
+  "privacy": {
+    "deidentified": true,
+    "customer_identity_included": false,
+    "payment_details_included": false
+  },
+  "authority": {
+    "execution_authorized": false,
+    "crm_write_performed": false,
+    "content_metrics_used_as_proof": false
+  }
+}

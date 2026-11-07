@@ -1,0 +1,55 @@
+{
+  "items": [
+    {
+      "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+      "actor_type": "local-tool",
+      "canonical_url": null,
+      "content_id": "research-edca758a6ed755c9e91aecb8",
+      "event_id": "evt_4G1ZWVHEHSN57K9HANDT5YBF3W",
+      "event_sequence": 1,
+      "event_type": "prepared",
+      "evidence_status": "local-record",
+      "occurred_at": "2026-08-15T12:00:00+08:00",
+      "platform": "synthetic-surface",
+      "platform_content_id": null,
+      "publication_id": "pub_8P7WP5K3A1RXS7F2S2J9HJEPXM",
+      "reason": "Synthetic prepared event; no publication occurred.",
+      "recorded_at": "2026-08-15T12:00:00+08:00",
+      "schema_version": "0.1",
+      "supersedes_event_id": null,
+      "version_id": "ver_QKJ431FKDMBM1B2VGMBN9Z3N5C"
+    },
+    {
+      "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+      "actor_type": "local-tool",
+      "canonical_url": null,
+      "content_id": "research-edca758a6ed755c9e91aecb8",
+      "event_id": "evt_23RQN4MKGZ6G0JKWPRHWERQKVN",
+      "event_sequence": 2,
+      "event_type": "published",
+      "evidence_status": "local-record",
+      "frozen_version": {
+        "body_ref": "questions/claims-preparation/adapter/research-edca758a6ed755c9e91aecb8.article.md",
+        "body_sha256": "1243fc88fd734689536588ddb427396cb9faa1e7bdb52ab0325d1c0f8272be3e",
+        "channel_variant": "synthetic-article",
+        "cover_refs": [],
+        "cta": null,
+        "freeze_status": "complete",
+        "frozen_at": "2026-08-15T12:01:00+08:00",
+        "media_refs": [],
+        "title": "买了保险，真到理赔时需要提前准备什么？",
+        "unavailable_reason": null
+      },
+      "occurred_at": "2026-08-15T12:01:00+08:00",
+      "platform": "synthetic-surface",
+      "platform_content_id": null,
+      "publication_id": "pub_8P7WP5K3A1RXS7F2S2J9HJEPXM",
+      "reason": "Synthetic published event used only to exercise the feedback contract.",
+      "recorded_at": "2026-08-15T12:01:00+08:00",
+      "schema_version": "0.1",
+      "supersedes_event_id": "evt_4G1ZWVHEHSN57K9HANDT5YBF3W",
+      "version_id": "ver_QKJ431FKDMBM1B2VGMBN9Z3N5C"
+    }
+  ],
+  "synthetic_only": true
+}

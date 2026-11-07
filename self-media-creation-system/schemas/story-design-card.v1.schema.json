@@ -1,0 +1,331 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/story-design-card.v1.schema.json",
+  "title": "Evidence-bound story and emotional resonance design card",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "card_id", "generated_at", "artifact_status",
+    "publication_boundary", "content_id", "risk_class", "structure_route",
+    "fact_binding", "story_source", "story_category", "story_purpose", "format_design",
+    "production_strategy", "timing_design", "continuity_value",
+    "protagonist", "audience_bridge", "scene_anchor", "inciting_incident",
+    "expectation_gap", "attempt_and_feedback", "pressure", "choice_under_pressure",
+    "turning_points", "climax", "resolution", "emotional_design",
+    "explanation_bridge", "editorial_diagnostics", "publication_learning_plan", "diagnostic_warnings", "review",
+    "authority", "receipt_payload_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "story-design-card.v1"},
+    "card_id": {"type": "string", "pattern": "^story-card-[a-f0-9]{24}$"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "artifact_status": {"const": "candidate-only"},
+    "publication_boundary": {"const": "manual-only"},
+    "content_id": {"type": "string", "minLength": 3, "maxLength": 160},
+    "risk_class": {"enum": ["ordinary", "insurance-health", "high-risk"]},
+    "structure_route": {"const": "story-arc"},
+    "fact_binding": {"$ref": "#/$defs/fact_binding"},
+    "story_source": {"$ref": "#/$defs/story_source"},
+    "story_category": {"enum": ["origin", "failure", "customer-transformation", "principle", "method-origin", "case-moment", "other"]},
+    "story_purpose": {"type": "string", "minLength": 1, "maxLength": 400},
+    "format_design": {"$ref": "#/$defs/format_design"},
+    "production_strategy": {"$ref": "#/$defs/production_strategy"},
+    "timing_design": {"$ref": "#/$defs/timing_design"},
+    "continuity_value": {"$ref": "#/$defs/continuity_value"},
+    "protagonist": {"$ref": "#/$defs/protagonist"},
+    "audience_bridge": {"$ref": "#/$defs/audience_bridge"},
+    "scene_anchor": {"$ref": "#/$defs/scene_anchor"},
+    "inciting_incident": {"$ref": "#/$defs/fact_beat"},
+    "expectation_gap": {"$ref": "#/$defs/expectation_gap"},
+    "attempt_and_feedback": {"$ref": "#/$defs/attempt_and_feedback"},
+    "pressure": {"type": "array", "minItems": 1, "maxItems": 4, "items": {"$ref": "#/$defs/pressure"}},
+    "choice_under_pressure": {"$ref": "#/$defs/choice"},
+    "turning_points": {"type": "array", "minItems": 1, "maxItems": 6, "items": {"$ref": "#/$defs/turning_point"}},
+    "climax": {"$ref": "#/$defs/value_shift"},
+    "resolution": {"$ref": "#/$defs/resolution"},
+    "emotional_design": {"$ref": "#/$defs/emotional_design"},
+    "explanation_bridge": {"$ref": "#/$defs/explanation_bridge"},
+    "editorial_diagnostics": {"$ref": "#/$defs/editorial_diagnostics"},
+    "publication_learning_plan": {"$ref": "#/$defs/publication_learning_plan"},
+    "diagnostic_warnings": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 160}},
+    "review": {"$ref": "#/$defs/review"},
+    "authority": {
+      "const": {"publish_authorized": false, "execution_authorized": false, "external_send_authorized": false}
+    },
+    "receipt_payload_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "safe_ref": {"type": "string", "minLength": 1, "maxLength": 500, "pattern": "^(?![A-Za-z]:)(?!/)(?!\\\\)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"},
+    "fact_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 120}},
+    "fact_binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["fact_card_ref", "fact_revision_id", "fact_card_sha256", "allowed_fact_ids"],
+      "properties": {
+        "fact_card_ref": {"$ref": "#/$defs/safe_ref"},
+        "fact_revision_id": {"type": "string", "minLength": 1, "maxLength": 120},
+        "fact_card_sha256": {"$ref": "#/$defs/sha256"},
+        "allowed_fact_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 120}}
+      }
+    },
+    "story_source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["mode", "authorization_status", "identity_treatment", "quote_treatment", "fact_refs"],
+      "properties": {
+        "mode": {"enum": ["first-person-memory", "observed-scene", "authorized-interview", "documented-case"]},
+        "authorization_status": {"enum": ["not-required", "confirmed", "blocked"]},
+        "identity_treatment": {"enum": ["synthetic", "deidentified", "authorized-identifiable"]},
+        "quote_treatment": {"enum": ["none", "confirmed-exact-only", "labelled-paraphrase", "mixed-reviewed"]},
+        "fact_refs": {"$ref": "#/$defs/fact_refs"}
+      }
+    },
+    "format_design": {
+      "type": "object", "additionalProperties": false,
+      "required": ["format_id", "standalone", "central_change_count", "scene_meaning_alternation", "interview_action_meaning_layers"],
+      "properties": {
+        "format_id": {"enum": ["moments-short-text", "graphic-note", "short-video-narration", "demo-video", "interview-video", "long-video", "live", "longform-article"]},
+        "standalone": {"const": true},
+        "central_change_count": {"type": "integer", "minimum": 1, "maximum": 3},
+        "scene_meaning_alternation": {"enum": ["not-applicable", "planned"]},
+        "interview_action_meaning_layers": {"enum": ["not-applicable", "separated"]}
+      }
+    },
+    "production_strategy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["current_mode", "platform_specific_variants", "single_variable_experiment", "distribution_rule", "release_freeze_contract", "future_trigger"],
+      "properties": {
+        "current_mode": {"enum": ["single-master-synchronized", "platform-specific-variants"]},
+        "platform_specific_variants": {"enum": ["active", "deferred-capacity"]},
+        "single_variable_experiment": {"enum": ["active", "deferred-capacity"]},
+        "distribution_rule": {"enum": ["same-frozen-master-manual-multi-platform", "platform-specific-frozen-variants"]},
+        "release_freeze_contract": {"const": "publication-version-freeze.v1"},
+        "future_trigger": {"type": "string", "minLength": 1, "maxLength": 300}
+      }
+    },
+    "timing_design": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["profile_basis", "target_duration_seconds", "audience_stake_visible_by_second", "reason_to_continue_visible_by_second", "first_information_advance_by_second", "maximum_gap_between_advances_seconds", "main_payoff_by_completion_ratio", "heuristic_not_platform_fact"],
+          "properties": {
+            "profile_basis": {"enum": ["current-operating-hypothesis", "platform-observed-profile"]},
+            "target_duration_seconds": {"type": "number", "exclusiveMinimum": 0, "maximum": 900},
+            "audience_stake_visible_by_second": {"type": "number", "minimum": 0, "maximum": 2},
+            "reason_to_continue_visible_by_second": {"type": "number", "minimum": 0, "maximum": 5},
+            "first_information_advance_by_second": {"type": "number", "minimum": 0, "maximum": 15},
+            "maximum_gap_between_advances_seconds": {"type": "number", "exclusiveMinimum": 0, "maximum": 15},
+            "main_payoff_by_completion_ratio": {"type": "number", "exclusiveMinimum": 0, "maximum": 0.8},
+            "heuristic_not_platform_fact": {"const": true}
+          }
+        }
+      ]
+    },
+    "continuity_value": {
+      "type": "object", "additionalProperties": false,
+      "required": ["current_item_value", "future_value_promise", "target_audience", "surface_mode", "mechanical_follow_request_prohibited", "promise_status"],
+      "properties": {
+        "current_item_value": {"type": "string", "minLength": 1, "maxLength": 400},
+        "future_value_promise": {"type": "string", "minLength": 1, "maxLength": 400},
+        "target_audience": {"type": "string", "minLength": 1, "maxLength": 240},
+        "surface_mode": {"enum": ["spoken", "caption", "profile-consistency", "not-surfaced-this-item"]},
+        "mechanical_follow_request_prohibited": {"const": true},
+        "promise_status": {"enum": ["author-position", "supported", "needs-review"]}
+      }
+    },
+    "protagonist": {
+      "type": "object", "additionalProperties": false,
+      "required": ["role", "immediate_goal", "goal_fact_refs", "internal_state_status", "internal_state_fact_refs"],
+      "properties": {
+        "role": {"type": "string", "minLength": 1, "maxLength": 160},
+        "immediate_goal": {"type": "string", "minLength": 1, "maxLength": 300},
+        "goal_fact_refs": {"$ref": "#/$defs/fact_refs"},
+        "internal_state_status": {"enum": ["not-used", "author-confirmed", "source-quoted"]},
+        "internal_state_fact_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 120}}
+      }
+    },
+    "audience_bridge": {
+      "type": "object", "additionalProperties": false,
+      "required": ["shared_situation", "recognition_basis", "validation_status"],
+      "properties": {
+        "shared_situation": {"type": "string", "minLength": 1, "maxLength": 400},
+        "recognition_basis": {"enum": ["audience-evidence", "author-observation", "agent-hypothesis"]},
+        "validation_status": {"enum": ["supported", "needs-validation"]}
+      }
+    },
+    "scene_anchor": {
+      "type": "object", "additionalProperties": false,
+      "required": ["beat_id", "detail_type", "observable_detail", "fact_refs"],
+      "properties": {
+        "beat_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,39}$"},
+        "detail_type": {"enum": ["observable-action", "object", "time-place", "sensory-detail", "record"]},
+        "observable_detail": {"type": "string", "minLength": 1, "maxLength": 400},
+        "fact_refs": {"$ref": "#/$defs/fact_refs"}
+      }
+    },
+    "fact_beat": {
+      "type": "object", "additionalProperties": false,
+      "required": ["beat_id", "event", "fact_refs"],
+      "properties": {
+        "beat_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,39}$"},
+        "event": {"type": "string", "minLength": 1, "maxLength": 500},
+        "fact_refs": {"$ref": "#/$defs/fact_refs"}
+      }
+    },
+    "expectation_gap": {
+      "type": "object", "additionalProperties": false,
+      "required": ["beat_id", "expected_outcome", "actual_outcome", "fact_refs"],
+      "properties": {
+        "beat_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,39}$"},
+        "expected_outcome": {"type": "string", "minLength": 1, "maxLength": 400},
+        "actual_outcome": {"type": "string", "minLength": 1, "maxLength": 400},
+        "fact_refs": {"$ref": "#/$defs/fact_refs"}
+      }
+    },
+    "attempt_and_feedback": {
+      "type": "object", "additionalProperties": false,
+      "required": ["beat_id", "first_action", "expected_feedback", "actual_feedback", "fact_refs"],
+      "properties": {
+        "beat_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,39}$"},
+        "first_action": {"type": "string", "minLength": 1, "maxLength": 400},
+        "expected_feedback": {"type": "string", "minLength": 1, "maxLength": 400},
+        "actual_feedback": {"type": "string", "minLength": 1, "maxLength": 400},
+        "fact_refs": {"$ref": "#/$defs/fact_refs"}
+      }
+    },
+    "pressure": {
+      "type": "object", "additionalProperties": false,
+      "required": ["beat_id", "type", "description", "fact_refs"],
+      "properties": {
+        "beat_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,39}$"},
+        "type": {"enum": ["internal", "interpersonal", "institutional", "environmental", "temporal", "resource"]},
+        "description": {"type": "string", "minLength": 1, "maxLength": 400},
+        "fact_refs": {"$ref": "#/$defs/fact_refs"}
+      }
+    },
+    "choice": {
+      "type": "object", "additionalProperties": false,
+      "required": ["beat_id", "options", "chosen_action", "cost_or_tradeoff", "fact_refs"],
+      "properties": {
+        "beat_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,39}$"},
+        "options": {"type": "array", "minItems": 2, "maxItems": 5, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 300}},
+        "chosen_action": {"type": "string", "minLength": 1, "maxLength": 400},
+        "cost_or_tradeoff": {"type": "string", "minLength": 1, "maxLength": 400},
+        "fact_refs": {"$ref": "#/$defs/fact_refs"}
+      }
+    },
+    "turning_point": {
+      "type": "object", "additionalProperties": false,
+      "required": ["beat_id", "function", "before_value", "event", "after_value", "fact_refs"],
+      "properties": {
+        "beat_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,39}$"},
+        "function": {"enum": ["complication", "reversal", "revelation", "decision", "consequence"]},
+        "before_value": {"type": "string", "minLength": 1, "maxLength": 200},
+        "event": {"type": "string", "minLength": 1, "maxLength": 500},
+        "after_value": {"type": "string", "minLength": 1, "maxLength": 200},
+        "fact_refs": {"$ref": "#/$defs/fact_refs"}
+      }
+    },
+    "value_shift": {
+      "type": "object", "additionalProperties": false,
+      "required": ["beat_id", "action_or_revelation", "value_shift", "fact_refs"],
+      "properties": {
+        "beat_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,39}$"},
+        "action_or_revelation": {"type": "string", "minLength": 1, "maxLength": 500},
+        "value_shift": {"type": "string", "minLength": 1, "maxLength": 300},
+        "fact_refs": {"$ref": "#/$defs/fact_refs"}
+      }
+    },
+    "resolution": {
+      "type": "object", "additionalProperties": false,
+      "required": ["new_state", "remaining_uncertainty", "fact_refs"],
+      "properties": {
+        "new_state": {"type": "string", "minLength": 1, "maxLength": 400},
+        "remaining_uncertainty": {"type": "string", "minLength": 1, "maxLength": 400},
+        "fact_refs": {"$ref": "#/$defs/fact_refs"}
+      }
+    },
+    "emotion_beat": {
+      "type": "object", "additionalProperties": false,
+      "required": ["beat_ref", "intended_response", "intensity", "eliciting_appraisal", "evidence_mode", "fact_refs"],
+      "properties": {
+        "beat_ref": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,39}$"},
+        "intended_response": {"enum": ["curiosity", "recognition", "concern", "surprise", "relief", "trust", "hope", "reflection"]},
+        "intensity": {"enum": ["low", "moderate", "high"]},
+        "eliciting_appraisal": {"type": "string", "minLength": 1, "maxLength": 400},
+        "evidence_mode": {"enum": ["observable-cue", "confirmed-quote", "author-reaction"]},
+        "fact_refs": {"$ref": "#/$defs/fact_refs"}
+      }
+    },
+    "emotional_design": {
+      "type": "object", "additionalProperties": false,
+      "required": ["engagement_target", "emotion_beats", "aftertaste", "prohibited_methods"],
+      "properties": {
+        "engagement_target": {"type": "array", "minItems": 1, "maxItems": 3, "uniqueItems": true, "items": {"enum": ["interest", "identification", "immersion"]}},
+        "emotion_beats": {"type": "array", "minItems": 1, "maxItems": 5, "items": {"$ref": "#/$defs/emotion_beat"}},
+        "aftertaste": {"type": "string", "minLength": 1, "maxLength": 300},
+        "prohibited_methods": {"const": ["fear-escalation", "shame", "outrage-targeting", "trauma-exploitation", "false-suspense", "affected-person-as-humor-target"]}
+      }
+    },
+    "explanation_bridge": {
+      "type": "object", "additionalProperties": false,
+      "required": ["main_claim", "boundary", "story_role", "sentence_budget"],
+      "properties": {
+        "main_claim": {"type": "string", "minLength": 1, "maxLength": 500},
+        "boundary": {"type": "string", "minLength": 1, "maxLength": 500},
+        "story_role": {"const": "illustration-not-population-proof"},
+        "sentence_budget": {"type": "integer", "minimum": 2, "maximum": 4}
+      }
+    },
+    "editorial_diagnostics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["causal_link_status", "stickiness", "causal_trim_status"],
+      "properties": {
+        "causal_link_status": {"enum": ["causal-order-clear", "chronology-risk", "needs-review"]},
+        "stickiness": {
+          "type": "object", "additionalProperties": false,
+          "required": ["simple", "unexpected", "concrete", "credible", "emotional", "story"],
+          "properties": {
+            "simple": {"$ref": "#/$defs/soft_status"},
+            "unexpected": {"$ref": "#/$defs/soft_status"},
+            "concrete": {"$ref": "#/$defs/soft_status"},
+            "credible": {"$ref": "#/$defs/soft_status"},
+            "emotional": {"$ref": "#/$defs/soft_status"},
+            "story": {"$ref": "#/$defs/soft_status"}
+          }
+        },
+        "causal_trim_status": {"enum": ["passed", "needs-review", "not-run"]}
+      }
+    },
+    "publication_learning_plan": {
+      "type": "object", "additionalProperties": false,
+      "required": ["experiment_status", "primary_variable", "one_variable_only", "observation_windows", "metric_keys", "content_signal_only", "causal_claim_prohibited"],
+      "properties": {
+        "experiment_status": {"enum": ["planned", "deferred-capacity", "not-applicable"]},
+        "primary_variable": {"enum": ["none", "opening-speed", "protagonist-desire", "unexpected-feedback", "choice-under-pressure", "ending-value-shift", "title-promise", "story-vs-point-recall"]},
+        "one_variable_only": {"const": true},
+        "observation_windows": {"const": ["early-48-72h", "d7"]},
+        "metric_keys": {
+          "type": "array", "minItems": 1, "maxItems": 6, "uniqueItems": true,
+          "items": {"enum": ["retention_2s_rate", "bounce_2s_rate", "retention_3s_rate", "retention_5s_rate", "retention_10s_rate", "average_watch_time", "completion_rate", "major_dropoff_second", "cover_click_rate", "follows", "net_follower_change", "meaningful_comments", "story_recall_comments", "point_recall_comments"]}
+        },
+        "content_signal_only": {"const": true},
+        "causal_claim_prohibited": {"const": true}
+      }
+    },
+    "soft_status": {"enum": ["supported", "needs-review", "not-applicable"]},
+    "review": {
+      "type": "object", "additionalProperties": false,
+      "required": ["causal_not_chronological", "choice_reveals_character", "emotion_is_evidence_bound", "audience_bridge_is_honest", "climax_changes_value", "story_and_explanation_separated", "decision"],
+      "properties": {
+        "causal_not_chronological": {"const": true},
+        "choice_reveals_character": {"const": true},
+        "emotion_is_evidence_bound": {"const": true},
+        "audience_bridge_is_honest": {"const": true},
+        "climax_changes_value": {"const": true},
+        "story_and_explanation_separated": {"const": true},
+        "decision": {"const": "passed"}
+      }
+    }
+  }
+}

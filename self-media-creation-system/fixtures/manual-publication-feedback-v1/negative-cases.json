@@ -1,0 +1,96 @@
+{
+  "cases": [
+    {
+      "expected_code": "stale_source_artifact",
+      "id": "stale-source-hash",
+      "mutation": "stale_source_hash",
+      "stage": "input"
+    },
+    {
+      "expected_code": "window_missing",
+      "id": "missing-day7-window",
+      "mutation": "missing_d7",
+      "stage": "input"
+    },
+    {
+      "expected_code": "duplicate_window",
+      "id": "duplicate-window",
+      "mutation": "duplicate_window",
+      "stage": "input"
+    },
+    {
+      "expected_code": "window_drift",
+      "id": "early-window-drift",
+      "mutation": "early_window_drift",
+      "stage": "input"
+    },
+    {
+      "expected_code": "stale_observation",
+      "id": "stale-capture",
+      "mutation": "stale_capture",
+      "stage": "input"
+    },
+    {
+      "expected_code": "privacy_boundary_violation",
+      "id": "raw-comment-field",
+      "mutation": "raw_comment",
+      "stage": "input"
+    },
+    {
+      "expected_code": "privacy_boundary_violation",
+      "id": "tracking-parameter",
+      "mutation": "tracking_parameter",
+      "stage": "input"
+    },
+    {
+      "expected_code": "signal_escalation",
+      "id": "like-promoted-to-business",
+      "mutation": "like_as_business",
+      "stage": "input"
+    },
+    {
+      "expected_code": "duplicate_metric",
+      "id": "duplicate-metric",
+      "mutation": "duplicate_metric",
+      "stage": "input"
+    },
+    {
+      "expected_code": "derived_metric_is_computed",
+      "id": "manual-derived-metric",
+      "mutation": "manual_derived_metric",
+      "stage": "input"
+    },
+    {
+      "expected_code": "retention_order_invalid",
+      "id": "retention-order-invalid",
+      "mutation": "retention_order_invalid",
+      "stage": "input"
+    },
+    {
+      "expected_code": "duplicate_publication_event",
+      "id": "duplicate-publication-event",
+      "mutation": "duplicate_publication_event",
+      "stage": "output"
+    },
+    {
+      "expected_code": "duplicate_snapshot",
+      "id": "duplicate-performance-snapshot",
+      "mutation": "duplicate_snapshot",
+      "stage": "output"
+    },
+    {
+      "expected_code": "derived_metric_drift",
+      "id": "derived-metric-drift",
+      "mutation": "derived_metric_drift",
+      "stage": "output"
+    },
+    {
+      "expected_code": "no_signal_escalation",
+      "id": "content-no-signal-promoted",
+      "mutation": "no_signal_customer_negative",
+      "stage": "output"
+    }
+  ],
+  "fixture_contract": "manual-publication-feedback-negative-cases.v1",
+  "synthetic_only": true
+}

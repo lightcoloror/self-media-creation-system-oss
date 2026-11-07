@@ -1,0 +1,263 @@
+{
+  "$id": "https://local.lightcolor/small-model-content-loop-input.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "audience": {
+      "minLength": 3,
+      "type": "string"
+    },
+    "canonical_seed": {
+      "additionalProperties": false,
+      "properties": {
+        "boundary": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "opening": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sections": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "body": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "claim_unit_ids": {
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array",
+                "uniqueItems": true
+              },
+              "heading": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "heading",
+              "body",
+              "claim_unit_ids"
+            ],
+            "type": "object"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "summary": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "title": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "opening",
+        "summary",
+        "boundary",
+        "sections"
+      ],
+      "type": "object"
+    },
+    "claim_units": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "evidence_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "fact_status": {
+            "enum": [
+              "verified_source",
+              "verified_position",
+              "framework_application",
+              "agent_inference",
+              "unverified"
+            ]
+          },
+          "framework_ref": {
+            "type": "string"
+          },
+          "human_review_required": {
+            "type": "boolean"
+          },
+          "position_confirmed": {
+            "type": "boolean"
+          },
+          "text": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "unit_id": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "unit_id",
+          "text",
+          "fact_status",
+          "evidence_ids"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "closure_run_id": {
+      "pattern": "^smcl-[a-z0-9-]{8,64}$",
+      "type": "string"
+    },
+    "content_id": {
+      "pattern": "^[a-z0-9][a-z0-9-]{7,79}$",
+      "type": "string"
+    },
+    "contract_binding": {
+      "additionalProperties": false,
+      "properties": {
+        "content_item_schema_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "human_voice_rulebook_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "human_voice_skill_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "routing_contract_version": {
+          "const": "1.9.1"
+        },
+        "routing_set_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "routing_contract_version",
+        "routing_set_sha256",
+        "content_item_schema_sha256",
+        "human_voice_skill_sha256",
+        "human_voice_rulebook_sha256"
+      ],
+      "type": "object"
+    },
+    "evidence_bundle": {
+      "additionalProperties": false,
+      "properties": {
+        "facade_contract": {
+          "const": "evidence-bundle.v1"
+        },
+        "native_contract": {
+          "const": "research-output.v1"
+        },
+        "path": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "research_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "facade_contract",
+        "native_contract",
+        "research_id",
+        "path",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "fixture_time": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "human_voice_attestation": {
+      "additionalProperties": false,
+      "properties": {
+        "author_voice_confirmed": {
+          "type": "boolean"
+        },
+        "body_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "mode": {
+          "const": "synthetic_fixture_attestation"
+        },
+        "read_aloud_completed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "mode",
+        "body_sha256",
+        "read_aloud_completed",
+        "author_voice_confirmed"
+      ],
+      "type": "object"
+    },
+    "requested_final_state": {
+      "enum": [
+        "candidate",
+        "review_required",
+        "final",
+        "finalized",
+        "published",
+        "publish-ready",
+        "release-ready"
+      ]
+    },
+    "schema_version": {
+      "const": "small-model-content-loop-input.v1"
+    },
+    "synthetic_only": {
+      "const": true
+    },
+    "topic": {
+      "minLength": 4,
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "synthetic_only",
+    "fixture_time",
+    "content_id",
+    "topic",
+    "audience",
+    "requested_final_state",
+    "contract_binding",
+    "evidence_bundle",
+    "claim_units",
+    "canonical_seed",
+    "human_voice_attestation"
+  ],
+  "title": "Small model evidence-to-content candidate loop input",
+  "type": "object"
+}

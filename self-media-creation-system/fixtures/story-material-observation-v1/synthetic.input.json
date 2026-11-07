@@ -1,0 +1,25 @@
+{
+  "schema_version": "story-material-input.v1",
+  "captured_at": "2026-09-03T17:00:00+08:00",
+  "story_source_mode": "documented-case",
+  "source_ref": "fixture://synthetic-family-policy-inventory",
+  "source_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+  "authorization_status": "not-required",
+  "identity_treatment": "synthetic",
+  "evidence_status": "verified-source",
+  "privacy_status": "passed",
+  "fields": {
+    "protagonist_goal": {"status": "supplied", "text": "Work out what coverage the fictional family already has.", "fact_refs": ["fact-01"]},
+    "prior_balance": {"status": "supplied", "text": "The family assumed its documents were sufficiently organized.", "fact_refs": ["fact-01"]},
+    "inciting_event": {"status": "supplied", "text": "A new purchase discussion reveals that nobody can produce a complete list.", "fact_refs": ["fact-01", "fact-02"]},
+    "first_attempt": {"status": "supplied", "text": "They begin by comparing another product.", "fact_refs": ["fact-02"]},
+    "unexpected_feedback": {"status": "supplied", "text": "The comparison cannot answer what is missing because existing records are scattered.", "fact_refs": ["fact-02", "fact-03"]},
+    "hardest_choice": {"status": "supplied", "text": "Pause the purchase discussion and inventory the records first.", "fact_refs": ["fact-03"]},
+    "final_result_and_cost": {"status": "supplied", "text": "The family gains a reviewable list but delays the purchase discussion.", "fact_refs": ["fact-04", "fact-05"]},
+    "sensory_detail": {"status": "unknown", "text": null, "fact_refs": []},
+    "audience_meaning": {"status": "supplied", "text": "Clarity about the present situation can precede a new decision.", "fact_refs": ["fact-05"]}
+  },
+  "quotation": {"mode": "none", "text": null, "fact_refs": []},
+  "created_by": "deterministic-adapter",
+  "synthetic_only": true
+}

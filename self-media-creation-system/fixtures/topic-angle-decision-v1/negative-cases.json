@@ -1,0 +1,15 @@
+{
+  "schema_version": "topic-angle-decision-negative-fixtures.v1",
+  "base_fixture": "fixtures/topic-angle-decision-v1/synthetic.input.json",
+  "cases": [
+    {"case_id": "high-reach-off-goal", "mutation": "select_angle_industry_outrage", "expected_code": "high_reach_off_goal_selected"},
+    {"case_id": "unsupported-hook", "mutation": "unsupported_selected_hook", "expected_code": "unsupported_hook_selected"},
+    {"case_id": "unverified-customer-case", "mutation": "make_material_unverified_customer_case", "expected_code": "customer_case_unverified"},
+    {"case_id": "comment-as-fact", "mutation": "promote_comment_to_fact", "expected_code": "discovery_signal_promoted_to_fact"},
+    {"case_id": "platform-formula", "mutation": "allow_platform_fact_claim", "expected_code": "heuristic_promoted_to_platform_fact"},
+    {"case_id": "missing-angle", "mutation": "remove_third_angle", "expected_code": "angle_count_invalid"},
+    {"case_id": "source-drift", "mutation": "change_source_hash", "expected_code": "source_observation_hash_drift"},
+    {"case_id": "blocked-evidence-selected", "mutation": "set_selected_evidence_readiness_blocked", "expected_code": "selected_angle_evidence_blocked"},
+    {"case_id": "compliance-risk-drift", "mutation": "set_compliance_risk_different_from_risk_detail", "expected_code": "compliance_risk_mismatch"}
+  ]
+}

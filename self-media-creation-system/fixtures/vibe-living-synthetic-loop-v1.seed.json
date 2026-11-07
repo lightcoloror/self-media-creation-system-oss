@@ -1,0 +1,77 @@
+{
+  "fixture_pack": "vibe-living-synthetic-content-loop.v1",
+  "synthetic_only": true,
+  "mode": "draft_only",
+  "generated_at": "2026-08-05T12:00:00+08:00",
+  "account_seed": "vibe-living-synthetic-insurance-content-account",
+  "questions": [
+    {
+      "question_id": "sq-insurance-health-underwriting",
+      "slug": "health-underwriting",
+      "question": "体检发现小问题以后，还能不能买保险？",
+      "audience_problem": "虚构读者不知道体检异常与健康告知、核保结论之间并不是简单的一一对应关系。",
+      "thesis": "能否投保不能只看诊断名称；需要结合险种、告知问法、检查结果与当前状态逐项核对。",
+      "synthetic_frequency_count": 5,
+      "source_excerpt": "本合成材料只验证一种回答边界：不能根据一个体检词直接承诺可以买或一定不能买。"
+    },
+    {
+      "question_id": "sq-insurance-medical-reimbursement",
+      "slug": "medical-reimbursement",
+      "question": "已经有医保，还需要了解商业医疗保障吗？",
+      "audience_problem": "虚构读者容易把医保与商业医疗保障理解为完全重合或彼此替代。",
+      "thesis": "医保与商业保障不能简单替代；先看医保覆盖范围、个人承担部分与家庭可承受风险，再决定是否需要补充。",
+      "synthetic_frequency_count": 4,
+      "source_excerpt": "本合成材料只验证分层解释方法，不给出任何真实家庭的配置结论。"
+    },
+    {
+      "question_id": "sq-insurance-claims-preparation",
+      "slug": "claims-preparation",
+      "question": "买了保险，真到理赔时需要提前准备什么？",
+      "audience_problem": "虚构读者可能以为理赔只是治疗结束后提交发票，忽略治疗前后的责任与材料核对。",
+      "thesis": "理赔准备应从保障责任、就医范围、通知要求和材料留存四方面核对，不能只在治疗结束后看发票。",
+      "synthetic_frequency_count": 4,
+      "source_excerpt": "本合成材料只验证理赔解释结构，不包含真实保单、医院、病情或赔付结果。"
+    },
+    {
+      "question_id": "sq-insurance-family-priority",
+      "slug": "family-priority",
+      "question": "一家人预算有限，保障顺序怎么排？",
+      "audience_problem": "虚构读者希望得到固定顺序，但真实决策需要先识别家庭责任与不可承受损失。",
+      "thesis": "排序应先识别家庭责任与不可承受损失，再分配预算；不能用单一固定顺序替代家庭事实。",
+      "synthetic_frequency_count": 3,
+      "source_excerpt": "本合成材料只验证决策框架，不代表任何真实家庭、年龄或收入结构。"
+    },
+    {
+      "question_id": "sq-insurance-product-comparison",
+      "slug": "product-comparison",
+      "question": "两个保险看起来差不多，应该怎么比较？",
+      "audience_problem": "虚构读者容易只比较单一价格或宣传数字，忽略版本、适用条件与责任边界。",
+      "thesis": "比较时应统一版本、责任、除外、续保或保障期限、适用条件与保费口径，不能只看宣传页上的一个数字。",
+      "synthetic_frequency_count": 3,
+      "source_excerpt": "本合成材料不指向任何真实产品，只验证同口径比较和证据回指。"
+    }
+  ],
+  "publication_feedback_cases": [
+    {
+      "case_id": "pf-content-no-signal",
+      "question_slug": "health-underwriting",
+      "feedback_type": "no_signal",
+      "expected_signal_layer": "content_observation",
+      "summary": "合成观察窗口内没有可用内容指标；只能记为证据不足。"
+    },
+    {
+      "case_id": "pf-ordinary-content-engagement",
+      "question_slug": "claims-preparation",
+      "feedback_type": "ordinary_content_engagement",
+      "expected_signal_layer": "content_observation",
+      "summary": "合成数据仅出现播放、点赞和收藏；这些仍然只是内容互动。"
+    },
+    {
+      "case_id": "pf-explicit-business-signal",
+      "question_slug": "family-priority",
+      "feedback_type": "continued_consultation",
+      "expected_signal_layer": "crm_candidate",
+      "summary": "虚构对象明确提出继续咨询并预约下一步，但仍必须人工确认。"
+    }
+  ]
+}

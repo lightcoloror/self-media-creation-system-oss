@@ -1,0 +1,32 @@
+{
+  "schema_version": "0.1",
+  "data_classification": "synthetic-only",
+  "resource_event_id": "res_01ARZ3NDEKTSV4RRFFQ69G5FB5",
+  "account_id": "acct_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+  "content_id": "synthetic-echo-garden-operations-001",
+  "publication_id": "pub_01ARZ3NDEKTSV4RRFFQ69G5FAX",
+  "resource_type": "human-time",
+  "occurred_at": "2026-10-18T00:00:00+08:00",
+  "quantity": {
+    "value": 1.5,
+    "unit": "hours"
+  },
+  "cost": {
+    "amount": 0,
+    "currency": "CNY",
+    "tax_included": null
+  },
+  "evidence_status": "manual-record",
+  "evidence_refs": [
+    "synthetic:time-log:001"
+  ],
+  "notes": "完全虚构的内容制作时间记录。",
+  "privacy": {
+    "personal_payment_data_included": false,
+    "account_credentials_included": false
+  },
+  "authority": {
+    "payment_authorized": false,
+    "execution_authorized": false
+  }
+}

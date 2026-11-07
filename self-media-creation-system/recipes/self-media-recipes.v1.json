@@ -1,0 +1,561 @@
+{
+  "schema_version": "self-media-recipe-catalog.v1",
+  "catalog_version": "1.6.1",
+  "canonical_parent": {
+    "tool_id": "content-creation-system",
+    "routing_binding": "routing-binding.v1.json",
+    "load_policy": "whole-contract-set-only"
+  },
+  "boundaries": {
+    "publication": "manual-only",
+    "external_send": "not-authorized",
+    "customer_contact": "not-authorized",
+    "crm_write": "not-authorized",
+    "knowledge_base_write": "not-authorized",
+    "provider_call": "not-authorized-by-this-entry"
+  },
+  "context_defaults": {
+    "capsule_max_bytes": 11776,
+    "tool_receipt_max_bytes": 1500,
+    "full_logs": "reference_only_unless_failure",
+    "large_artifacts": "hash_bound_reference_only"
+  },
+  "route_execution_policy": {
+    "mode": "selected-recipe-subset-only",
+    "canonical_order_is_universal_checklist": false,
+    "skip_reason_required": true,
+    "unknown_applicability": "fail-closed"
+  },
+  "error_catalog": {
+    "capture_bridge_unavailable": {"recovery_action": "Preserve the failed platform checkpoint. Doctor is not a live search. Check the current authorized browser instance once; do not install extensions or copy credentials. Read docs/research-capture-execution.md.", "automatic_retry": false},
+    "capture_browser_unavailable": {"recovery_action": "Check current tool discovery in the main task. A missing child-task browser is session evidence, not model incapability. Continue independent offline work; never start an undocumented browser.", "automatic_retry": false},
+    "capture_login_required": {"recovery_action": "Hand the exact current target page to the user for login. Verify visible login state and same-surface reopen separately; do not export cookies, passwords or tokens.", "automatic_retry": false},
+    "capture_access_blocked": {"recovery_action": "Stop the restricted route. Preserve CAPTCHA, authentication or frequency-limit status without sensitive values; do not switch tools to evade it. Resume only after authorized manual recovery.", "automatic_retry": false},
+    "capture_body_incomplete": {"recovery_action": "Keep metadata and body/image/subtitle gaps separate. Reuse existing WCF completeness/platform_samples or authorized saved-page import; do not count snippets as full text.", "automatic_retry": false},
+    "capture_connection_timeout": {"recovery_action": "Record the platform and stage immediately after the 20-30 second deadline. Preserve successful checkpoints and continue another independent platform. Retry the affected route only after a specific recovery observation.", "automatic_retry": false},
+    "recipe_detail_drift": {
+      "recovery_action": "Preserve the original capsule and receipts. Compare its bound recipe with the current catalog, recover the original request, then create a separate current capsule only after identifying affected steps. Never rewrite old receipt hashes, claim old receipts belong to the new capsule, or automatically rerun production.",
+      "automatic_retry": false
+    },
+    "canonical_route_version_drift": {
+      "recovery_action": "Validate the current whole canonical routing set, retain prior request and receipt evidence, and re-resolve a separate current capsule with affected steps explicitly identified. Do not mix roots, relabel old approvals or automatically restart creative/media work.",
+      "automatic_retry": false
+    },
+    "canonical_route_missing": {
+      "recovery_action": "Run python scripts/canonical_routing.py, restore the registered routing contract set, then rerun resolve.",
+      "automatic_retry": false
+    },
+    "source_hash_drift": {
+      "recovery_action": "Re-read the referenced artifact, record its reviewed SHA-256, and rerun only the affected step.",
+      "automatic_retry": false
+    },
+    "evidence_not_verified": {
+      "recovery_action": "Return to the evidence owner; do not promote candidate or AI-synthesized claims to facts.",
+      "automatic_retry": false
+    },
+    "research_output_missing_or_blocked": {
+      "recovery_action": "Run the registered question-research owner and provide a schema-valid research-output.v1 that passes all answer-readiness gates, or record why research is not applicable.",
+      "automatic_retry": false
+    },
+    "privacy_review_required": {
+      "recovery_action": "Remove or irreversibly de-identify sensitive details and obtain the required human privacy review.",
+      "automatic_retry": false
+    },
+    "privacy_treatment_unresolved": {
+      "recovery_action": "Keep the candidate internal-only until every subject has an explicit voice and face-treatment choice.",
+      "automatic_retry": false
+    },
+    "customer_effect_rework_requested": {
+      "recovery_action": "Freeze all unlisted windows, reuse the local edit manifests and recipes, and rerender only the customer-requested time ranges before a new confirmation.",
+      "automatic_retry": false
+    },
+    "privacy_candidate_stale": {
+      "recovery_action": "Rebind the treatment decision and customer review to the current candidate hashes; do not reuse an earlier confirmation.",
+      "automatic_retry": false
+    },
+    "author_voice_confirmation_missing": {
+      "recovery_action": "Complete human voice rewrite, read-aloud review, and explicit author confirmation before packaging.",
+      "automatic_retry": false
+    },
+    "packaging_review_stale": {
+      "recovery_action": "Freeze the current body again, recalculate the exact title-cover-opening scope, obtain a new human credential, and rerun only content-packaging-review.",
+      "automatic_retry": false
+    },
+    "series_item_not_standalone": {
+      "recovery_action": "Rewrite only the affected item so its frozen body contains its own audience question, necessary context, core answer, and current-item payoff. Remove prior-item dependency and do not defer this payoff to a later item; then obtain a new packaging review.",
+      "automatic_retry": false
+    },
+    "audience_path_review_failed": {
+      "recovery_action": "Keep the verified facts and body scope, then fix only the affected audience path: choose one entry strategy, align title-cover-opening, restore two or more ordered information advances, and deliver the current-item payoff before requesting a new packaging review.",
+      "automatic_retry": false
+    },
+    "science_popularization_review_required": {
+      "recovery_action": "When the frozen body contains science, technology, health, medicine, or medical-insurance factual claims, run the science-popularization review. Obtain current authoritative evidence, a human subject-matter check, target-audience readability evidence, and an AI deidentification/disclosure assessment before visual or video production.",
+      "automatic_retry": false
+    },
+    "editorial_angle_review_required": {
+      "recovery_action": "Return to the material and its topic observations, expose at least three angle candidates, keep reach and novelty as labeled hypotheses, reject unsupported conflict or off-goal angles, and obtain human confirmation before drafting.",
+      "automatic_retry": false
+    },
+    "proxy_review_failed": {
+      "recovery_action": "Inspect only the failed time window or receipt, correct it, and rerun the bounded review verification.",
+      "automatic_retry": false
+    },
+    "sequence_incomplete": {
+      "recovery_action": "Run sequence-status, prepare only the reported next step, and supply its verified receipt. Do not skip forward or claim managed completion.",
+      "automatic_retry": false
+    },
+    "sequence_receipt_order": {
+      "recovery_action": "Supply output receipts once each in the capsule step_index order. Do not reorder, substitute, or reuse a receipt from another capsule revision.",
+      "automatic_retry": false
+    },
+    "owner_semantics_pending": {
+      "recovery_action": "Run the named domain owner validators or human gates for the listed steps. Transport and hash checks alone do not authorize a managed-pipeline completion claim.",
+      "automatic_retry": false
+    },
+    "manual_publication_required": {
+      "recovery_action": "Stop at publish-ready and hand the candidate to the human owner; this entry cannot publish or send.",
+      "automatic_retry": false
+    }
+  },
+  "recipes": [
+    {
+      "recipe_id": "moments-short-post",
+      "workflow_goal": "moments_short_post",
+      "description": "Turn one reviewed real-life observation into a short WeChat Moments candidate in the selected personal voice.",
+      "required_initial_inputs": ["account_ip", "real_event_or_observation", "voice_profile_ref"],
+      "always_load": ["routing-binding.v1.json", "AGENT_DISCOVERY.md", "request"],
+      "on_demand": ["voice_profile_ref", "fact_or_privacy_notes", "recent_published_samples", "topic_angle_decision_ref", "science_popularization_review_if_applicable"],
+      "never_inline": ["full_chat_history", "raw_customer_records", "entire_knowledge_base", "unbounded_search_results"],
+      "steps": [
+        {
+          "step_id": "verify-canonical-route",
+          "interface": "cli",
+          "tool_id": "canonical-routing",
+          "instruction": "Validate the complete registered routing set before drafting.",
+          "command": "python scripts/canonical_routing.py",
+          "input_roles": ["routing-binding"],
+          "output_contract": "canonical-routing-check.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "propose-editorial-angle",
+          "interface": "cli",
+          "tool_id": "topic-angle-decision",
+          "instruction": "Compare at least three frames by audience, viewer gain, account/business fit, evidence and production cost. Record one of continue/reframe/supplement/defer in topic-angle-decision.v2. All candidates may be rejected. Never choose an off-goal high-reach frame just to fill a selection field. Missing material is a research route, not draft permission.",
+          "command": "python scripts/topic_angle_decision.py create --input <topic-angle-input.json> --output <runtime-receipt.json>",
+          "input_roles": ["real_event_or_observation", "topic-angle-decision-input"],
+          "output_contract": "topic-angle-decision.v2",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "confirm-editorial-angle",
+          "interface": "human_gate",
+          "tool_id": "editorial-angle-human-review-gate",
+          "instruction": "Human review confirms the exact v2 framework decision, including rejection of every candidate when appropriate. Continue permits the existing draft gates; supplement permits only specified research/material collection, then reassessment. Reframe/defer stop downstream writing and packaging. Confirmation grants no publication authority.",
+          "input_roles": ["topic-angle-decision"],
+          "output_contract": "editorial-angle-human-confirmation.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "draft-one-observation",
+          "interface": "agent_task",
+          "tool_id": "content-creation-system",
+          "instruction": "Draft one event, one observation, and one natural stopping point. Preserve facts and the selected voice; do not add a standard CTA or forced conclusion. Use author context; preserve judgments and persist the revision.",
+          "input_roles": ["account_ip", "real_event_or_observation", "voice_profile_ref", "topic-angle-decision", "editorial-angle-human-confirmation", "author-writing-context"],
+          "output_contract": "moments-candidate.v1+author-writing-revision.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "confirm-author-voice",
+          "interface": "human_gate",
+          "tool_id": "human-voice-gate",
+          "instruction": "The author reads the candidate aloud and confirms that the wording and factual emphasis are their own. Confirm judgment changes; sample adoption is separate.",
+          "input_roles": ["moments-candidate", "author-writing-context", "author-revision-review"],
+          "output_contract": "author-voice-confirmation.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "handoff-manual-publication",
+          "interface": "human_gate",
+          "tool_id": "manual-publication-boundary",
+          "instruction": "Stop at a reviewed candidate. A human may publish and later report the event; no tool publishes or sends.",
+          "input_roles": ["moments-candidate", "author-voice-confirmation"],
+          "output_contract": "manual-publication-handoff.v1",
+          "stop_on_error": true
+        }
+      ],
+      "quality_gates": ["topic-observation-binding", "editorial-goal-alignment", "reach-hypothesis-not-platform-fact", "fact", "privacy", "insurance-medical", "science-popularization-review-if-science-claim", "author-voice", "manual-publication"],
+      "outputs": ["topic-angle-decision", "editorial-angle-human-confirmation", "moments-candidate", "author-voice-confirmation", "manual-publication-handoff"],
+      "stop_conditions": ["editorial-angle-review-required", "missing-sensitive-fact-source", "privacy-not-reviewed", "author-voice-not-confirmed", "candidate-ready-for-human"]
+    },
+    {
+      "recipe_id": "xhs-evidence-graphic",
+      "workflow_goal": "xhs_evidence_graphic",
+      "description": "Research one audience question, preserve evidence status, and derive a graphic-note candidate with matching title, cover, and promise.",
+      "required_initial_inputs": ["account_ip", "primary_audience", "topic_question"],
+      "always_load": ["routing-binding.v1.json", "AGENT_DISCOVERY.md", "request"],
+      "on_demand": ["research_output_ref", "content_item_ref", "visual_style_ref", "platform_rules_checked_at", "topic_angle_decision_ref", "science_popularization_review_if_applicable"],
+      "never_inline": ["full_web_pages", "raw_comment_exports", "entire_knowledge_base", "generated_images"],
+      "steps": [
+        {
+          "step_id": "verify-canonical-route",
+          "interface": "cli",
+          "tool_id": "canonical-routing",
+          "instruction": "Validate the complete registered routing set before research or packaging.",
+          "command": "python scripts/canonical_routing.py",
+          "input_roles": ["routing-binding"],
+          "output_contract": "canonical-routing-check.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "propose-editorial-angle",
+          "interface": "cli",
+          "tool_id": "topic-angle-decision",
+          "instruction": "Compare at least three frames by audience, viewer gain, account/business fit, evidence and production cost. Record one of continue/reframe/supplement/defer in topic-angle-decision.v2. All candidates may be rejected. Never choose an off-goal high-reach frame just to fill a selection field. Missing material is a research route, not draft permission.",
+          "command": "python scripts/topic_angle_decision.py create --input <topic-angle-input.json> --output <runtime-receipt.json>",
+          "input_roles": ["topic_question", "topic-angle-decision-input"],
+          "output_contract": "topic-angle-decision.v2",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "confirm-editorial-angle",
+          "interface": "human_gate",
+          "tool_id": "editorial-angle-human-review-gate",
+          "instruction": "Human review confirms the exact v2 framework decision, including rejection of every candidate when appropriate. Continue permits the existing draft gates; supplement permits only specified research/material collection, then reassessment. Reframe/defer stop downstream writing and packaging. Confirmation grants no publication authority.",
+          "input_roles": ["topic-angle-decision"],
+          "output_contract": "editorial-angle-human-confirmation.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "discover-research-owner",
+          "interface": "cli",
+          "tool_id": "local-tools",
+          "instruction": "Discover the registered question research owner; peer posts are discovery evidence, not verified facts. Before new platform collection read docs/research-capture-execution.md and use research-capture lookup on the existing webpage ledger. Persist each platform stage, bound connection waits to 30 seconds, and keep metadata/body/images/subtitles separate. Use the existing WCF completeness or authorized saved-page import; acquisition checks never replace research-output readiness.",
+          "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ..\\scripts\\local-tools.ps1 discover question-research-poc",
+          "input_roles": ["topic_question", "topic-angle-decision", "editorial-angle-human-confirmation"],
+          "output_contract": "local-tool-discovery.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "produce-verified-research-output",
+          "interface": "cli",
+          "tool_id": "question-research-poc",
+          "instruction": "Run the registered research owner and admit only a schema-valid research-output.v1 with ready_for_answer=true, no blocking gates, and a ready verified guarded answer. Export success alone is not evidence readiness.",
+          "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ..\\question-research-poc\\scripts\\research-poc.ps1 export-research-output --project <reviewed-research-project> --output <research-output.v1.json> --scope <scope> --audience content-creation-system --requested-output article",
+          "input_roles": ["topic_question", "local-tool-discovery", "topic-angle-decision", "editorial-angle-human-confirmation"],
+          "output_contract": "research-output.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "build-evidence-draft",
+          "interface": "agent_task",
+          "tool_id": "content-studio-poc",
+          "instruction": "Use only verified research claims to build the mother draft, page tasks, and title-cover-opening promise. Keep unknowns and contradictions visible. Use author context; preserve judgments and persist the revision. Require a current human-confirmed continue decision; a supplement decision must be reassessed after research.",
+          "input_roles": ["topic_question", "primary_audience", "research_output_ref", "author-writing-context", "topic-angle-decision"],
+          "output_contract": "content-item.v0.2+article-visual-plan+author-writing-revision.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "approve-exact-package",
+          "interface": "human_gate",
+          "tool_id": "package-human-review-gate",
+          "instruction": "After the body is frozen, record exact text anchors for the audience question, reviewed entry, context, two or more ordered advances, core answer, and current-item payoff. Confirm title-cover-opening alignment; choose life-context-first or search-intent-direct for insurance; both cross-item dependency flags must be false. Review the exact body, rights, facts, privacy, and author voice. This grants no publishing, execution, or send authority. Confirm judgment changes; sample adoption is separate.",
+          "input_roles": ["content-item", "visual-candidates", "frozen-body", "author-writing-context", "author-revision-review"],
+          "output_contract": "content-packaging-human-review-credential.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "verify-frozen-package",
+          "interface": "cli",
+          "tool_id": "content-packaging-review",
+          "instruction": "Create and validate a candidate-only receipt that binds the exact body bytes, reviewed-input bytes, title, cover, opening, audience-path and standalone assessment, platform, classification, and human credential. Missing anchors, promise mismatch, missing or out-of-order information advances, previous/next-item dependency, sequence-labelled packaging, or any changed byte fails closed.",
+          "command": "python scripts/content_packaging_review.py create --input <reviewed-package-input.json> --output <runtime-receipt.json>",
+          "input_roles": ["reviewed-package-input", "content-packaging-human-review-credential"],
+          "output_contract": "content-packaging-review.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "handoff-manual-publication",
+          "interface": "human_gate",
+          "tool_id": "manual-publication-boundary",
+          "instruction": "Stop at a hash-bound graphic-note candidate. A human may decide whether to publish; no tool publishes or sends.",
+          "input_roles": ["graphic-note-candidate", "content-packaging-review"],
+          "output_contract": "manual-publication-handoff.v1",
+          "stop_on_error": true
+        }
+      ],
+      "quality_gates": ["topic-observation-binding", "editorial-goal-alignment", "reach-hypothesis-not-platform-fact", "verified-evidence", "unknowns-preserved", "science-popularization-review-if-science-claim", "audience-entry-strategy", "title-cover-opening-promise", "ordered-information-progression", "standalone-item-completeness", "visual-rights", "privacy", "author-voice", "visual-typography-hard-gate", "frozen-body-hash", "manual-publication"],
+      "outputs": ["topic-angle-decision", "editorial-angle-human-confirmation", "research-output.v1", "content-item", "graphic-note-candidate", "content-packaging-human-review-credential", "content-packaging-review", "manual-publication-handoff"],
+      "stop_conditions": ["editorial-angle-review-required", "research-output-missing-or-blocked", "research-blocked", "evidence-candidate-only", "visual-rights-unknown", "review-pending", "audience-path-review-failed", "series-item-not-standalone", "packaging-review-stale", "candidate-ready-for-human"]
+    },
+    {
+      "recipe_id": "case-video-candidate",
+      "workflow_goal": "case_video_candidate",
+      "prerecording": {
+        "required_initial_inputs": ["account_ip", "primary_audience", "topic_question", "fact_card_ref", "authorization_status", "voice_profile_ref"],
+        "outputs": ["case-video-script.v1", "case-video-initial-draft-review.v1", "case-video-human-voice-receipt.v1", "short-video-timing-evidence.v1"],
+        "interview_steps": [
+          {
+            "step_id": "draft-interview-guide", "interface": "agent_task", "tool_id": "case-video-script-adapter",
+            "instruction": "Prepare questions, open follow-ups, purpose and production notes from known facts plus unknowns. Never supply predicted answers or call a planned interview completed. Read the fact/story/voice runbook; no source recording, transcript, edit manifest or production lock is required for this draft. Use author context; preserve judgments and persist the revision.",
+            "input_roles": ["account_ip", "primary_audience", "topic_question", "fact_card_ref", "authorization_status", "voice_profile_ref", "author-writing-context"],
+            "output_contract": "case-interview-guide.v1+author-writing-revision.v1", "stop_on_error": true
+          },
+          {
+            "step_id": "review-interview-guide", "interface": "human_gate", "tool_id": "interview-guide-human-review",
+            "instruction": "Review question neutrality, privacy, fact premises and spoken clarity against exact questions. Unknown answers stay unknown. Record author review for the guide only; not recording consent, factual interview evidence or publication approval. No audio/video is required. Confirm judgment changes; sample adoption is separate.",
+            "input_roles": ["interview-guide", "fact_card_ref", "author-writing-context", "author-revision-review"],
+            "output_contract": "case-interview-guide-review.v1", "stop_on_error": true
+          }
+        ],
+        "steps": [
+          {
+            "step_id": "draft-prerecord-case", "interface": "agent_task", "tool_id": "case-video-script-adapter",
+            "instruction": "Read the canonical fact-card and storycraft Skills, invocation runbook, author voice basis and confirmed fact IDs. Compare the audience entry, section advances, service scope and abandonment risk before drafting. Produce pre_voice=true case-video-script.v1 with editorial_plan; keep spoken text separate from production notes. Do not invent media, approval, hooks or completed Skill receipts. Use author context; preserve judgments and persist the revision.",
+            "input_roles": ["account_ip", "primary_audience", "topic_question", "fact_card_ref", "authorization_status", "voice_profile_ref", "author-writing-context"],
+            "output_contract": "case-video-script.v1+author-writing-revision.v1", "stop_on_error": true
+          },
+          {
+            "step_id": "review-prerecord-draft", "interface": "human_gate", "tool_id": "human-voice-gate",
+            "instruction": "Apply the existing eleven-gate initial-draft review to this exact body and fact revision. Review actual spans, standalone understanding and information advances; a filled plan is not approval. Separately decide interaction and acquisition CTA in cta-plan: use or not_used, reasons and each selected location. No CTA is mandatory. Real material requires the existing human reviewer evidence; return_for_revision stays blocked downstream.",
+            "input_roles": ["case-video-script", "fact_card_ref", "cta-plan"],
+            "output_contract": "case-video-initial-draft-review.v1", "stop_on_error": true
+          },
+          {
+            "step_id": "complete-prerecord-voice", "interface": "human_gate", "tool_id": "human-voice-gate",
+            "instruction": "After approved initial review, apply human-voice-editor with author examples and DBS diagnosis. Supply before/after editorial evidence or justified unchanged review. Use the existing human_voice_gate only after genuine author read-aloud and confirmation; freeze hooks on that body. Stop at a recording candidate, never production or publication approval. Use author context; preserve judgments and persist the revision. Confirm judgment changes; sample adoption is separate.",
+            "input_roles": ["case-video-script", "initial-draft-review", "fact_card_ref", "voice_profile_ref", "human-voice-request", "author-writing-context", "author-revision-review"],
+            "output_contract": "case-video-script.v1+case-video-human-voice-receipt.v1+author-writing-revision.v1", "stop_on_error": true
+          },
+          {
+            "step_id": "verify-prerecord-timing", "interface": "cli", "tool_id": "video-timing",
+            "instruction": "After the author read-aloud, bind observed stopwatch timecodes to the exact reviewed script. Verify audience stake, continuation reason, ordered information advances, main payoff and any spoken continuity promise. Recheck cta-plan against this script revision and the selected CTA positions; omission remains valid with reasons. This prerecord receipt authorizes recording only; it never proves the later final cut.",
+            "command": "python scripts/short_video_timing_evidence.py create --input <prerecord-timing-input.json> --output <timing-receipt.json>",
+            "input_roles": ["case-video-script", "fact_card_ref", "timing-input", "cta-plan"],
+            "output_contract": "short-video-timing-evidence.v1", "stop_on_error": true
+          }
+        ]
+      },
+      "description": "Route a reviewed real case through de-identification, customer review, and exact-window rework.",
+      "required_initial_inputs": ["authorization_status", "content_item", "verified_research_output", "voice_profile_ref", "source_media_ref", "source_subject_manifest", "local_edit_manifests", "artifact_lifecycle_manifest", "production_run_lock"],
+      "always_load": ["routing-binding.v1.json", "AGENT_DISCOVERY.md", "request"],
+      "on_demand": ["fact_card_ref", "route_card_ref", "topic_angle_decision_ref", "story_five_question_adapter_ref", "interview_quote_refs", "visual_asset_manifest", "case_financial_facts", "localized_subtitle_review", "science_popularization_review_if_applicable", "video_privacy_treatment_decision", "privacy_redaction_binding", "privacy_redaction_binding_receipt", "customer_video_effect_review", "prepublication_privacy_gate", "final_layout_safety_receipt", "platform_publication_package"],
+      "never_inline": ["raw_interview_audio", "raw_medical_records", "raw_policy_documents", "full_video_binary", "raw_customer_confirmation", "customer_identity"],
+      "steps": [
+        {
+          "step_id": "verify-production-run-lock",
+          "interface": "cli",
+          "tool_id": "production-run-lock",
+          "instruction": "Verify the toolchain-and-static-rules-only lock for this run. It does not freeze the script, media, privacy decision, subtitles, or layout; those are bound by later body, privacy, packaging, and exact-candidate receipts. Tool or rule drift invalidates downstream candidates.",
+          "command": "python scripts/production_run_lock.py verify --lock <production-run-lock.json> --workspace-root <workspace> --output <verification.json>",
+          "input_roles": ["production_run_lock"],
+          "output_contract": "production-run-lock-verification.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "capture-initial-privacy-treatment",
+          "interface": "human_gate",
+          "tool_id": "subject-privacy-treatment-gate",
+          "instruction": "Record each subject's voice and face treatment against local edit manifests. Undecided stays internal_preview_only; never infer consent or identity.",
+          "input_roles": ["source_media_ref", "source_subject_manifest", "local_edit_manifests", "authorization_status"],
+          "output_contract": "video-privacy-treatment-decision.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "project-case-script",
+          "interface": "agent_task",
+          "tool_id": "case-video-script-adapter",
+          "instruction": "Validate current content contracts, lifecycle, typed amounts and reviewed cross-language text; inherit source timing. Project one question and one capability with paragraph-level fact refs. Process cases use locked chronology; record any editorial departure. Preserve author judgments and persist revision. If upstream angle selection applies, require a current human-confirmed v2 continue decision.",
+          "input_roles": ["content_item", "verified_research_output", "topic-angle-decision-if-upstream-selected", "story-five-question-adapter-if-story-route", "authorization_status", "video-privacy-treatment-decision", "artifact_lifecycle_manifest", "case_financial_facts_if_amounts_present", "localized_subtitle_review_if_languages_differ", "author-writing-context"],
+          "output_contract": "case-governance-validation-receipt.v1+case-video-script.v1+author-writing-revision.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "complete-human-voice-gate",
+          "interface": "human_gate",
+          "tool_id": "human-voice-gate",
+          "instruction": "Complete rewrite, read-aloud, and author confirmation against the frozen body. In the same human review, bind one audience entry, title-cover-opening promise, two ordered advances, core answer, current-item payoff, insurance entry route, and no cross-item dependency. Any body change invalidates both receipts and requires re-review. Use author context; preserve judgments and persist the revision. Confirm judgment changes; sample adoption is separate.",
+          "input_roles": ["case-video-script", "voice_profile_ref", "frozen-body", "title-cover-opening-candidate", "author-writing-context", "author-revision-review"],
+          "output_contract": "human-voice-stage-receipt.v1+content-packaging-human-review-credential.v1+case-video-script.v1+author-writing-revision.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "verify-case-audience-path",
+          "interface": "cli",
+          "tool_id": "content-packaging-review",
+          "instruction": "Bind the reviewed audience path and standalone assessment to the frozen script/body. Missing anchors, promise mismatch, missing or out-of-order progression, cross-item dependency, or a changed body fails closed before video-owner handoff.",
+          "command": "python scripts/content_packaging_review.py create --input <reviewed-package-input.json> --output <runtime-receipt.json>",
+          "input_roles": ["reviewed-package-input", "human-voice-stage-receipt", "content-packaging-human-review-credential"],
+          "output_contract": "content-packaging-review.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "handoff-video-owner",
+          "interface": "human_gate",
+          "tool_id": "mvp-video-pipeline",
+          "instruction": "Handoff the evidence-bound brief and edit manifests. Run lifecycle preflight before rendering and register each created output before review; return both receipts. Semantic motion must render inside an isolated creator/evidence segment before final concatenation and must never overlay a customer-interview segment. Preserve privacy choices, time ranges, recipes, and final-layout safety.",
+          "input_roles": ["case-video-script", "human-voice-stage-receipt", "content-packaging-review", "video-privacy-treatment-decision", "local_edit_manifests", "production_run_lock"],
+          "output_contract": "content-video-brief.v1+review-packet.v1+internal-video-preview-handoff.v1+final-layout-safety-receipt.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "final-timing",
+          "interface": "cli",
+          "tool_id": "video-timing",
+          "instruction": "Bind the exact final cut, timed transcript and reviewed script. Re-measure opening, advances, payoff and any surfaced continuity. Prerecord timing cannot satisfy this step.",
+          "command": "python scripts/short_video_timing_evidence.py create --input <final-cut-timing-input.json> --output <timing-receipt.json>",
+          "input_roles": ["case-video-script", "video-candidate", "timing-input"],
+          "output_contract": "short-video-timing-evidence.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "verify-privacy-redaction-binding",
+          "interface": "cli",
+          "tool_id": "privacy-redaction-binding",
+          "instruction": "Bind human-reviewed customer identity and visible windows to anonymous MVP redaction tracks, then require every frame in every authorized mosaic window to be covered on the exact candidate hash. Detection never decides who the person is.",
+          "command": "python scripts/privacy_redaction_binding.py --binding <binding.json> --workspace-root <media-workspace> --mvp-root <mvp-video-pipeline> --output <receipt.json>",
+          "input_roles": ["video-privacy-treatment-decision", "privacy_redaction_binding", "video-candidate", "local_edit_manifests"],
+          "output_contract": "privacy-redaction-binding-receipt.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "record-customer-video-effect-review",
+          "interface": "human_gate",
+          "tool_id": "customer-video-effect-gate",
+          "instruction": "A human records confirmation, withdrawal, or exact changed windows against candidate and treatment hashes. Then record qa_pass, qa_fail with reason, or superseded in lifecycle; silence is not rejection. Never contact the customer or store identity.",
+          "input_roles": ["video-candidate", "video-privacy-treatment-decision", "privacy-redaction-binding-receipt", "review-packet"],
+          "output_contract": "customer-video-effect-review.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "evaluate-prepublication-privacy",
+          "interface": "cli",
+          "tool_id": "video-privacy-treatment",
+          "instruction": "Verify decision, review, candidate, and artifact hashes. Return internal-only, manual-release-eligible, withdrawn, or exact-window rework; never render, contact, or publish.",
+          "command": "python scripts/video_privacy_treatment.py evaluate --decision <decision.json> --review <review.json> --workspace-root <media-workspace> --output <gate.json>",
+          "input_roles": ["video-privacy-treatment-decision", "privacy-redaction-binding-receipt", "customer-video-effect-review", "video-candidate", "local_edit_manifests"],
+          "output_contract": "prepublication-privacy-gate.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "confirm-manual-publication-or-rework",
+          "interface": "human_gate",
+          "tool_id": "prepublication-privacy-gate",
+          "instruction": "Before manual upload, require the exact-master lifecycle lock receipt and publication_release v2. At task close require a hash-bound quarantine-only plan. Purge remains a later retention- and approval-gated phase. After upload run publication_post_upload; nothing publishes automatically.",
+          "input_roles": ["prepublication-privacy-gate", "video-candidate", "timing-evidence", "customer-video-effect-review", "platform-publication-package"],
+          "output_contract": "platform-publication-validation-receipt.v2+manual-publication-handoff.v1+video-review-input.v1",
+          "stop_on_error": true
+        }
+      ],
+      "quality_gates": ["production-run-lock", "topic-angle-decision-if-upstream-selected", "story-five-question-is-view-over-story-card", "verified-evidence", "case-governance-contracts", "paragraph-fact-routing", "privacy", "privacy-redaction-binding", "medical-insurance", "science-popularization-review-if-science-claim", "authorization", "rights", "author-voice", "audience-entry-strategy", "title-cover-opening-promise", "ordered-information-progression", "standalone-item-completeness", "visual-typography-hard-gate", "isolated-segment-motion-before-concat", "final-layout-safety", "initial-treatment-decision", "customer-effect-confirmation", "exact-candidate-hash", "prepublication-privacy-recheck", "platform-publication-package", "manual-publication"],
+      "outputs": ["production-run-lock-verification", "content-packaging-review", "internal-video-preview-handoff", "privacy-redaction-binding-receipt", "limited-rework-request", "manual-publication-handoff"],
+      "stop_conditions": ["production-toolchain-drift", "real-case-review-owner-unavailable", "authorization-unresolved", "case-governance-failed", "body-changed-after-hook", "voice-not-confirmed", "audience-path-review-failed", "series-item-not-standalone", "motion-overlays-customer-interview", "final-layout-safety-failed", "redaction-window-uncovered", "privacy-treatment-undecided-internal-preview-only", "customer-effect-review-pending", "limited-rework-required", "customer-withdrawn", "platform-package-failed", "candidate-ready-for-human"]
+    },
+    {
+      "recipe_id": "publication-feedback-review",
+      "workflow_goal": "publication_feedback_review",
+      "description": "Build one draft six-layer review from an existing append-only manual operations store. Publication, snapshots, interactions, and lead decisions are recorded separately, one fixed command and receipt at a time.",
+      "required_initial_inputs": ["operations_store_ref", "review_input"],
+      "always_load": ["routing-binding.v1.json", "AGENT_DISCOVERY.md", "request"],
+      "on_demand": ["operations_store_manifest", "publication_event", "performance_snapshots", "deidentified_interactions", "human_lead_receipts"],
+      "never_inline": ["platform_tokens", "tracking_urls", "raw_comments", "customer_identifiers", "operations_journal", "full_runtime_store"],
+      "steps": [
+        {
+          "step_id": "build-operating-review",
+          "interface": "cli",
+          "tool_id": "content-operations-cycle",
+          "instruction": "Validate the existing private append-only store, then build one draft-only six-layer review. Do not record or infer missing publication, snapshot, interaction, lead, resource, experiment, or revenue facts in this step.",
+          "command": "python scripts/content_operations_cycle.py build-review --store <private-store> --input <review-input.json>",
+          "input_roles": ["operations_store_ref", "review_input"],
+          "output_contract": "operating-review.v0.1+content-operations-cycle-receipt.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "review-operating-draft",
+          "interface": "human_gate",
+          "tool_id": "signal-review-gate",
+          "instruction": "A human reviews the six layers, missing evidence, and any already-confirmed lead references. content_no_signal remains neutral; the Agent cannot approve a lead, change resources, contact anyone, or publish.",
+          "input_roles": ["operating-review"],
+          "output_contract": "review-packet.v1",
+          "stop_on_error": true
+        }
+      ],
+      "quality_gates": ["atomic-contract-set", "append-only-store", "window-integrity", "privacy", "content-business-signal-separation", "no-crm-write"],
+      "outputs": ["operating-review", "content-operations-cycle-receipt", "review-packet"],
+      "stop_conditions": ["store-invalid", "source-hash-drift", "window-drift", "privacy-field-present", "invalid-signal-upgrade", "human-review-complete"]
+    },
+    {
+      "recipe_id": "context-efficient-rework",
+      "workflow_goal": "context_efficient_rework",
+      "description": "Review or revise only the affected windows and artifacts while retaining hashes, existing owner boundaries, and final human QA.",
+      "required_initial_inputs": ["change_description", "decision_sheet", "rough_cut_workspace", "source_media"],
+      "always_load": ["routing-binding.v1.json", "AGENT_DISCOVERY.md", "request", "decision_sheet"],
+      "on_demand": ["affected_time_windows", "source_media_time_ranges", "keyframes", "asr_decision_receipt", "previous_review_receipt"],
+      "never_inline": ["full_resolution_video", "full_asr_transcript", "full_command_logs", "unaffected_artifacts"],
+      "steps": [
+        {
+          "step_id": "plan-bounded-review",
+          "interface": "cli",
+          "tool_id": "context-efficiency",
+          "instruction": "Create a hash-bound original-source and affected-window technical review plan; use targeted-review source time ranges for human review. Never create proxy or review clips, and do not reprocess unchanged assets. The proxy-review-plan contract name is retained only for compatibility.",
+          "command": "python scripts/context_efficiency.py plan-video-review --manifest <input.json> --output <plan.json>",
+          "input_roles": ["source_media", "decision_sheet", "rough_cut_workspace", "change_description"],
+          "output_contract": "proxy-review-plan.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "decide-asr-need",
+          "interface": "cli",
+          "tool_id": "video-knowledge-pipeline",
+          "instruction": "Compare the current audio hash with the previous ASR receipt. Reuse unchanged ASR; rerun only changed windows with context when the audio changed.",
+          "command": "python scripts/context_manifest_consumer.py decide-asr --handoff <handoff.json> --audio <audio> --previous-receipt <receipt.json> --output <asr-decision.json>",
+          "input_roles": ["source_media", "proxy-review-plan"],
+          "output_contract": "asr-decision-receipt.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "execute-guarded-technical-review",
+          "interface": "cli",
+          "tool_id": "mvp-video-pipeline",
+          "instruction": "Use the guarded MVP review executor. Heavy scans are single-slot, exact media/profile receipts are reused, and limited rework may inspect only planned changed windows. Resource pressure stops fail-closed without automatic retry.",
+          "command": "python scripts/context_manifest_consumer.py execute-review --plan <plan.json> --output <mvp-execution-receipt.json>",
+          "input_roles": ["proxy-review-plan", "asr-decision-receipt"],
+          "output_contract": "video_creation_pipeline.video_review_execution_receipt.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "assemble-owner-review",
+          "interface": "agent_task",
+          "tool_id": "mvp-video-pipeline",
+          "instruction": "Consume the verified MVP execution receipt and shared QA report. Prepare only the planned proxy, acceptance frames, and targeted-review references through the guarded outlet; do not repeat the full decode or create another pipeline. Return the self-media execution receipt for deterministic verification.",
+          "input_roles": ["proxy-review-plan", "asr-decision-receipt", "mvp-review-execution-receipt"],
+          "output_contract": "self-media-video-review-execution-receipt.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "verify-bounded-review",
+          "interface": "cli",
+          "tool_id": "context-efficiency",
+          "instruction": "Verify source, plan, output hashes, reviewed windows, and owner boundary before human QA.",
+          "command": "python scripts/context_efficiency.py verify-video-review --plan <plan.json> --receipt <receipt.json> --output <verification.json>",
+          "input_roles": ["proxy-review-plan", "proxy-review-receipt"],
+          "output_contract": "proxy-review-verification.v1",
+          "stop_on_error": true
+        },
+        {
+          "step_id": "final-human-qa",
+          "interface": "human_gate",
+          "tool_id": "manual-qa-boundary",
+          "instruction": "Review the complete candidate for continuity, facts, privacy, sound, subtitles, and visual rights. Optimization never removes final QA.",
+          "input_roles": ["proxy-review-verification", "candidate-output"],
+          "output_contract": "review-packet.v1",
+          "stop_on_error": true
+        }
+      ],
+      "quality_gates": ["source-hash", "affected-window-boundary", "single-heavy-media-slot", "exact-hash-qa-reuse", "resource-pressure-stop", "no-unnecessary-asr", "proxy-review", "science-popularization-review-invalidated-if-science-text-changed", "visual-typography-hard-gate-if-text-changed", "final-human-qa", "manual-publication"],
+      "outputs": ["proxy-review-plan", "asr-decision-receipt", "mvp-review-execution-receipt", "proxy-review-receipt", "proxy-review-verification", "review-packet"],
+      "stop_conditions": ["source-hash-drift", "owner-receipt-missing", "resource_pressure_pause_required", "proxy-review-failed", "final-qa-pending", "candidate-ready-for-human"]
+    }
+  ]
+}

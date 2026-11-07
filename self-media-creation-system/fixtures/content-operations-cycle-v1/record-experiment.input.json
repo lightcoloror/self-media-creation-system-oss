@@ -1,0 +1,55 @@
+{
+  "schema_version": "content-operations-cycle.experiment-input.v1",
+  "data_classification": "synthetic-only",
+  "artifact": {
+    "schema_version": "0.1",
+    "data_classification": "synthetic-only",
+    "experiment_run_id": "exp_1Z834ZGZTK191K8X31MRRRG2K5",
+    "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+    "topic_ids": [],
+    "content_ids": ["research-9af53d1845bc537784dd42b4"],
+    "publication_ids": [],
+    "test_type": "observational-content-test",
+    "state": "pre-registered",
+    "registered_at": "2026-08-10T08:00:00+08:00",
+    "started_at": null,
+    "completed_at": null,
+    "hypothesis": "Synthetic only: a question-led title may improve reading entry without changing facts.",
+    "primary_variable": {
+      "key": "title",
+      "change": "Change only the title entry pattern.",
+      "held_constant": ["body facts", "visual hierarchy", "account", "CTA"]
+    },
+    "primary_signal": {
+      "layer": "consumption",
+      "metric_key": "read_depth",
+      "direction": "increase"
+    },
+    "observation_window": {
+      "minimum_hours": 168,
+      "evaluate_after": "2026-08-17T08:00:00+08:00",
+      "sample_rule": "Remain inconclusive until the window and minimum sample are satisfied."
+    },
+    "variants": [
+      {"variant_id": "baseline", "label": "Baseline title", "publication_ids": []},
+      {"variant_id": "question_title", "label": "Question-led title", "publication_ids": []}
+    ],
+    "allocation_method": null,
+    "guardrails": ["Facts and compliance remain unchanged", "No automatic publication"],
+    "stop_conditions": ["Any fact or compliance risk", "Insufficient sample after the window"],
+    "confounders": ["Natural traffic fluctuation"],
+    "causal_scope": "association-only",
+    "conclusion": {
+      "status": "pending",
+      "effect_direction": "unknown",
+      "data_quality": "not-evaluated",
+      "evidence_refs": [],
+      "limitations": ["Synthetic pre-registration; no execution occurred"]
+    },
+    "authority": {
+      "execution_authorized": false,
+      "publication_authority": "never",
+      "automatic_winner_selection": false
+    }
+  }
+}

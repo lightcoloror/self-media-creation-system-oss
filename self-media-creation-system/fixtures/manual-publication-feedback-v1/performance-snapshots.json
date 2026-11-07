@@ -1,0 +1,377 @@
+{
+  "items": [
+    {
+      "as_of": "2026-08-08T22:00:00+08:00",
+      "captured_at": "2026-08-08T22:10:00+08:00",
+      "data_completeness": "complete",
+      "metric_dictionary_version": "cold-start-content-signals.1.1",
+      "metrics": [
+        {
+          "dimensions": {
+            "layer": "admission",
+            "synthetic": true
+          },
+          "metric_key": "admission.status",
+          "unit": "other",
+          "value": 1
+        },
+        {
+          "dimensions": {
+            "layer": "attraction",
+            "synthetic": true
+          },
+          "metric_key": "reach",
+          "unit": "count",
+          "value": 150
+        },
+        {
+          "dimensions": {
+            "layer": "attraction",
+            "synthetic": true
+          },
+          "metric_key": "views",
+          "unit": "count",
+          "value": 120
+        },
+        {
+          "dimensions": {
+            "layer": "consumption",
+            "synthetic": true
+          },
+          "metric_key": "retention_3s_rate",
+          "unit": "percent",
+          "value": 72
+        },
+        {
+          "dimensions": {
+            "layer": "consumption",
+            "synthetic": true
+          },
+          "metric_key": "retention_5s_rate",
+          "unit": "percent",
+          "value": 60
+        },
+        {
+          "dimensions": {
+            "layer": "consumption",
+            "synthetic": true
+          },
+          "metric_key": "retention_10s_rate",
+          "unit": "percent",
+          "value": 42
+        },
+        {
+          "dimensions": {
+            "layer": "consumption",
+            "synthetic": true
+          },
+          "metric_key": "average_watch_time",
+          "unit": "seconds",
+          "value": 18
+        },
+        {
+          "dimensions": {
+            "layer": "consumption",
+            "synthetic": true
+          },
+          "metric_key": "completion_rate",
+          "unit": "percent",
+          "value": 30
+        },
+        {
+          "dimensions": {
+            "layer": "consumption",
+            "synthetic": true
+          },
+          "metric_key": "major_dropoff_second",
+          "unit": "seconds",
+          "value": 12
+        },
+        {
+          "dimensions": {
+            "layer": "value",
+            "synthetic": true
+          },
+          "metric_key": "likes",
+          "unit": "count",
+          "value": 4
+        },
+        {
+          "dimensions": {
+            "layer": "value",
+            "synthetic": true
+          },
+          "metric_key": "saves",
+          "unit": "count",
+          "value": 2
+        },
+        {
+          "dimensions": {
+            "layer": "value",
+            "synthetic": true
+          },
+          "metric_key": "shares",
+          "unit": "count",
+          "value": 0
+        },
+        {
+          "dimensions": {
+            "layer": "value",
+            "synthetic": true
+          },
+          "metric_key": "meaningful_comments",
+          "unit": "count",
+          "value": 1
+        },
+        {
+          "dimensions": {
+            "layer": "value",
+            "synthetic": true
+          },
+          "metric_key": "profile_visits",
+          "unit": "count",
+          "value": 9
+        },
+        {
+          "dimensions": {
+            "layer": "value",
+            "synthetic": true
+          },
+          "metric_key": "attributed_new_followers",
+          "unit": "count",
+          "value": 2
+        },
+        {
+          "dimensions": {
+            "denominator": "views",
+            "derived": true,
+            "layer": "value",
+            "numerator": "attributed_new_followers",
+            "synthetic": true
+          },
+          "metric_key": "follows_per_1000_views",
+          "unit": "other",
+          "value": 16.666667
+        },
+        {
+          "dimensions": {
+            "denominator": "views",
+            "derived": true,
+            "layer": "value",
+            "numerator": "profile_visits",
+            "synthetic": true
+          },
+          "metric_key": "profile_visit_rate",
+          "unit": "percent",
+          "value": 7.5
+        },
+        {
+          "dimensions": {
+            "denominator": "profile_visits",
+            "derived": true,
+            "layer": "value",
+            "numerator": "attributed_new_followers",
+            "synthetic": true
+          },
+          "metric_key": "profile_follow_conversion_rate",
+          "unit": "percent",
+          "value": 22.222222
+        }
+      ],
+      "notes": "Synthetic manual observation; no live platform access.",
+      "publication_id": "pub_TY3ZH2KQWQ5W7JB7VHPDMN4A1H",
+      "schema_version": "0.1",
+      "snapshot_id": "snap_ACP0NZGMPHHFSAANSSZB605DV7",
+      "source_type": "other",
+      "timezone": "Asia/Shanghai",
+      "window_label": "early"
+    },
+    {
+      "as_of": "2026-08-13T10:00:00+08:00",
+      "captured_at": "2026-08-13T10:10:00+08:00",
+      "data_completeness": "complete",
+      "metric_dictionary_version": "cold-start-content-signals.1.1",
+      "metrics": [
+        {
+          "dimensions": {
+            "layer": "admission",
+            "synthetic": true
+          },
+          "metric_key": "admission.status",
+          "unit": "other",
+          "value": 1
+        },
+        {
+          "dimensions": {
+            "layer": "attraction",
+            "synthetic": true
+          },
+          "metric_key": "reach",
+          "unit": "count",
+          "value": 260
+        },
+        {
+          "dimensions": {
+            "layer": "attraction",
+            "synthetic": true
+          },
+          "metric_key": "views",
+          "unit": "count",
+          "value": 210
+        },
+        {
+          "dimensions": {
+            "layer": "consumption",
+            "synthetic": true
+          },
+          "metric_key": "retention_3s_rate",
+          "unit": "percent",
+          "value": 74
+        },
+        {
+          "dimensions": {
+            "layer": "consumption",
+            "synthetic": true
+          },
+          "metric_key": "retention_5s_rate",
+          "unit": "percent",
+          "value": 62
+        },
+        {
+          "dimensions": {
+            "layer": "consumption",
+            "synthetic": true
+          },
+          "metric_key": "retention_10s_rate",
+          "unit": "percent",
+          "value": 44
+        },
+        {
+          "dimensions": {
+            "layer": "consumption",
+            "synthetic": true
+          },
+          "metric_key": "average_watch_time",
+          "unit": "seconds",
+          "value": 20
+        },
+        {
+          "dimensions": {
+            "layer": "consumption",
+            "synthetic": true
+          },
+          "metric_key": "completion_rate",
+          "unit": "percent",
+          "value": 33
+        },
+        {
+          "dimensions": {
+            "layer": "consumption",
+            "synthetic": true
+          },
+          "metric_key": "major_dropoff_second",
+          "unit": "seconds",
+          "value": 13
+        },
+        {
+          "dimensions": {
+            "layer": "value",
+            "synthetic": true
+          },
+          "metric_key": "likes",
+          "unit": "count",
+          "value": 7
+        },
+        {
+          "dimensions": {
+            "layer": "value",
+            "synthetic": true
+          },
+          "metric_key": "saves",
+          "unit": "count",
+          "value": 5
+        },
+        {
+          "dimensions": {
+            "layer": "value",
+            "synthetic": true
+          },
+          "metric_key": "shares",
+          "unit": "count",
+          "value": 1
+        },
+        {
+          "dimensions": {
+            "layer": "value",
+            "synthetic": true
+          },
+          "metric_key": "meaningful_comments",
+          "unit": "count",
+          "value": 2
+        },
+        {
+          "dimensions": {
+            "layer": "value",
+            "synthetic": true
+          },
+          "metric_key": "profile_visits",
+          "unit": "count",
+          "value": 18
+        },
+        {
+          "dimensions": {
+            "layer": "value",
+            "synthetic": true
+          },
+          "metric_key": "attributed_new_followers",
+          "unit": "count",
+          "value": 5
+        },
+        {
+          "dimensions": {
+            "denominator": "views",
+            "derived": true,
+            "layer": "value",
+            "numerator": "attributed_new_followers",
+            "synthetic": true
+          },
+          "metric_key": "follows_per_1000_views",
+          "unit": "other",
+          "value": 23.809524
+        },
+        {
+          "dimensions": {
+            "denominator": "views",
+            "derived": true,
+            "layer": "value",
+            "numerator": "profile_visits",
+            "synthetic": true
+          },
+          "metric_key": "profile_visit_rate",
+          "unit": "percent",
+          "value": 8.571429
+        },
+        {
+          "dimensions": {
+            "denominator": "profile_visits",
+            "derived": true,
+            "layer": "value",
+            "numerator": "attributed_new_followers",
+            "synthetic": true
+          },
+          "metric_key": "profile_follow_conversion_rate",
+          "unit": "percent",
+          "value": 27.777778
+        }
+      ],
+      "notes": "Synthetic manual observation; no live platform access.",
+      "publication_id": "pub_TY3ZH2KQWQ5W7JB7VHPDMN4A1H",
+      "schema_version": "0.1",
+      "snapshot_id": "snap_93Q64VA179VE3WPW2BFH9Z8R5H",
+      "source_type": "other",
+      "timezone": "Asia/Shanghai",
+      "window_label": "d7"
+    }
+  ],
+  "synthetic_only": true
+}

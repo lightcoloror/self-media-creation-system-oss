@@ -1,0 +1,185 @@
+{
+  "license": "Apache-2.0",
+  "source_kind": "first-party shared working snapshot, separate from main Git HEAD",
+  "source_files": [
+    {
+      "path": "docs/content-creation-system/operations-contract-set.v1.json",
+      "sha256": "b577fa8b37bd3e6a6719e5bd5c386c1effe87c02385cf1d78621e9fe0e8eb7b8",
+      "public_sha256": "04f6ac2c911098416254cc2705fed8ba44a383b58b98b011e5c5724297613b07",
+      "byte_identical": false
+    },
+    {
+      "path": "docs/content-creation-system/operations-contract-set.v1.schema.json",
+      "sha256": "9b3ca06c822af7f941b63c35c72588f8a20c6fe6f7c4b0f86df3c7a76f797024",
+      "public_sha256": "241a13dcfa8090c2119364bb7c05f5bfbfec5f43b2b8b4caa9efeff050917f69",
+      "byte_identical": false
+    },
+    {
+      "path": "scripts/validate-content-operations.py",
+      "sha256": "93f544a4a520cf5adeeafa2f906c4a89b65cc71aa4a79e5d39d2bd4ce8fc6b00",
+      "public_sha256": "93f544a4a520cf5adeeafa2f906c4a89b65cc71aa4a79e5d39d2bd4ce8fc6b00",
+      "byte_identical": true
+    },
+    {
+      "path": "tests/test_content_operations_contracts.py",
+      "sha256": "e6368755fb26cbf9f5ea21f8b8f3173d9bf0f7a8fccf4926dad6d16f2434e993",
+      "public_sha256": "e6368755fb26cbf9f5ea21f8b8f3173d9bf0f7a8fccf4926dad6d16f2434e993",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/content-creation-system/operations/operating-goal.schema.json",
+      "sha256": "c48940c79a45faa8c794584660e358c960c9ab2f3d09dc9aab4cd406093b1136",
+      "public_sha256": "c48940c79a45faa8c794584660e358c960c9ab2f3d09dc9aab4cd406093b1136",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/content-creation-system/operations/fixtures/operating-goal.json",
+      "sha256": "11ba0c9ecb6fef63a863de3ed98489fe004dd1314566a69f261358921b93d062",
+      "public_sha256": "97f44654aa30995b283892eb669fe4717597133903015d61498efcc7628b055c",
+      "byte_identical": false
+    },
+    {
+      "path": "docs/content-creation-system/operations/account.schema.json",
+      "sha256": "f0f66be6e47e6c5c9b6c7398a18499c2aab5c56da1ae2fa7c2cb561f62dcf5b6",
+      "public_sha256": "f0f66be6e47e6c5c9b6c7398a18499c2aab5c56da1ae2fa7c2cb561f62dcf5b6",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/content-creation-system/operations/topic.schema.json",
+      "sha256": "911a832e11e6298c6cce24d73591ec8a9c429c6cf58c0134bf89658efd73abb9",
+      "public_sha256": "911a832e11e6298c6cce24d73591ec8a9c429c6cf58c0134bf89658efd73abb9",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/content-creation-system/operations/publication-event.schema.json",
+      "sha256": "a6b3d941c26ee86dbfb734b4c541917b3f3655459ec138855a7bb653dc78982d",
+      "public_sha256": "a6b3d941c26ee86dbfb734b4c541917b3f3655459ec138855a7bb653dc78982d",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/content-creation-system/operations/performance-snapshot.schema.json",
+      "sha256": "ed795d13ec646956bdc99eee18e7893753d7c55e92e549e707bf5d980e81e936",
+      "public_sha256": "ed795d13ec646956bdc99eee18e7893753d7c55e92e549e707bf5d980e81e936",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/content-creation-system/operations/interaction-event.schema.json",
+      "sha256": "396f3f99ec65449336d82f7363121907af2803d0899fe5c8ba8aa03bf70a032a",
+      "public_sha256": "396f3f99ec65449336d82f7363121907af2803d0899fe5c8ba8aa03bf70a032a",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/content-creation-system/operations/fixtures/interaction-event.json",
+      "sha256": "8271d979c612db26ceb2fcde842fbb85c269ec9d61d9886cfc574ca278b981c5",
+      "public_sha256": "bd5a9e96bf79973dd3616ec1c73a16eb6bfae7ab22a55656f60b30970bb5ee71",
+      "byte_identical": false
+    },
+    {
+      "path": "docs/content-creation-system/operations/lead-event.schema.json",
+      "sha256": "fed0bd7797c9a81cf59176ee3a8a9eb25f28831c41c6b5e51a541dae10a5276a",
+      "public_sha256": "fed0bd7797c9a81cf59176ee3a8a9eb25f28831c41c6b5e51a541dae10a5276a",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/content-creation-system/operations/fixtures/lead-event.json",
+      "sha256": "8563c03f173c2580cab6690bcc2ee2eadeb9f418ffa98924dbb55219ca624946",
+      "public_sha256": "da318c07c7f701a35840dbca4b008e473e3d767109223024b5582e29a0de6d8d",
+      "byte_identical": false
+    },
+    {
+      "path": "docs/content-creation-system/operations/experiment-run.schema.json",
+      "sha256": "a3898fe2be1d6eddd59ec67bcf1ac6ed04e0750382279d156cf2cdb1ec7407c7",
+      "public_sha256": "a3898fe2be1d6eddd59ec67bcf1ac6ed04e0750382279d156cf2cdb1ec7407c7",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/content-creation-system/operations/fixtures/experiment-run.json",
+      "sha256": "e85ecc64ca6a7bc6a9c36f2d84336d6477a3b546f4ccf7fb02bc80265bb8e97f",
+      "public_sha256": "705035e285e5cd16b26f32f7512b1f0b4f31df8e826572ffced71b94b18ee4b7",
+      "byte_identical": false
+    },
+    {
+      "path": "docs/content-creation-system/operations/resource-ledger-event.schema.json",
+      "sha256": "1d717926f7c5a069b173558344480ab39271b995e8263b9c233649544206b943",
+      "public_sha256": "1d717926f7c5a069b173558344480ab39271b995e8263b9c233649544206b943",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/content-creation-system/operations/fixtures/resource-ledger-event.json",
+      "sha256": "3f83fa63bbf989aa7ae767b921dc1a439bd41eea6127009813a725e48a2c99e0",
+      "public_sha256": "36ad78d0ec32da1c6cd314d194152157029ff322a75dde13451f7f60fdc3ac3d",
+      "byte_identical": false
+    },
+    {
+      "path": "docs/content-creation-system/operations/revenue-attribution-event.schema.json",
+      "sha256": "72686be49db2b5c26830975afc7e5abb18ef2a395e1eb0a78d7360c6a8bed83f",
+      "public_sha256": "72686be49db2b5c26830975afc7e5abb18ef2a395e1eb0a78d7360c6a8bed83f",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/content-creation-system/operations/fixtures/revenue-attribution-event.json",
+      "sha256": "a01157d4f170e7330861e051e700ceea41c1b410511f9939613b992a8a387429",
+      "public_sha256": "91041bb0b1a7cef1b2f8f4dc424e4803227b27d9b5c0952fed238417f2b38f74",
+      "byte_identical": false
+    },
+    {
+      "path": "docs/content-creation-system/operations/account-continuity-plan.schema.json",
+      "sha256": "5b5375c90fbcf6caef5476ad0c08595a7cfdfe33fab13e812b52258b3d7051e7",
+      "public_sha256": "5b5375c90fbcf6caef5476ad0c08595a7cfdfe33fab13e812b52258b3d7051e7",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/content-creation-system/operations/fixtures/account-continuity-plan.json",
+      "sha256": "196177c69641a705425d1093773c39e662ce5395f26b8c464d66773215a12eae",
+      "public_sha256": "99560813ed9045b0b2e2f91233e8296d1bb1723515cb72b3478e4c6a628746a7",
+      "byte_identical": false
+    },
+    {
+      "path": "docs/content-creation-system/operations/account-security-event.schema.json",
+      "sha256": "4960feb1e4ed7a5ff8087adf1fdc324f1e7f1a0dc55f8c3d9342b22763c1c0b5",
+      "public_sha256": "4960feb1e4ed7a5ff8087adf1fdc324f1e7f1a0dc55f8c3d9342b22763c1c0b5",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/content-creation-system/operations/fixtures/account-security-event.json",
+      "sha256": "a6c03e681c8bd5d8712686276bd06fed3ae341d4539e05234e02680c8d726daa",
+      "public_sha256": "34ea400e2d3aef957aa9ad16840546941c77cd71a588de83a07deb2a2c993eff",
+      "byte_identical": false
+    },
+    {
+      "path": "docs/content-creation-system/operations/operating-review.schema.json",
+      "sha256": "2aebda215d7e562a8fcc215f898395ade016be604e80d07f2f6d0455b37fd0d7",
+      "public_sha256": "2aebda215d7e562a8fcc215f898395ade016be604e80d07f2f6d0455b37fd0d7",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/content-creation-system/operations/fixtures/operating-review.json",
+      "sha256": "a48502f8a056b79970097d138baaa066944006406886a6b7d5c1195278864634",
+      "public_sha256": "926b0ac97dad6dcef02ee1bcccef1f8d44beacd9570bfc0464b08ff02a0d847b",
+      "byte_identical": false
+    },
+    {
+      "path": "docs/content-creation-system/diagnostics/diagnostic-run.schema.json",
+      "sha256": "a84d52f2cdc4a2aa4d75ba45a42a8c850467ab0363db2cc090eda305206d2276",
+      "public_sha256": "a84d52f2cdc4a2aa4d75ba45a42a8c850467ab0363db2cc090eda305206d2276",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/content-creation-system/diagnostics/fixtures/diagnostic-run.json",
+      "sha256": "d5372a897350c2d8bf8abee15ec54b3709259f50d57d54e3ca7ba29776ab3639",
+      "public_sha256": "9d60c44db9e59911ac01151b6cd429ba9b21f393836978d660c6e1465a7e381e",
+      "byte_identical": false
+    }
+  ],
+  "fixture_scope": "synthetic-only; no real observations or human approvals",
+  "historical_p0_fixtures_distributed": false,
+  "operating_schema_count_byte_identical": 14,
+  "validator_and_original_tests_byte_identical": true,
+  "adaptations": [
+    "Atomic manifest is rebound using the existing canonical hash helper, including its trailing newline",
+    "Atomic schema informational acting_tool_model changed from historical actor const to nonempty string; no authority or component constraint changed",
+    "14 operating schema bytes, shared validator and original negative tests are unchanged",
+    "Four historical P0 fixtures excluded; replaced with explicitly synthetic Echo Garden records",
+    "Ten source synthetic fixtures have independent public scenario labels/dates; enum states are simulations only"
+  ]
+}

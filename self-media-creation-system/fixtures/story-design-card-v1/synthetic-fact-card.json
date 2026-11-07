@@ -1,0 +1,11 @@
+{
+  "schema_version": "synthetic-fact-card.v1",
+  "synthetic_only": true,
+  "facts": [
+    {"fact_id": "fact-01", "text": "A fictional household asks about adding coverage but cannot list existing policies."},
+    {"fact_id": "fact-02", "text": "The fictional documents are scattered across family members and devices."},
+    {"fact_id": "fact-03", "text": "The fictional household pauses product comparison and chooses to inventory first."},
+    {"fact_id": "fact-04", "text": "The fictional inventory produces a reviewable list."},
+    {"fact_id": "fact-05", "text": "No product suitability or purchase conclusion is established."}
+  ]
+}

@@ -1,0 +1,273 @@
+{
+  "schema_version": "0.2",
+  "updated_at": "2026-08-26T10:20:49+08:00",
+  "rule": "format adapter first platform overlay second",
+  "overlays": [
+    {
+      "id": "wechat-moments@0.2",
+      "role": "relationship-touch",
+      "formats": [
+        "moments-short-text"
+      ],
+      "adapt": [
+        "no-title-required",
+        "low-to-medium-density",
+        "real-life-trigger",
+        "no-standard-cta"
+      ],
+      "feedback": [
+        "weak-partial-visible-signals",
+        "no-exposure-data",
+        "no_signal-is-neutral"
+      ],
+      "source_status": "private-manual-input-only-no-automatic-sampling"
+    },
+    {
+      "id": "wechat-groups-wecom@0.2",
+      "role": "private-service-continuation",
+      "formats": [
+        "moments-short-text",
+        "graphic-note",
+        "longform-article"
+      ],
+      "adapt": [
+        "conversation-context-required",
+        "service-only-by-default",
+        "no-mass-message",
+        "no-public-metric-assumption"
+      ],
+      "feedback": [
+        "explicit-reply-or-service-action-only",
+        "silence-is-no_signal"
+      ],
+      "source_status": "private-manual-input-only-no-account-or-chat-read-authority"
+    },
+    {
+      "id": "xiaohongshu@0.2",
+      "role": "search-discovery-and-save",
+      "formats": [
+        "graphic-note",
+        "short-video-narration",
+        "demo-video",
+        "interview-video"
+      ],
+      "adapt": [
+        "specific-searchable-problem",
+        "cover-does-one-job",
+        "caption-adds-context"
+      ],
+      "volatile_checks": [
+        "publishing-specs",
+        "community-rules",
+        "commercial-disclosure-rules"
+      ],
+      "source_status": "official-entry-full-text-partly-login-gated"
+    },
+    {
+      "id": "wechat-video@0.2",
+      "role": "trusted-distribution",
+      "formats": [
+        "short-video-narration",
+        "interview-video",
+        "demo-video",
+        "live"
+      ],
+      "adapt": [
+        "speaker-identity-clear",
+        "captions",
+        "one-main-message",
+        "forwarded-viewer-context"
+      ],
+      "volatile_checks": [
+        "file-specs",
+        "live-and-health-rules"
+      ],
+      "source_status": "manual-share-url-plus-v16-download-flow-not-platform-wide-auto-sampling",
+      "acquisition_plan_ref": "docs/public-owner-boundaries.md",
+      "runtime_evidence": "synthetic-flow-verified-real-mediago-download-user-validation-pending"
+    },
+    {
+      "id": "douyin@0.2",
+      "role": "short-expression-and-opening-test",
+      "formats": [
+        "short-video-narration",
+        "demo-video",
+        "live"
+      ],
+      "adapt": [
+        "immediate-context",
+        "concise-delivery",
+        "visible-proof-or-scene",
+        "caption-key-meaning"
+      ],
+      "volatile_checks": [
+        "creator-convention",
+        "health-finance-rules",
+        "publishing-specs"
+      ],
+      "source_status": "official-entry-dynamic-text-not-relied-on"
+    },
+    {
+      "id": "bilibili@0.2",
+      "role": "deep-professional-trust-and-series",
+      "formats": [
+        "long-video",
+        "demo-video",
+        "interview-video"
+      ],
+      "adapt": [
+        "title-cover-content-alignment",
+        "chapters",
+        "source-and-rights-notes",
+        "original-or-reprint-status-correct"
+      ],
+      "quality": [
+        "truthfulness",
+        "originality",
+        "non-misleading",
+        "subtitles",
+        "retention-review"
+      ],
+      "official_basis": [
+        "community-convention",
+        "submission-rules"
+      ]
+    },
+    {
+      "id": "wechat-article@0.2",
+      "role": "complete-explanation-and-reference",
+      "formats": [
+        "longform-article"
+      ],
+      "adapt": [
+        "descriptive-title",
+        "section-navigation",
+        "sources",
+        "shareable-summary",
+        "actual-images-not-placeholders"
+      ],
+      "volatile_checks": [
+        "editor-and-media-specs",
+        "content-and-advertising-rules"
+      ],
+      "source_status": "wcf-direct-url-body-and-images;account-search-requires-approved-local-official-session"
+    },
+    {
+      "id": "zhihu@0.2",
+      "role": "search-long-tail-and-professional-q-and-a",
+      "formats": [
+        "longform-article",
+        "graphic-note"
+      ],
+      "adapt": [
+        "answer-question-first",
+        "separate-fact-from-opinion",
+        "show-conditions-and-counterexamples",
+        "preserve-source-links"
+      ],
+      "volatile_checks": [
+        "publishing-specs",
+        "commercial-disclosure-rules"
+      ],
+      "source_status": "general-web-search-and-direct-page-fetch-no-native-platform-sampler"
+    },
+    {
+      "id": "kuaishou@0.2",
+      "role": "community-short-video-and-live",
+      "formats": [
+        "short-video-narration",
+        "demo-video",
+        "live"
+      ],
+      "adapt": [
+        "plain-language",
+        "visible-real-scene",
+        "one-main-message",
+        "captions"
+      ],
+      "volatile_checks": [
+        "creator-rules",
+        "finance-health-rules",
+        "publishing-specs"
+      ],
+      "source_status": "output-overlay-only-sampling-and-original-media-adapter-not-verified"
+    },
+    {
+      "id": "toutiao@0.2",
+      "role": "broad-information-distribution-and-search",
+      "formats": [
+        "longform-article",
+        "graphic-note",
+        "short-video-narration"
+      ],
+      "adapt": [
+        "descriptive-title",
+        "lead-with-answer",
+        "sectioned-explanation",
+        "source-links"
+      ],
+      "volatile_checks": [
+        "creator-rules",
+        "finance-health-rules",
+        "publishing-specs"
+      ],
+      "source_status": "general-web-discovery-best-effort-no-native-platform-sampler"
+    },
+    {
+      "id": "weibo@0.2",
+      "role": "public-topic-commentary-and-timely-distribution",
+      "formats": [
+        "moments-short-text",
+        "graphic-note",
+        "short-video-narration"
+      ],
+      "adapt": [
+        "context-in-first-screen",
+        "source-link-or-evidence-reference",
+        "thread-when-needed",
+        "no-unverified-hot-take"
+      ],
+      "volatile_checks": [
+        "topic-rules",
+        "commercial-disclosure-rules",
+        "publishing-specs"
+      ],
+      "source_status": "general-web-discovery-best-effort-native-sampling-not-verified"
+    },
+    {
+      "id": "youtube@0.2",
+      "role": "overseas-and-hong-kong-deep-video",
+      "formats": [
+        "short-video-narration",
+        "demo-video",
+        "interview-video",
+        "long-video",
+        "live"
+      ],
+      "adapt": [
+        "title-thumbnail-opening-alignment",
+        "chapters",
+        "captions-or-transcript",
+        "source-and-rights-notes"
+      ],
+      "quality": [
+        "truthfulness",
+        "retention-review",
+        "originality",
+        "rights"
+      ],
+      "volatile_checks": [
+        "publishing-specs",
+        "finance-health-rules"
+      ],
+      "source_status": "agent-reach-public-search-metadata-subtitles-and-transcript;full-video-download-not-default"
+    }
+  ],
+  "prohibited_assumptions": [
+    "fixed-recommendation-weights",
+    "fixed-traffic-pools",
+    "one-best-posting-time",
+    "one-format-fits-all-platforms",
+    "likes-equal-business-value"
+  ]
+}

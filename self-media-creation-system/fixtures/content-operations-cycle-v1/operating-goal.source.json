@@ -1,0 +1,64 @@
+{
+  "schema_version": "0.1",
+  "data_classification": "synthetic-only",
+  "goal_id": "goal_01ARZ3NDEKTSV4RRFFQ69G5FBC",
+  "title": "验证完全虚构内容的人工发布与复盘闭环",
+  "owner_ref": "synthetic-fixture",
+  "account_ids": ["acct_1RNQ220TWEF0K9RGMTYS1B47WB"],
+  "period": {
+    "start": "2026-08-01T00:00:00+08:00",
+    "end": "2026-08-31T23:59:59+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "primary_objective": {
+    "objective_type": "portfolio-learning",
+    "statement": "确认一个完全虚构问题可被人工记录为发布、观察、互动、人工线索审核和六层复盘。",
+    "audience": "自动化合同测试",
+    "measurement_scope": "mixed-but-separated"
+  },
+  "success_criteria": [
+    {
+      "criterion_id": "criterion_complete-cycle",
+      "indicator": "同一 publication 具有 early、d7、互动和复盘引用",
+      "comparison": "observed",
+      "target_value": true,
+      "unit": "evidence-chain",
+      "evidence_requirement": "只接受同一追加式 store 内可解析的去标识化对象。"
+    }
+  ],
+  "stop_conditions": [
+    {
+      "condition": "出现隐私字段、未核验事实或任何自动发布要求",
+      "action": "pause",
+      "human_confirmation_required": true
+    }
+  ],
+  "resource_ceiling": {
+    "human_time_hours": 4,
+    "cash_cost": 0,
+    "currency": "CNY",
+    "automatic_spend_authorized": false
+  },
+  "evidence_refs": [
+    {
+      "ref": "fixture://content-operations-cycle/operating-goal",
+      "evidence_status": "local-fact",
+      "note": "完全虚构、仅离线回归。"
+    }
+  ],
+  "status": "active",
+  "review": {
+    "human_confirmed": true,
+    "reviewer_ref": "synthetic-reviewer",
+    "reviewed_at": "2026-08-01T00:00:00+08:00",
+    "receipt_ref": "fixture://content-operations-cycle/goal-activation-receipt"
+  },
+  "authority": {
+    "execution_authorized": false,
+    "publication_authority": "never",
+    "automatic_resource_reallocation": false,
+    "automatic_goal_status_change": false
+  },
+  "created_at": "2026-08-01T00:00:00+08:00",
+  "updated_at": "2026-08-01T00:00:00+08:00"
+}

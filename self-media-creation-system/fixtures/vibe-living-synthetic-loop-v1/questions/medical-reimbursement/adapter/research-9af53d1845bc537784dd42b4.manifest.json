@@ -1,0 +1,175 @@
+{
+  "adapter": "research-output-to-content",
+  "adapter_version": "0.2.0",
+  "artifacts": [
+    {
+      "path": "research-9af53d1845bc537784dd42b4.article.html",
+      "sha256": "450631bce542642eaa9bd8507f6cfbc58b835197c3aac9da6a50e67ff80413ea"
+    },
+    {
+      "path": "research-9af53d1845bc537784dd42b4.article.md",
+      "sha256": "f5b412068a4035862d0edd5ebee3c172556dd71853d47bf38c7334e3661e582e"
+    },
+    {
+      "path": "research-9af53d1845bc537784dd42b4.content-item.json",
+      "sha256": "c575aefd9ed73d6c7305a4d2d2349e951872260f5bb638fac9da2f68a010e85a"
+    },
+    {
+      "path": "research-9af53d1845bc537784dd42b4.content-video-brief.json",
+      "sha256": "d10714599c06af6c0834bc0969b85fd0713a0b9fefc0bce01115cf73e16d59ad"
+    }
+  ],
+  "content_id": "research-9af53d1845bc537784dd42b4",
+  "draft_basis": "verified",
+  "generated_at": "2026-08-05T12:00:00+08:00",
+  "input": {
+    "path": "research-output.v1.json",
+    "schema_id": "https://local.invalid/schemas/research-output.v1.schema.json",
+    "sha256": "56ef83c0ab97b4583a3eb386b1763b57bcd179461c3ef8d377aec83acc57f426"
+  },
+  "mode": "draft_only",
+  "provenance": {
+    "claim_ids": [
+      "claim_synthetic_medical_reimbursement"
+    ],
+    "contradiction_refs": [],
+    "evidence_ids": [
+      "evidence_synthetic_medical_reimbursement"
+    ],
+    "source_ids": [
+      "source_synthetic_medical_reimbursement"
+    ],
+    "status_snapshot": {
+      "claims": [
+        {
+          "claim_id": "claim_synthetic_medical_reimbursement",
+          "claim_status": "open",
+          "evidence_status": "verified",
+          "review_status": "verified"
+        }
+      ],
+      "completeness": {
+        "blocking_gates": [],
+        "coverage": {
+          "candidate_evidence": 0,
+          "claim_count": 1,
+          "claims_with_counter_or_context": 0,
+          "claims_with_evidence": 1,
+          "claims_with_verified_evidence": 1,
+          "claims_with_verified_support_evidence": 1,
+          "draft_exists": false,
+          "gate_audit_passed": false,
+          "human_review_count": 2,
+          "poor_source_evidence": 0,
+          "required_review_queue_count": 0,
+          "review_queue_count": 0,
+          "source_count": 1,
+          "source_types": [
+            "local_fixture"
+          ],
+          "unknown_source_quality": 0
+        },
+        "ready_for_answer": true,
+        "warnings": [
+          "synthetic-only fixture; the frequency count and content do not describe real users or markets"
+        ]
+      },
+      "contradictions": [],
+      "evidence": [
+        {
+          "ai_synthesis": false,
+          "claim_id": "claim_synthetic_medical_reimbursement",
+          "evidence_id": "evidence_synthetic_medical_reimbursement",
+          "evidence_status": "verified",
+          "relation": "supports",
+          "review_status": "reviewed",
+          "source_id": "source_synthetic_medical_reimbursement"
+        }
+      ],
+      "evidence_status": {
+        "counts": {
+          "candidate": 0,
+          "contradictions": 0,
+          "rejected": 0,
+          "verified": 1
+        },
+        "overall": "verified"
+      },
+      "guarded_final_answer": {
+        "blocking_gates": [],
+        "claim_ids": [
+          "claim_synthetic_medical_reimbursement"
+        ],
+        "evidence_ids": [
+          "evidence_synthetic_medical_reimbursement"
+        ],
+        "ready": true,
+        "source_ids": [
+          "source_synthetic_medical_reimbursement"
+        ],
+        "status": "verified",
+        "warnings": [
+          "synthetic-only fixture; the frequency count and content do not describe real users or markets"
+        ]
+      },
+      "media_refs": [],
+      "review_status": {
+        "events": [
+          {
+            "decision": "good",
+            "kind": "source",
+            "reviewed_at": "2026-08-05T12:00:00+08:00",
+            "reviewer": "synthetic-fixture-reviewer",
+            "target_id": "source_synthetic_medical_reimbursement"
+          },
+          {
+            "decision": "verified",
+            "kind": "evidence",
+            "reviewed_at": "2026-08-05T12:00:00+08:00",
+            "reviewer": "synthetic-fixture-reviewer",
+            "target_id": "evidence_synthetic_medical_reimbursement"
+          }
+        ],
+        "human_review_required": false,
+        "overall": "verified"
+      },
+      "sources": [
+        {
+          "freshness": "not_applicable",
+          "hash_status": "verified",
+          "quality": "good",
+          "ref_status": "resolved",
+          "review_status": "reviewed",
+          "source_id": "source_synthetic_medical_reimbursement"
+        }
+      ],
+      "unknowns": [],
+      "visual_leads": []
+    },
+    "unknown_ids": [],
+    "upstream": {
+      "external_api_called": false,
+      "input_files": [
+        {
+          "path": "sources/synthetic-source.md",
+          "sha256": "ebb94ea18bc67395e75e4d912c71fd78048ebee06cb66b3c4f2997485070b766",
+          "status": "present"
+        }
+      ],
+      "model_memory_used_as_evidence": false,
+      "offline_only": true,
+      "source_systems": [
+        "synthetic-fixture-generator"
+      ]
+    }
+  },
+  "quality": {
+    "publication_boundary": "manual-only",
+    "status": "human_review_required",
+    "warnings": [
+      "synthetic-only fixture; the frequency count and content do not describe real users or markets"
+    ]
+  },
+  "research_id": "research_synthetic_medical_reimbursement",
+  "schema_version": "research-content-adapter-manifest.v1"
+}

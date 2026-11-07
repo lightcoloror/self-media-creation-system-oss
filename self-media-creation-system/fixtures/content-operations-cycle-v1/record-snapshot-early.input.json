@@ -1,0 +1,18 @@
+{
+  "schema_version": "content-operations-cycle.snapshot-input.v1",
+  "data_classification": "synthetic-only",
+  "publication_id": "pub_M4SFWHX1HS3T64SWRG3T0WRZKW",
+  "as_of": "2026-08-12T10:00:00+08:00",
+  "captured_at": "2026-08-12T10:10:00+08:00",
+  "window_label": "early",
+  "timezone": "Asia/Shanghai",
+  "metric_dictionary_version": "manual-content-signals.0.1",
+  "source_type": "other",
+  "data_completeness": "complete",
+  "metrics": [
+    {"metric_key": "views", "value": 120, "unit": "count", "dimensions": {"synthetic": true}},
+    {"metric_key": "average_watch_time", "value": 18, "unit": "seconds", "dimensions": {"synthetic": true}},
+    {"metric_key": "saves", "value": 2, "unit": "count", "dimensions": {"synthetic": true}}
+  ],
+  "notes": "Synthetic manual observation; no platform access."
+}

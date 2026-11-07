@@ -1,0 +1,101 @@
+{
+  "schema_version": "1",
+  "source_scope": "synthetic-only",
+  "frequency_unit": "unique_qualified_evidence_group_not_people_or_messages",
+  "raw_occurrence_count_policy": "unknown; all evidence and confirmation enum values in this bundled example are fictional simulations",
+  "candidates": [
+    {
+      "topic_key": "synthetic-information-inventory",
+      "question": "虚构回声花园：怎样整理观察卡？",
+      "historical_priority": "P0",
+      "human_reviewed_repeat_confirmed": true,
+      "raw_occurrence_count": null,
+      "risk_level": "low",
+      "fact_dependency": "low",
+      "personal_experience_status": "not-claimed",
+      "current_product_status": "not-applicable",
+      "evidence_refs": [
+        {
+          "evidence_id": "synthetic-a",
+          "source_type": "workspace-file",
+          "ref": "fixtures/frequency-example/source-a.md",
+          "evidence_status": "verified-synthetic-state",
+          "relationship": "human-reviewed-repeat-confirmation",
+          "independence_group": "invented-group-a",
+          "counts_toward_frequency": true
+        },
+        {
+          "evidence_id": "synthetic-b",
+          "source_type": "workspace-file",
+          "ref": "fixtures/frequency-example/source-b.md",
+          "evidence_status": "verified-synthetic-state",
+          "relationship": "example-source",
+          "independence_group": "invented-group-b",
+          "counts_toward_frequency": true
+        },
+        {
+          "evidence_id": "synthetic-a-mirror",
+          "source_type": "workspace-file",
+          "ref": "fixtures/frequency-example/source-a.md",
+          "evidence_status": "verified-synthetic-state",
+          "relationship": "example-source",
+          "independence_group": "invented-group-a",
+          "counts_toward_frequency": false
+        }
+      ]
+    },
+    {
+      "topic_key": "synthetic-contrast",
+      "question": "虚构回声花园：如何比较两种标签？",
+      "historical_priority": "P1",
+      "human_reviewed_repeat_confirmed": false,
+      "raw_occurrence_count": null,
+      "risk_level": "medium",
+      "fact_dependency": "high",
+      "personal_experience_status": "not-claimed",
+      "current_product_status": "not-applicable",
+      "evidence_refs": [
+        {
+          "evidence_id": "synthetic-c",
+          "source_type": "workspace-file",
+          "ref": "fixtures/frequency-example/source-a.md",
+          "evidence_status": "verified-synthetic-state",
+          "relationship": "example-source",
+          "independence_group": "invented-group-c",
+          "counts_toward_frequency": true
+        },
+        {
+          "evidence_id": "synthetic-ai",
+          "source_type": "ai-draft",
+          "ref": "fixtures/frequency-example/unverified-draft.md",
+          "evidence_status": "unverified",
+          "relationship": "example-source",
+          "independence_group": "invented-draft",
+          "counts_toward_frequency": false
+        }
+      ]
+    },
+    {
+      "topic_key": "synthetic-observation",
+      "question": "虚构回声花园：观察卡如何留白？",
+      "historical_priority": "P1",
+      "human_reviewed_repeat_confirmed": false,
+      "raw_occurrence_count": null,
+      "risk_level": "low",
+      "fact_dependency": "medium",
+      "personal_experience_status": "not-claimed",
+      "current_product_status": "not-applicable",
+      "evidence_refs": [
+        {
+          "evidence_id": "synthetic-d",
+          "source_type": "workspace-file",
+          "ref": "fixtures/frequency-example/source-a.md",
+          "evidence_status": "verified-synthetic-state",
+          "relationship": "example-source",
+          "independence_group": "invented-group-d",
+          "counts_toward_frequency": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/short-video-timing-evidence-input.v1.schema.json",
+  "title": "Hash-bound short-video timing observation input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "measurement_id", "checked_at", "content_id", "stage",
+    "synthetic_only", "structure_route", "script_binding", "timing_profile_binding",
+    "story_design_binding", "media_binding", "measurement_basis", "measured_duration_seconds",
+    "timeline", "continuity_binding", "publication_boundary", "authority"
+  ],
+  "properties": {
+    "schema_version": {"const": "short-video-timing-evidence-input.v1"},
+    "measurement_id": {"type": "string", "pattern": "^timing-measurement-[a-z0-9][a-z0-9-]{5,79}$"},
+    "checked_at": {"type": "string", "format": "date-time"},
+    "content_id": {"type": "string", "minLength": 3, "maxLength": 160},
+    "stage": {"enum": ["prerecording-script", "final-cut"]},
+    "synthetic_only": {"type": "boolean"},
+    "structure_route": {"enum": ["story-arc", "direct-answer"]},
+    "script_binding": {"$ref": "#/$defs/artifact_ref"},
+    "timing_profile_binding": {"$ref": "#/$defs/artifact_ref"},
+    "story_design_binding": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/artifact_ref"}]},
+    "media_binding": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/media_ref"}]},
+    "measurement_basis": {"enum": ["observed-read-aloud-timecode", "final-cut-timed-transcript"]},
+    "measured_duration_seconds": {"type": "number", "exclusiveMinimum": 0, "maximum": 900},
+    "timeline": {
+      "type": "array", "minItems": 2, "maxItems": 120,
+      "items": {"$ref": "#/$defs/timeline_entry"}
+    },
+    "continuity_binding": {"$ref": "#/$defs/continuity_binding"},
+    "publication_boundary": {"const": "manual-only"},
+    "authority": {"const": {"publish_authorized": false, "execution_authorized": false, "external_send_authorized": false}}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"stage": {"const": "prerecording-script"}}, "required": ["stage"]},
+      "then": {
+        "properties": {
+          "measurement_basis": {"const": "observed-read-aloud-timecode"},
+          "media_binding": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"stage": {"const": "final-cut"}}, "required": ["stage"]},
+      "then": {
+        "properties": {
+          "measurement_basis": {"const": "final-cut-timed-transcript"},
+          "media_binding": {"$ref": "#/$defs/media_ref"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"structure_route": {"const": "story-arc"}}, "required": ["structure_route"]},
+      "then": {"properties": {"story_design_binding": {"$ref": "#/$defs/artifact_ref"}}},
+      "else": {"properties": {"story_design_binding": {"type": "null"}}}
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "safe_ref": {"type": "string", "minLength": 1, "maxLength": 500, "pattern": "^(?![A-Za-z]:)(?!/)(?!\\\\)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"},
+    "artifact_ref": {
+      "type": "object", "additionalProperties": false,
+      "required": ["owner", "path", "sha256"],
+      "properties": {
+        "owner": {"enum": ["self-media-creation-system", "content-studio-poc"]},
+        "path": {"$ref": "#/$defs/safe_ref"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "media_ref": {
+      "type": "object", "additionalProperties": false,
+      "required": ["owner", "path", "sha256", "duration_seconds", "media_copy_stored"],
+      "properties": {
+        "owner": {"const": "self-media-creation-system"},
+        "path": {"$ref": "#/$defs/safe_ref"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "duration_seconds": {"type": "number", "exclusiveMinimum": 0, "maximum": 900},
+        "media_copy_stored": {"const": false}
+      }
+    },
+    "timeline_entry": {
+      "type": "object", "additionalProperties": false,
+      "required": ["entry_id", "segment_id", "start_seconds", "end_seconds", "observed_text", "script_anchor", "alignment_status", "review_note", "roles"],
+      "properties": {
+        "entry_id": {"type": "string", "pattern": "^beat-[0-9]{2,3}$"},
+        "segment_id": {"type": "string", "pattern": "^segment-[0-9]{2}$"},
+        "start_seconds": {"type": "number", "minimum": 0, "maximum": 900},
+        "end_seconds": {"type": "number", "exclusiveMinimum": 0, "maximum": 900},
+        "observed_text": {"type": "string", "minLength": 2, "maxLength": 600},
+        "script_anchor": {"type": "string", "minLength": 2, "maxLength": 300},
+        "alignment_status": {"enum": ["exact", "human-reviewed-equivalent"]},
+        "review_note": {"type": ["string", "null"], "maxLength": 400},
+        "roles": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"enum": ["audience-stake", "reason-to-continue", "information-advance", "main-payoff", "continuity-promise"]}
+        }
+      }
+    },
+    "continuity_binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["surface_mode", "timeline_entry_id", "assessment"],
+      "properties": {
+        "surface_mode": {"enum": ["spoken", "caption", "profile-consistency", "not-surfaced-this-item"]},
+        "timeline_entry_id": {"type": ["string", "null"], "pattern": "^beat-[0-9]{2,3}$"},
+        "assessment": {"enum": ["explicitly-delivered", "profile-only-not-spoken", "intentionally-not-surfaced"]}
+      }
+    }
+  }
+}

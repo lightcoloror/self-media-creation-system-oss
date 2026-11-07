@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lightcolor/content-operations/operating-goal.schema.json",
+  "title": "自媒体经营目标对象",
+  "description": "把一个时间周期内唯一的首要经营目标、判断标准、资源上限和人工决策边界固定下来；不自动分配资源、发布内容或判定客户价值。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "data_classification",
+    "goal_id",
+    "title",
+    "owner_ref",
+    "account_ids",
+    "period",
+    "primary_objective",
+    "success_criteria",
+    "stop_conditions",
+    "resource_ceiling",
+    "evidence_refs",
+    "status",
+    "authority",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "data_classification": { "enum": ["synthetic-only", "deidentified-operational"] },
+    "goal_id": { "type": "string", "pattern": "^goal_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "owner_ref": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "account_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "pattern": "^acct_[0-9A-HJKMNP-TV-Z]{26}$" },
+      "uniqueItems": true
+    },
+    "period": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end", "timezone"],
+      "properties": {
+        "start": { "type": "string", "format": "date-time" },
+        "end": { "type": "string", "format": "date-time" },
+        "timezone": { "type": "string", "minLength": 1, "maxLength": 80 }
+      }
+    },
+    "primary_objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objective_type", "statement", "audience", "measurement_scope"],
+      "properties": {
+        "objective_type": {
+          "enum": ["reach", "trust", "education", "qualified-conversation", "portfolio-learning", "operational-health"]
+        },
+        "statement": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "audience": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "measurement_scope": { "enum": ["content-signals", "business-signals", "mixed-but-separated", "operational-evidence"] }
+      }
+    },
+    "success_criteria": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["criterion_id", "indicator", "comparison", "target_value", "unit", "evidence_requirement"],
+        "properties": {
+          "criterion_id": { "type": "string", "pattern": "^criterion_[a-z0-9][a-z0-9-]{0,63}$" },
+          "indicator": { "type": "string", "minLength": 1, "maxLength": 300 },
+          "comparison": { "enum": ["at-least", "at-most", "equals", "observed", "human-judgment"] },
+          "target_value": { "type": ["number", "integer", "boolean", "string", "null"], "maxLength": 300 },
+          "unit": { "type": "string", "minLength": 1, "maxLength": 80 },
+          "evidence_requirement": { "type": "string", "minLength": 1, "maxLength": 500 }
+        }
+      }
+    },
+    "stop_conditions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["condition", "action", "human_confirmation_required"],
+        "properties": {
+          "condition": { "type": "string", "minLength": 1, "maxLength": 500 },
+          "action": { "enum": ["review", "pause", "retire", "reduce-scope"] },
+          "human_confirmation_required": { "const": true }
+        }
+      }
+    },
+    "resource_ceiling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["human_time_hours", "cash_cost", "currency", "automatic_spend_authorized"],
+      "properties": {
+        "human_time_hours": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "cash_cost": { "type": ["number", "null"], "minimum": 0 },
+        "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+        "automatic_spend_authorized": { "const": false }
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ref", "evidence_status"],
+        "properties": {
+          "ref": { "type": "string", "minLength": 1, "maxLength": 1000 },
+          "evidence_status": { "enum": ["user-confirmed", "local-fact", "personal-observation", "official", "candidate", "unverified"] },
+          "note": { "type": "string", "maxLength": 500 }
+        }
+      }
+    },
+    "status": { "enum": ["draft-only", "active", "paused", "completed", "retired"] },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["human_confirmed", "reviewer_ref", "reviewed_at", "receipt_ref"],
+      "properties": {
+        "human_confirmed": { "const": true },
+        "reviewer_ref": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "reviewed_at": { "type": "string", "format": "date-time" },
+        "receipt_ref": { "type": "string", "minLength": 1, "maxLength": 1000 }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["execution_authorized", "publication_authority", "automatic_resource_reallocation", "automatic_goal_status_change"],
+      "properties": {
+        "execution_authorized": { "const": false },
+        "publication_authority": { "const": "never" },
+        "automatic_resource_reallocation": { "const": false },
+        "automatic_goal_status_change": { "const": false }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "enum": ["active", "paused", "completed", "retired"] } }, "required": ["status"] },
+      "then": { "required": ["review"] }
+    }
+  ]
+}

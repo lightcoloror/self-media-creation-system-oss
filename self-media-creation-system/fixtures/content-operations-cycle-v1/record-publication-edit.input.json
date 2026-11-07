@@ -1,0 +1,14 @@
+{
+  "schema_version": "content-operations-cycle.publication-edit-input.v1",
+  "data_classification": "synthetic-only",
+  "publication_id": "pub_M4SFWHX1HS3T64SWRG3T0WRZKW",
+  "source_event_id": "evt_695VG7TNBTD0XWWV2VGB9FWKBK",
+  "occurred_at": "2026-08-10T10:00:00+08:00",
+  "recorded_at": "2026-08-10T10:05:00+08:00",
+  "title": "Synthetic insurance information checklist, corrected",
+  "channel_variant": "synthetic-manual-publication-v2",
+  "freeze_status": "partial",
+  "unavailable_reason": "Synthetic fixture intentionally stores no edited body or media.",
+  "evidence_status": "manual-observation",
+  "reason": "Synthetic manual edit observation."
+}

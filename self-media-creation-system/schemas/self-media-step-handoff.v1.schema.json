@@ -1,0 +1,305 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/self-media-step-handoff.v1.schema.json",
+  "title": "Hash-bound handoff from a routing capsule to one existing owner step",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "handoff_id",
+    "status",
+    "capsule",
+    "request_id",
+    "recipe_id",
+    "step",
+    "tool_contract",
+    "execution_brief",
+    "context",
+    "boundaries",
+    "payload_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "self-media-step-handoff.v1"
+    },
+    "handoff_id": {
+      "type": "string",
+      "pattern": "^handoff-[a-f0-9]{16}$"
+    },
+    "status": {
+      "enum": [
+        "ready_for_existing_owner",
+        "inspection_only"
+      ]
+    },
+    "previous_receipt": {
+      "$ref": "#/$defs/artifact"
+    },
+    "required_reading": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_id",
+          "workspace_relative_path",
+          "sha256",
+          "load_policy"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string"
+          },
+          "workspace_relative_path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "load_policy": {
+            "const": "read_full_before_task; follow_referenced_instruction_routing"
+          }
+        }
+      }
+    },
+    "capsule": {
+      "$ref": "#/$defs/artifact"
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "recipe_id": {
+      "type": "string"
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "step_id",
+        "tool_id",
+        "interface",
+        "context_stage",
+        "input_roles",
+        "output_contract",
+        "stop_on_error",
+        "handoff_required",
+        "output_receipt_required"
+      ],
+      "properties": {
+        "step_id": {
+          "type": "string"
+        },
+        "tool_id": {
+          "type": "string"
+        },
+        "interface": {
+          "enum": [
+            "cli",
+            "agent_task",
+            "human_gate"
+          ]
+        },
+        "context_stage": {
+          "type": "string"
+        },
+        "input_roles": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "output_contract": {
+          "type": "string"
+        },
+        "stop_on_error": {
+          "const": true
+        },
+        "handoff_required": {
+          "const": true
+        },
+        "output_receipt_required": {
+          "const": true
+        }
+      }
+    },
+    "tool_contract": {
+      "type": "object",
+      "required": [
+        "tool_id",
+        "discovery_mode",
+        "execution_authority"
+      ],
+      "properties": {
+        "tool_id": {
+          "type": "string"
+        },
+        "discovery_mode": {
+          "enum": [
+            "registered_owner",
+            "repository_internal",
+            "human_gate"
+          ]
+        },
+        "execution_authority": {
+          "enum": [
+            "existing-owner-boundary",
+            "bounded-local-only",
+            "human-only"
+          ]
+        },
+        "registry_tool_id": {
+          "type": "string"
+        },
+        "registry_entry_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "discovery_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "symbol",
+            "sha256"
+          ],
+          "properties": {
+            "symbol": {
+              "type": "string",
+              "pattern": "^tool-registry://"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          }
+        },
+        "discovery_command": {
+          "type": "string",
+          "pattern": "^python \\.\\./tools/public_toolchain\\.py discover [a-z0-9][a-z0-9-]*$"
+        },
+        "preferred_interfaces": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "command_names": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "consumer_command": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "boundary_summary": {
+          "type": "array",
+          "maxItems": 4,
+          "items": {
+            "type": "string"
+          }
+        },
+        "source_ref": {
+          "$ref": "#/$defs/artifact"
+        }
+      },
+      "additionalProperties": false
+    },
+    "execution_brief": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "instruction",
+        "command",
+        "stop_on_error"
+      ],
+      "properties": {
+        "instruction": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 900
+        },
+        "purpose_context": {
+          "type": "object"
+        },
+        "command": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 500
+        },
+        "stop_on_error": {
+          "const": true
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest",
+        "receipt",
+        "source_roles",
+        "missing_roles",
+        "receipt_required_before_execution"
+      ],
+      "properties": {
+        "manifest": {
+          "$ref": "#/$defs/artifact"
+        },
+        "receipt": {
+          "$ref": "#/$defs/artifact"
+        },
+        "source_roles": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "missing_roles": {
+          "type": "array",
+          "maxItems": 0
+        },
+        "receipt_required_before_execution": {
+          "const": true
+        }
+      }
+    },
+    "boundaries": {
+      "type": "object"
+    },
+    "payload_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(?![A-Za-z]:[\\\\/])(?!/)(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}

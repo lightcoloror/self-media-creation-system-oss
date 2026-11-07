@@ -1,0 +1,40 @@
+{
+  "schema_version": "content-operations-cycle.revenue-input.v1",
+  "data_classification": "synthetic-only",
+  "artifact": {
+    "schema_version": "0.1",
+    "data_classification": "synthetic-only",
+    "revenue_event_id": "rev_039PT6M02YFA0WE7PSW17NC6C6",
+    "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+    "occurred_at": "2026-08-12T13:00:00+08:00",
+    "amount": {"value": null, "currency": "CNY", "disclosure": "withheld"},
+    "attribution_type": "direct",
+    "attribution_model": "manual-evidence",
+    "publication_ids": ["pub_M4SFWHX1HS3T64SWRG3T0WRZKW"],
+    "lead_event_ids": ["lead_KAK2BNN9GGS2NEZAEGS0HGT4KH"],
+    "evidence_refs": ["synthetic:business-outcome:001"],
+    "review": {
+      "human_confirmed": true,
+      "reviewer_ref": "synthetic-revenue-reviewer",
+      "reviewed_at": "2026-08-12T14:00:00+08:00"
+    },
+    "causal_claim": false,
+    "privacy": {
+      "deidentified": true,
+      "customer_identity_included": false,
+      "payment_details_included": false
+    },
+    "authority": {
+      "execution_authorized": false,
+      "crm_write_performed": false,
+      "content_metrics_used_as_proof": false
+    }
+  },
+  "decision_review": {
+    "reviewer_ref": "synthetic-revenue-reviewer",
+    "reviewed_at": "2026-08-12T14:00:00+08:00",
+    "receipt_ref": "fixtures/content-operations-cycle-v1/revenue-review-confirm.credential.json",
+    "receipt_sha256": "8dcb06e2631f17b63b6503eedcf39fe32c4f60d2021c24bed06ed555df09207d",
+    "scope_sha256": "36bb05304a15f2d38d577d2fe019d754db2ebfe2eadf54a32c48960c21c9dfbe"
+  }
+}

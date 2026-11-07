@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/self-media-task-capsule.v1.schema.json",
+  "title": "Compact execution capsule for a constrained Agent",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "capsule_id",
+    "request_id",
+    "status",
+    "recipe_id",
+    "canonical_route",
+    "required_inputs",
+    "provided_inputs",
+    "missing_inputs",
+    "context_loading",
+    "steps",
+    "quality_gates",
+    "outputs",
+    "stop_conditions",
+    "boundaries",
+    "error_recovery",
+    "provenance",
+    "payload_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "self-media-task-capsule.v1"},
+    "capsule_id": {"type": "string", "pattern": "^capsule-[a-f0-9]{16}$"},
+    "request_id": {"type": "string"},
+    "status": {"enum": ["ready", "blocked_missing_inputs"]},
+    "recipe_id": {"type": "string"},
+    "canonical_route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_set_id", "contract_set_version", "load_policy", "legacy_fallback"],
+      "properties": {
+        "contract_set_id": {"const": "registered-content-routing"},
+        "contract_set_version": {"const": "1.0.0"},
+        "load_policy": {"const": "whole-contract-set-only"},
+        "legacy_fallback": {"const": false}
+      }
+    },
+    "required_inputs": {"$ref": "#/$defs/stringSet"},
+    "provided_inputs": {"$ref": "#/$defs/stringSet"},
+    "missing_inputs": {"$ref": "#/$defs/stringSet"},
+    "context_loading": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["always_load", "on_demand", "never_inline", "capsule_max_bytes", "tool_receipt_max_bytes"],
+      "properties": {
+        "always_load": {"$ref": "#/$defs/stringSet"},
+        "on_demand": {"$ref": "#/$defs/stringSet"},
+        "never_inline": {"$ref": "#/$defs/stringSet"},
+        "capsule_max_bytes": {"type": "integer"},
+        "tool_receipt_max_bytes": {"type": "integer"}
+      }
+    },
+    "steps": {"type": "array", "minItems": 2, "maxItems": 8, "items": {"$ref": "#/$defs/step"}},
+    "quality_gates": {"$ref": "#/$defs/stringSet"},
+    "outputs": {"$ref": "#/$defs/stringSet"},
+    "stop_conditions": {"$ref": "#/$defs/stringSet"},
+    "boundaries": {"$ref": "#/$defs/boundaries"},
+    "error_recovery": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/recovery"}
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["request_sha256", "recipe_catalog_version", "synthetic_only", "input_refs"],
+      "properties": {
+        "request_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "recipe_catalog_version": {"type": "string"},
+        "synthetic_only": {"type": "boolean"},
+        "author_identity": {"$ref": "#/$defs/authorIdentity"},
+        "input_refs": {"type": "array", "items": {"$ref": "#/$defs/artifactRef"}}
+      }
+    },
+    "payload_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"recipe_id": {"enum": ["moments-short-post", "xhs-evidence-graphic", "case-video-candidate"]}}},
+      "then": {"properties": {"provenance": {"required": ["author_identity"]}}}
+    }
+  ],
+  "$defs": {
+    "authorIdentity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["account_id", "genre"],
+      "properties": {
+        "account_id": {"type": "string", "minLength": 1, "maxLength": 200, "pattern": "\\S"},
+        "genre": {"enum": ["moments", "graphic_note", "spoken_script", "interview_guide"]}
+      }
+    },
+    "stringSet": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["publication", "external_send", "customer_contact", "crm_write", "knowledge_base_write", "provider_call"],
+      "properties": {
+        "publication": {"const": "manual-only"},
+        "external_send": {"const": "not-authorized"},
+        "customer_contact": {"const": "not-authorized"},
+        "crm_write": {"const": "not-authorized"},
+        "knowledge_base_write": {"const": "not-authorized"},
+        "provider_call": {"const": "not-authorized-by-this-entry"}
+      }
+    },
+    "recovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recovery_action", "automatic_retry"],
+      "properties": {
+        "recovery_action": {"type": "string", "minLength": 1, "maxLength": 400},
+        "automatic_retry": {"const": false}
+      }
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["step_id", "interface", "tool_id", "instruction", "input_roles", "output_contract", "stop_on_error"],
+      "properties": {
+        "step_id": {"type": "string", "pattern": "^[a-z][a-z0-9._-]{2,79}$"},
+        "interface": {"enum": ["cli", "agent_task", "human_gate"]},
+        "tool_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{1,79}$"},
+        "instruction": {"type": "string", "minLength": 1, "maxLength": 500},
+        "command": {"type": "string", "minLength": 1, "maxLength": 500},
+        "input_roles": {"$ref": "#/$defs/stringSet"},
+        "output_contract": {"type": "string", "minLength": 1},
+        "stop_on_error": {"const": true}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"interface": {"const": "cli"}}},
+          "then": {"required": ["command"]},
+          "else": {"not": {"required": ["command"]}}
+        }
+      ]
+    },
+    "artifactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "path", "sha256"],
+      "properties": {
+        "role": {"type": "string", "pattern": "^[a-z][a-z0-9._-]{2,79}$"},
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?![A-Za-z]:[\\\\/])(?!/)(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$"
+        },
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    }
+  }
+}

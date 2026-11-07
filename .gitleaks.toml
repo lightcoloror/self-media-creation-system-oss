@@ -1,0 +1,58 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Deterministic synthetic interaction id used for local event idempotency"
+condition = "AND"
+regexTarget = "line"
+paths = ['''(?:^|/)self\-media\-creation\-system/fixtures/content\-operations\-cycle\-v1/record\-interaction\-business\.input\.json$''']
+regexes = ['''^\s*"interaction_key":\ "synthetic\-continued\-consultation\-001",\s*$''']
+
+[[allowlists]]
+description = "Deterministic synthetic interaction id used for local event idempotency"
+condition = "AND"
+regexTarget = "line"
+paths = ['''(?:^|/)self\-media\-creation\-system/fixtures/content\-operations\-cycle\-v1/record\-interaction\-no\-signal\.input\.json$''']
+regexes = ['''^\s*"interaction_key":\ "synthetic\-no\-signal\-001",\s*$''']
+
+[[allowlists]]
+description = "Exact SHA-256 of an inert synthetic review fixture, not an API credential"
+condition = "AND"
+regexTarget = "line"
+paths = ['''(?:^|/)self\-media\-creation\-system/fixtures/content\-packaging\-review\-v1/deidentified\-operational\.input\.json$''']
+regexes = ['''^\s*"credential_sha256":\ "03c266bf19b3e16cd83aecc0f92dc14404fb50e7d13ecb17ef6b72d06f848606",\s*$''']
+
+[[allowlists]]
+description = "Exact SHA-256 of an inert synthetic review fixture, not an API credential"
+condition = "AND"
+regexTarget = "line"
+paths = ['''(?:^|/)self\-media\-creation\-system/fixtures/content\-packaging\-review\-v1/deidentified\-operational\.input\.json$''']
+regexes = ['''^\s*"credential_sha256":\ "09ecd0e6c7a52b6c3fb8d6dedd1eeef1ce755ae96b4c463202ed5c5891c52343",\s*$''']
+
+[[allowlists]]
+description = "Exact SHA-256 of an inert synthetic review fixture, not an API credential"
+condition = "AND"
+regexTarget = "line"
+paths = ['''(?:^|/)self\-media\-creation\-system/fixtures/content\-packaging\-review\-v1/deidentified\-operational\.expected\.json$''']
+regexes = ['''^\s*"credential_sha256":\ "03c266bf19b3e16cd83aecc0f92dc14404fb50e7d13ecb17ef6b72d06f848606",\s*$''']
+
+[[allowlists]]
+description = "Exact SHA-256 of an inert synthetic review fixture, not an API credential"
+condition = "AND"
+regexTarget = "line"
+paths = ['''(?:^|/)self\-media\-creation\-system/fixtures/content\-packaging\-review\-v1/deidentified\-operational\.expected\.json$''']
+regexes = ['''^\s*"credential_sha256":\ "09ecd0e6c7a52b6c3fb8d6dedd1eeef1ce755ae96b4c463202ed5c5891c52343",\s*$''']
+
+[[allowlists]]
+description = "Exact SHA-256 of an inert synthetic review fixture, not an API credential"
+condition = "AND"
+regexTarget = "line"
+paths = ['''(?:^|/)self\-media\-creation\-system/fixtures/content\-packaging\-review\-v1/synthetic\.input\.json$''']
+regexes = ['''^\s*"credential_sha256":\ "650a768b959ec6ef039aeb42a13bfa26a1b8ec6e7850e24774316b4c88ac8c1f",\s*$''']
+
+[[allowlists]]
+description = "Exact SHA-256 of an inert synthetic review fixture, not an API credential"
+condition = "AND"
+regexTarget = "line"
+paths = ['''(?:^|/)self\-media\-creation\-system/fixtures/content\-packaging\-review\-v1/synthetic\.expected\.json$''']
+regexes = ['''^\s*"credential_sha256":\ "650a768b959ec6ef039aeb42a13bfa26a1b8ec6e7850e24774316b4c88ac8c1f",\s*$''']

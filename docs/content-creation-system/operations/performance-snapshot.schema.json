@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lightcolor/content-operations/performance-snapshot.schema.json",
+  "title": "自媒体发布表现快照",
+  "description": "记录一个发布实例在明确时间点、观察窗口和指标字典下的原始指标，不计算平台推荐权重。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "snapshot_id",
+    "publication_id",
+    "as_of",
+    "captured_at",
+    "window_label",
+    "timezone",
+    "metric_dictionary_version",
+    "source_type",
+    "data_completeness",
+    "metrics"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "snapshot_id": { "type": "string", "pattern": "^snap_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "publication_id": { "type": "string", "pattern": "^pub_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "as_of": { "type": "string", "format": "date-time" },
+    "captured_at": { "type": "string", "format": "date-time" },
+    "window_label": { "enum": ["early", "d7", "d30", "ad-hoc"] },
+    "timezone": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "metric_dictionary_version": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "source_type": { "enum": ["manual-platform-backend", "platform-export", "official-api", "owned-analytics", "other"] },
+    "data_completeness": { "enum": ["complete", "partial", "unavailable"] },
+    "missing_reasons": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "maxLength": 500 }
+    },
+    "metrics": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/metricObservation" }
+    },
+    "notes": { "type": "string", "maxLength": 2000 }
+  },
+  "$defs": {
+    "metricObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["metric_key", "value", "unit"],
+      "properties": {
+        "metric_key": { "type": "string", "pattern": "^[a-z][a-z0-9._-]{1,79}$" },
+        "value": { "type": ["number", "null"] },
+        "unit": { "enum": ["count", "ratio", "percent", "seconds", "currency", "other"] },
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": { "type": ["string", "number", "boolean", "null"] }
+        },
+        "unavailable_reason": { "type": ["string", "null"], "maxLength": 500 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "value": { "type": "null" } }, "required": ["value"] },
+          "then": { "required": ["unavailable_reason"] }
+        }
+      ]
+    }
+  }
+}

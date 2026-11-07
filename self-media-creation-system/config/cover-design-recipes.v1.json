@@ -1,0 +1,19 @@
+{
+  "schema": "self-media.cover-design-recipes.v1",
+  "version": "2026-09-26",
+  "source_notes": {
+    "canvas-design":"https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/canvas-design/SKILL.md",
+    "other_method_ids":"config/cover-methods.v1.json",
+    "boundary":"设计机制参考，不表示逐字执行源 Skill，也不表示 Polotno/Penpot 已接入；配方是本地实现。"
+  },
+  "recipes": [
+    {"id":"photo-caption","name":"真实照片与留白","route":"photo-editorial","kinds":["photo"],"min_assets":1,"max_assets":1,"sources":["charlie-thumbnail","woop-thumbnail"],"mechanism":"单张真实画面承担主视觉，标题独立留白，不改画人物。"},
+    {"id":"photo-doodle","name":"照片与矢量标记","route":"photo-editorial","kinds":["photo"],"min_assets":1,"max_assets":1,"sources":["canvas-design"],"mechanism":"真实照片与可编辑几何线条分层；标记只出现在留白区。"},
+    {"id":"comparison","name":"真实双图对照","route":"photo-collage","kinds":["photo"],"min_assets":2,"max_assets":2,"sources":["woop-thumbnail"],"mechanism":"同等展示面积配两项标签；必须写明比较依据，不能伪造前后效果。"},
+    {"id":"storyboard","name":"真实两至三格叙事","route":"photo-collage","kinds":["photo"],"min_assets":2,"max_assets":3,"sources":["gbro-cover-design"],"mechanism":"用真实素材顺序与每格说明表达过程；顺序依据必须显式填写。"},
+    {"id":"cutout-type","name":"透明主体与字体层次","route":"cutout-poster","kinds":["reviewed_cutout"],"min_assets":1,"max_assets":1,"sources":["canvas-design"],"mechanism":"已复核透明主体与几何背景叠合；本入口不执行分割模型或下载。"},
+    {"id":"type-symbol","name":"字体与矢量符号","route":"type-led","kinds":[],"min_assets":0,"max_assets":0,"sources":["canvas-design"],"mechanism":"用真实文案、留白与可编辑线形表达概念；不用照片或生图兜底。"},
+    {"id":"evidence-focus","name":"证据或界面主导","route":"evidence-ui","kinds":["evidence"],"min_assets":1,"max_assets":1,"sources":["lucas-case-cover-craft"],"mechanism":"展示已脱敏且有来源的原件；需填写核验焦点，不生成证据。"}
+  ],
+  "boundaries":{"automatic_generation":false,"automatic_download":false,"automatic_upload":false,"automatic_publish":false,"recipe_count_is_not_engine_count":true}
+}

@@ -1,0 +1,56 @@
+{
+  "audience": "需要整理家庭保险资料的虚构读者",
+  "canonical_seed": {
+    "boundary": "这是一份完全虚构的流程验证材料，只用于帮助整理问题，不代表真实产品、真实案例或个案结论。",
+    "opening": "买了保险，真到理赔时，最怕的不是少一张发票，而是前面该确认的事情一直没确认。",
+    "sections": [
+      {
+        "body": "先看保障责任，再核对就医范围、通知要求和材料留存。等治疗结束后只看发票，往往已经太晚了。",
+        "claim_unit_ids": [
+          "claim-unit-01"
+        ],
+        "heading": "先核对四件事"
+      }
+    ],
+    "summary": "理赔准备不能只等治疗结束后看发票，应提前核对责任、就医范围、通知要求和材料留存。",
+    "title": "买了保险，理赔前要先核对什么？"
+  },
+  "claim_units": [
+    {
+      "claim_id": "claim_synthetic_claims_preparation",
+      "evidence_ids": [
+        "evidence_synthetic_claims_preparation"
+      ],
+      "fact_status": "verified_source",
+      "text": "理赔准备应从保障责任、就医范围、通知要求和材料留存四方面核对，不能只在治疗结束后看发票。",
+      "unit_id": "claim-unit-01"
+    }
+  ],
+  "closure_run_id": "smcl-synthetic-claims-001",
+  "content_id": "synthetic-claims-prep-candidate-001",
+  "contract_binding": {
+    "content_item_schema_sha256": "202b827b10c448594a37810fd307831d8410344df8d17f62896a2064f09885ad",
+    "human_voice_rulebook_sha256": "583a89a9e6092d8266cdf864b793b57042293cf21196aa452b88347acc2c7ee3",
+    "human_voice_skill_sha256": "96a626636e3a5909e1380e28c54f5e19b1d90ab720eba0cab9d0d6fa92d8cbc4",
+    "routing_contract_version": "1.9.1",
+    "routing_set_sha256": "1dd1f19ed9ab874da99abce475b4bf60345cfc7dd7ad76fa5f823d9cebcc2390"
+  },
+  "evidence_bundle": {
+    "facade_contract": "evidence-bundle.v1",
+    "native_contract": "research-output.v1",
+    "path": "fixtures/vibe-living-synthetic-loop-v1/questions/claims-preparation/research-output.v1.json",
+    "research_id": "research_synthetic_claims_preparation",
+    "sha256": "07edf3a8e2df82894a980d47fcb35628a5501b69c28479c61a070d241e1a0546"
+  },
+  "fixture_time": "2026-08-27T12:00:00+08:00",
+  "human_voice_attestation": {
+    "author_voice_confirmed": true,
+    "body_sha256": "dc0b09e8322a37d08d0044b873cdc7d05494a5c588364993c12109834dc24479",
+    "mode": "synthetic_fixture_attestation",
+    "read_aloud_completed": true
+  },
+  "requested_final_state": "candidate",
+  "schema_version": "small-model-content-loop-input.v1",
+  "synthetic_only": true,
+  "topic": "买了保险，真到理赔时需要提前准备什么？"
+}

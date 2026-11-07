@@ -1,0 +1,20 @@
+{
+  "account_ids": [
+    "acct_1RNQ220TWEF0K9RGMTYS1B47WB"
+  ],
+  "created_at": "2026-08-18T09:00:00+08:00",
+  "data_classification": "synthetic-only",
+  "period": {
+    "end": "2026-08-17T23:59:59+08:00",
+    "start": "2026-08-10T00:00:00+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "review_type": "weekly",
+  "schema_version": "content-operations-cycle.review-input.v1",
+  "scope": "synthetic-content-operations-cycle",
+  "source_checkpoint": {
+    "journal_chain_sha256": "aa6d44323c76bcc35a94c8c9dbaeac894c2819209c63edb8548e413d8b53f153",
+    "journal_record_count": 11,
+    "tail_record_sha256": "d5605fb96f14243dbee2e77382adce0a35b37d851f6ffe1ee93b595c5f51d146"
+  }
+}

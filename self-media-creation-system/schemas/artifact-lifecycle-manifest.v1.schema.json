@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/artifact-lifecycle-manifest.v1.schema.json",
+  "title": "Non-destructive self-media artifact lifecycle manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "manifest_id", "updated_at", "workspace_ref", "artifacts"],
+  "properties": {
+    "schema_version": {"const": "self-media-artifact-lifecycle-manifest.v1"},
+    "manifest_id": {"$ref": "#/$defs/id"},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "workspace_ref": {"type": "string", "minLength": 1, "maxLength": 200},
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/artifact"}
+    },
+    "deletion_request": {
+      "oneOf": [{"$ref": "#/$defs/deletionRequest"}, {"type": "null"}]
+    }
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,99}$"},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![A-Za-z]:[\\\\/])(?!/)(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_id",
+        "path",
+        "expected_sha256",
+        "status",
+        "locked",
+        "customer_sensitive",
+        "parent_sha256s",
+        "superseded_by"
+      ],
+      "properties": {
+        "artifact_id": {"$ref": "#/$defs/id"},
+        "path": {"$ref": "#/$defs/relativePath"},
+        "expected_sha256": {"$ref": "#/$defs/sha256"},
+        "status": {
+          "enum": [
+            "raw_source",
+            "reviewed_source",
+            "fine_cut",
+            "candidate",
+            "locked_master",
+            "superseded",
+            "rejected",
+            "archival_review",
+            "deletion_approved"
+          ]
+        },
+        "locked": {"type": "boolean"},
+        "customer_sensitive": {"type": "boolean"},
+        "parent_sha256s": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/sha256"}
+        },
+        "superseded_by": {
+          "oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+        }
+      }
+    },
+    "deletionRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "requested_at",
+        "mode",
+        "target_artifact_ids",
+        "user_approved",
+        "approver",
+        "approved_at"
+      ],
+      "properties": {
+        "request_id": {"$ref": "#/$defs/id"},
+        "requested_at": {"type": "string", "format": "date-time"},
+        "mode": {"const": "quarantine_only"},
+        "target_artifact_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/id"}
+        },
+        "user_approved": {"type": "boolean"},
+        "approver": {"type": ["string", "null"], "maxLength": 120},
+        "approved_at": {"type": ["string", "null"], "format": "date-time"}
+      }
+    }
+  }
+}

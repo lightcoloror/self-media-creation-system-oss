@@ -1,0 +1,308 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/context-input-manifest.v1.schema.json",
+  "title": "Self-media context input manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "stage",
+    "budget",
+    "artifacts"
+  ],
+  "properties": {
+    "editorial_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "content_id",
+        "purpose",
+        "audience",
+        "stage_duty",
+        "current_body_artifact_id",
+        "feedback",
+        "feedback_note"
+      ],
+      "properties": {
+        "topic_selection": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["topic", "origin", "origin_source", "adoption", "adoption_basis", "adoption_source"],
+          "properties": {
+            "topic": {"type": "string", "minLength": 1, "maxLength": 500},
+            "origin": {"enum": ["user_assigned", "agent_proposed", "tool_trial", "existing_topic"]},
+            "origin_source": {"$ref": "#/$defs/editorialAnchor"},
+            "adoption": {"enum": ["selected", "candidate", "deferred"]},
+            "adoption_basis": {"type": "string", "minLength": 1, "maxLength": 2000},
+            "adoption_source": {"$ref": "#/$defs/editorialAnchor"},
+            "decision_artifact_id": {"type": "string", "minLength": 3}
+          },
+          "description": "Existing task/editorial decision evidence, never manuscript approval or publication permission."
+        },
+        "version": {
+          "const": 1
+        },
+        "content_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purpose": {
+          "$ref": "#/$defs/editorialAnchor"
+        },
+        "audience": {
+          "$ref": "#/$defs/editorialAnchor"
+        },
+        "stage_duty": {
+          "type": "string",
+          "minLength": 1
+        },
+        "current_body_artifact_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 3
+        },
+        "feedback_note": {
+          "type": "string",
+          "minLength": 1
+        },
+        "consumer_assertions": {
+          "type": "array",
+          "maxItems": 40,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "consumer",
+              "source",
+              "decision",
+              "reason",
+              "schema"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "consumer": {
+                "enum": [
+                  "publication_desk",
+                  "video_review",
+                  "video_delivery",
+                  "covers"
+                ]
+              },
+              "source": {
+                "$ref": "#/$defs/editorialAnchor"
+              },
+              "decision": {
+                "enum": [
+                  "use",
+                  "not_applicable"
+                ]
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              },
+              "schema": {
+                "type": "object",
+                "description": "Offline JSON Schema on actual consumer output; never automatic human/semantic approval"
+              }
+            }
+          }
+        },
+        "feedback": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "artifact_id",
+              "quote",
+              "check_ids"
+            ],
+            "properties": {
+              "artifact_id": {
+                "type": "string",
+                "minLength": 3
+              },
+              "quote": {
+                "type": "string",
+                "minLength": 1
+              },
+              "check_ids": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "enum": [
+                    "C01",
+                    "C02",
+                    "C03",
+                    "C04",
+                    "C05",
+                    "C06",
+                    "C07",
+                    "C08",
+                    "C09"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schema_version": {
+      "const": "self-media-context-input.v1"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 6,
+      "maxLength": 120
+    },
+    "stage": {
+      "enum": [
+        "topic",
+        "research",
+        "fact-check",
+        "draft",
+        "voice-review",
+        "visual",
+        "video",
+        "publication-review",
+        "feedback"
+      ]
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_inline_bytes"
+      ],
+      "properties": {
+        "max_inline_bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 200000
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "artifact_id",
+          "role",
+          "path",
+          "load_mode"
+        ],
+        "properties": {
+          "artifact_id": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 100
+          },
+          "role": {
+            "enum": [
+              "fact_baseline",
+              "approved_script",
+              "user_correction",
+              "privacy_authorization",
+              "medical_insurance_boundary",
+              "source_manifest",
+              "route_contract",
+              "format_adapter",
+              "platform_overlay",
+              "voice_profile",
+              "visual_profile",
+              "working_draft",
+              "execution_receipt",
+              "full_log",
+              "historical_version",
+              "account_ip",
+              "real_event_or_observation",
+              "topic_question",
+              "primary_audience",
+              "research_output",
+              "content_item",
+              "authorization_status",
+              "publication_event",
+              "observation_window",
+              "manual_metrics",
+              "deidentified_business_signal",
+              "previous_snapshot",
+              "decision_sheet",
+              "rough_cut_workspace",
+              "source_media",
+              "change_description",
+              "proxy_review_plan",
+              "proxy_review_receipt",
+              "asr_decision_receipt",
+              "case_video_script",
+              "human_voice_stage_receipt",
+              "candidate_output"
+            ]
+          },
+          "source_role": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9._-]{2,79}$"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 260,
+            "pattern": "^(?![A-Za-z]:)(?![/\\\\])(?!.*(?:^|[/\\\\])\\.\\.(?:[/\\\\]|$)).+$"
+          },
+          "load_mode": {
+            "enum": [
+              "inline",
+              "reference",
+              "on_failure"
+            ]
+          },
+          "expected_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "fetch_condition": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 240
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "editorialAnchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_id",
+        "quote"
+      ],
+      "properties": {
+        "artifact_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

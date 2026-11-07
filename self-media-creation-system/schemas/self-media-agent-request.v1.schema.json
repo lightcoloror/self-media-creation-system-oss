@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/self-media-agent-request.v1.schema.json",
+  "title": "Bounded request for the self-media Agent entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "workflow_goal",
+    "synthetic_only",
+    "available_inputs",
+    "input_refs"
+  ],
+  "properties": {
+    "schema_version": {"const": "self-media-agent-request.v1"},
+    "request_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{5,99}$"},
+    "workflow_goal": {
+      "enum": [
+        "moments_short_post",
+        "xhs_evidence_graphic",
+        "case_video_candidate",
+        "publication_feedback_review",
+        "context_efficient_rework"
+      ]
+    },
+    "synthetic_only": {"type": "boolean"},
+    "entry_binding": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "author_identity": {"$ref": "#/$defs/authorIdentity"},
+    "creation_phase": {"enum": ["production", "prerecording"]},
+    "preparation_kind": {"enum": ["spoken_script", "interview_guide"]},
+    "available_inputs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-z][a-z0-9._-]{2,79}$"}
+    },
+    "input_refs": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/artifactRef"}
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"workflow_goal": {"enum": ["moments_short_post", "xhs_evidence_graphic", "case_video_candidate"]}}},
+      "then": {"required": ["author_identity"]}
+    }
+  ],
+  "$defs": {
+    "authorIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["account_id", "genre"],
+      "properties": {
+        "account_id": {"type": "string", "minLength": 1, "maxLength": 200, "pattern": "\\S"},
+        "genre": {"enum": ["moments", "graphic_note", "spoken_script", "interview_guide"]}
+      }
+    },
+    "artifactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "path", "sha256"],
+      "properties": {
+        "role": {"type": "string", "pattern": "^[a-z][a-z0-9._-]{2,79}$"},
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?![A-Za-z]:[\\\\/])(?!/)(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$"
+        },
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    }
+  }
+}

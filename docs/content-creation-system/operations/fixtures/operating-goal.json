@@ -1,0 +1,66 @@
+{
+  "schema_version": "0.1",
+  "data_classification": "synthetic-only",
+  "goal_id": "goal_01ARZ3NDEKTSV4RRFFQ69G5FBA",
+  "title": "验证虚构花园信息整理内容是否值得形成稳定栏目",
+  "owner_ref": "synthetic-owner",
+  "account_ids": [
+    "acct_01ARZ3NDEKTSV4RRFFQ69G5FAV"
+  ],
+  "period": {
+    "start": "2026-09-29T00:00:00+08:00",
+    "end": "2026-11-28T23:59:59+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "primary_objective": {
+    "objective_type": "portfolio-learning",
+    "statement": "用完全虚构样本验证一个高频问题从内容发布到第七天复盘的记录闭环。",
+    "audience": "需要梳理虚构花园信息的虚构读者",
+    "measurement_scope": "mixed-but-separated"
+  },
+  "success_criteria": [
+    {
+      "criterion_id": "criterion_complete-cycle",
+      "indicator": "具备人工发布、早期快照、第七天快照和六层复盘证据",
+      "comparison": "observed",
+      "target_value": true,
+      "unit": "evidence-chain",
+      "evidence_requirement": "所有引用必须能解析到同一原子合同集中的对象。"
+    }
+  ],
+  "stop_conditions": [
+    {
+      "condition": "出现隐私字段、未经核验事实或任何自动发布要求",
+      "action": "pause",
+      "human_confirmation_required": true
+    }
+  ],
+  "resource_ceiling": {
+    "human_time_hours": 8,
+    "cash_cost": 0,
+    "currency": "CNY",
+    "automatic_spend_authorized": false
+  },
+  "evidence_refs": [
+    {
+      "ref": "synthetic:content-operations-contract-fixtures",
+      "evidence_status": "local-fact",
+      "note": "仅用于合同与闭环回归。"
+    }
+  ],
+  "status": "active",
+  "review": {
+    "human_confirmed": true,
+    "reviewer_ref": "synthetic-reviewer",
+    "reviewed_at": "2026-09-29T00:00:00+08:00",
+    "receipt_ref": "synthetic:goal-activation-receipt"
+  },
+  "authority": {
+    "execution_authorized": false,
+    "publication_authority": "never",
+    "automatic_resource_reallocation": false,
+    "automatic_goal_status_change": false
+  },
+  "created_at": "2026-09-29T00:00:00+08:00",
+  "updated_at": "2026-09-29T00:00:00+08:00"
+}

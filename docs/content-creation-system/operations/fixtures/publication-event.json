@@ -1,0 +1,31 @@
+{
+  "schema_version": "0.1",
+  "event_id": "evt_01ARZ3NDEKTSV4RRFFQ69G5FAZ",
+  "publication_id": "pub_01ARZ3NDEKTSV4RRFFQ69G5FAX",
+  "event_sequence": 1,
+  "content_id": "synthetic-echo-garden-operations-001",
+  "version_id": "ver_01ARZ3NDEKTSV4RRFFQ69G5FB0",
+  "account_id": "acct_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+  "platform": "synthetic-platform",
+  "platform_content_id": null,
+  "canonical_url": null,
+  "event_type": "published",
+  "occurred_at": "2026-10-18T00:00:00+08:00",
+  "recorded_at": "2026-10-18T00:01:00+08:00",
+  "actor_type": "user",
+  "evidence_status": "local-record",
+  "supersedes_event_id": null,
+  "reason": "Synthetic state simulation only; no actual publication or user action.",
+  "frozen_version": {
+    "title": "Synthetic Echo Garden observation card",
+    "channel_variant": "synthetic-platform",
+    "freeze_status": "partial",
+    "body_ref": null,
+    "body_sha256": null,
+    "cover_refs": [],
+    "media_refs": [],
+    "cta": null,
+    "unavailable_reason": "Synthetic example intentionally contains no published body or media.",
+    "frozen_at": "2026-10-18T00:00:00+08:00"
+  }
+}

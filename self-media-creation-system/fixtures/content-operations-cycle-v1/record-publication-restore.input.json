@@ -1,0 +1,10 @@
+{
+  "schema_version": "content-operations-cycle.publication-restore-input.v1",
+  "data_classification": "synthetic-only",
+  "publication_id": "pub_M4SFWHX1HS3T64SWRG3T0WRZKW",
+  "source_event_id": "evt_105EE26Q9G7XSX4HQB32RQP6H3",
+  "occurred_at": "2026-08-10T12:00:00+08:00",
+  "recorded_at": "2026-08-10T12:05:00+08:00",
+  "evidence_status": "manual-observation",
+  "reason": "Synthetic manual restoration observation."
+}

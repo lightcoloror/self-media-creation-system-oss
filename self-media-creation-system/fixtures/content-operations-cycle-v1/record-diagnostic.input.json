@@ -1,0 +1,51 @@
+{
+  "schema_version": "content-operations-cycle.diagnostic-input.v1",
+  "data_classification": "synthetic-only",
+  "artifact": {
+    "schema_version": "0.1",
+    "data_classification": "synthetic-only",
+    "diagnostic_run_id": "diag_T8A0BKHN0D2EHVWNV9PZTAQRKT",
+    "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+    "run_at": "2026-08-18T08:00:00+08:00",
+    "input_window": {
+      "start": "2026-08-10T00:00:00+08:00",
+      "end": "2026-08-17T23:59:59+08:00",
+      "timezone": "Asia/Shanghai"
+    },
+    "publication_ids": ["pub_M4SFWHX1HS3T64SWRG3T0WRZKW"],
+    "sample_size": 1,
+    "missingness": [
+      {
+        "field": "platform-impressions",
+        "status": "unavailable",
+        "reason": "Synthetic fixture contains no platform dashboard data."
+      }
+    ],
+    "baseline": {
+      "type": "self-history",
+      "definition": "Compare only the same synthetic account; do not score when evidence is insufficient.",
+      "evidence_refs": ["synthetic:baseline:self-history"],
+      "cohort_size": null
+    },
+    "rule_version": "account-diagnosis.rules.0.1",
+    "metric_dictionary_version": "synthetic-surface.manual.0.1",
+    "data_completeness": "insufficient",
+    "findings": [
+      {
+        "dimension": "operations",
+        "finding": "The record chain is complete, but one synthetic publication cannot support an account-performance conclusion.",
+        "evidence_refs": ["synthetic:publication:001"],
+        "counterevidence_refs": [],
+        "confidence": "high",
+        "priority": "observe",
+        "recommended_action": "Continue manual observation; do not infer failure from no signal."
+      }
+    ],
+    "report_state": "draft-only",
+    "authority": {
+      "execution_authorized": false,
+      "publication_authority": "never",
+      "automatic_account_action": false
+    }
+  }
+}

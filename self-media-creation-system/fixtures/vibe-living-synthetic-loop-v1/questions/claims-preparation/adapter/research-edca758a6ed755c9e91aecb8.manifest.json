@@ -1,0 +1,175 @@
+{
+  "adapter": "research-output-to-content",
+  "adapter_version": "0.2.0",
+  "artifacts": [
+    {
+      "path": "research-edca758a6ed755c9e91aecb8.article.html",
+      "sha256": "ab89d818f9b2d75addc8ea28c99ceb2702d8cfbfcdf5547787d18eeeb4461284"
+    },
+    {
+      "path": "research-edca758a6ed755c9e91aecb8.article.md",
+      "sha256": "1243fc88fd734689536588ddb427396cb9faa1e7bdb52ab0325d1c0f8272be3e"
+    },
+    {
+      "path": "research-edca758a6ed755c9e91aecb8.content-item.json",
+      "sha256": "41d4191923a3a048b198ca0bd7d67a84e4be8018b1a0010ac5461556bf2cdf77"
+    },
+    {
+      "path": "research-edca758a6ed755c9e91aecb8.content-video-brief.json",
+      "sha256": "992de2d5a713d2aff2a0e956562bedefd0b3a31bd85122b14dce0b99935e1c4b"
+    }
+  ],
+  "content_id": "research-edca758a6ed755c9e91aecb8",
+  "draft_basis": "verified",
+  "generated_at": "2026-08-05T12:00:00+08:00",
+  "input": {
+    "path": "research-output.v1.json",
+    "schema_id": "https://local.invalid/schemas/research-output.v1.schema.json",
+    "sha256": "4634b9022e2ed62dcb1a0dbe383b3b4a369c90094ca04da538bcf772a3171fc1"
+  },
+  "mode": "draft_only",
+  "provenance": {
+    "claim_ids": [
+      "claim_synthetic_claims_preparation"
+    ],
+    "contradiction_refs": [],
+    "evidence_ids": [
+      "evidence_synthetic_claims_preparation"
+    ],
+    "source_ids": [
+      "source_synthetic_claims_preparation"
+    ],
+    "status_snapshot": {
+      "claims": [
+        {
+          "claim_id": "claim_synthetic_claims_preparation",
+          "claim_status": "open",
+          "evidence_status": "verified",
+          "review_status": "verified"
+        }
+      ],
+      "completeness": {
+        "blocking_gates": [],
+        "coverage": {
+          "candidate_evidence": 0,
+          "claim_count": 1,
+          "claims_with_counter_or_context": 0,
+          "claims_with_evidence": 1,
+          "claims_with_verified_evidence": 1,
+          "claims_with_verified_support_evidence": 1,
+          "draft_exists": false,
+          "gate_audit_passed": false,
+          "human_review_count": 2,
+          "poor_source_evidence": 0,
+          "required_review_queue_count": 0,
+          "review_queue_count": 0,
+          "source_count": 1,
+          "source_types": [
+            "local_fixture"
+          ],
+          "unknown_source_quality": 0
+        },
+        "ready_for_answer": true,
+        "warnings": [
+          "synthetic-only fixture; the frequency count and content do not describe real users or markets"
+        ]
+      },
+      "contradictions": [],
+      "evidence": [
+        {
+          "ai_synthesis": false,
+          "claim_id": "claim_synthetic_claims_preparation",
+          "evidence_id": "evidence_synthetic_claims_preparation",
+          "evidence_status": "verified",
+          "relation": "supports",
+          "review_status": "reviewed",
+          "source_id": "source_synthetic_claims_preparation"
+        }
+      ],
+      "evidence_status": {
+        "counts": {
+          "candidate": 0,
+          "contradictions": 0,
+          "rejected": 0,
+          "verified": 1
+        },
+        "overall": "verified"
+      },
+      "guarded_final_answer": {
+        "blocking_gates": [],
+        "claim_ids": [
+          "claim_synthetic_claims_preparation"
+        ],
+        "evidence_ids": [
+          "evidence_synthetic_claims_preparation"
+        ],
+        "ready": true,
+        "source_ids": [
+          "source_synthetic_claims_preparation"
+        ],
+        "status": "verified",
+        "warnings": [
+          "synthetic-only fixture; the frequency count and content do not describe real users or markets"
+        ]
+      },
+      "media_refs": [],
+      "review_status": {
+        "events": [
+          {
+            "decision": "good",
+            "kind": "source",
+            "reviewed_at": "2026-08-05T12:00:00+08:00",
+            "reviewer": "synthetic-fixture-reviewer",
+            "target_id": "source_synthetic_claims_preparation"
+          },
+          {
+            "decision": "verified",
+            "kind": "evidence",
+            "reviewed_at": "2026-08-05T12:00:00+08:00",
+            "reviewer": "synthetic-fixture-reviewer",
+            "target_id": "evidence_synthetic_claims_preparation"
+          }
+        ],
+        "human_review_required": false,
+        "overall": "verified"
+      },
+      "sources": [
+        {
+          "freshness": "not_applicable",
+          "hash_status": "verified",
+          "quality": "good",
+          "ref_status": "resolved",
+          "review_status": "reviewed",
+          "source_id": "source_synthetic_claims_preparation"
+        }
+      ],
+      "unknowns": [],
+      "visual_leads": []
+    },
+    "unknown_ids": [],
+    "upstream": {
+      "external_api_called": false,
+      "input_files": [
+        {
+          "path": "sources/synthetic-source.md",
+          "sha256": "3398844a6bd09430c4498a363e4f472d8a66d4e181fe9631e7155941824639ae",
+          "status": "present"
+        }
+      ],
+      "model_memory_used_as_evidence": false,
+      "offline_only": true,
+      "source_systems": [
+        "synthetic-fixture-generator"
+      ]
+    }
+  },
+  "quality": {
+    "publication_boundary": "manual-only",
+    "status": "human_review_required",
+    "warnings": [
+      "synthetic-only fixture; the frequency count and content do not describe real users or markets"
+    ]
+  },
+  "research_id": "research_synthetic_claims_preparation",
+  "schema_version": "research-content-adapter-manifest.v1"
+}

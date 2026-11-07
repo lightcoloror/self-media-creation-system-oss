@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/video-review-input.v1.schema.json",
+  "title": "Self-media proxy review input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "mode",
+    "source_media",
+    "decision_sheet",
+    "rough_cut_workspace",
+    "changed_windows",
+    "frozen_windows",
+    "acceptance_frame_timestamps",
+    "change_kinds"
+  ],
+  "properties": {
+    "schema_version": {"const": "self-media-video-review-input.v1"},
+    "task_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{5,99}$"},
+    "mode": {"enum": ["initial_review", "limited_rework"]},
+    "source_media": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {"$ref": "#/$defs/relativePath"},
+        "expected_sha256": {"$ref": "#/$defs/sha256"},
+        "duration_seconds": {"type": "number", "exclusiveMinimum": 0}
+      },
+      "required": ["path", "expected_sha256", "duration_seconds"]
+    },
+    "decision_sheet": {"$ref": "#/$defs/artifact"},
+    "rough_cut_workspace": {"$ref": "#/$defs/artifact"},
+    "changed_windows": {"type": "array", "items": {"$ref": "#/$defs/window"}},
+    "frozen_windows": {"type": "array", "items": {"$ref": "#/$defs/window"}},
+    "acceptance_frame_timestamps": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "items": {"type": "number", "minimum": 0}
+    },
+    "change_kinds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"enum": ["audio", "timing", "visual_source", "mask", "subtitle", "speed", "recompression"]}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![A-Za-z]:[\\\\/])(?!/)(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "expected_sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/relativePath"},
+        "expected_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["window_id", "start_seconds", "end_seconds", "reason"],
+      "properties": {
+        "window_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,79}$"},
+        "start_seconds": {"type": "number", "minimum": 0},
+        "end_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "reason": {"type": "string", "minLength": 1, "maxLength": 240}
+      }
+    }
+  }
+}

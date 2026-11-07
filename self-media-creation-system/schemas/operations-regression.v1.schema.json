@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lightcolor/self-media/operations-regression.v1.schema.json",
+  "title": "自媒体经营合同离线回归夹具",
+  "description": "只允许虚构账号、虚构内容和本地证据引用的回归夹具；不代表真实发布或客户结果。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "fixture_id",
+    "synthetic_only",
+    "account",
+    "topic",
+    "content_item",
+    "publication_events",
+    "performance_snapshots",
+    "reviews",
+    "legacy_feedback"
+  ],
+  "properties": {
+    "schema_version": { "const": "1" },
+    "fixture_id": { "type": "string", "pattern": "^fixture_[a-z0-9._-]{6,80}$" },
+    "synthetic_only": { "const": true },
+    "account": { "type": "object" },
+    "topic": { "type": "object" },
+    "content_item": { "type": "object" },
+    "publication_events": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "type": "object" }
+    },
+    "performance_snapshots": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "type": "object" }
+    },
+    "reviews": {
+      "type": "array",
+      "minItems": 6,
+      "items": { "$ref": "#/$defs/review" }
+    },
+    "legacy_feedback": { "$ref": "#/$defs/legacyFeedback" }
+  },
+  "$defs": {
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layer", "signal_domain", "signal_status", "evidence_refs"],
+      "properties": {
+        "layer": {
+          "enum": ["admission", "attraction", "consumption", "value", "negative_feedback", "business"]
+        },
+        "signal_domain": { "enum": ["content", "business"] },
+        "signal_status": { "enum": ["observed", "not_observed", "content_no_signal", "business_no_signal"] },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^fixture://[a-z0-9._/-]+$" },
+          "uniqueItems": true
+        },
+        "note": { "type": "string", "maxLength": 500 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "layer": { "const": "business" } }, "required": ["layer"] },
+          "then": { "properties": { "signal_domain": { "const": "business" } } },
+          "else": { "properties": { "signal_domain": { "const": "content" } } }
+        },
+        {
+          "if": { "properties": { "signal_status": { "const": "content_no_signal" } }, "required": ["signal_status"] },
+          "then": { "properties": { "signal_domain": { "const": "content" } } }
+        },
+        {
+          "if": { "properties": { "signal_status": { "const": "business_no_signal" } }, "required": ["signal_status"] },
+          "then": { "properties": { "signal_domain": { "const": "business" } } }
+        }
+      ]
+    },
+    "legacyFeedback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["signal_status", "platform_signals", "business_signals", "learning_decision"],
+      "properties": {
+        "signal_status": { "enum": ["not-observed", "no_signal", "observed"] },
+        "platform_signals": { "type": "object" },
+        "business_signals": { "type": "object" },
+        "qualitative_feedback": { "type": "array", "items": { "type": "string" } },
+        "learning_decision": { "enum": ["none", "retain", "modify", "retire", "insufficient-evidence"] }
+      }
+    }
+  }
+}

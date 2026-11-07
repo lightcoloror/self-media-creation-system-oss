@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/platform-metrics-intake.v1.schema.json",
+  "title": "Offline platform export metric intake",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "intake_id", "captured_at", "mapping_version", "sources", "records", "warnings", "boundaries", "payload_sha256"],
+  "properties": {
+    "schema_version": {"const": "platform-metrics-intake.v1"},
+    "intake_id": {"type": "string", "pattern": "^metrics-intake-[a-f0-9]{24}$"},
+    "captured_at": {"type": "string", "format": "date-time"},
+    "mapping_version": {"const": "platform-metric-mappings.v1"},
+    "sources": {"type": "array", "minItems": 1, "maxItems": 12, "items": {"$ref": "#/$defs/source"}},
+    "records": {"type": "array", "items": {"$ref": "#/$defs/record"}},
+    "warnings": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 200}},
+    "boundaries": {
+      "const": {
+        "offline_only": true,
+        "platform_access_performed": false,
+        "content_attribution_inferred": false,
+        "cross_platform_metric_equivalence_assumed": false,
+        "publication_authorized": false,
+        "raw_comments_included": false
+      }
+    },
+    "payload_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["export_profile", "platform", "basename", "sha256", "source_grain", "attribution_status", "header_row", "row_count"],
+      "properties": {
+        "export_profile": {"type": "string", "pattern": "^[a-z][a-z0-9_]{2,63}$"},
+        "platform": {"enum": ["xiaohongshu", "wechat_channels", "douyin", "kuaishou", "bilibili", "wechat_official_account"]},
+        "compatibility_status": {"const": "template_only"},
+        "format_version": {"const": "wechat-account-day-template.v1"},
+        "basename": {"type": "string", "minLength": 1, "maxLength": 200, "pattern": "^[^/\\\\]+$"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "source_grain": {"enum": ["content_item", "account_day"]},
+        "attribution_status": {"enum": ["direct-platform-item", "not-attributed-to-content"]},
+        "header_row": {"type": "integer", "minimum": 1, "maximum": 20},
+        "row_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "record": {
+      "type": "object", "additionalProperties": false,
+      "required": ["export_profile", "platform", "source_row", "source_grain", "attribution_status", "content_label", "observed_time", "metrics"],
+      "properties": {
+        "export_profile": {"type": "string", "pattern": "^[a-z][a-z0-9_]{2,63}$"},
+        "platform": {"enum": ["xiaohongshu", "wechat_channels", "douyin", "kuaishou", "bilibili", "wechat_official_account"]},
+        "compatibility_status": {"const": "template_only"},
+        "format_version": {"const": "wechat-account-day-template.v1"},
+        "source_row": {"type": "integer", "minimum": 1},
+        "source_grain": {"enum": ["content_item", "account_day"]},
+        "attribution_status": {"enum": ["direct-platform-item", "not-attributed-to-content"]},
+        "content_label": {"type": ["string", "null"], "maxLength": 240},
+        "observed_time": {"type": ["string", "null"], "maxLength": 80},
+        "metrics": {"type": "array", "items": {"$ref": "#/$defs/metric"}}
+      }
+    },
+    "metric": {
+      "type": "object", "additionalProperties": false,
+      "required": ["metric_key", "source_metric_key", "source_value_display", "value", "unit", "semantic_status"],
+      "properties": {
+        "metric_key": {"type": "string", "pattern": "^[a-z][a-z0-9_]{1,63}$"},
+        "source_metric_key": {"type": "string", "minLength": 1, "maxLength": 80},
+        "source_value_display": {"type": ["string", "null"], "maxLength": 120},
+        "value": {"type": ["number", "null"]},
+        "unit": {"enum": ["count", "percent", "seconds", "other"]},
+        "semantic_status": {"enum": ["mapped", "source-empty", "requires-confirmation"]}
+      }
+    }
+  }
+}

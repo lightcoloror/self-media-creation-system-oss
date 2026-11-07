@@ -1,0 +1,43 @@
+{
+  "schema_version": "self-media.video-archive-policy.v1",
+  "updated_at": "2026-10-12T17:42:15+08:00",
+  "updated_by": "Codex (GPT-6; exact runtime variant not independently verified)",
+  "default_level": "rework",
+  "levels": {
+    "simple": {
+      "label": "简单留存",
+      "retain": ["final_media", "final_cover_and_publication_text", "final_subtitles", "project_readme", "source_backup_reference", "file_hash_inventory"],
+      "verify": ["inventory_and_hashes", "open_final_media", "resolve_original_backup"]
+    },
+    "rework": {
+      "label": "可返工归档",
+      "retain": ["adopted_fine_cuts", "resume_masters_for_expected_edits", "edit_timing_and_source_mapping", "editable_subtitle_audio_effect_recipes", "available_independent_layers_and_audio", "human_corrections_and_acceptance", "shared_asset_references", "known_missing_layers"],
+      "verify": ["resolve_expected_edit_inputs", "document_flattened_layers_and_gaps"]
+    },
+    "reproducible": {
+      "label": "可复现归档",
+      "retain": ["executable_entrypoint", "pinned_dependency_versions", "required_tool_model_font_assets_or_verified_retrieval", "relative_paths_or_rebinding_instructions", "scoped_rebuild_comparison_receipt"],
+      "verify": ["rebuild_declared_scope_in_relocated_directory", "avoid_original_workspace_and_undeclared_cache", "compare_rendered_picture_audio_and_semantics", "record_exact_hash_or_other_comparison_method"]
+    }
+  },
+  "upgrade_factors": {
+    "cross_machine_rebuild": "需要在另一台电脑或搬家后的目录重新生成",
+    "long_term_regeneration": "长期封存后仍明确需要重新生成，而非仅观看",
+    "dependency_sensitive_effects": "预期修改涉及复杂动效、打码或依赖版本敏感处理",
+    "evidence_processing_replay": "需要重放与人工事实修正、证据绑定有关的处理链",
+    "costly_recovery": "恢复失败或重新制作的成本高，保留母版仍不足以覆盖预期修改"
+  },
+  "never_infer_from": ["file_count", "archive_size", "topic_name", "series_label_alone"],
+  "exclude_by_default": ["asr_chunks_rebuildable_from_sources", "duplicate_recognition_runs", "frame_caches", "browser_profiles_and_secrets", "superseded_full_renders", "unused_cover_variants", "generic_runtime_caches"],
+  "always_preserve": ["irreplaceable_original_or_verified_private_backup", "adopted_human_corrections", "current_final_and_its_acceptance", "required_source_rights_and_processing_evidence"],
+  "temporary_full_snapshot": "仅在迁移/清理前依赖尚未理清时临时保留工作现场；设置复查条件，不能据此宣称可复现，也不自动删除旧目录。",
+  "independent_states": ["level_selected", "materials_collected", "integrity_verified", "rebuild_verified_for_declared_scope", "uploaded", "remote_download_verified"],
+  "boundaries": {
+    "planning_only": true,
+    "automatic_copy": false,
+    "automatic_upload": false,
+    "automatic_publish": false,
+    "automatic_delete": false,
+    "replaces_lifecycle_manifest": false
+  }
+}

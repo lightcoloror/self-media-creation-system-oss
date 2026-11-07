@@ -1,0 +1,67 @@
+{
+  "items": [
+    {
+      "as_of": "2026-08-28T00:01:00+08:00",
+      "captured_at": "2026-08-28T00:02:00+08:00",
+      "data_completeness": "complete",
+      "metric_dictionary_version": "synthetic.content-signals.0.1",
+      "metrics": [
+        {
+          "dimensions": {
+            "synthetic": true
+          },
+          "metric_key": "views",
+          "unit": "count",
+          "value": 90
+        },
+        {
+          "dimensions": {
+            "synthetic": true
+          },
+          "metric_key": "likes",
+          "unit": "count",
+          "value": 4
+        }
+      ],
+      "notes": "Fully synthetic metrics for offline contract verification only.",
+      "publication_id": "pub_QTMRG4H2PGAQJ40HD0791Z9X5N",
+      "schema_version": "0.1",
+      "snapshot_id": "snap_EECX35Y85XEKXQ5ASRGF510A8R",
+      "source_type": "other",
+      "timezone": "Asia/Shanghai",
+      "window_label": "early"
+    },
+    {
+      "as_of": "2026-09-01T12:01:00+08:00",
+      "captured_at": "2026-09-01T12:02:00+08:00",
+      "data_completeness": "complete",
+      "metric_dictionary_version": "synthetic.content-signals.0.1",
+      "metrics": [
+        {
+          "dimensions": {
+            "synthetic": true
+          },
+          "metric_key": "views",
+          "unit": "count",
+          "value": 105
+        },
+        {
+          "dimensions": {
+            "synthetic": true
+          },
+          "metric_key": "likes",
+          "unit": "count",
+          "value": 4
+        }
+      ],
+      "notes": "Fully synthetic metrics for offline contract verification only.",
+      "publication_id": "pub_QTMRG4H2PGAQJ40HD0791Z9X5N",
+      "schema_version": "0.1",
+      "snapshot_id": "snap_X0W6MXXMKDC6BQ2Y44PMYEBMQK",
+      "source_type": "other",
+      "timezone": "Asia/Shanghai",
+      "window_label": "d7"
+    }
+  ],
+  "synthetic_only": true
+}

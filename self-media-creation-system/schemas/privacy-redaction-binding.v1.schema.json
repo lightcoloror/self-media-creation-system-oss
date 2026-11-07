@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "self-media-privacy-redaction-binding.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "binding_id",
+    "created_at",
+    "decision",
+    "privacy_zones",
+    "candidate",
+    "visible_window_manifest",
+    "subject_bindings",
+    "authority_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "self-media-privacy-redaction-binding.v1"},
+    "binding_id": {"type": "string", "pattern": "^privacy-binding-[A-Za-z0-9._-]{4,100}$"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "decision": {"$ref": "#/$defs/artifact"},
+    "privacy_zones": {"$ref": "#/$defs/artifact"},
+    "candidate": {"$ref": "#/$defs/artifact"},
+    "visible_window_manifest": {"$ref": "#/$defs/artifact"},
+    "subject_bindings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/subjectBinding"}
+    },
+    "authority_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity_binding_source", "automatic_identity_inference", "candidate_only", "publish_allowed"],
+      "properties": {
+        "identity_binding_source": {"const": "human_reviewed_subject_manifest"},
+        "automatic_identity_inference": {"const": false},
+        "candidate_only": {"const": true},
+        "publish_allowed": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "expected_sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "expected_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "visibleWindow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["visible_window_ref", "start_frame", "end_frame"],
+      "properties": {
+        "visible_window_ref": {"type": "string", "minLength": 1},
+        "start_frame": {"type": "integer", "minimum": 0},
+        "end_frame": {"type": "integer", "minimum": 0}
+      }
+    },
+    "subjectBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subject_ref",
+        "human_face_track_refs",
+        "anonymous_zone_track_refs",
+        "visible_windows",
+        "treatment"
+      ],
+      "properties": {
+        "subject_ref": {"type": "string", "minLength": 1},
+        "human_face_track_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "anonymous_zone_track_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "visible_windows": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/visibleWindow"}},
+        "treatment": {"const": "mosaic"}
+      }
+    }
+  }
+}

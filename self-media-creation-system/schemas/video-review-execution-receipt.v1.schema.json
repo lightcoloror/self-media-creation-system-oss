@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/video-review-execution-receipt.v1.schema.json",
+  "title": "Self-media source-time-range review execution receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "plan_payload_sha256", "candidate_media_sha256", "execution_policy_ref", "executor_tool_id", "ffmpeg_outlet", "status", "rendered_scope", "proxy_profile", "mvp_execution_evidence", "authority_boundary", "receipt_payload_sha256"],
+  "properties": {
+    "schema_version": {"const": "self-media-video-review-execution-receipt.v1"},
+    "plan_payload_sha256": {"$ref": "#/$defs/sha256"},
+    "candidate_media_sha256": {"$ref": "#/$defs/sha256"},
+    "execution_policy_ref": {"$ref": "#/$defs/executionPolicyRef"},
+    "executor_tool_id": {"const": "mvp-video-pipeline"},
+    "ffmpeg_outlet": {"const": "video_creation_pipeline.single_ffmpeg_outlet"},
+    "status": {"enum": ["pass", "limited_rework", "reject", "blocked"]},
+    "rendered_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["render_scope", "changed_window_ids"],
+      "properties": {
+        "render_scope": {"enum": ["full_timeline_source", "changed_windows_only"]},
+        "changed_window_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+      }
+    },
+    "proxy_profile": {"const": {"enabled": false, "reason": "source_time_range_review"}},
+    "mvp_execution_evidence": {
+      "oneOf": [
+        {"$ref": "#/$defs/completedMvpEvidence"},
+        {"$ref": "#/$defs/blockedMvpEvidence"}
+      ]
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_media", "acceptance_frames", "execution_log"],
+      "properties": {
+        "source_media": {"$ref": "#/$defs/artifact"},
+        "execution_log": {"$ref": "#/$defs/artifact"},
+        "acceptance_frames": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "path": {"type": "string", "minLength": 1},
+              "sha256": {"$ref": "#/$defs/sha256"},
+              "timestamp_seconds": {"type": "number", "minimum": 0}
+            },
+            "required": ["path", "sha256", "timestamp_seconds"]
+          }
+        },
+        "human_review_clips": {
+          "type": "array",
+          "maxItems": 0,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["review_id", "path", "sha256", "start_seconds", "end_seconds"],
+            "properties": {
+              "review_id": {"type": "string", "minLength": 3},
+              "path": {"type": "string", "minLength": 1},
+              "sha256": {"$ref": "#/$defs/sha256"},
+              "start_seconds": {"type": "number", "minimum": 0},
+              "end_seconds": {"type": "number", "exclusiveMinimum": 0}
+            }
+          }
+        }
+      }
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_full_decode_passed", "acceptance_frames_reviewed", "privacy_candidate_reviewed", "normal_speed_human_reviewed"],
+      "properties": {
+        "source_full_decode_passed": {"type": "boolean"},
+        "acceptance_frames_reviewed": {"type": "boolean"},
+        "privacy_candidate_reviewed": {"type": "boolean"},
+        "normal_speed_human_reviewed": {"type": "boolean"}
+      }
+    },
+    "human_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["confirmed", "confirmed_by", "reviewed_at", "request_results"],
+      "properties": {
+        "confirmed": {"type": "boolean"},
+        "confirmed_by": {"type": "string", "minLength": 1},
+        "reviewed_at": {"type": "string", "format": "date-time"},
+        "request_results": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["review_id", "decision"],
+            "properties": {
+              "review_id": {"type": "string", "minLength": 3},
+              "decision": {"enum": ["pass", "needs_rework", "uncertain"]},
+              "note": {"type": "string", "maxLength": 500}
+            }
+          }
+        }
+      }
+    },
+    "authority_boundary": {
+      "const": {"final_candidate_rendered": false, "automatic_publish": false, "full_log_inlined": false}
+    },
+    "receipt_payload_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "blocked"}}, "required": ["status"]},
+      "then": {
+        "not": {"anyOf": [{"required": ["artifacts"]}, {"required": ["checks"]}, {"required": ["human_review"]}]}
+      },
+      "else": {"required": ["artifacts", "checks", "human_review"]}
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "executionPolicyRef": {
+      "const": {
+        "canonical_owner": "video_creation_pipeline.single_ffmpeg_outlet",
+        "policy_id": "video-review-resource-guard-v1",
+        "heavy_media_concurrency": 1,
+        "full_decode_once_per": "exact_media_sha256_and_check_profile_sha256",
+        "proxy_first": false,
+        "limited_rework_scope": "changed_windows_only",
+        "cached_report_analysis_parallel_allowed": true
+      }
+    },
+    "completedMvpEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "disposition", "media_sha256", "check_profile_sha256", "cache_key", "reusable_evidence_available", "execution_receipt", "qa_report", "automatic_retry"],
+      "properties": {
+        "status": {"const": "completed"},
+        "disposition": {"enum": ["performed", "reused"]},
+        "media_sha256": {"$ref": "#/$defs/sha256"},
+        "check_profile_sha256": {"$ref": "#/$defs/sha256"},
+        "cache_key": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "reusable_evidence_available": {"type": "boolean"},
+        "execution_receipt": {"$ref": "#/$defs/artifact"},
+        "qa_report": {"$ref": "#/$defs/artifact"},
+        "automatic_retry": {"const": false}
+      }
+    },
+    "blockedMvpEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "disposition", "media_sha256", "check_profile_sha256", "cache_key", "reusable_evidence_available", "execution_receipt", "reason", "automatic_retry"],
+      "properties": {
+        "status": {"const": "blocked"},
+        "disposition": {"const": "not_run"},
+        "media_sha256": {"$ref": "#/$defs/sha256"},
+        "check_profile_sha256": {"$ref": "#/$defs/sha256"},
+        "cache_key": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "reusable_evidence_available": {"const": false},
+        "execution_receipt": {"$ref": "#/$defs/artifact"},
+        "reason": {"const": "resource_pressure_pause_required"},
+        "automatic_retry": {"const": false}
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

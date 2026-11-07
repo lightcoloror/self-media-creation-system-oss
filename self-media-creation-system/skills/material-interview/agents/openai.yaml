@@ -1,0 +1,6 @@
+interface:
+  display_name: "素材访谈"
+  short_description: "按现有回答补关键素材，减少无效追问，保留不确定性并及时转入写作"
+  default_prompt: "使用 $material-interview，先整理已有回答，再只问影响本次内容的缺口，材料足够时收口。"
+policy:
+  allow_implicit_invocation: true

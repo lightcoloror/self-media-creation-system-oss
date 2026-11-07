@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/self-media-task-capsule.v2.schema.json",
+  "title": "Compact routing capsule with mandatory step handoffs",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "capsule_id", "request_id", "status", "recipe_id",
+    "canonical_route", "recipe_detail_ref", "required_inputs", "provided_inputs",
+    "missing_inputs", "context_loading", "route_application", "step_index", "quality_gates",
+    "tool_index", "outputs", "stop_conditions", "boundaries", "recovery_codes",
+    "provenance", "payload_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "self-media-task-capsule.v2"},
+    "capsule_id": {"type": "string", "pattern": "^capsule-[a-f0-9]{16}$"},
+    "request_id": {"type": "string"},
+    "status": {"enum": ["routing_ready", "blocked_missing_inputs"]},
+    "recipe_id": {"type": "string"},
+    "creation_phase": {"enum": ["production", "prerecording"]},
+    "preparation_kind": {"enum": ["spoken_script", "interview_guide"]},
+    "canonical_route": {
+      "type": "object", "additionalProperties": false,
+      "required": ["contract_set_id", "contract_set_version", "load_policy", "legacy_fallback"],
+      "properties": {
+        "contract_set_id": {"const": "registered-content-routing"},
+        "contract_set_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "load_policy": {"const": "whole-contract-set-only"},
+        "legacy_fallback": {"const": false}
+      }
+    },
+    "recipe_detail_ref": {"$ref": "#/$defs/ref"},
+    "required_inputs": {"$ref": "#/$defs/stringSet"},
+    "provided_inputs": {"$ref": "#/$defs/stringSet"},
+    "missing_inputs": {"$ref": "#/$defs/stringSet"},
+    "context_loading": {
+      "type": "object", "additionalProperties": false,
+      "required": ["always_load", "on_demand", "never_inline", "capsule_max_bytes", "tool_receipt_max_bytes", "handoff_required"],
+      "properties": {
+        "always_load": {"$ref": "#/$defs/stringSet"},
+        "on_demand": {"$ref": "#/$defs/stringSet"},
+        "never_inline": {"$ref": "#/$defs/stringSet"},
+        "capsule_max_bytes": {"type": "integer"},
+        "tool_receipt_max_bytes": {"type": "integer"},
+        "handoff_required": {"const": true}
+      }
+    },
+    "route_application": {
+      "type": "object", "additionalProperties": false,
+      "required": ["mode", "canonical_order_is_universal_checklist", "applicable_steps", "skipped_steps", "skip_reason_required", "unknown_applicability"],
+      "properties": {
+        "mode": {"const": "selected-recipe-subset-only"},
+        "canonical_order_is_universal_checklist": {"const": false},
+        "applicable_steps": {"$ref": "#/$defs/stringSet"},
+        "skipped_steps": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["step_id", "reason"],
+            "properties": {
+              "step_id": {"type": "string", "minLength": 1},
+              "reason": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "skip_reason_required": {"const": true},
+        "unknown_applicability": {"const": "fail-closed"}
+      }
+    },
+    "step_index": {"type": "array", "minItems": 2, "maxItems": 12, "items": {"$ref": "#/$defs/step"}},
+    "tool_index": {"type": "array", "minItems": 2, "maxItems": 12, "items": {"$ref": "#/$defs/toolIndex"}},
+    "quality_gates": {"$ref": "#/$defs/stringSet"},
+    "outputs": {"$ref": "#/$defs/stringSet"},
+    "stop_conditions": {"$ref": "#/$defs/stringSet"},
+    "boundaries": {"$ref": "#/$defs/boundaries"},
+    "recovery_codes": {"$ref": "#/$defs/stringSet"},
+    "provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["request_sha256", "recipe_catalog_version", "synthetic_only", "input_refs"],
+      "properties": {
+        "request_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "recipe_catalog_version": {"type": "string"},
+        "synthetic_only": {"type": "boolean"},
+        "author_identity": {"$ref": "#/$defs/authorIdentity"},
+        "input_refs": {"type": "array", "items": {"$ref": "#/$defs/artifactRef"}}
+      }
+    },
+    "payload_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"recipe_id": {"enum": ["moments-short-post", "xhs-evidence-graphic", "case-video-candidate"]}}},
+      "then": {"properties": {"provenance": {"required": ["author_identity"]}}}
+    }
+  ],
+  "$defs": {
+    "authorIdentity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["account_id", "genre"],
+      "properties": {
+        "account_id": {"type": "string", "minLength": 1, "maxLength": 200, "pattern": "\\S"},
+        "genre": {"enum": ["moments", "graphic_note", "spoken_script", "interview_guide"]}
+      }
+    },
+    "stringSet": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+    "ref": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^(?![A-Za-z]:[\\\\/])(?!/)(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$"},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "step": {
+      "type": "object", "additionalProperties": false,
+      "required": ["step_id", "interface", "tool_id", "context_stage", "input_roles", "output_contract", "stop_on_error", "handoff_required", "output_receipt_required"],
+      "properties": {
+        "step_id": {"type": "string", "pattern": "^[a-z][a-z0-9._-]{2,79}$"},
+        "interface": {"enum": ["cli", "agent_task", "human_gate"]},
+        "tool_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{1,79}$"},
+        "context_stage": {"enum": ["topic", "research", "fact-check", "draft", "voice-review", "visual", "video", "publication-review", "feedback"]},
+        "input_roles": {"$ref": "#/$defs/stringSet"},
+        "output_contract": {"type": "string", "minLength": 1},
+        "stop_on_error": {"const": true},
+        "handoff_required": {"const": true},
+        "output_receipt_required": {"const": true}
+      }
+    },
+    "toolIndex": {
+      "type": "object",
+      "required": ["step_id", "tool_id", "discovery_mode", "execution_authority"],
+      "properties": {
+        "step_id": {"type": "string"},
+        "tool_id": {"type": "string"},
+        "discovery_mode": {"enum": ["registered_owner", "repository_internal", "human_gate"]},
+        "registry_tool_id": {"type": "string"},
+        "execution_authority": {"enum": ["existing-owner-boundary", "bounded-local-only", "human-only"]}
+      },
+      "additionalProperties": false
+    },
+    "artifactRef": {
+      "type": "object", "additionalProperties": false,
+      "required": ["role", "path", "sha256"],
+      "properties": {
+        "role": {"type": "string", "pattern": "^[a-z][a-z0-9._-]{2,79}$"},
+        "path": {"type": "string", "pattern": "^(?![A-Za-z]:[\\\\/])(?!/)(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$"},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "boundaries": {
+      "type": "object", "additionalProperties": false,
+      "required": ["publication", "external_send", "customer_contact", "crm_write", "knowledge_base_write", "provider_call"],
+      "properties": {
+        "publication": {"const": "manual-only"},
+        "external_send": {"const": "not-authorized"},
+        "customer_contact": {"const": "not-authorized"},
+        "crm_write": {"const": "not-authorized"},
+        "knowledge_base_write": {"const": "not-authorized"},
+        "provider_call": {"const": "not-authorized-by-this-entry"}
+      }
+    }
+  }
+}

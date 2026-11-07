@@ -1,0 +1,21 @@
+{
+  "fixture_contract": "manual-publication-feedback-negative-cases.v1",
+  "synthetic_only": true,
+  "cases": [
+    {"id": "stale-source-hash", "stage": "input", "mutation": "stale_source_hash", "expected_code": "stale_source_artifact"},
+    {"id": "missing-day7-window", "stage": "input", "mutation": "missing_d7", "expected_code": "window_missing"},
+    {"id": "duplicate-window", "stage": "input", "mutation": "duplicate_window", "expected_code": "duplicate_window"},
+    {"id": "early-window-drift", "stage": "input", "mutation": "early_window_drift", "expected_code": "window_drift"},
+    {"id": "stale-capture", "stage": "input", "mutation": "stale_capture", "expected_code": "stale_observation"},
+    {"id": "raw-comment-field", "stage": "input", "mutation": "raw_comment", "expected_code": "privacy_boundary_violation"},
+    {"id": "tracking-parameter", "stage": "input", "mutation": "tracking_parameter", "expected_code": "privacy_boundary_violation"},
+    {"id": "like-promoted-to-business", "stage": "input", "mutation": "like_as_business", "expected_code": "signal_escalation"},
+    {"id": "duplicate-metric", "stage": "input", "mutation": "duplicate_metric", "expected_code": "duplicate_metric"},
+    {"id": "manual-derived-metric", "stage": "input", "mutation": "manual_derived_metric", "expected_code": "derived_metric_is_computed"},
+    {"id": "retention-order-invalid", "stage": "input", "mutation": "retention_order_invalid", "expected_code": "retention_order_invalid"},
+    {"id": "duplicate-publication-event", "stage": "output", "mutation": "duplicate_publication_event", "expected_code": "duplicate_publication_event"},
+    {"id": "duplicate-performance-snapshot", "stage": "output", "mutation": "duplicate_snapshot", "expected_code": "duplicate_snapshot"},
+    {"id": "derived-metric-drift", "stage": "output", "mutation": "derived_metric_drift", "expected_code": "derived_metric_drift"},
+    {"id": "content-no-signal-promoted", "stage": "output", "mutation": "no_signal_customer_negative", "expected_code": "no_signal_escalation"}
+  ]
+}

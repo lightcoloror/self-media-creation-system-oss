@@ -1,0 +1,55 @@
+{
+  "schema_version": "creation-routes.v1",
+  "updated_at": "2026-10-10T13:20:00+08:00",
+  "acting_tool_model": "Codex (GPT-6)",
+  "selection_policy": "AI interprets the current request and evidence into structured context on every creative task; the local resolver checks that assessment without calling a model or interpreting raw media.",
+  "shared_material_analysis": "full-source-inventory-visual-audio-event-coverage-and-unused-selects-review",
+  "routes": {
+    "story": {
+      "guide": "../skills/insurance-content-storycraft/SKILL.md",
+      "quality_focus": ["真实因果变化", "人物行动与反馈", "事实支持的转折", "开场与结尾兑现"],
+      "requires_supported_causal_change": true
+    },
+    "travel-experience": {
+      "guide": "docs/travel-experience-vlog-workflow.md",
+      "quality_focus": ["观看体验与所选形态一致", "动作与区段衔接", "精彩候选覆盖及未用理由", "现场声与反应", "信息与时序真实"],
+      "requires_supported_causal_change": false,
+      "styles": {
+        "chronological-diary": "同一天或一段行程的随行记录；用必要时间地点提示组织真实片段。",
+        "activity-highlights": "动作、刺激点和现场反应为主要筛选依据；保留关键动作及反应的可理解范围。",
+        "practical-guide": "围绕观众的实际决策组织核实过的信息；未知价格、规则、结果留作缺口。",
+        "experience-review": "按明确体验维度组织观察和本人判断；没有比较任务时不强造比较。",
+        "atmospheric-montage": "以画面、环境声和音乐组织感官体验；旁白可少或无。",
+        "observational": "以人物互动、地方细节和现场观察组织片段；不补造内心或对白。"
+      }
+    },
+    "expository": {
+      "guide": "structure-route-playbook.md",
+      "quality_focus": ["观众问题与答案匹配", "信息有证据", "展开顺序清楚"],
+      "requires_supported_causal_change": false
+    },
+    "technical-rework": {
+      "guide": "docs/agent-discovery-details-2026-08-28.md",
+      "quality_focus": ["只处理指定技术修改", "现有创作方向保持可追溯"],
+      "requires_supported_causal_change": false
+    }
+  },
+  "intent_to_vlog_style": {
+    "preserve-experience": "chronological-diary",
+    "activity-highlights": "activity-highlights",
+    "practical-guide": "practical-guide",
+    "compare-experiences": "experience-review",
+    "sensory-place": "atmospheric-montage",
+    "observe-people-place": "observational"
+  },
+  "defaults": {
+    "story_is_universal": false,
+    "vlog_topic_implies_story": false,
+    "vlog_requires_conflict_turn_climax": false,
+    "lightweight_output_reduces_analysis": false,
+    "fixed_seconds_or_shot_ratios": false,
+    "missing_context": "needs-context",
+    "new_goal_material_style_or_user_correction": "reassess-and-bind-current-context",
+    "hybrid": "choose-one-primary-route; local story chapters need separate supported evidence"
+  }
+}

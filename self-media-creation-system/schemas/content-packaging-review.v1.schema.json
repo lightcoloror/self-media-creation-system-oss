@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/content-packaging-review.v1.schema.json",
+  "title": "Content packaging review receipt",
+  "description": "A candidate-only, manual-only receipt binding a frozen body to its reviewed title, cover brief, and opening.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "generated_at",
+    "artifact_status",
+    "publication_boundary",
+    "data_classification",
+    "reviewed_input_binding",
+    "content_binding",
+    "packaging",
+    "human_review",
+    "privacy_review",
+    "authority",
+    "receipt_payload_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "content-packaging-review.v1"},
+    "receipt_id": {"type": "string", "pattern": "^packaging-review-[a-f0-9]{24}$"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "artifact_status": {"const": "candidate-only"},
+    "publication_boundary": {"const": "manual-only"},
+    "data_classification": {
+      "enum": ["synthetic-only", "deidentified-operational"]
+    },
+    "reviewed_input_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["input_ref", "input_sha256"],
+      "properties": {
+        "input_ref": {"$ref": "#/$defs/repo_ref"},
+        "input_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "content_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["content_id", "platform", "body_ref", "body_sha256"],
+      "properties": {
+        "content_id": {"type": "string", "minLength": 3, "maxLength": 160},
+        "platform": {"type": "string", "minLength": 1, "maxLength": 80},
+        "body_ref": {"$ref": "#/$defs/repo_ref"},
+        "body_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "packaging": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "title_sha256",
+        "cover_brief",
+        "cover_brief_sha256",
+        "opening_sha256",
+        "standalone_review_sha256"
+      ],
+      "properties": {
+        "title": {"type": "string", "minLength": 1, "maxLength": 240},
+        "title_sha256": {"$ref": "#/$defs/sha256"},
+        "cover_brief": {"$ref": "#/$defs/cover_brief"},
+        "cover_brief_sha256": {"$ref": "#/$defs/sha256"},
+        "opening_sha256": {"$ref": "#/$defs/sha256"},
+        "standalone_review_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "human_review": {"$ref": "#/$defs/human_review"},
+    "privacy_review": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/privacy_review"}
+      ]
+    },
+    "authority": {
+      "const": {
+        "publish_authorized": false,
+        "execution_authorized": false,
+        "external_send_authorized": false
+      }
+    },
+    "receipt_payload_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"data_classification": {"const": "synthetic-only"}},
+        "required": ["data_classification"]
+      },
+      "then": {"properties": {"privacy_review": {"type": "null"}}}
+    },
+    {
+      "if": {
+        "properties": {"data_classification": {"const": "deidentified-operational"}},
+        "required": ["data_classification"]
+      },
+      "then": {"properties": {"privacy_review": {"$ref": "#/$defs/privacy_review"}}}
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "repo_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "pattern": "^(?![A-Za-z]:)(?!/)(?!\\\\)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "cover_brief": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["headline", "visual_direction", "supporting_text"],
+      "properties": {
+        "headline": {"type": "string", "minLength": 1, "maxLength": 180},
+        "visual_direction": {"type": "string", "minLength": 1, "maxLength": 1200},
+        "supporting_text": {"type": ["string", "null"], "maxLength": 300}
+      }
+    },
+    "human_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "credential_ref",
+        "credential_sha256",
+        "reviewer",
+        "reviewed_at",
+        "decision",
+        "review_scope_sha256"
+      ],
+      "properties": {
+        "credential_ref": {"$ref": "#/$defs/repo_ref"},
+        "credential_sha256": {"$ref": "#/$defs/sha256"},
+        "reviewer": {"type": "string", "minLength": 1, "maxLength": 120},
+        "reviewed_at": {"type": "string", "format": "date-time"},
+        "decision": {"const": "approved"},
+        "review_scope_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "privacy_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "credential_ref",
+        "credential_sha256",
+        "reviewer",
+        "reviewed_at",
+        "decision",
+        "privacy_scope_sha256"
+      ],
+      "properties": {
+        "credential_ref": {"$ref": "#/$defs/repo_ref"},
+        "credential_sha256": {"$ref": "#/$defs/sha256"},
+        "reviewer": {"type": "string", "minLength": 1, "maxLength": 120},
+        "reviewed_at": {"type": "string", "format": "date-time"},
+        "decision": {"const": "passed"},
+        "privacy_scope_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

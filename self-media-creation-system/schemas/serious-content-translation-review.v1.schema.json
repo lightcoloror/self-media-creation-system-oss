@@ -1,0 +1,232 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/serious-content-translation-review.v1.schema.json",
+  "title": "Serious professional content translation review receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "review_id", "generated_at", "artifact_status",
+    "publication_boundary", "content_id", "risk_class", "sensitivity_profile", "content_nature",
+    "body_binding", "precreative_gate", "translation_plan",
+    "postcreative_gate", "review_dimensions", "gate_status", "release_status", "next_gate",
+    "authority", "receipt_payload_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "serious-content-translation-review.v1"},
+    "review_id": {"type": "string", "pattern": "^serious-translation-[a-f0-9]{24}$"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "artifact_status": {"const": "candidate-only"},
+    "publication_boundary": {"const": "manual-only"},
+    "content_id": {"type": "string", "minLength": 3, "maxLength": 160},
+    "risk_class": {"enum": ["ordinary", "insurance-health", "high-risk"]},
+    "sensitivity_profile": {
+      "enum": ["ordinary", "professional-sensitive", "medical-sensitive", "affected-person-severe-illness", "customer-loss", "privacy-high-risk", "compound-high-sensitivity"]
+    },
+    "content_nature": {
+      "enum": ["education", "opinion", "case-review", "product-marketing", "individual-advice", "medical-insurance-cross"]
+    },
+    "body_binding": {"$ref": "#/$defs/body_binding"},
+    "precreative_gate": {"$ref": "#/$defs/precreative_gate"},
+    "translation_plan": {"$ref": "#/$defs/translation_plan"},
+    "postcreative_gate": {"$ref": "#/$defs/postcreative_gate"},
+    "review_dimensions": {
+      "const": {
+        "integrity_gate_status": "passed",
+        "attention_gate_status": "passed",
+        "aggregation_policy": "independent-no-averaging"
+      }
+    },
+    "gate_status": {"const": "passed"},
+    "release_status": {"const": "review-required"},
+    "next_gate": {"enum": ["author-review", "author-plus-subject-matter-check"]},
+    "authority": {
+      "const": {"publish_authorized": false, "execution_authorized": false, "external_send_authorized": false}
+    },
+    "receipt_payload_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "repo_ref": {
+      "type": "string", "minLength": 1, "maxLength": 500,
+      "pattern": "^(?![A-Za-z]:)(?!/)(?!\\\\)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "body_binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["body_ref", "body_sha256"],
+      "properties": {"body_ref": {"$ref": "#/$defs/repo_ref"}, "body_sha256": {"$ref": "#/$defs/sha256"}}
+    },
+    "precreative_gate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["audience_decision", "evidence_spine_status", "privacy_status", "risk_boundary", "reviewed_at", "decision"],
+      "properties": {
+        "audience_decision": {"type": "string", "minLength": 1, "maxLength": 500},
+        "evidence_spine_status": {"const": "verified"},
+        "privacy_status": {"enum": ["cleared", "not-applicable"]},
+        "risk_boundary": {"type": "string", "minLength": 1, "maxLength": 800},
+        "reviewed_at": {"type": "string", "format": "date-time"},
+        "decision": {"const": "passed"}
+      }
+    },
+    "translation_plan": {
+      "type": "object", "additionalProperties": false,
+      "required": ["content_role", "real_tension", "viewer_stakes", "central_judgment", "explanation_budget", "life_relevance", "protagonist_goal_or_reader_task", "scene_or_dialogue_anchor", "completion_question", "completion_payoff", "takeaway_or_next_use", "target_action", "service_action", "service_action_effect", "entry_mechanism", "humor_level", "humor_target", "sensitive_humor_exception", "information_advances", "story_reveal_contract", "analogy"],
+      "properties": {
+        "content_role": {"enum": ["growth", "trust", "tool", "professional"]},
+        "real_tension": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "string", "minLength": 1, "maxLength": 500}
+          ]
+        },
+        "viewer_stakes": {"type": "string", "minLength": 1, "maxLength": 500},
+        "central_judgment": {"type": "string", "minLength": 1, "maxLength": 500},
+        "explanation_budget": {
+          "type": "object", "additionalProperties": false,
+          "required": ["level", "max_professional_concepts", "max_boundaries"],
+          "properties": {
+            "level": {"enum": ["short", "medium", "deep"]},
+            "max_professional_concepts": {"type": "integer", "minimum": 1, "maximum": 5},
+            "max_boundaries": {"type": "integer", "minimum": 1, "maximum": 5}
+          }
+        },
+        "life_relevance": {"type": "string", "minLength": 1, "maxLength": 500},
+        "protagonist_goal_or_reader_task": {"type": "string", "minLength": 1, "maxLength": 500},
+        "scene_or_dialogue_anchor": {"type": "string", "minLength": 1, "maxLength": 500},
+        "completion_question": {"type": "string", "minLength": 1, "maxLength": 500},
+        "completion_payoff": {"type": "string", "minLength": 1, "maxLength": 500},
+        "takeaway_or_next_use": {"type": "string", "minLength": 1, "maxLength": 500},
+        "target_action": {"enum": ["understand", "save", "share", "discuss", "consult", "convert"]},
+        "service_action": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "string", "minLength": 1, "maxLength": 500}
+          ]
+        },
+        "service_action_effect": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "string", "minLength": 1, "maxLength": 500}
+          ]
+        },
+        "entry_mechanism": {"enum": ["life-problem", "choice-conflict", "counterintuitive-result", "result-preview-story-reveal", "role-dialogue", "prop-demo", "light-humor", "search-intent-direct"]},
+        "humor_level": {"enum": ["none", "light", "moderate", "experimental"]},
+        "humor_target": {"enum": ["none", "self", "jargon", "mechanism", "common-reasoning-error"]},
+        "sensitive_humor_exception": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object", "additionalProperties": false,
+              "required": ["reason", "affected_person_targeted", "human_approved"],
+              "properties": {
+                "reason": {"type": "string", "minLength": 1, "maxLength": 500},
+                "affected_person_targeted": {"const": false},
+                "human_approved": {"const": true}
+              }
+            }
+          ]
+        },
+        "information_advances": {"type": "array", "minItems": 2, "maxItems": 8, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 300}},
+        "story_reveal_contract": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object", "additionalProperties": false,
+              "required": ["opening_watch_reason", "central_judgment_timing", "post_story_explanation", "empty_suspense_prohibited"],
+              "properties": {
+                "opening_watch_reason": {
+                  "type": "object", "additionalProperties": false,
+                  "required": ["type", "text", "target_seconds", "central_answer_disclosed", "body_fulfills_opening"],
+                  "properties": {
+                    "type": {"enum": ["result-glimpse", "concrete-number", "counterintuitive-change", "choice-conflict", "key-question", "decisive-scene"]},
+                    "text": {"type": "string", "minLength": 1, "maxLength": 240},
+                    "target_seconds": {"type": "number", "minimum": 0.5, "maximum": 2},
+                    "central_answer_disclosed": {"const": false},
+                    "body_fulfills_opening": {"const": true}
+                  }
+                },
+                "central_judgment_timing": {"const": "near-story-close"},
+                "post_story_explanation": {
+                  "type": "object", "additionalProperties": false,
+                  "required": ["sentence_count", "boundary_included"],
+                  "properties": {
+                    "sentence_count": {"type": "integer", "minimum": 2, "maximum": 4},
+                    "boundary_included": {"const": true}
+                  }
+                },
+                "empty_suspense_prohibited": {"const": true}
+              }
+            }
+          ]
+        },
+        "analogy": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object", "additionalProperties": false,
+              "required": ["metaphor", "mapping", "boundary"],
+              "properties": {
+                "metaphor": {"type": "string", "minLength": 1, "maxLength": 300},
+                "mapping": {"type": "string", "minLength": 1, "maxLength": 500},
+                "boundary": {"type": "string", "minLength": 1, "maxLength": 500}
+              }
+            }
+          ]
+        }
+      }
+    },
+    "postcreative_gate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["reviewed_at", "decision", "key_boundary_in_body", "source_detail_available_in_package", "safe_action_present", "individual_case_generalized", "misinterpretation_scenarios", "scores", "attention_review", "fun_integrity_review"],
+      "properties": {
+        "reviewed_at": {"type": "string", "format": "date-time"},
+        "decision": {"const": "passed"},
+        "key_boundary_in_body": {"const": true},
+        "source_detail_available_in_package": {"const": true},
+        "safe_action_present": {"const": true},
+        "individual_case_generalized": {"const": false},
+        "misinterpretation_scenarios": {"type": "array", "minItems": 1, "maxItems": 6, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 500}},
+        "scores": {
+          "type": "object", "additionalProperties": false,
+          "required": ["evidence", "boundary", "safety"],
+          "properties": {
+            "evidence": {"type": "integer", "minimum": 1, "maximum": 5},
+            "boundary": {"type": "integer", "minimum": 1, "maximum": 5},
+            "safety": {"type": "integer", "minimum": 1, "maximum": 5}
+          }
+        },
+        "attention_review": {
+          "type": "object", "additionalProperties": false,
+          "required": ["decision", "opening_watch_reason_present", "audience_relevance_immediate", "protagonist_goal_or_reader_task_visible", "concrete_stakes_visible", "scene_or_dialogue_anchor_preserved", "tension_or_direct_utility_present", "information_progression_present", "completion_payoff_present", "takeaway_or_next_use_present", "service_causality_fit", "central_judgment_clear", "explanation_within_budget", "title_cover_opening_aligned"],
+          "properties": {
+            "decision": {"const": "passed"},
+            "opening_watch_reason_present": {"const": true},
+            "audience_relevance_immediate": {"const": true},
+            "protagonist_goal_or_reader_task_visible": {"const": true},
+            "concrete_stakes_visible": {"const": true},
+            "scene_or_dialogue_anchor_preserved": {"const": true},
+            "tension_or_direct_utility_present": {"const": true},
+            "information_progression_present": {"const": true},
+            "completion_payoff_present": {"const": true},
+            "takeaway_or_next_use_present": {"const": true},
+            "service_causality_fit": {"const": true},
+            "central_judgment_clear": {"const": true},
+            "explanation_within_budget": {"const": true},
+            "title_cover_opening_aligned": {"const": true}
+          }
+        },
+        "fun_integrity_review": {
+          "type": "object", "additionalProperties": false,
+          "required": ["fun_present", "role", "helps_answer_core_question", "humor_target_safe", "core_value_survives_without_fun", "primary_memory_target"],
+          "properties": {
+            "fun_present": {"type": "boolean"},
+            "role": {"enum": ["none", "related", "decorative", "misleading"]},
+            "helps_answer_core_question": {"type": ["boolean", "null"]},
+            "humor_target_safe": {"type": "boolean"},
+            "core_value_survives_without_fun": {"type": "boolean"},
+            "primary_memory_target": {"enum": ["central-judgment", "action", "mechanism", "gag"]}
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": "small-model-content-loop-negative-cases.v1",
+  "base_fixture": "fixtures/small-model-content-loop-v1/input.valid.json",
+  "cases": [
+    {"case_id": "source-hash-drift", "mutation": {"path": "evidence_bundle.sha256", "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}, "expected_errors": ["source_hash_drift"]},
+    {"case_id": "routing-contract-drift", "mutation": {"path": "contract_binding.routing_set_sha256", "value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}, "expected_errors": ["contract_hash_drift"]},
+    {"case_id": "privacy-field", "mutation": {"path": "customer_name", "value": "虚构但仍禁止的姓名字段"}, "expected_errors": ["input_schema_invalid", "privacy_field_detected"]},
+    {"case_id": "fact-needs-source", "mutation": {"path": "claim_units.0.fact_status", "value": "unverified"}, "expected_errors": ["needs_source"]},
+    {"case_id": "human-voice-stale", "mutation": {"path": "human_voice_attestation.body_sha256", "value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"}, "expected_errors": ["human_voice_body_hash_drift"]},
+    {"case_id": "premature-finalize", "mutation": {"path": "requested_final_state", "value": "published"}, "expected_errors": ["premature_finalize_forbidden"]},
+    {"case_id": "series-dependency", "mutation": {"path": "canonical_seed.title", "value": "第1集：买了保险，理赔前要先核对什么？"}, "expected_errors": ["standalone_variant_failed"]}
+  ]
+}

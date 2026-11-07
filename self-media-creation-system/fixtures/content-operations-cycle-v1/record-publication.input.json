@@ -1,0 +1,25 @@
+{
+  "schema_version": "content-operations-cycle.publication-input.v1",
+  "data_classification": "synthetic-only",
+  "publication_key": "synthetic-medical-reimbursement-publication-001",
+  "source_objects": {
+    "goal_ref": "fixtures/content-operations-cycle-v1/operating-goal.source.json",
+    "goal_sha256": "cc3529c82f2938a033b5417c815e647b31ba3fe13cf468ea3080f634305ebcf8",
+    "account_ref": "fixtures/vibe-living-synthetic-loop-v1/account.json",
+    "account_sha256": "d9bdd5932918ba6a7f07a88fd2f799a8d9408c6546222140a2c2a8de838f4774",
+    "topic_ref": "fixtures/vibe-living-synthetic-loop-v1/questions/medical-reimbursement/topic.json",
+    "topic_sha256": "edab89cba49077108795906259a71997ba85d38c0cbe55029a2c82b40b8f4542",
+    "content_item_ref": "fixtures/vibe-living-synthetic-loop-v1/questions/medical-reimbursement/draft.content-item.json",
+    "content_item_sha256": "9183a5a6a85da4e96d47849d4faba334f8563e9a0ca83bb6090bde6dae5f82d7"
+  },
+  "content_id": "research-9af53d1845bc537784dd42b4",
+  "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+  "platform": "synthetic-surface",
+  "occurred_at": "2026-08-10T09:00:00+08:00",
+  "recorded_at": "2026-08-10T09:05:00+08:00",
+  "title": "Synthetic insurance information checklist",
+  "channel_variant": "synthetic-manual-publication",
+  "freeze_status": "partial",
+  "unavailable_reason": "Synthetic fixture intentionally stores no published body or media.",
+  "evidence_status": "manual-observation"
+}

@@ -1,0 +1,161 @@
+{
+  "schema_version": "short-video-timing-evidence-input.v1",
+  "measurement_id": "timing-measurement-synthetic-final-001",
+  "checked_at": "2026-09-11T11:00:00+08:00",
+  "content_id": "research-5d27168fe364979b2baf1886",
+  "stage": "final-cut",
+  "synthetic_only": true,
+  "structure_route": "direct-answer",
+  "script_binding": {
+    "owner": "content-studio-poc",
+    "path": "fixtures/case-video-script-v1/synthetic-case-video-script.v1.json",
+    "sha256": "3d7a2268c8eacda5809d279958753c2f21a90aa32629b0adc6a92c1d9b58a21b"
+  },
+  "timing_profile_binding": {
+    "owner": "self-media-creation-system",
+    "path": "config/short-video-timing-profile.v1.json",
+    "sha256": "e8755f83d3364f8d32ff04ec88afac2f36655055aefd24455ffaa25fe9e2c942"
+  },
+  "story_design_binding": null,
+  "media_binding": {
+    "owner": "self-media-creation-system",
+    "path": "fixtures/short-video-timing-evidence-v1/synthetic-final-cut.bin",
+    "sha256": "40a4a403cc5b014797c02cae169cef4d27c98e4db6b91d5eab733126fe3965cf",
+    "duration_seconds": 88,
+    "media_copy_stored": false
+  },
+  "measurement_basis": "final-cut-timed-transcript",
+  "measured_duration_seconds": 88,
+  "timeline": [
+    {
+      "entry_id": "beat-01",
+      "segment_id": "segment-01",
+      "start_seconds": 0,
+      "end_seconds": 4,
+      "observed_text": "家里突然要面对癌症诊治时",
+      "script_anchor": "家里突然要面对癌症诊治时",
+      "alignment_status": "exact",
+      "review_note": null,
+      "roles": [
+        "audience-stake",
+        "reason-to-continue"
+      ]
+    },
+    {
+      "entry_id": "beat-02",
+      "segment_id": "segment-01",
+      "start_seconds": 4,
+      "end_seconds": 12,
+      "observed_text": "摆在面前的不只是怎么治",
+      "script_anchor": "摆在面前的不只是怎么治",
+      "alignment_status": "exact",
+      "review_note": null,
+      "roles": [
+        "information-advance"
+      ]
+    },
+    {
+      "entry_id": "beat-03",
+      "segment_id": "segment-01",
+      "start_seconds": 12,
+      "end_seconds": 23,
+      "observed_text": "还会冒出医院范围、保单责任和材料怎么准备这些问题",
+      "script_anchor": "还会冒出医院范围、保单责任和材料怎么准备这些问题",
+      "alignment_status": "exact",
+      "review_note": null,
+      "roles": [
+        "information-advance"
+      ]
+    },
+    {
+      "entry_id": "beat-04",
+      "segment_id": "segment-02",
+      "start_seconds": 23,
+      "end_seconds": 35,
+      "observed_text": "最容易说错的，是把保险能不能用和治疗该怎么选混成一件事",
+      "script_anchor": "最容易说错的，是把保险能不能用和治疗该怎么选混成一件事",
+      "alignment_status": "exact",
+      "review_note": null,
+      "roles": [
+        "information-advance"
+      ]
+    },
+    {
+      "entry_id": "beat-05",
+      "segment_id": "segment-02",
+      "start_seconds": 35,
+      "end_seconds": 47,
+      "observed_text": "治疗方案由医生和家庭决定，保险顾问不能替他们作医疗判断",
+      "script_anchor": "治疗方案由医生和家庭决定，保险顾问不能替他们作医疗判断",
+      "alignment_status": "exact",
+      "review_note": null,
+      "roles": [
+        "information-advance"
+      ]
+    },
+    {
+      "entry_id": "beat-06",
+      "segment_id": "segment-03",
+      "start_seconds": 47,
+      "end_seconds": 59,
+      "observed_text": "能做的，是在安排确定以后",
+      "script_anchor": "能做的，是在安排确定以后",
+      "alignment_status": "exact",
+      "review_note": null,
+      "roles": [
+        "information-advance"
+      ]
+    },
+    {
+      "entry_id": "beat-07",
+      "segment_id": "segment-03",
+      "start_seconds": 59,
+      "end_seconds": 69,
+      "observed_text": "把合同责任、医院范围和材料清单一项项核对",
+      "script_anchor": "把合同责任、医院范围和材料清单一项项核对",
+      "alignment_status": "exact",
+      "review_note": null,
+      "roles": [
+        "information-advance",
+        "main-payoff"
+      ]
+    },
+    {
+      "entry_id": "beat-08",
+      "segment_id": "segment-03",
+      "start_seconds": 69,
+      "end_seconds": 78,
+      "observed_text": "哪些已经确认，哪些还要继续问，都写清楚",
+      "script_anchor": "哪些已经确认，哪些还要继续问，都写清楚",
+      "alignment_status": "exact",
+      "review_note": null,
+      "roles": [
+        "information-advance"
+      ]
+    },
+    {
+      "entry_id": "beat-09",
+      "segment_id": "segment-04",
+      "start_seconds": 78,
+      "end_seconds": 87,
+      "observed_text": "这些动作能减少信息混乱，但个案结果不能外推",
+      "script_anchor": "这些动作能减少信息混乱，但个案结果不能外推",
+      "alignment_status": "exact",
+      "review_note": null,
+      "roles": [
+        "information-advance"
+      ]
+    }
+  ],
+  "continuity_binding": {
+    "surface_mode": "profile-consistency",
+    "timeline_entry_id": null,
+    "assessment": "profile-only-not-spoken"
+  },
+  "publication_boundary": "manual-only",
+  "authority": {
+    "publish_authorized": false,
+    "execution_authorized": false,
+    "external_send_authorized": false
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "schema_version": "self-media-agent-request.v1",
+  "request_id": "synthetic-case-video-001",
+  "workflow_goal": "case_video_candidate",
+  "synthetic_only": true,
+  "author_identity": {"account_id": "fixture-account", "genre": "spoken_script"},
+  "available_inputs": ["authorization_status", "content_item", "verified_research_output", "voice_profile_ref", "source_media_ref", "source_subject_manifest", "local_edit_manifests", "artifact_lifecycle_manifest", "production_run_lock"],
+  "input_refs": []
+}

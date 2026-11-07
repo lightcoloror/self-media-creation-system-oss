@@ -1,0 +1,316 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/platform-publication-package.v2.schema.json",
+  "title": "Manual-only publication release and post-upload verification package",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "package_id",
+    "content_item_ref",
+    "created_at",
+    "package_phase",
+    "video",
+    "privacy_gate",
+    "release_scope_sha256",
+    "release_reviews",
+    "automatic_publish",
+    "publication_mode",
+    "platforms"
+  ],
+  "properties": {
+    "schema_version": {"const": "self-media-platform-publication-package.v2"},
+    "package_id": {"$ref": "#/$defs/id"},
+    "content_item_ref": {"$ref": "#/$defs/id"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "package_phase": {"enum": ["release_candidate", "post_upload_checked"]},
+    "video": {"$ref": "#/$defs/artifact"},
+    "privacy_gate": {"$ref": "#/$defs/artifact"},
+    "release_scope_sha256": {"$ref": "#/$defs/sha256"},
+    "release_reviews": {"$ref": "#/$defs/releaseReviews"},
+    "automatic_publish": {"const": false},
+    "publication_mode": {"const": "manual_only"},
+    "platforms": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/platform"}
+    }
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,99}$"},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![A-Za-z]:[\\\\/])(?!/)(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "expected_sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/relativePath"},
+        "expected_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "cover": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ratio", "artifact"],
+      "properties": {
+        "ratio": {"enum": ["9:16", "3:4", "4:3", "16:9", "1:1"]},
+        "artifact": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "reviewCredentialRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["credential_ref", "credential_sha256", "reviewer", "reviewed_at"],
+      "properties": {
+        "credential_ref": {"$ref": "#/$defs/relativePath"},
+        "credential_sha256": {"$ref": "#/$defs/sha256"},
+        "reviewer": {"type": "string", "minLength": 1, "maxLength": 120},
+        "reviewed_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "releaseReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "credential", "reason"],
+      "properties": {
+        "status": {"enum": ["approved", "not_required", "pending", "rework_required"]},
+        "credential": {
+          "oneOf": [
+            {"$ref": "#/$defs/reviewCredentialRef"},
+            {"type": "null"}
+          ]
+        },
+        "reason": {"type": ["string", "null"], "minLength": 1, "maxLength": 240}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "approved"}}},
+          "then": {
+            "properties": {
+              "credential": {"$ref": "#/$defs/reviewCredentialRef"},
+              "reason": {"type": "null"}
+            }
+          },
+          "else": {
+            "properties": {
+              "credential": {"type": "null"},
+              "reason": {"type": "string", "minLength": 1, "maxLength": 240}
+            }
+          }
+        }
+      ]
+    },
+    "releaseReviews": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["customer_final_cut", "institution_final_publication", "account_operator"],
+      "properties": {
+        "customer_final_cut": {"$ref": "#/$defs/releaseReview"},
+        "institution_final_publication": {"$ref": "#/$defs/releaseReview"},
+        "account_operator": {"$ref": "#/$defs/releaseReview"}
+      }
+    },
+    "rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_status",
+        "checked_at",
+        "title_max_characters",
+        "short_title_max_characters",
+        "collection_name_max_characters",
+        "collection_description_max_characters",
+        "required_cover_ratios",
+        "minimum_cover_candidates",
+        "maximum_cover_candidates",
+        "collection_cover_required",
+        "required_collection_cover_ratios",
+        "minimum_schedule_lead_minutes"
+      ],
+      "properties": {
+        "source_status": {
+          "enum": ["user_confirmed_current_authenticated_ui", "official_documentation", "unknown"]
+        },
+        "checked_at": {"type": "string", "format": "date-time"},
+        "title_max_characters": {"type": ["integer", "null"], "minimum": 1},
+        "short_title_max_characters": {"type": ["integer", "null"], "minimum": 1},
+        "collection_name_max_characters": {"type": ["integer", "null"], "minimum": 1},
+        "collection_description_max_characters": {"type": ["integer", "null"], "minimum": 1},
+        "required_cover_ratios": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["9:16", "3:4", "4:3", "16:9", "1:1"]}
+        },
+        "minimum_cover_candidates": {"type": "integer", "minimum": 1},
+        "maximum_cover_candidates": {"type": ["integer", "null"], "minimum": 1},
+        "collection_cover_required": {"type": "boolean"},
+        "required_collection_cover_ratios": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["9:16", "3:4", "4:3", "16:9", "1:1"]}
+        },
+        "minimum_schedule_lead_minutes": {"type": ["integer", "null"], "minimum": 0},
+        "maximum_schedule_lead_minutes": {"type": ["integer", "null"], "minimum": 0},
+        "schedule_change_policy": {
+          "enum": ["modifiable", "unmodifiable", "restricted_by_submission_type", "unknown_must_recheck"]
+        },
+        "schedule_change_route": {"type": ["string", "null"], "minLength": 1},
+        "schedule_restricted_submission_types": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "maxLength": 80}
+        },
+        "collection_creation_during_publish_supported": {"type": ["boolean", "null"]},
+        "attach_during_publish_requires_existing_collection": {"type": ["boolean", "null"]},
+        "post_publish_add_to_collection_supported": {"type": ["boolean", "null"]},
+        "temporary_title_field_tag_recognition": {"type": "boolean"},
+        "final_title_restore_required": {"type": "boolean"}
+      }
+    },
+    "correctionRoute": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_status",
+        "checked_at",
+        "scope",
+        "source_replacement_support",
+        "on_source_error",
+        "preserve_metrics_before_action",
+        "replacement_requires_re_review",
+        "deletion_irreversible"
+      ],
+      "properties": {
+        "source_status": {
+          "enum": ["user_confirmed_current_authenticated_ui", "official_documentation", "unknown"]
+        },
+        "checked_at": {"type": "string", "format": "date-time"},
+        "scope": {"enum": ["current_account_and_item", "account_capability", "official_platform_rule"]},
+        "source_replacement_support": {"enum": ["supported", "unsupported", "conditional", "unknown"]},
+        "on_source_error": {"enum": ["replace_source", "delete_and_repost", "recheck_current_ui"]},
+        "preserve_metrics_before_action": {"type": "boolean"},
+        "replacement_requires_re_review": {"type": ["boolean", "null"]},
+        "deletion_irreversible": {"type": ["boolean", "null"]}
+      }
+    },
+    "postUploadPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "checks", "failure_route", "record_via"],
+      "properties": {
+        "status": {"const": "ready"},
+        "checks": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["playback", "audio", "subtitles", "cover", "privacy", "metadata"]}
+        },
+        "failure_route": {"const": "use_platform_correction_route"},
+        "record_via": {"const": "content_operations_cycle.record-publication"}
+      }
+    },
+    "postUploadChecks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["playback", "audio", "subtitles", "cover", "privacy", "metadata"],
+      "properties": {
+        "playback": {"enum": ["passed", "failed"]},
+        "audio": {"enum": ["passed", "failed"]},
+        "subtitles": {"enum": ["passed", "failed"]},
+        "cover": {"enum": ["passed", "failed"]},
+        "privacy": {"enum": ["passed", "failed"]},
+        "metadata": {"enum": ["passed", "failed"]}
+      }
+    },
+    "postUploadResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checked_at",
+        "checker",
+        "published_item_ref",
+        "manual_upload_confirmed",
+        "checks",
+        "correction_required",
+        "failure_route_used",
+        "automatic_action_performed"
+      ],
+      "properties": {
+        "checked_at": {"type": "string", "format": "date-time"},
+        "checker": {"type": "string", "minLength": 1, "maxLength": 120},
+        "published_item_ref": {"type": "string", "minLength": 1, "maxLength": 500},
+        "manual_upload_confirmed": {"const": true},
+        "checks": {"$ref": "#/$defs/postUploadChecks"},
+        "correction_required": {"type": "boolean"},
+        "failure_route_used": {"enum": ["none", "replace_source", "delete_and_repost", "recheck_current_ui"]},
+        "automatic_action_performed": {"const": false}
+      }
+    },
+    "platform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "platform_id",
+        "enabled",
+        "title",
+        "short_title",
+        "description",
+        "tags",
+        "collection_name",
+        "collection_description",
+        "collection_cover",
+        "scheduled_at",
+        "covers",
+        "rules",
+        "human_preview_status",
+        "copy_human_review_status",
+        "correction_route",
+        "post_upload_plan",
+        "post_upload_result"
+      ],
+      "properties": {
+        "platform_id": {
+          "enum": ["xiaohongshu", "wechat_channels", "bilibili", "douyin", "kuaishou", "other"]
+        },
+        "enabled": {"type": "boolean"},
+        "title": {"type": "string", "minLength": 1, "maxLength": 200},
+        "short_title": {"type": ["string", "null"], "maxLength": 100},
+        "description": {"type": "string", "minLength": 1, "maxLength": 5000},
+        "tags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "maxLength": 80}
+        },
+        "collection_name": {"type": ["string", "null"], "maxLength": 100},
+        "collection_description": {"type": ["string", "null"], "maxLength": 1000},
+        "collection_cover": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/cover"}
+          ]
+        },
+        "scheduled_at": {"type": ["string", "null"], "format": "date-time"},
+        "covers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/cover"}
+        },
+        "rules": {"$ref": "#/$defs/rules"},
+        "human_preview_status": {"enum": ["pending", "passed", "rework_required"]},
+        "copy_human_review_status": {"enum": ["pending", "passed", "rework_required"]},
+        "correction_route": {"$ref": "#/$defs/correctionRoute"},
+        "post_upload_plan": {"$ref": "#/$defs/postUploadPlan"},
+        "post_upload_result": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/postUploadResult"}
+          ]
+        }
+      }
+    }
+  }
+}

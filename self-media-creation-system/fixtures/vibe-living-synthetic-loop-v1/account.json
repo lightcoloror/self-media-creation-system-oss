@@ -1,0 +1,44 @@
+{
+  "account_id": "acct_1RNQ220TWEF0K9RGMTYS1B47WB",
+  "account_role": "experiment",
+  "created_at": "2026-08-05T12:00:00+08:00",
+  "display_name": "Synthetic Insurance Content Fixture",
+  "goal_ids": [
+    "goal_01ARZ3NDEKTSV4RRFFQ69G5FBC"
+  ],
+  "ownership": {
+    "access_model": "single-owner",
+    "last_permission_review_at": null,
+    "manager_refs": [],
+    "owner_ref": "synthetic-fixture"
+  },
+  "platform": "synthetic-surface",
+  "platform_account_id": null,
+  "positioning": {
+    "audience_segments": [
+      "synthetic insurance education reader"
+    ],
+    "business_boundary": "No real account, customer, product, publication, or CRM write.",
+    "summary": "Fully synthetic account for offline contract tests only."
+  },
+  "schema_version": "0.1",
+  "security": {
+    "backup_codes_status": "unknown",
+    "last_recovery_drill_at": null,
+    "last_security_review_at": null,
+    "mfa_method": "unknown",
+    "mfa_status": "unknown",
+    "notes": "No credentials exist for this synthetic account.",
+    "recovery_status": "unknown",
+    "secret_location_class": "not-recorded"
+  },
+  "source_refs": [
+    {
+      "evidence_status": "local-fact",
+      "note": "Synthetic fixture seed only.",
+      "ref": "fixture://vibe-living-synthetic-loop-v1/seed"
+    }
+  ],
+  "status": "planning",
+  "updated_at": "2026-08-05T12:00:00+08:00"
+}

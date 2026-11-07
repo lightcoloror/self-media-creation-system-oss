@@ -1,0 +1,12 @@
+{
+  "schema_version": "legacy-feedback.v0",
+  "fixture_id": "fixture_legacy_feedback_v0",
+  "synthetic_only": true,
+  "feedback": {
+    "signal_status": "no_signal",
+    "platform_signals": { "synthetic.impressions": 42 },
+    "business_signals": {},
+    "qualitative_feedback": [],
+    "learning_decision": "insufficient-evidence"
+  }
+}

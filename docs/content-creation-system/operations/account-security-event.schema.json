@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lightcolor/content-operations/account-security-event.schema.json",
+  "title": "账号安全与恢复事件",
+  "description": "追加式记录权限复核、恢复演练、连接应用复核、平台限制、安全事件和恢复结果；不保存任何秘密值。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "data_classification",
+    "security_event_id",
+    "account_id",
+    "event_type",
+    "occurred_at",
+    "recorded_at",
+    "status",
+    "evidence_status",
+    "summary",
+    "privacy",
+    "authority"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "data_classification": { "enum": ["synthetic-only", "deidentified-operational"] },
+    "security_event_id": { "type": "string", "pattern": "^sec_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "account_id": { "type": "string", "pattern": "^acct_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "event_type": { "enum": ["permission-review", "recovery-drill", "connected-app-review", "platform-restriction", "security-incident", "recovery-completed", "handoff-review"] },
+    "occurred_at": { "type": "string", "format": "date-time" },
+    "recorded_at": { "type": "string", "format": "date-time" },
+    "status": { "enum": ["planned", "in-progress", "pass", "partial", "fail", "resolved"] },
+    "evidence_status": { "enum": ["platform-receipt", "manual-observation", "local-record", "unknown"] },
+    "summary": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "maxLength": 1000 },
+      "uniqueItems": true
+    },
+    "next_review_at": { "type": ["string", "null"], "format": "date-time" },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["secrets_included", "recovery_codes_included", "totp_seed_included", "direct_identifiers_included"],
+      "properties": {
+        "secrets_included": { "const": false },
+        "recovery_codes_included": { "const": false },
+        "totp_seed_included": { "const": false },
+        "direct_identifiers_included": { "const": false }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["execution_authorized", "credential_action_authorized", "account_action_authorized"],
+      "properties": {
+        "execution_authorized": { "const": false },
+        "credential_action_authorized": { "const": false },
+        "account_action_authorized": { "const": false }
+      }
+    }
+  }
+}

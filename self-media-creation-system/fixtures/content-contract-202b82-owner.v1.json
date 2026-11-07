@@ -1,0 +1,222 @@
+{
+  "schema_version": "content-contract-202b82-owner-fixture.v1",
+  "positive_additions": {
+    "design_context": {
+      "principles_version": "shared-design-principles.v1",
+      "media_adapter": "infographic",
+      "communication_job": {
+        "audience": "需要理解复杂规则的普通读者",
+        "outcome": "能够区分事实证据与解释性视觉",
+        "central_takeaway": "视觉规则只约束表达，不改变事实、审核和人工发布边界"
+      },
+      "global_visual": {
+        "schema_version": "global-visual-context.v1",
+        "ruleset": {
+          "ref": "synthetic://shared-visual/guidelines.v1.json",
+          "version": "1.0.0",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "locale": "zh-Hans",
+        "writing_mode": "horizontal-tb",
+        "conformance_profile": "infographic.v1",
+        "authority_scope": "global-only",
+        "enforcement": {
+          "p0": "blocking",
+          "p1": "report-only",
+          "p2": "explicit-only"
+        },
+        "motion": {
+          "mode": "none"
+        },
+        "exceptions": [
+          {
+            "rule_id": "synthetic-calibration-rule",
+            "reason": "Synthetic fixture for owner-contract validation only.",
+            "reviewer": "human-review-required",
+            "expires_at": "2099-12-31T23:59:59Z"
+          }
+        ]
+      }
+    },
+    "asset": {
+      "ref": "synthetic://assets/explanatory-diagram.svg",
+      "asset_type": "illustration",
+      "rights_status": "verified",
+      "privacy_status": "not-applicable",
+      "visual_role": "explanatory-illustration",
+      "evidence_status": "illustrative-only",
+      "treatment": "annotated",
+      "text_overlay_policy": "none"
+    },
+    "render_artifact": {
+      "artifact_id": "synthetic-global-visual-card",
+      "output_family": "infographic",
+      "media_adapter": "infographic",
+      "layout_intent": "list",
+      "renderer": "manual",
+      "format": "svg",
+      "status": "review-required",
+      "conformance_receipt_ref": "synthetic://receipts/visual-conformance.json"
+    }
+  },
+  "negative_cases": [
+    {
+      "id": "ruleset_version_must_be_semver",
+      "target": "design_context.global_visual",
+      "operations": [
+        { "action": "set", "path": "ruleset.version", "value": "latest" }
+      ]
+    },
+    {
+      "id": "ruleset_hash_must_be_sha256",
+      "target": "design_context.global_visual",
+      "operations": [
+        { "action": "set", "path": "ruleset.sha256", "value": "not-a-sha256" }
+      ]
+    },
+    {
+      "id": "locale_must_be_supported",
+      "target": "design_context.global_visual",
+      "operations": [
+        { "action": "set", "path": "locale", "value": "en-US" }
+      ]
+    },
+    {
+      "id": "brand_bound_requires_authority",
+      "target": "design_context.global_visual",
+      "operations": [
+        { "action": "set", "path": "authority_scope", "value": "brand-bound" }
+      ]
+    },
+    {
+      "id": "brand_authority_cannot_grant_execution",
+      "target": "design_context.global_visual",
+      "operations": [
+        {
+          "action": "set",
+          "path": "brand_authority",
+          "value": {
+            "profile_id": "synthetic-profile",
+            "profile_version": "1.0.0",
+            "repository_ref": "synthetic://brand-authority",
+            "authority_version": "1.0.0",
+            "profile_ref": "synthetic://brand/profile.json",
+            "tokens_ref": "synthetic://brand/tokens.json",
+            "projection_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "qa_receipt_ref": "synthetic://brand/qa.json",
+            "qa_receipt_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "execution_authorized": true
+          }
+        },
+        { "action": "set", "path": "authority_scope", "value": "brand-bound" }
+      ]
+    },
+    {
+      "id": "explicit_motion_is_web_only",
+      "target": "design_context.global_visual",
+      "operations": [
+        {
+          "action": "set",
+          "path": "motion",
+          "value": {
+            "mode": "explicit",
+            "purpose": "Synthetic transition",
+            "static_fallback_ref": "synthetic://fallback/static.svg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "exception_requires_reviewer",
+      "target": "design_context.global_visual",
+      "operations": [
+        {
+          "action": "set",
+          "path": "exceptions",
+          "value": [
+            {
+              "rule_id": "synthetic-rule",
+              "reason": "Synthetic reason is long enough.",
+              "expires_at": "2099-12-31T23:59:59Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "exception_cannot_grant_publication",
+      "target": "design_context.global_visual",
+      "operations": [
+        {
+          "action": "set",
+          "path": "exceptions",
+          "value": [
+            {
+              "rule_id": "synthetic-rule",
+              "reason": "Synthetic reason is long enough.",
+              "reviewer": "human-review-required",
+              "expires_at": "2099-12-31T23:59:59Z",
+              "publication_authorized": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "global_visual_cannot_grant_execution",
+      "target": "design_context.global_visual",
+      "operations": [
+        { "action": "set", "path": "execution_authorized", "value": true }
+      ]
+    },
+    {
+      "id": "asset_visual_role_is_closed_enum",
+      "target": "asset",
+      "operations": [
+        { "action": "set", "path": "visual_role", "value": "sales-proof" }
+      ]
+    },
+    {
+      "id": "asset_evidence_status_is_closed_enum",
+      "target": "asset",
+      "operations": [
+        { "action": "set", "path": "evidence_status", "value": "official-fact" }
+      ]
+    },
+    {
+      "id": "asset_treatment_is_closed_enum",
+      "target": "asset",
+      "operations": [
+        { "action": "set", "path": "treatment", "value": "persuasive" }
+      ]
+    },
+    {
+      "id": "asset_overlay_policy_is_closed_enum",
+      "target": "asset",
+      "operations": [
+        { "action": "set", "path": "text_overlay_policy", "value": "unrestricted" }
+      ]
+    },
+    {
+      "id": "asset_cannot_grant_publication",
+      "target": "asset",
+      "operations": [
+        { "action": "set", "path": "publication_authorized", "value": true }
+      ]
+    },
+    {
+      "id": "conformance_receipt_ref_cannot_be_empty",
+      "target": "render_artifact",
+      "operations": [
+        { "action": "set", "path": "conformance_receipt_ref", "value": "" }
+      ]
+    },
+    {
+      "id": "render_artifact_cannot_grant_execution",
+      "target": "render_artifact",
+      "operations": [
+        { "action": "set", "path": "execution_authorized", "value": true }
+      ]
+    }
+  ]
+}

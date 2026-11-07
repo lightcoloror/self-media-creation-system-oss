@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/self-media/video-privacy-treatment-decision.v1.schema.json",
+  "title": "Video subject privacy and voice-treatment decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "decision_id",
+    "revision",
+    "recorded_at",
+    "recorded_by_role",
+    "customer_choice_status",
+    "preview_policy",
+    "authorization_overlay_policy",
+    "source_media",
+    "subject_manifest",
+    "local_edit_state",
+    "subjects",
+    "customer_contact_performed_by_system",
+    "raw_customer_text_stored"
+  ],
+  "properties": {
+    "schema_version": {"const": "self-media-video-privacy-treatment-decision.v1"},
+    "decision_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{5,99}$"},
+    "revision": {"type": "integer", "minimum": 1},
+    "supersedes_decision_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "recorded_by_role": {"enum": ["human_editor", "human_project_owner"]},
+    "customer_choice_status": {"enum": ["confirmed", "undecided"]},
+    "preview_policy": {"enum": ["internal_preview_only", "customer_preview"]},
+    "authorization_overlay_policy": {"enum": ["required_with_face_window", "not_applicable"]},
+    "source_media": {"$ref": "#/$defs/artifact"},
+    "subject_manifest": {"$ref": "#/$defs/artifact"},
+    "local_edit_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_edl",
+        "speaker_segments",
+        "face_tracks",
+        "identity_reference_manifest",
+        "visible_window_manifest",
+        "mask_recipe_catalog",
+        "voice_recipe_catalog",
+        "motion_recipe_catalog"
+      ],
+      "properties": {
+        "source_edl": {"$ref": "#/$defs/nullableArtifact"},
+        "speaker_segments": {"$ref": "#/$defs/nullableArtifact"},
+        "face_tracks": {"$ref": "#/$defs/nullableArtifact"},
+        "identity_reference_manifest": {"$ref": "#/$defs/nullableArtifact"},
+        "visible_window_manifest": {"$ref": "#/$defs/nullableArtifact"},
+        "mask_recipe_catalog": {"$ref": "#/$defs/nullableArtifact"},
+        "voice_recipe_catalog": {"$ref": "#/$defs/nullableArtifact"},
+        "motion_recipe_catalog": {"$ref": "#/$defs/nullableArtifact"}
+      }
+    },
+    "subjects": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/subject"}
+    },
+    "customer_contact_performed_by_system": {"const": false},
+    "raw_customer_text_stored": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![A-Za-z]:[\\\\/])(?!/)(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "expected_sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/relativePath"},
+        "expected_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "nullableArtifact": {
+      "oneOf": [{"$ref": "#/$defs/artifact"}, {"type": "null"}]
+    },
+    "voiceTreatment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action"],
+      "properties": {
+        "action": {
+          "enum": [
+            "undecided",
+            "keep_original",
+            "convert_same_gender_range",
+            "mute",
+            "exclude_segment"
+          ]
+        },
+        "local_recipe_ref": {"type": "string", "minLength": 1, "maxLength": 160}
+      }
+    },
+    "faceTreatment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action"],
+      "properties": {
+        "action": {"enum": ["undecided", "keep_visible", "mosaic", "exclude_front_face"]},
+        "local_recipe_ref": {"type": "string", "minLength": 1, "maxLength": 160}
+      }
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subject_ref",
+        "role",
+        "speaker_segment_refs",
+        "face_track_refs",
+        "identity_reference_refs",
+        "visible_window_refs",
+        "identity_match_status",
+        "voice_treatment",
+        "face_treatment"
+      ],
+      "properties": {
+        "subject_ref": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,79}$"},
+        "role": {"enum": ["customer_interviewee", "interviewer_creator", "other_participant"]},
+        "speaker_segment_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "maxLength": 120}
+        },
+        "face_track_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "maxLength": 120}
+        },
+        "identity_reference_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "maxLength": 120}
+        },
+        "visible_window_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "maxLength": 120}
+        },
+        "identity_match_status": {"enum": ["confirmed", "undecided"]},
+        "voice_treatment": {"$ref": "#/$defs/voiceTreatment"},
+        "face_treatment": {"$ref": "#/$defs/faceTreatment"}
+      }
+    }
+  }
+}

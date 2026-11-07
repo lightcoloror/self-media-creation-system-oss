@@ -1,0 +1,185 @@
+{
+  "schema_version": "platform-metric-mappings.v1",
+  "export_profiles": {
+    "wechat_official_template_v1": {
+      "platform": "wechat_official_account",
+      "file_type": "csv",
+      "header_row": 1,
+      "source_grain": "account_day",
+      "label_field": null,
+      "time_field": "date",
+      "compatibility_status": "template_only",
+      "format_version": "wechat-account-day-template.v1",
+      "empty_values": [
+        "-",
+        "--"
+      ],
+      "metrics": {
+        "read_users": [
+          "read_users",
+          "count",
+          "number"
+        ],
+        "delivered_users": [
+          "delivered_users",
+          "count",
+          "number"
+        ],
+        "open_rate_percent": [
+          "open_rate",
+          "percent",
+          "percent_text"
+        ]
+      }
+    },
+    "xiaohongshu_items": {
+      "platform": "xiaohongshu",
+      "file_type": "xlsx",
+      "header_row": 2,
+      "source_grain": "content_item",
+      "label_field": "笔记标题",
+      "time_field": "首次发布时间",
+      "metrics": {
+        "曝光": ["impressions", "count", "number"],
+        "观看量": ["views", "count", "number"],
+        "封面点击率": ["cover_click_rate", "percent", "ratio_to_percent"],
+        "点赞": ["likes", "count", "number"],
+        "评论": ["comments", "count", "number"],
+        "收藏": ["saves", "count", "number"],
+        "涨粉": ["attributed_new_followers", "count", "number"],
+        "分享": ["shares", "count", "number"],
+        "人均观看时长": ["average_watch_time", "seconds", "number"],
+        "弹幕": ["danmaku", "count", "number"]
+      }
+    },
+    "wechat_channels_items": {
+      "platform": "wechat_channels",
+      "file_type": "csv",
+      "header_row": 1,
+      "source_grain": "content_item",
+      "label_field": "视频描述",
+      "time_field": "发布时间",
+      "metrics": {
+        "播放量": ["views", "count", "number"],
+        "完播率": ["completion_rate", "percent", "percent_text"],
+        "平均播放时长": ["average_watch_time", "seconds", "seconds_text"],
+        "推荐": ["recommendations", "count", "number"],
+        "喜欢": ["likes", "count", "number"],
+        "评论量": ["comments", "count", "number"],
+        "分享量": ["shares", "count", "number"],
+        "关注量": ["attributed_new_followers", "count", "number"],
+        "转发聊天和朋友圈": ["private_forwards", "count", "number"]
+      }
+    },
+    "douyin_items": {
+      "platform": "douyin",
+      "file_type": "xlsx",
+      "header_row": 1,
+      "source_grain": "content_item",
+      "label_field": "作品名称",
+      "time_field": "发布时间",
+      "empty_values": ["-", "--"],
+      "metrics": {
+        "播放量": ["views", "count", "number"],
+        "完播率": ["completion_rate", "percent", "ratio_or_percent"],
+        "5s完播率": ["retention_5s_rate", "percent", "ratio_or_percent"],
+        "封面点击率": ["cover_click_rate", "percent", "ratio_or_percent"],
+        "2s跳出率": ["bounce_2s_rate", "percent", "ratio_or_percent"],
+        "平均播放时长": ["average_watch_time", "seconds", "number"],
+        "点赞量": ["likes", "count", "number"],
+        "分享量": ["shares", "count", "number"],
+        "评论量": ["comments", "count", "number"],
+        "收藏量": ["saves", "count", "number"],
+        "主页访问量": ["profile_visits", "count", "number"],
+        "粉丝增量": ["attributed_new_followers", "count", "signed_number"]
+      }
+    },
+    "douyin_account_daily": {
+      "platform": "douyin",
+      "file_type": "xlsx",
+      "header_row": 1,
+      "source_grain": "account_day",
+      "label_field": null,
+      "time_field": "日期",
+      "empty_values": ["-", "--"],
+      "metrics": {
+        "投稿量": ["published_items", "count", "number"],
+        "总播放量": ["views", "count", "number"],
+        "总点赞量": ["likes", "count", "number"],
+        "总分享量": ["shares", "count", "number"],
+        "总评论量": ["comments", "count", "number"],
+        "5秒完播率": ["retention_5s_rate", "percent", "percent_text"],
+        "2秒跳出率": ["bounce_2s_rate", "percent", "percent_text"],
+        "封面点击率": ["cover_click_rate", "percent", "percent_text"],
+        "平均播放时长": ["average_watch_time", "seconds", "seconds_text"]
+      }
+    },
+    "kuaishou_items": {
+      "platform": "kuaishou",
+      "file_type": "xlsx",
+      "header_row": 1,
+      "source_grain": "content_item",
+      "label_field": "作品",
+      "time_field": "发布时间",
+      "empty_values": ["-", "--"],
+      "metrics": {
+        "播放量": ["views", "count", "number"],
+        "完播率": ["completion_rate", "percent", "ratio_or_percent"],
+        "评论量": ["comments", "count", "number"],
+        "点赞量": ["likes", "count", "number"],
+        "收藏量": ["saves", "count", "number"],
+        "涨粉量": ["attributed_new_followers", "count", "signed_number"]
+      }
+    },
+    "kuaishou_account_daily": {
+      "platform": "kuaishou",
+      "file_type": "xlsx",
+      "header_row": 1,
+      "source_grain": "account_day",
+      "label_field": null,
+      "time_field": "日期",
+      "empty_values": ["-", "--"],
+      "metrics": {
+        "播放量": ["views", "count", "number"],
+        "完播率": ["completion_rate", "percent", "percent_text"],
+        "净增粉丝量": ["net_follower_change", "count", "signed_number"],
+        "评论量": ["comments", "count", "number"],
+        "点赞量": ["likes", "count", "number"],
+        "分享量": ["shares", "count", "number"],
+        "作品量": ["published_items", "count", "number"]
+      },
+      "semantic_checks": [
+        {"metric_key": "completion_rate", "condition": "all_zero", "warning": "completion-rate-all-zero-semantic-confirmation-required"}
+      ]
+    },
+    "bilibili_items": {
+      "platform": "bilibili",
+      "file_type": "csv",
+      "header_row": 1,
+      "source_grain": "content_item",
+      "label_field": "视频标题",
+      "time_field": "发布时间",
+      "metrics": {
+        "播放量": ["views", "count", "number"],
+        "3秒跳出率": ["bounce_3s_rate", "percent", "percent_text"],
+        "涨粉量": ["attributed_new_followers", "count", "number"],
+        "取关量": ["unfollows", "count", "number"],
+        "点赞量": ["likes", "count", "number"],
+        "评论量": ["comments", "count", "number"],
+        "弹幕量": ["danmaku", "count", "number"],
+        "收藏量": ["saves", "count", "number"],
+        "投币量": ["coins", "count", "number"],
+        "转发量": ["shares", "count", "number"],
+        "平均播放进度": ["average_play_progress", "percent", "percent_text"]
+      },
+      "unmapped_semantic_fields": ["封标点击率", "粉丝点击率", "游客点击率"]
+    }
+  },
+  "legacy_source_aliases": {
+    "xiaohongshu": "xiaohongshu_items",
+    "wechat_channels": "wechat_channels_items",
+    "douyin": "douyin_account_daily",
+    "kuaishou": "kuaishou_account_daily",
+    "bilibili": "bilibili_items"
+  }
+}

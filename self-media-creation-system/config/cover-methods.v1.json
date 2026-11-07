@@ -1,0 +1,296 @@
+{
+  "schema": "self-media.cover-methods.v1",
+  "review_date": "2026-09-26",
+  "scope": "Optional method discovery only. External source copies and personal brand assets are not bundled or installed.",
+  "entries": [
+    {
+      "id": "canvas-design",
+      "root": "workspace",
+      "path": "source-inspect/anthropics-skills/skills/canvas-design/SKILL.md",
+      "availability": "not_bundled",
+      "stage": "editable_composition",
+      "content_kinds": [
+        "*"
+      ],
+      "routes": [
+        "photo-editorial",
+        "photo-collage",
+        "cutout-poster",
+        "type-led"
+      ],
+      "contribution": "空间、图形、字体共同构图并看实图精修，不强制调用生图模型。",
+      "deliverable": "layered_design_intent_and_visual_review",
+      "limits": "Public edition: optional source is not bundled or installed. 本地旧版研究副本，不代表线上最新版；艺术海报细字不能覆盖手机字号政策，不自动安装字体或执行整个外部工作流。"
+    },
+    {
+      "id": "woop-thumbnail",
+      "root": "workspace",
+      "path": "source-reviews/video-cover-agent-skills-20260825/sources/woop-social-media-skills/skills/thumbnail-design/SKILL.md",
+      "availability": "not_bundled",
+      "stage": "promise_and_test",
+      "content_kinds": [
+        "*"
+      ],
+      "routes": [
+        "*"
+      ],
+      "contribution": "封面和标题共同承诺；候选比较与正式单变量实验分开。",
+      "deliverable": "promise_and_title_roles",
+      "limits": "Public edition: optional source is not bundled or installed. 不采纳无验证 CTR 数字；本地 PK 不等于平台 A/B 结果。"
+    },
+    {
+      "id": "craig-thumbnail",
+      "root": "workspace",
+      "path": "source-reviews/video-cover-agent-skills-20260825/sources/craighewitt-skills/youtube/thumbnail-design/SKILL.md",
+      "availability": "not_bundled",
+      "stage": "mobile_critique",
+      "content_kinds": [
+        "*"
+      ],
+      "routes": [
+        "*"
+      ],
+      "contribution": "一眼识别主角和情绪；品牌一致不等于每次同构图。",
+      "deliverable": "small_preview_check",
+      "limits": "Public edition: optional source is not bundled or installed. 不把固定人脸占比、夸张表情或流量结论当通用强规则。"
+    },
+    {
+      "id": "charlie-thumbnail",
+      "root": "workspace",
+      "path": "source-reviews/video-cover-agent-skills-20260825/sources/charlie-social-media-skills/skills/youtube-thumbnail/SKILL.md",
+      "availability": "not_bundled",
+      "stage": "photo_direction",
+      "content_kinds": [
+        "*"
+      ],
+      "routes": [
+        "photo-editorial",
+        "photo-collage",
+        "cutout-poster",
+        "hybrid"
+      ],
+      "contribution": "照片表情、视线、主体位置和文字留白一并规划。",
+      "deliverable": "subject_and_negative_space",
+      "limits": "Public edition: optional source is not bundled or installed. 不强制露脸、不强制 Gemini、不默认上传参考照片。"
+    },
+    {
+      "id": "higgsfield-thumbnail",
+      "root": "workspace",
+      "path": "source-reviews/video-cover-agent-skills-20260825/sources/higgsfield-skills/higgsfield-youtube-thumbnail/SKILL.md",
+      "availability": "not_bundled",
+      "stage": "visual_layer",
+      "content_kinds": [
+        "*"
+      ],
+      "routes": [
+        "hybrid",
+        "ai-illustration"
+      ],
+      "contribution": "真实信息差，干净视觉层，针对具体缺陷做局部迭代。",
+      "deliverable": "visual_iteration_reason",
+      "limits": "Public edition: optional source is not bundled or installed. 仅方法参考；不执行其安装脚本、认证或云端上传。"
+    },
+    {
+      "id": "atutun-xhs-cover",
+      "root": "workspace",
+      "path": "source-reviews/repos/atutun-xhs-cover/atutun-xhs-cover/SKILL.md",
+      "availability": "not_bundled",
+      "stage": "information_hierarchy",
+      "content_kinds": [
+        "tutorial",
+        "product"
+      ],
+      "routes": [
+        "type-led",
+        "evidence-ui",
+        "cutout-poster",
+        "hybrid"
+      ],
+      "contribution": "8 类中文高密度封面；人物、标题、素材、背景、装饰、安全区顺序。",
+      "deliverable": "information_hierarchy",
+      "limits": "Public edition: optional source is not bundled or installed. 不作为亲子默认；固定浅黄、勾选和夸张人物不是通用品牌。"
+    },
+    {
+      "id": "gbro-cover-design",
+      "root": "workspace",
+      "path": "source-reviews/cover-design-skills-20260830/sources/gbro-cover-design-retry/SKILL.md",
+      "availability": "not_bundled",
+      "stage": "composition",
+      "content_kinds": [
+        "*"
+      ],
+      "routes": [
+        "*"
+      ],
+      "contribution": "三组 brief 决策、空间关系和按需构图配方；非仅换色。",
+      "deliverable": "spatial_composition",
+      "limits": "Public edition: optional source is not bundled or installed. 10 份构图参考不等于 10 个已验证渲染器。"
+    },
+    {
+      "id": "oh-my-cover-design",
+      "root": "workspace",
+      "path": "source-reviews/cover-design-skills-20260830/sources/oh-my-cover-design/SKILL.md",
+      "availability": "not_bundled",
+      "stage": "lineage",
+      "content_kinds": [],
+      "routes": [],
+      "contribution": "gbro 来源谱系和对照。",
+      "deliverable": "none",
+      "limits": "Public edition: optional source is not bundled or installed. 机制重叠，保留索引但不重复计入工作路线。"
+    },
+    {
+      "id": "gpt-image-2-style-library",
+      "root": "workspace",
+      "path": "source-reviews/awesome-gpt-image-2-2026-08-27/awesome-gpt-image-2/agents/skills/gpt-image-2-style-library/SKILL.md",
+      "data_path": "source-reviews/awesome-gpt-image-2-2026-08-27/awesome-gpt-image-2/data/style-library.json",
+      "availability": "not_bundled",
+      "stage": "style_reference",
+      "content_kinds": [
+        "*"
+      ],
+      "routes": [
+        "hybrid",
+        "ai-illustration"
+      ],
+      "contribution": "结构化模板、风格、场景、案例 ID 和常见失败点检索。",
+      "deliverable": "style_template_and_case_ids",
+      "limits": "Public edition: optional source is not bundled or installed. 名称不是已安装模型；案例是参考，不是效果或复现保证。"
+    },
+    {
+      "id": "baoyu-cover-image",
+      "root": "workspace",
+      "path": "ppt-ai-skills-20260701/baoyu-skills/skills/baoyu-cover-image/SKILL.md",
+      "availability": "not_bundled",
+      "stage": "concept_dimensions",
+      "content_kinds": [
+        "*"
+      ],
+      "routes": [
+        "hybrid",
+        "ai-illustration"
+      ],
+      "contribution": "题材、色板、渲染质感、文字和情绪分维度决策。",
+      "deliverable": "concept_dimensions",
+      "limits": "Public edition: optional source is not bundled or installed. 只在生成路线选择；不吞并真实摄影路线，不替代当前后端权限。"
+    },
+    {
+      "id": "baoyu-xhs-images",
+      "root": "workspace",
+      "path": "ppt-ai-skills-20260701/baoyu-skills/skills/baoyu-xhs-images/SKILL.md",
+      "availability": "not_bundled",
+      "stage": "card_structure",
+      "content_kinds": [
+        "tutorial",
+        "product",
+        "article"
+      ],
+      "routes": [
+        "ai-illustration"
+      ],
+      "contribution": "图文卡片系列，风格、布局、色板独立组合。",
+      "deliverable": "card_density_and_layout",
+      "limits": "Public edition: optional source is not bundled or installed. 首图方法可参考；系列卡片不是视频封面的同义词。"
+    },
+    {
+      "id": "baoyu-article-illustrator",
+      "root": "workspace",
+      "path": "ppt-ai-skills-20260701/baoyu-skills/skills/baoyu-article-illustrator/SKILL.md",
+      "availability": "not_bundled",
+      "stage": "semantic_visual",
+      "content_kinds": [
+        "article",
+        "tutorial"
+      ],
+      "routes": [
+        "hybrid",
+        "ai-illustration"
+      ],
+      "contribution": "从内容结构选择配图职责，区分图像类型与风格。",
+      "deliverable": "visual_semantic_role",
+      "limits": "Public edition: optional source is not bundled or installed. 文章中段配图不能直接当有点击承诺的视频封面。"
+    },
+    {
+      "id": "baoyu-infographic",
+      "root": "workspace",
+      "path": "ppt-ai-skills-20260701/baoyu-skills/skills/baoyu-infographic/SKILL.md",
+      "availability": "not_bundled",
+      "stage": "information_structure",
+      "content_kinds": [
+        "tutorial",
+        "product",
+        "article"
+      ],
+      "routes": [
+        "ai-illustration"
+      ],
+      "contribution": "信息关系布局与视觉风格拆开，按数据结构选择。",
+      "deliverable": "information_structure",
+      "limits": "Public edition: optional source is not bundled or installed. 高密度长图不直接缩成封面；生成信息图不充当真实证据。"
+    },
+    {
+      "id": "lucas-case-cover-craft",
+      "root": "codex_skills",
+      "path": "lucas-case-cover-craft/SKILL.md",
+      "availability": "not_bundled",
+      "stage": "case_plan",
+      "content_kinds": [
+        "case"
+      ],
+      "routes": [
+        "*"
+      ],
+      "contribution": "真实案例、证据、隐私和人物保护区，多比例正式 visual plan。",
+      "deliverable": "case_evidence_and_identity",
+      "limits": "Public edition: optional source is not bundled or installed. 保险医疗案例品牌不自动套到家庭账号。"
+    },
+    {
+      "id": "lucas-personal-visual-system",
+      "root": "codex_skills",
+      "path": "lucas-personal-visual-system/SKILL.md",
+      "availability": "not_bundled",
+      "stage": "brand_identity",
+      "content_kinds": [
+        "lucas_brand",
+        "case"
+      ],
+      "routes": [
+        "*"
+      ],
+      "contribution": "操作者身份、品牌、字号和跨平台视觉规范入口。",
+      "deliverable": "brand_and_identity_constraints",
+      "limits": "Public edition: optional source is not bundled or installed. 家庭内容出现 Lucas 身份时仍需人工选择此入口；AI 装饰授权不等于生成人脸授权。"
+    },
+    {
+      "id": "personal-editorial-illustrations",
+      "root": "codex_skills",
+      "path": "personal-editorial-illustrations/SKILL.md",
+      "availability": "not_bundled",
+      "stage": "non_person_metaphor",
+      "content_kinds": [
+        "family",
+        "article",
+        "generic"
+      ],
+      "routes": [
+        "hybrid",
+        "ai-illustration"
+      ],
+      "contribution": "物件、空间和动作表达概念，避免每张都生成人物或吉祥物。",
+      "deliverable": "non_person_metaphor",
+      "limits": "Public edition: optional source is not bundled or installed. 不冒充真实拍摄事件；原 SKILL 主要面向文章，封面须另补标题承诺。"
+    },
+    {
+      "id": "claude-youtube-thumbnail",
+      "root": null,
+      "path": null,
+      "availability": "not_bundled",
+      "stage": "unresolved",
+      "content_kinds": [],
+      "routes": [],
+      "contribution": "历史报告提及标题与封面分工。",
+      "deliverable": "none",
+      "limits": "Public edition: optional source is not bundled or installed. 尚未定位精确 SKILL/提交，不标记为已安装或可执行。"
+    }
+  ],
+  "execution_boundary": "方法选择是待 Agent 阅读与落实的设计任务，不执行第三方指令，不下载模型，不授权外传、生成、渲染或发布。"
+}

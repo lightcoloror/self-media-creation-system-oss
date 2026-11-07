@@ -1,0 +1,436 @@
+{
+  "schema_version": "channel-portfolio.v1",
+  "strategy_id": "synthetic-compatibility-example-no-approval",
+  "updated_at": "2026-11-07T00:00:00+00:00",
+  "status": "superseded",
+  "publication_boundary": "manual-only",
+  "current_stage": {
+    "id": "single-frozen-master-synchronized-distribution-validation",
+    "label": "Synthetic schema-state simulation; not an active strategy",
+    "default_public_format": "short-video-narration",
+    "default_public_platform": "xiaohongshu",
+    "video_cadence": "No production scheduled",
+    "longform_cadence": "No production scheduled",
+    "distribution_mode": "manual-synchronized-frozen-master",
+    "synchronized_public_platforms": [
+      "xiaohongshu",
+      "wechat-video",
+      "douyin",
+      "kuaishou",
+      "bilibili"
+    ]
+  },
+  "principles": [
+    "All state fields are inert synthetic examples, not user approval or account truth."
+  ],
+  "channels": [
+    {
+      "platform": "wechat-moments",
+      "priority": "P0",
+      "current_distribution_status": "not-active",
+      "portfolio_role": "Synthetic compatibility example only",
+      "account_ips": [
+        "cange-risk-diagnosis"
+      ],
+      "primary_formats": [
+        "moments-short-text"
+      ],
+      "overlay_ref": "wechat-moments@0.2",
+      "current_action": "No real account action; demonstrate contract structure.",
+      "not_for": [
+        "Publication, account access or a user-approved strategy"
+      ],
+      "acquisition_runtime": {
+        "acquisition_mode": "manual-private-input",
+        "runtime_status": "not-verified",
+        "execution_authority": "none",
+        "account_access": "not-authorized",
+        "real_media_download": "not-authorized",
+        "boundary_note": "Synthetic metadata; no current service or account was checked.",
+        "evidence_ref": "fixtures/platform-coverage.v1.synthetic.json"
+      }
+    },
+    {
+      "platform": "wechat-groups-wecom",
+      "priority": "service-only",
+      "current_distribution_status": "not-active",
+      "portfolio_role": "Synthetic compatibility example only",
+      "account_ips": [
+        "cange-risk-diagnosis"
+      ],
+      "primary_formats": [
+        "moments-short-text"
+      ],
+      "overlay_ref": "wechat-groups-wecom@0.2",
+      "current_action": "No real account action; demonstrate contract structure.",
+      "not_for": [
+        "Publication, account access or a user-approved strategy"
+      ],
+      "acquisition_runtime": {
+        "acquisition_mode": "manual-private-input",
+        "runtime_status": "not-verified",
+        "execution_authority": "none",
+        "account_access": "not-authorized",
+        "real_media_download": "not-authorized",
+        "boundary_note": "Synthetic metadata; no current service or account was checked.",
+        "evidence_ref": "fixtures/platform-coverage.v1.synthetic.json"
+      }
+    },
+    {
+      "platform": "xiaohongshu",
+      "priority": "P0",
+      "current_distribution_status": "active-synchronized-master",
+      "portfolio_role": "Synthetic compatibility example only",
+      "account_ips": [
+        "cange-risk-diagnosis"
+      ],
+      "primary_formats": [
+        "moments-short-text"
+      ],
+      "overlay_ref": "xiaohongshu@0.2",
+      "current_action": "No real account action; demonstrate contract structure.",
+      "not_for": [
+        "Publication, account access or a user-approved strategy"
+      ],
+      "acquisition_runtime": {
+        "acquisition_mode": "public-readonly-tools",
+        "runtime_status": "not-verified",
+        "execution_authority": "none",
+        "account_access": "not-authorized",
+        "real_media_download": "not-authorized",
+        "boundary_note": "Synthetic metadata; no current service or account was checked.",
+        "evidence_ref": "fixtures/platform-coverage.v1.synthetic.json"
+      }
+    },
+    {
+      "platform": "wechat-video",
+      "priority": "P1",
+      "current_distribution_status": "active-synchronized-master",
+      "portfolio_role": "Synthetic compatibility example only",
+      "account_ips": [
+        "cange-risk-diagnosis"
+      ],
+      "primary_formats": [
+        "moments-short-text"
+      ],
+      "overlay_ref": "wechat-video@0.2",
+      "current_action": "No real account action; demonstrate contract structure.",
+      "not_for": [
+        "Publication, account access or a user-approved strategy"
+      ],
+      "acquisition_runtime": {
+        "acquisition_mode": "share-link-assisted",
+        "runtime_status": "not-verified",
+        "execution_authority": "none",
+        "account_access": "not-authorized",
+        "real_media_download": "not-authorized",
+        "boundary_note": "Synthetic metadata; no current service or account was checked.",
+        "evidence_ref": "fixtures/platform-coverage.v1.synthetic.json"
+      }
+    },
+    {
+      "platform": "douyin",
+      "priority": "pause",
+      "current_distribution_status": "active-synchronized-master",
+      "portfolio_role": "Synthetic compatibility example only",
+      "account_ips": [
+        "cange-risk-diagnosis"
+      ],
+      "primary_formats": [
+        "moments-short-text"
+      ],
+      "overlay_ref": "douyin@0.2",
+      "current_action": "No real account action; demonstrate contract structure.",
+      "not_for": [
+        "Publication, account access or a user-approved strategy"
+      ],
+      "acquisition_runtime": {
+        "acquisition_mode": "overlay-only",
+        "runtime_status": "not-verified",
+        "execution_authority": "none",
+        "account_access": "not-authorized",
+        "real_media_download": "not-authorized",
+        "boundary_note": "Synthetic metadata; no current service or account was checked.",
+        "evidence_ref": "fixtures/platform-coverage.v1.synthetic.json"
+      }
+    },
+    {
+      "platform": "bilibili",
+      "priority": "P2",
+      "current_distribution_status": "active-synchronized-master",
+      "portfolio_role": "Synthetic compatibility example only",
+      "account_ips": [
+        "cange-risk-diagnosis"
+      ],
+      "primary_formats": [
+        "moments-short-text"
+      ],
+      "overlay_ref": "bilibili@0.2",
+      "current_action": "No real account action; demonstrate contract structure.",
+      "not_for": [
+        "Publication, account access or a user-approved strategy"
+      ],
+      "acquisition_runtime": {
+        "acquisition_mode": "public-readonly-tools",
+        "runtime_status": "not-verified",
+        "execution_authority": "none",
+        "account_access": "not-authorized",
+        "real_media_download": "not-authorized",
+        "boundary_note": "Synthetic metadata; no current service or account was checked.",
+        "evidence_ref": "fixtures/platform-coverage.v1.synthetic.json"
+      }
+    },
+    {
+      "platform": "wechat-article",
+      "priority": "P2",
+      "current_distribution_status": "not-active",
+      "portfolio_role": "Synthetic compatibility example only",
+      "account_ips": [
+        "cange-risk-diagnosis"
+      ],
+      "primary_formats": [
+        "moments-short-text"
+      ],
+      "overlay_ref": "wechat-article@0.2",
+      "current_action": "No real account action; demonstrate contract structure.",
+      "not_for": [
+        "Publication, account access or a user-approved strategy"
+      ],
+      "acquisition_runtime": {
+        "acquisition_mode": "public-readonly-tools",
+        "runtime_status": "not-verified",
+        "execution_authority": "none",
+        "account_access": "not-authorized",
+        "real_media_download": "not-authorized",
+        "boundary_note": "Synthetic metadata; no current service or account was checked.",
+        "evidence_ref": "fixtures/platform-coverage.v1.synthetic.json"
+      }
+    },
+    {
+      "platform": "zhihu",
+      "priority": "observe",
+      "current_distribution_status": "not-active",
+      "portfolio_role": "Synthetic compatibility example only",
+      "account_ips": [
+        "cange-risk-diagnosis"
+      ],
+      "primary_formats": [
+        "moments-short-text"
+      ],
+      "overlay_ref": "zhihu@0.2",
+      "current_action": "No real account action; demonstrate contract structure.",
+      "not_for": [
+        "Publication, account access or a user-approved strategy"
+      ],
+      "acquisition_runtime": {
+        "acquisition_mode": "general-web-best-effort",
+        "runtime_status": "not-verified",
+        "execution_authority": "none",
+        "account_access": "not-authorized",
+        "real_media_download": "not-authorized",
+        "boundary_note": "Synthetic metadata; no current service or account was checked.",
+        "evidence_ref": "fixtures/platform-coverage.v1.synthetic.json"
+      }
+    },
+    {
+      "platform": "kuaishou",
+      "priority": "observe",
+      "current_distribution_status": "active-synchronized-master",
+      "portfolio_role": "Synthetic compatibility example only",
+      "account_ips": [
+        "cange-risk-diagnosis"
+      ],
+      "primary_formats": [
+        "moments-short-text"
+      ],
+      "overlay_ref": "kuaishou@0.2",
+      "current_action": "No real account action; demonstrate contract structure.",
+      "not_for": [
+        "Publication, account access or a user-approved strategy"
+      ],
+      "acquisition_runtime": {
+        "acquisition_mode": "overlay-only",
+        "runtime_status": "not-verified",
+        "execution_authority": "none",
+        "account_access": "not-authorized",
+        "real_media_download": "not-authorized",
+        "boundary_note": "Synthetic metadata; no current service or account was checked.",
+        "evidence_ref": "fixtures/platform-coverage.v1.synthetic.json"
+      }
+    },
+    {
+      "platform": "toutiao",
+      "priority": "observe",
+      "current_distribution_status": "not-active",
+      "portfolio_role": "Synthetic compatibility example only",
+      "account_ips": [
+        "cange-risk-diagnosis"
+      ],
+      "primary_formats": [
+        "moments-short-text"
+      ],
+      "overlay_ref": "toutiao@0.2",
+      "current_action": "No real account action; demonstrate contract structure.",
+      "not_for": [
+        "Publication, account access or a user-approved strategy"
+      ],
+      "acquisition_runtime": {
+        "acquisition_mode": "general-web-best-effort",
+        "runtime_status": "not-verified",
+        "execution_authority": "none",
+        "account_access": "not-authorized",
+        "real_media_download": "not-authorized",
+        "boundary_note": "Synthetic metadata; no current service or account was checked.",
+        "evidence_ref": "fixtures/platform-coverage.v1.synthetic.json"
+      }
+    },
+    {
+      "platform": "weibo",
+      "priority": "observe",
+      "current_distribution_status": "not-active",
+      "portfolio_role": "Synthetic compatibility example only",
+      "account_ips": [
+        "cange-risk-diagnosis"
+      ],
+      "primary_formats": [
+        "moments-short-text"
+      ],
+      "overlay_ref": "weibo@0.2",
+      "current_action": "No real account action; demonstrate contract structure.",
+      "not_for": [
+        "Publication, account access or a user-approved strategy"
+      ],
+      "acquisition_runtime": {
+        "acquisition_mode": "general-web-best-effort",
+        "runtime_status": "not-verified",
+        "execution_authority": "none",
+        "account_access": "not-authorized",
+        "real_media_download": "not-authorized",
+        "boundary_note": "Synthetic metadata; no current service or account was checked.",
+        "evidence_ref": "fixtures/platform-coverage.v1.synthetic.json"
+      }
+    },
+    {
+      "platform": "youtube",
+      "priority": "observe",
+      "current_distribution_status": "not-active",
+      "portfolio_role": "Synthetic compatibility example only",
+      "account_ips": [
+        "cange-risk-diagnosis"
+      ],
+      "primary_formats": [
+        "moments-short-text"
+      ],
+      "overlay_ref": "youtube@0.2",
+      "current_action": "No real account action; demonstrate contract structure.",
+      "not_for": [
+        "Publication, account access or a user-approved strategy"
+      ],
+      "acquisition_runtime": {
+        "acquisition_mode": "public-readonly-tools",
+        "runtime_status": "not-verified",
+        "execution_authority": "none",
+        "account_access": "not-authorized",
+        "real_media_download": "not-authorized",
+        "boundary_note": "Synthetic metadata; no current service or account was checked.",
+        "evidence_ref": "fixtures/platform-coverage.v1.synthetic.json"
+      }
+    }
+  ],
+  "format_decision_rules": [
+    {
+      "when": "Synthetic test only",
+      "choose": "moments-short-text",
+      "adapter_ref": "moments-short-text@0.2",
+      "reason": "Structural route reference only"
+    }
+  ],
+  "ip_routes": [
+    {
+      "account_ip": "cange-risk-diagnosis",
+      "primary_platforms": [
+        "wechat-moments"
+      ],
+      "primary_formats": [
+        "moments-short-text"
+      ],
+      "content_jobs": [
+        "story"
+      ],
+      "cross_post_policy": "No publication authorized"
+    },
+    {
+      "account_ip": "cange-growth",
+      "primary_platforms": [
+        "wechat-moments"
+      ],
+      "primary_formats": [
+        "moments-short-text"
+      ],
+      "content_jobs": [
+        "story"
+      ],
+      "cross_post_policy": "No publication authorized"
+    },
+    {
+      "account_ip": "dual-account-shared",
+      "primary_platforms": [
+        "wechat-moments"
+      ],
+      "primary_formats": [
+        "moments-short-text"
+      ],
+      "content_jobs": [
+        "story"
+      ],
+      "cross_post_policy": "No publication authorized"
+    },
+    {
+      "account_ip": "personal-wechat-moments",
+      "primary_platforms": [
+        "wechat-moments"
+      ],
+      "primary_formats": [
+        "moments-short-text"
+      ],
+      "content_jobs": [
+        "story"
+      ],
+      "cross_post_policy": "No publication authorized"
+    }
+  ],
+  "weekly_core_unit": {
+    "source": "Synthetic fixture",
+    "default_outputs": [
+      "No real content"
+    ],
+    "public_adaptation_max": 2,
+    "public_adaptation_max_scope": "distinct-platform-variants-only-excludes-identical-frozen-master-sync",
+    "same-copy-cross-posting": "manual-synchronized-frozen-master"
+  },
+  "feedback_policy": {
+    "moments_no_signal": "neutral-insufficient-evidence",
+    "content_signal": [
+      "not-observed"
+    ],
+    "business_signal": [
+      "not-observed"
+    ],
+    "private_feedback_gate": "helpful-not-required"
+  },
+  "expansion_gates": [
+    {
+      "target": "No expansion scheduled",
+      "when": [
+        "Separate operator decision required"
+      ]
+    }
+  ],
+  "source_refs": [
+    {
+      "ref": "fixtures/platform-coverage.v1.synthetic.json",
+      "status": "local-system-contract",
+      "supports": "Synthetic structure only; no real capability or approval"
+    }
+  ]
+}

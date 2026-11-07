@@ -1,0 +1,53 @@
+{
+  "schema_version": "0.1",
+  "data_classification": "synthetic-only",
+  "diagnostic_run_id": "diag_01ARZ3NDEKTSV4RRFFQ69G5FB4",
+  "account_id": "acct_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+  "run_at": "2026-10-22T10:00:00+08:00",
+  "input_window": {
+    "start": "2026-09-22T00:00:00+08:00",
+    "end": "2026-10-22T00:00:00+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "publication_ids": [
+    "pub_01ARZ3NDEKTSV4RRFFQ69G5FAX"
+  ],
+  "sample_size": 1,
+  "missingness": [
+    {
+      "field": "platform-impressions",
+      "status": "unavailable",
+      "reason": "完全虚构 fixture 不含平台后台数据。"
+    }
+  ],
+  "baseline": {
+    "type": "self-history",
+    "definition": "仅比较同一虚构账号最近 30 天记录；样本不足时不输出健康分。",
+    "evidence_refs": [
+      "synthetic:baseline:self-history-30d"
+    ],
+    "cohort_size": null
+  },
+  "rule_version": "account-diagnosis.rules.0.1",
+  "metric_dictionary_version": "synthetic.manual.0.1",
+  "data_completeness": "insufficient",
+  "findings": [
+    {
+      "dimension": "operations",
+      "finding": "样本与平台数据不足，当前只能确认记录链完整，不能判断账号表现优劣。",
+      "evidence_refs": [
+        "synthetic:publication:001"
+      ],
+      "counterevidence_refs": [],
+      "confidence": "high",
+      "priority": "observe",
+      "recommended_action": "继续按 early 与 d7 保存快照，达到最低样本后再重跑。"
+    }
+  ],
+  "report_state": "draft-only",
+  "authority": {
+    "execution_authorized": false,
+    "publication_authority": "never",
+    "automatic_account_action": false
+  }
+}

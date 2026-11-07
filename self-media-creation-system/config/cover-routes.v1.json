@@ -1,0 +1,14 @@
+{
+  "schema": "self-media.cover-routes.v1",
+  "version": "2026-09-26",
+  "routes": [
+    {"id":"photo-editorial","name":"真实瞬间 · 摄影编辑","engine":"remotion","needs":["photo"],"method":"先挑表情和故事瞬间，再用照片负空间排字；不能把套色背景当设计。","sources":["gbro","canvas-design"]},
+    {"id":"photo-collage","name":"真实照片 · 编辑拼贴","engine":"remotion","needs":["multiple_photos"],"method":"两张以上有不同叙事作用的真实图，明确主次与空间关系；不拿同一帧换色凑候选。","sources":["gbro","justified-layout"]},
+    {"id":"cutout-poster","name":"本地抠图 · 海报","engine":"remotion","needs":["reviewed_cutout"],"method":"消费已复核透明抠图；可用 rembg 准备，但本入口不会暗中下载模型或把毛发边缘判为通过。","sources":["rembg"]},
+    {"id":"evidence-ui","name":"证据或产品界面主导","engine":"remotion","needs":["evidence"],"method":"真实且已脱敏原件或截图承担焦点，不生成虚构证据或 UI。","sources":["gbro"]},
+    {"id":"type-led","name":"文字视觉主导","engine":"remotion","needs":[],"method":"标题本身具有信息反差时选用；用字体、留白、节奏建立构图，不默认矩形色块。","sources":["canvas-design"]},
+    {"id":"hybrid","name":"真实照片 + AI 装饰","engine":"remotion","needs":["photo","generated_decoration","ai_opt_in"],"method":"真人像素保留在本机；AI 只生成非人物装饰，单独生成、单独标识，再本地合成。","sources":["baoyu","gbro"]},
+    {"id":"ai-illustration","name":"AI 概念插画","engine":"native-imagegen","needs":["ai_opt_in"],"method":"完整概念图，与真实纪实封面并列比较；保存提示词，不伪装拍摄现场。","sources":["baoyu"]}
+  ],
+  "boundaries": {"new_renderer":false,"automatic_upload":false,"automatic_publish":false,"automatic_model_install":false,"ctr_prediction":false}
+}

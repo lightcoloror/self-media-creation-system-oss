@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lightcolor/content-operations/lead-event.schema.json",
+  "title": "自媒体人工确认业务线索事件",
+  "description": "仅在明确业务事件经人工确认后创建。该对象只做去标识化归因和承接回执，不授权自动联系、发布或写入 CRM。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "data_classification",
+    "lead_event_id",
+    "source_interaction_event_id",
+    "source_publication_id",
+    "account_id",
+    "business_event_type",
+    "dedupe_key",
+    "review",
+    "consent_status",
+    "attribution",
+    "handoff",
+    "privacy",
+    "authority",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "data_classification": { "enum": ["synthetic-only", "deidentified-operational"] },
+    "lead_event_id": { "type": "string", "pattern": "^lead_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "source_interaction_event_id": { "type": "string", "pattern": "^int_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "source_publication_id": { "type": "string", "pattern": "^pub_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "account_id": { "type": "string", "pattern": "^acct_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "business_event_type": {
+      "enum": ["continued_consultation", "necessary_documents_provided", "next_step_booked"]
+    },
+    "dedupe_key": { "type": "string", "pattern": "^lead-dedupe:[a-f0-9]{64}$" },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "human_confirmed",
+        "decision",
+        "reviewer_ref",
+        "reviewed_at",
+        "receipt_ref",
+        "receipt_sha256",
+        "review_scope_sha256",
+        "evidence_refs"
+      ],
+      "properties": {
+        "human_confirmed": { "const": true },
+        "decision": { "const": "confirmed-lead" },
+        "reviewer_ref": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "reviewed_at": { "type": "string", "format": "date-time" },
+        "receipt_ref": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "receipt_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "review_scope_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1, "maxLength": 1000 },
+          "uniqueItems": true
+        }
+      }
+    },
+    "consent_status": { "enum": ["existing-relationship", "explicit", "not-required"] },
+    "attribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "window_start", "window_end", "model"],
+      "properties": {
+        "type": { "enum": ["direct", "assisted", "unknown"] },
+        "window_start": { "type": "string", "format": "date-time" },
+        "window_end": { "type": "string", "format": "date-time" },
+        "model": { "enum": ["manual-evidence", "first-touch", "last-touch", "unknown"] }
+      }
+    },
+    "handoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "next_step_summary", "receipt_ref"],
+      "properties": {
+        "status": { "enum": ["not-started", "prepared", "completed"] },
+        "next_step_summary": { "type": ["string", "null"], "maxLength": 500 },
+        "receipt_ref": { "type": ["string", "null"], "maxLength": 1000 }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["deidentified", "raw_message_included", "direct_identifiers_included"],
+      "properties": {
+        "deidentified": { "const": true },
+        "raw_message_included": { "const": false },
+        "direct_identifiers_included": { "const": false }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["execution_authorized", "crm_write_performed", "do_not_auto_contact", "publication_authority"],
+      "properties": {
+        "execution_authorized": { "const": false },
+        "crm_write_performed": { "const": false },
+        "do_not_auto_contact": { "const": true },
+        "publication_authority": { "const": "never" }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "handoff": { "properties": { "status": { "const": "completed" } }, "required": ["status"] } },
+        "required": ["handoff"]
+      },
+      "then": {
+        "properties": {
+          "handoff": {
+            "required": ["receipt_ref"],
+            "properties": { "receipt_ref": { "type": "string", "minLength": 1, "maxLength": 1000 } }
+          }
+        }
+      }
+    }
+  ]
+}

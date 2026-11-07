@@ -1,0 +1,33 @@
+{
+  "schema_version": "reference-source-card.v1",
+  "source_id": "cast-science-popularization-guide-2026",
+  "title": "科技工作者科普创作指南",
+  "issuing_body": "中国科协办公厅",
+  "document_date": "2026-04-15",
+  "official_page_published_at": "2026-04-17",
+  "official_page_url": "https://www.cast.org.cn/xw/tzgg/KXPJ/art/2026/art_f5ab20b92cdf424e8683c31c19ec95fe.html",
+  "source_type": "official-guidance",
+  "verification_status": "verified-primary-source",
+  "checked_at": "2026-09-03T19:15:38+08:00",
+  "checked_by": "Codex (GPT-5.6 Sol)",
+  "retrieval": {
+    "tool": "web-content-fetcher",
+    "transport": "direct",
+    "robots_allowed": true,
+    "raw_sha256": "4536b0472dbe12b716c6569d39e7cd7ad98979813d8a7af235d6bb280f294f96",
+    "extracted_sha256": "96de79060d37b8aca607cdc7430e258504cc6807d531fb6f0bae34319a2f6263"
+  },
+  "admitted_uses": [
+    "science-popularization-methodology",
+    "scientific-review-baseline",
+    "target-audience-readability-review-baseline",
+    "ai-assisted-science-writing-safety-baseline"
+  ],
+  "authority_limits": [
+    "not-a-medical-diagnosis-or-treatment-standard",
+    "not-an-insurance-contract-or-regulatory-source",
+    "not-a-platform-growth-or-ranking-guide",
+    "not-a-substitute-for-current-domain-evidence"
+  ],
+  "adoption_status": "active-local-operational-reference"
+}
