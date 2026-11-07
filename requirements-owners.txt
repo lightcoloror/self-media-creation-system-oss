@@ -2,5 +2,9 @@
 # Obtain the sibling source trees in public_toolchain.lock.json as well when a
 # selected consumer or fixture needs them. These pins grant no execution rights.
 question-research-poc @ git+https://github.com/lightcoloror/question-research-poc-oss.git@646b3871257b0861446615e7c96390f5dc714bde
-content-visual-studio @ git+https://github.com/lightcoloror/content-visual-studio-oss.git@2b09061f3a250bb50a0492509b83302cc4aa5c57
+content-visual-studio @ git+https://github.com/lightcoloror/content-visual-studio-oss.git@49c3a4c4be735ca80816af87dc5241555ad9a600
 artifact-lifecycle-core @ git+https://github.com/lightcoloror/artifact-lifecycle-core-oss.git@fab239085724458c2a6b9452d0a1ba4f4012593e
+
+# Optional video route owners; installed/source identity is not execution consent.
+video-knowledge-pipeline @ git+https://github.com/lightcoloror/video-knowledge-pipeline-oss.git@9dff9d8c1ebb2f798a6d03d5cc355c6ed0118e21
+video-creation-pipeline @ git+https://github.com/lightcoloror/mvp-video-pipeline-oss.git@9f55b12864df642f08fcbd96df15acb0f97652d5

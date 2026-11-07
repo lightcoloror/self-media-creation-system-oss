@@ -89,8 +89,8 @@ real account portfolios, STATE, private inventories and operational receipts are
 excluded. Two newly invented fixtures replace excluded working examples; their
 confirmed/verified enum values are artificial unit-test states only.
 
-Read [public owner boundaries](docs/public-owner-boundaries.md). The complete MVP
-workflow consumer is not bundled, and local-rough-cut P0 is not a substitute.
+Read [public owner boundaries](docs/public-owner-boundaries.md). The complete first-party MVP owner is separately published and pinned; it is
+not bundled into this workspace. local-rough-cut P0 is not a substitute.
 Missing owner code or evidence blocks the corresponding route. No live model,
 service, UI, real media, customer contact or platform publication was validated.
 
@@ -105,3 +105,32 @@ this framework. Main source, shared operations, selected source contracts and
 synthetic feedback handoffs reuse the existing mechanisms. Platform publishing
 is manual; actual content, evidence, authorship and channel authorization
 must be supplied and reviewed for each use.
+
+## Public video owner connection (0.1.1)
+
+The existing lock now selects Studio v0.1.3, VKP v0.1.2 and full first-party MVP
+v0.8.1. Keep the indicated owner directory names; MVP installs as
+`video-creation-pipeline`, not as a package called `mvp-video-pipeline`. The
+optional requirements file pins those same public source commits. Its Git
+installation route remains unverified on this Windows host; local acceptance
+uses reviewed wheels and actual public Git objects/bytes.
+
+`tools/public_toolchain.py init` still only writes the existing local registry,
+refuses an existing one and does not clone/install/launch an Owner. `discover`
+checks checkout identity separately from runtime. A source checkout matching its
+pin is not approval to render, call models, handle private data or publish.
+
+The public Governance v0.1.1 contract distribution is at
+`https://github.com/lightcoloror/codex-local-governance-oss`, commit
+`ba0bca6632979a35881583d531f4637593e2e66c`; its root bundle digest is
+`cf97adbb27a97bee1fb846954721f671e1a922a2a2f3b7e130f234cdac652994`.
+It is an optional metadata reference, not a newly registered execution Owner.
+Its native review-packet integrations remain undistributed. P1 of
+local-rough-cut remains outside this release and requires separate user review.
+
+The pinned VKP also supplies the existing subtitle coverage consumer required
+by the main video delivery path. The bounded synthetic composition passed
+95 tests and 58 subtests; one explicit browser regression was not run. This
+does not prove the separate VKP context-manifest script integration or any
+real-media/author/platform outcome. Those limits remain visible in the Owner
+boundaries and acceptance record.

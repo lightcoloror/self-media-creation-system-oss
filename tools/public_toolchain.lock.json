@@ -32,26 +32,29 @@
       "directory": "video-knowledge-pipeline",
       "discovery": "AGENT_DISCOVERY.md",
       "repository": "https://github.com/lightcoloror/video-knowledge-pipeline-oss",
-      "commit": "ef2bcddcc9227b914363f5c5f9a522dfb031b258",
-      "source_status": "published-public-source-consumer-coverage-limited",
+      "commit": "9dff9d8c1ebb2f798a6d03d5cc355c6ed0118e21",
+      "source_status": "published-public-source-native-runtime-and-per-use-approval-remain-separate",
       "commands": {
-        "help": "vkp --help"
+        "help": "video-knowledge --help"
       }
     },
     "mvp-video-pipeline": {
       "directory": "ai-video-tools-20260708/mvp-video-pipeline",
       "discovery": "AGENT_DISCOVERY.md",
-      "repository": null,
-      "commit": null,
-      "source_status": "full-owner-not-public-do-not-substitute-rough-cut",
-      "commands": {}
+      "repository": "https://github.com/lightcoloror/mvp-video-pipeline-oss",
+      "commit": "9f55b12864df642f08fcbd96df15acb0f97652d5",
+      "source_status": "published-public-source-native-runtime-and-per-use-approval-remain-separate",
+      "commands": {
+        "help": "video-content-brief --help",
+        "context_consumer_help": "python scripts/context_manifest_consumer.py --help"
+      }
     },
     "content-studio": {
       "directory": "content-studio-poc",
       "discovery": "README.md",
       "repository": "https://github.com/lightcoloror/content-visual-studio-oss",
-      "commit": "2b09061f3a250bb50a0492509b83302cc4aa5c57",
-      "source_status": "published-capture-context-and-format-consumers-remaining-workbench-under-review",
+      "commit": "49c3a4c4be735ca80816af87dc5241555ad9a600",
+      "source_status": "published-public-source-native-runtime-and-per-use-approval-remain-separate",
       "commands": {}
     },
     "artifact-lifecycle-core": {

@@ -70,3 +70,31 @@ retained; no third-party fonts/music/models/binaries are bundled.
 This covers the selected source edition only. Remaining ContentStudio workbench
 scripts, complete MVP consumers, P1 and motion-showreel are not declared formally
 reviewed or released by this acceptance. See PROVENANCE.json for file sources.
+
+
+## 0.1.1 public Owner binding increment
+
+2026-11-07, Codex; exact runtime model independently unverified. Four metadata/
+boundary files and this acceptance note changed; framework runtime is unchanged.
+The existing lock now binds Studio 0.1.3, VKP 0.1.2 and full first-party MVP 0.8.1.
+The actual public Git objects/HEADs and tracked bytes of all five pinned Owners
+were checked in the owned composition. No fake HEAD, private Git history or
+substitute rough-cut Owner was used.
+
+Directed synthetic tests: 95 passed, 58 subtests; one browser regression not run
+because explicit Node/Playwright paths were not supplied. Earlier 31 failures
+exposed the absent public subtitle coverage module; the first-party module was
+reviewed and published separately in VKP 0.1.2. Two intermediate TEMP-root harness
+failures were corrected using process-local paths in the owned test directory.
+No assertion, purpose/hash guard or human approval requirement was relaxed.
+
+The Git+ installation route remains untested on this Windows host; package and
+source composition use reviewed wheels and real public Git objects. This is
+source/contract and synthetic media evidence, not real ASR, private content,
+author confirmation, native browser interaction, platform use or publication.
+VKP's separate context-manifest script integration and remaining workbench
+features remain explicit limits. local-rough-cut P1 is not included.
+
+The existing complete public contract checker (--no-tests) passed again after
+these updated public pins. That is structural/contract evidence, not an extra
+runtime, browser, author or platform approval.

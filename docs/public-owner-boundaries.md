@@ -18,8 +18,10 @@ Missing consumer scripts and missing evidence remain blocking errors.
   verified facts merely because hashes or schema validate.
 - VKP provides source-time review and metadata. Its public source edition has
   not established the private main workflow's complete context consumer.
-- The complete MVP consumer is not included. `local-rough-cut` P0 is a narrower
-  FFmpeg tool and is not a drop-in substitute. P1 requires its separate review.
+- The full first-party MVP consumer is separately public and pinned in the
+  existing lock. Its runtime requirements and per-use evidence/approval still
+  apply; no runtime is bundled here. `local-rough-cut` P0 is not a substitute,
+  and P1 remains separately pending user review.
 - Artifact lifecycle operations remain explicitly selected local operations;
   an archive plan does not authorize deletion or prove an archive exists.
 
