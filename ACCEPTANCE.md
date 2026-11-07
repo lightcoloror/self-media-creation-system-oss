@@ -121,3 +121,19 @@ An initial host environment produced65 passes and31 setup errors because it
 lacked the Video owner's psutil dependency. The actual rerun used the existing
 fully provisioned Video Python3.12 environment; no dependency installation,
 schema/assertion change or reduced approval/resource guard was needed.
+
+
+## 0.1.3 Studio synthesis/artifact source binding
+
+2026-11-08. Codex; exact runtime model not independently verified. Five metadata
+files only change. The existing lock/requirements select actually released
+Studio0.1.5; its256 tracked files and reachable public Git objects are imported
+into an owned composition without fake HEAD or private history. The main runtime
+source is unchanged. Directed composition and existing --no-tests checker are
+recorded by the release host, separately from the Studio67 tests and installed
+98-file comparisons. Discovery is not execution or real editorial approval.
+
+Release-host directed composition:95 pass,1 explicit browser skip,58 subtests;
+the existing complete --no-tests contract checker passes. Five actual public
+source checkouts remain pinned-checkout verified, runtime_verified=false.
+No new dependency install, renderer, model, service, schema or guard changes.

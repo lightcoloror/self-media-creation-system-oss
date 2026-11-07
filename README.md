@@ -147,3 +147,12 @@ No Owner is cloned/installed/launched by discovery. The existing prerequisites,
 purpose/fact/privacy/author gates and separate rough-cut P1 review remain.
 
 For video routes, use Python >=3.12 and install the selected Owners' declared dependencies into the chosen environment. A clean pinned source checkout does not supply packages such as psutil by itself; the toolchain initializer performs no dependency installation.
+
+## Editorial synthesis/artifact Owner pin (0.1.3)
+
+The existing lock selects the released Studio0.1.5 source, including bounded
+editorial synthesis, synthetic artifact plans and design-direction admission.
+Its67 directed tests and installed98-file parity are separate Owner evidence.
+The Main resolver/runtime is unchanged; discovery remains runtime_verified=false.
+No command is automatically launched, and no real research, author approval,
+cleanup permission or rough-cutP1 scope is added.

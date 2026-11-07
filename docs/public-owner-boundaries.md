@@ -34,3 +34,10 @@ No example grants publication, account access, external contact or medical advic
 Gateway and VKP public components retain AGPL-3.0; other separately installed
 owners retain their own licenses. This workspace includes first-party
 consumer glue and reviewed contract resources, not those external runtimes.
+
+### Studio0.1.5 pin
+
+Original synthesis uses the existing explicit QRP/Main gates; document artifacts
+reuse the separate hash-pinned Artifact Core. Design-direction validation is
+structural admission only. Draft-only, human fact/author/privacy and no automatic
+cleanup/publication boundaries persist; new Owners are not executed by discovery.
