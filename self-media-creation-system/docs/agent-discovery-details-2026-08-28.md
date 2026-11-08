@@ -155,22 +155,34 @@ Metadata: Codex (GPT-5.6 Sol), 2026-09-03 19:12:00 +08:00.
 
 ## Archive decision entry (relocated 2026-10-24 by Codex)
 
-2026-10-12 17:42:15 +08:00 | Codex (GPT-6): At video project close, default to a **rework archive**, assess actual recovery needs for a reproducible archive, and record exceptions. Follow [archive levels](docs/video-archive-levels.md), read `python scripts/artifact_lifecycle.py archive-policy`, then run `archive-plan --assessment <json> --output <new-plan.json>` before collecting archive materials or planning cleanup. A plan is not a completed archive, rebuild receipt, upload or deletion authority. Reuse existing asset IDs and lifecycle manifests.
+2026-10-12 17:42:15 +08:00 | Codex (GPT-6): At video project close, default to a **rework archive**, assess actual recovery needs for a reproducible archive, and record exceptions. Follow [archive levels](video-archive-levels.md), read `python scripts/artifact_lifecycle.py archive-policy`, then run `archive-plan --assessment <json> --output <new-plan.json>` before collecting archive materials or planning cleanup. A plan is not a completed archive, rebuild receipt, upload or deletion authority. Reuse existing asset IDs and lifecycle manifests.
 
 
 ## Framework decision entry (relocated 2026-10-24 by Codex)
 
-`topic-angle-decision.v2` follows topic observations: compare audience, value, business fit, evidence and cost; choose continue/reframe/supplement/defer. Only confirmed continue reaches drafting; supplement reaches research then reassessment. `prepare-step` enforces this. v1 proves no framework review. See [four routes](topic-reframing-playbook.md). Story five questions are a fact-preserving view of `story-design-card.v1`. Keep one central change and truthful turns. Applicable serious-video/cross-platform gates remain required. Receipts never grant publication authority.
+`topic-angle-decision.v2` follows topic observations: compare audience, value, business fit, evidence and cost; choose continue/reframe/supplement/defer. Only confirmed continue reaches drafting; supplement reaches research then reassessment. `prepare-step` enforces this. v1 proves no framework review. See [four routes](../topic-reframing-playbook.md). Story five questions are a fact-preserving view of `story-design-card.v1`. Keep one central change and truthful turns. Applicable serious-video/cross-platform gates remain required. Receipts never grant publication authority.
 
 
 ## CTA push entry details
 
 2026-10-29 | Codex. Intent: keep the entry discoverable. Decision: relocate these four remote-base paragraphs verbatim. Reason: the existing entry exceeded 9 KiB. Evidence: bounded-entry regression. Scope: navigation only; prior rules and attribution remain.
 
-Contracts: `agent-tool-manifest.v1.json`. `python scripts/self_media_agent.py authoring`: [author guide](docs/author-expression-workflow.md). `python scripts/self_media_agent.py publication-desk`: [desk](docs/publication-desk.md). [Covers](docs/content-driven-covers.md), [delivery](docs/video-delivery.md). Plain desk=draft; delivery rechecks. Added: author/page 2026-09-26, Codex GPT-6 Astra; covers 09-26, delivery 09-27, Codex.
+Contracts: `agent-tool-manifest.v1.json`. `python scripts/self_media_agent.py authoring`: [author guide](author-expression-workflow.md). `python scripts/self_media_agent.py publication-desk`: [desk](publication-desk.md). [Covers](content-driven-covers.md), [delivery](video-delivery.md). Plain desk=draft; delivery rechecks. Added: author/page 2026-09-26, Codex GPT-6 Astra; covers 09-26, delivery 09-27, Codex.
 
-- Hash-bound journals, credentials, derived heads, packages, and media receipts are never manually edited. Recipe/material review uses original source hashes and time ranges through `self_media_agent.py video-review` and VKP `targeted-review`, without proxy/clip exports. Fine-cut reviews also require the presentation/dialogue inputs in [the existing review guide](docs/source-time-range-review.md); output cues are checked after generation. Case media also requires human-bound identity and visible-window privacy evidence. Missing required evidence fails closed.
+- Hash-bound journals, credentials, derived heads, packages, and media receipts are never manually edited. Recipe/material review uses original source hashes and time ranges through `self_media_agent.py video-review` and VKP `targeted-review`, without proxy/clip exports. Fine-cut reviews also require the presentation/dialogue inputs in [the existing review guide](source-time-range-review.md); output cues are checked after generation. Case media also requires human-bound identity and visible-window privacy evidence. Missing required evidence fails closed.
 
-Video packaging: `video-delivery context` exposes the current progress choice; `progress-select` records `use` or `not_used` with a reason. Missing/stale choice or checked reservation blocks preflight; selected overlays also require actual render/decode/final-layout evidence bound to the final video before delivery. [Contract and migration](docs/video-delivery.md#进度条选用预留与实际交付2026-10-28). 2026-10-28 08:48:47 +08:00, Codex GPT-6. 意图：避免跨项目漏条；决策：进入原交付入口；理由：待办不证明执行；证据：33项交付回归及真实RWE编码候选；生效范围：统一视频交付，明确不使用仍允许。
+Video packaging: `video-delivery context` exposes the current progress choice; `progress-select` records `use` or `not_used` with a reason. Missing/stale choice or checked reservation blocks preflight; selected overlays also require actual render/decode/final-layout evidence bound to the final video before delivery. [Contract and migration](video-delivery.md#进度条选用预留与实际交付2026-10-28). 2026-10-28 08:48:47 +08:00, Codex GPT-6. 意图：避免跨项目漏条；决策：进入原交付入口；理由：待办不证明执行；证据：历史记录声称33项交付回归及私有项目编码候选；原回执未随公开版分发，非本轮公开版实测；生效范围：统一视频交付，明确不使用仍允许。
 
-2026-10-28 09:18:10 +08:00, Codex GPT-6. Video progress defaults are runtime code: bind the video script with `video-delivery progress-select --script`; chapter labels reuse script H2 headings, and independent navigation presets select16/20/24px on540 short edge. Body/subtitle minima do not apply to progress. [Implementation/evidence](../ai-video-tools-20260708/mvp-video-pipeline/docs/progress-script-title-navigation-defaults-20261028.md). 意图：默认同源；决策：接原组件/CLI；理由：避免各项目重复填标题或被正文门限约束；证据：最终76项通过、1项跳过及RWE CLI；生效范围：进度导航，其他字号规则保持。
+2026-10-28 09:18:10 +08:00, Codex GPT-6. Video progress defaults are runtime code: bind the video script with `video-delivery progress-select --script`; chapter labels reuse script H2 headings, and independent navigation presets select16/20/24px on540 short edge. Body/subtitle minima do not apply to progress. Historical implementation/evidence reference: `progress-script-title-navigation-defaults-20261028.md` (not included in this public edition; the historical reference is not public runtime evidence). 意图：默认同源；决策：接原组件/CLI；理由：避免各项目重复填标题或被正文门限约束；证据：历史记录声称76项通过、1项跳过及私有项目CLI；原回执未随公开版分发，非本轮公开版实测；生效范围：进度导航，其他字号规则保持。
+
+
+## Public navigation clarification (0.1.5)
+
+2026-11-08T03:16:00.794804+00:00; Codex (exact runtime model not independently verified).
+Eight relative links now resolve to files already in this public snapshot.
+One missing historical MVP reference is identified as not distributed, with
+its filename retained for the separate source-scope audit. Historical private
+test counts above remain attributed historical claims; they are not new tests,
+public runtime proof, or permission to render, call models, review real media,
+clean artifacts, approve facts/privacy, or publish content. No runtime source,
+schema, route, Owner pin, dependency, safety setting or historical author changed.
