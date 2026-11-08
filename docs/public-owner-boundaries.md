@@ -35,9 +35,14 @@ Gateway and VKP public components retain AGPL-3.0; other separately installed
 owners retain their own licenses. This workspace includes first-party
 consumer glue and reviewed contract resources, not those external runtimes.
 
-### Studio0.1.5 pin
+### Studio0.1.8 pin
 
-Original synthesis uses the existing explicit QRP/Main gates; document artifacts
-reuse the separate hash-pinned Artifact Core. Design-direction validation is
-structural admission only. Draft-only, human fact/author/privacy and no automatic
-cleanup/publication boundaries persist; new Owners are not executed by discovery.
+The public Studio snapshot retains explicit QRP/Main synthesis gates and the
+separate Artifact Core. It now also provides synthetic feedback/preview, local
+CMS/diagram contracts and optional style planning. Optional upstream roots,
+manual generation and source/asset rights remain operator responsibilities;
+new CLI presence is not a renderer/browser/provider acceptance result.
+
+Structural admission, draft-only/human fact/author/privacy review, no automatic
+cleanup/publication and per-operation permission persist. Discovering these
+actually pinned files does not execute them or promote runtime_verified.

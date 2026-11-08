@@ -148,11 +148,15 @@ purpose/fact/privacy/author gates and separate rough-cut P1 review remain.
 
 For video routes, use Python >=3.12 and install the selected Owners' declared dependencies into the chosen environment. A clean pinned source checkout does not supply packages such as psutil by itself; the toolchain initializer performs no dependency installation.
 
-## Editorial synthesis/artifact Owner pin (0.1.3)
+## Current Studio Owner pin (0.1.4)
 
-The existing lock selects the released Studio0.1.5 source, including bounded
-editorial synthesis, synthetic artifact plans and design-direction admission.
-Its67 directed tests and installed98-file parity are separate Owner evidence.
-The Main resolver/runtime is unchanged; discovery remains runtime_verified=false.
-No command is automatically launched, and no real research, author approval,
-cleanup permission or rough-cutP1 scope is added.
+The existing lock selects released Studio0.1.8, including the existing synthetic
+feedback intake, offline CMS/diagram contracts and explicit-runtime handdraw
+planning adapters. Studio's scoped source/native/install receipts are separate
+Owner evidence. No upstream gallery/image/style-index payload is bundled there;
+the attribution license and unverified legacy rights remain explicit.
+
+Main resolver/runtime source is unchanged. Discovery remains
+runtime_verified=false; no command, browser, model, image generation, cleanup or
+publication is launched/authorized by a source pin. Original research/author/
+privacy/platform boundaries and separately review-gated rough-cutP1 remain.

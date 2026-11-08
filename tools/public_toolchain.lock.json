@@ -54,7 +54,7 @@
       "directory": "content-studio-poc",
       "discovery": "README.md",
       "repository": "https://github.com/lightcoloror/content-visual-studio-oss",
-      "commit": "89c6efb868dbc0d755538258e262d136f0dcaa80",
+      "commit": "5a4ac1a9937ff580b06674a408be4c101dd27bff",
       "source_status": "published-public-source-native-runtime-and-per-use-approval-remain-separate",
       "commands": {}
     },

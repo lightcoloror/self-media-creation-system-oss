@@ -137,3 +137,21 @@ Release-host directed composition:95 pass,1 explicit browser skip,58 subtests;
 the existing complete --no-tests contract checker passes. Five actual public
 source checkouts remain pinned-checkout verified, runtime_verified=false.
 No new dependency install, renderer, model, service, schema or guard changes.
+
+
+## 0.1.4 stable Studio source binding
+
+2026-11-08. Codex; exact runtime model not independently verified. Five metadata
+files only change; runtime code/schema/route remains unchanged. The existing
+lock/optional requirements select actually released Studio0.1.8 at its public
+commit;327 public tracked files/reachable objects imported into the owned
+composition without private history, fabricated HEAD or clone-success claim.
+Studio source/native/install tests are separate from Main composition checks.
+The host records new directed/checker results below after execution; prior
+version's historical receipts are not reused as new test results.
+
+Release-host NEW execution after the0.1.8 pin:95 directed pass,1 explicit
+browser skip,58 subtests; the existing full --no-tests checker passes. All5
+actual public checkouts are pinned-checkout verified, runtime_verified=false.
+No runtime/source/schema/route/guard change, no actual browser/model/media,
+no real research, author/privacy approval, cleanup or content publication.
