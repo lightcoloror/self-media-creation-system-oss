@@ -8,3 +8,22 @@ ContentStudio contracts; retain licenses/agency-agents-zh-MIT.txt.
 Exact upstream license texts are in licenses/. External model weights, media,
 fonts, browser binaries, third-party Skill libraries and personal brand assets
 are not redistributed. Source/license provenance is in PROVENANCE.json.
+
+Method lineage and scope (public adaptation addition, 2026-11-08):
+The two restored method references are first-party working Markdown adapted
+for public use, not claimed historical Git blobs:
+`self-media-creation-system/商业医疗险大主题选题发现操作卡.md` and
+`skills/grill-me/references/upstream-notes.md`.
+The grill-me/grilling method lineage comes from `mattpocock/skills`, MIT,
+copyright 2026 Matt Pocock; current pinned public commit
+`4ae2317ddb22b046e26455e4f9c9b3aaaf62212d`. The exact upstream license text is
+`licenses/mattpocock-skills-MIT.txt` (SHA-256
+`0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5`).
+No upstream Skill implementation, library, asset or model is distributed; only
+first-party compatibility/provenance notes and this MIT license text are
+included. The first-party Apache-2.0 edition and every notice above remain in
+force. The exact historical local adoption revision is unverified, and the
+current MIT license does not prove an older adoption pin.
+Public adaptation prepared with DeepSeek Harness (observed runtime ID
+deepseek-flash; precise internal version unverified), 2026-11-08; the original
+method authorship and the 2026-07-22 historical review date are unchanged.

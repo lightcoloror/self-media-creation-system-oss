@@ -170,9 +170,21 @@ For later revisions, use the chosen Git commit and tree. Original source hashes
 and attribution are retained; they do not prove later runtime or rights approval.
 
 Some historical validation/research records, operator brand/editing contracts,
-and method/adaptation references are not distributed. In particular, the named
-commercial-medical-insurance topic discovery card and local grill-me adaptation
-notes remain unavailable in this edition. Existing references are retained as
-unresolved sources, not replaced with generic invented guides. Operator-dependent
-instructions require the applicable external material; fewer broken links do
-not mean those methods, historical checks or real content workflows were verified.
+and operator-dependent instructions are not distributed. The named
+commercial-medical-insurance topic discovery card and the local grill-me
+upstream/adaptation notes are now provided as public method references, adapted
+from current first-party working Markdown with explicit source and adaptation
+qualifications. The topic card keeps its commercial-medical-insurance scope,
+search expressions and filter conditions, but replaces a private hardcoded
+research-ledger path with an operator-provided authorized research
+workspace/ledger. The grill-me note corrects the current upstream wording and
+records that the exact historical local adoption revision is unverified; the
+current MIT license does not prove an older adoption pin. Neither reference is
+a claimed historical Git blob, and neither was verified as a live research or
+interview run. Historical validation/research reports and operator-dependent
+instructions remain unbundled and require the applicable external material.
+The public adaptation was prepared on 2026-11-08 with DeepSeek Harness
+(observed runtime ID deepseek-flash; precise internal version unverified);
+original method authorship and the 2026-07-22 review date are unchanged.
+Fewer broken links do not mean those methods, historical checks or real content
+workflows were verified.
