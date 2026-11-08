@@ -4293,5 +4293,8 @@
     "exit": 0,
     "complete_public_contract_checker_exit": 0,
     "actual_source_is_not_real_content": true
-  }
+  },
+  "file_hash_scope": "historical-public-source-snapshot; not a current-tree integrity manifest",
+  "public_snapshot_commit": "34f6c1322391bc92253d763b9e03677402a2b869",
+  "file_hash_scope_note": "The 508 files[].sha256 and bytes entries describe the selected public source snapshot at public_snapshot_commit (509 tracked files including this document). They are retained as historical source provenance; later public commits can add or modify files. Use the selected Git commit/tree for current file integrity. These records do not establish runtime, rights, privacy or publication approval for later changes."
 }

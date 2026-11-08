@@ -160,3 +160,19 @@ Main resolver/runtime source is unchanged. Discovery remains
 runtime_verified=false; no command, browser, model, image generation, cleanup or
 publication is launched/authorized by a source pin. Original research/author/
 privacy/platform boundaries and separately review-gated rough-cutP1 remain.
+
+## Historical provenance and unbundled references
+
+`PROVENANCE.json` preserves 508 selected-file hashes from public snapshot
+`34f6c1322391bc92253d763b9e03677402a2b869`; all 508 match that snapshot.
+It is historical source provenance, not a current-tree integrity manifest.
+For later revisions, use the chosen Git commit and tree. Original source hashes
+and attribution are retained; they do not prove later runtime or rights approval.
+
+Some historical validation/research records, operator brand/editing contracts,
+and method/adaptation references are not distributed. In particular, the named
+commercial-medical-insurance topic discovery card and local grill-me adaptation
+notes remain unavailable in this edition. Existing references are retained as
+unresolved sources, not replaced with generic invented guides. Operator-dependent
+instructions require the applicable external material; fewer broken links do
+not mean those methods, historical checks or real content workflows were verified.

@@ -22,7 +22,7 @@
 | 获取公开文章、监管页面、保险公司说明和附件 | `web-content-fetcher` | URL 归档、正文/附件抽取、抓取时间与失败记录 | 平台内搜索、绕过验证码/付费墙、自动判定事实成立 |
 | 做证据型综合稿 | 本地 `evidence-synthesis` | 问题簇、主张台账、矛盾表、已核事实、未知项、原创母稿 | 拼接别人的段落、复制图片/比喻、伪造行业共识 |
 | 把稳定母稿变成图文 | `content-studio-render-router` + 图文 adapter | 卡片任务、视觉 Brief、HTML/SVG/PNG 或可编辑交付 | 在制图阶段补事实、所有主题套同一视觉皮肤 |
-| 已有配图槽位需要选择手绘画风、版式或配色 | Content Studio `handdraw_style_brief.py gallery/catalog/prompt` | 编号画廊、绑定内容版本的双语提示词包与画风参考图 | 自动重写文案、替代图表/证据图、自动生图或发布；[接入操作说明](../content-studio-poc/docs/handdraw-style-library.md) |
+| 已有配图槽位需要选择手绘画风、版式或配色 | Content Studio `handdraw_style_brief.py gallery/catalog/prompt` | 编号画廊、绑定内容版本的双语提示词包与画风参考图 | 自动重写文案、替代图表/证据图、自动生图或发布；[接入操作说明](docs/handdraw-style-workflow.md) |
 
 ## DBS 新版调用约定
 

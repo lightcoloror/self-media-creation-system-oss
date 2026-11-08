@@ -38,7 +38,7 @@ personal-vlog-status <项目派生目录>
 
 | 阶段 | 现有入口 | 交接产物与进入下一步的条件 |
 | --- | --- | --- |
-| 任务定义 | [内容路由入口](../../docs/content-creation-system/routing/README.md) 的任务／形态／平台顺序 | 一句话观众任务、账号、主要受众、拟交付平台与画幅；发布规格记录核验日期，不采用固定算法秒数。 |
+| 任务定义 | [内容路由卡模板](../../docs/content-creation-system/routing/route-card.template.md) 的任务／形态／平台顺序 | 一句话观众任务、账号、主要受众、拟交付平台与画幅；发布规格记录核验日期，不采用固定算法秒数。 |
 | 出行前拍摄与离场检查 | [出行前拍摄卡](../templates/travel-experience-vlog-pre-shoot-card.md)；仅适用于未拍项目 | 选一条主视频，列进入／开始／过程／细节／实际结果／本人回看中真正需要的单元；记录不可补拍时刻、同期声与权利疑点。离开前核对缺口；已拍项目记 `not_applicable_pre_shoot`，不得伪填。 |
 | 入库 | 创作者本地备份；VKP `personal-vlog-prepare` | 原件与至少两个独立副本校验、项目 manifest／源哈希、粗粒度地点及权利／隐私标记。VKP 清单不是备份工具。 |
 | 素材导航 | VKP `personal-vlog-run` 的 `shared_analysis → evidence → event_plan → recipes → handoff_review` | 事件／转写／轻量画面证据、三档候选配方与 review gaps。当前实现会对有效视频启动本地 ASR／初始 Bundle，需事先核对资源和数据范围；其完成只证明候选分析完成。 |
@@ -69,13 +69,13 @@ personal-vlog-status <项目派生目录>
 
 自动检查只报告可测量的技术状态：文件身份、完整解码、媒体参数、字幕越界／重叠、音量峰值／响度、可疑黑帧和静音。算法可以提出镜头、人物、说话人、情绪和隐私疑点，但不裁决语义或授权。
 
-人工至少做一次整片冷看、一次手机尺寸看字与构图、一次耳机／手机扬声器听声音；再对明确风险用 VKP `targeted-review.html` 看精确范围并保存 `targeted-review-decisions.json`。审核回执只覆盖对应区间，不替代最终完整成片、隐私、版权或发布批准。改动音频、时长、字幕、源图或遮罩后，按 `docs/agent-rules/self-media-video-editing.md` 的失效图重跑下游检查。
+人工至少做一次整片冷看、一次手机尺寸看字与构图、一次耳机／手机扬声器听声音；再对明确风险用 VKP `targeted-review.html` 看精确范围并保存 `targeted-review-decisions.json`。审核回执只覆盖对应区间，不替代最终完整成片、隐私、版权或发布批准。改动音频、时长、字幕、源图或遮罩后，按操作者治理工作区中自媒体视频编辑规则的失效图重跑下游检查（该规则不随本公共版分发）。
 
 ## 证据与当前能力边界
 
 - [Adobe 代理与原片回连](https://helpx.adobe.com/in/premiere/desktop/organize-media/ingest-proxy-workflow/reconnect-full-resolution-media-to-proxies.html)、[转写辅助粗剪](https://helpx.adobe.com/premiere/desktop/edit-projects/edit-video-using-text-based-editing/overview-of-text-based-editing.html)和 [DaVinci Resolve 官方编辑教材](https://documents.blackmagicdesign.com/UserManuals/DaVinci-Resolve-20-Editors-Guide.pdf)支持代理、元数据、转写、字幕与交付等技术做法；故事结构与五维评分是本流程的操作性综合判断。
 - [叙事连续性研究](https://doi.org/10.1111/j.1551-6709.2011.01202.x)支持关注动作与事件理解，不能推出固定镜头秒数或平台推荐效果。平台规格须按实际目的地在发布当天重查；[YouTube 上传格式](https://support.google.com/youtube/answer/4603579)及 [Meta 画幅指南](https://www.facebook.com/business/help/103816146375741)只能说明各自适用范围。以上公开资料于 2026-09-23 核验。
-- 本地依据：[VKP personal-vlog-v1 交付](../../video-knowledge-pipeline/docs/personal-vlog-v1-delivery-2026-09-02.md)及 [自媒体视频编辑规则](../../docs/agent-rules/self-media-video-editing.md)。VKP `complete_draft`、三档 recipe、MVP v4 handoff 均为 `candidate_only / review_required`。既有合成测试不证明真实旅行素材已完成分析或成片。
+- 本地依据：操作者提供的 VKP personal-vlog-v1 交付记录（VKP 为另行发布并固定于 `tools/public_toolchain.lock.json` 的 owner，该记录不随本公共版分发），以及操作者治理工作区的自媒体视频编辑规则（该规则不随本公共版分发）。VKP `complete_draft`、三档 recipe、MVP v4 handoff 均为 `candidate_only / review_required`。既有合成测试不证明真实旅行素材已完成分析或成片。
 
 ## 接入记录
 
