@@ -25,7 +25,7 @@ Load only what the task needs:
 | Character and IP evidence | [ip-and-character.md](../../self-media-creation-system/docs/story-material-inbox.md) |
 | Emotional design | [emotional-resonance.md](../../self-media-creation-system/narrative-resonance-lens.md) |
 | Source Wiki and Evidence index | [bookwiki-source-map.md](references/source-notes.md) |
-| Sensitive-case contract and eleven gates | [contract-binding.json](references/contract-binding.json), [initial-draft-quality-gate.md](../../content-studio-poc/README.md) |
+| Sensitive-case contract and eleven gates | [contract-binding.json](references/contract-binding.json), [initial-draft contract validator](https://github.com/lightcoloror/content-visual-studio-oss/blob/e5bdff31cd2598d681a2b71e701e596673e9e7c6/scripts/initial_draft_quality_gate.py) |
 
 ## When to use
 
@@ -59,7 +59,7 @@ Always work in this order:
 4a. **Build the serious-content attention contract before drafting**
    For insurance, health, high-risk, or declared serious professional content, complete the precreative part of the existing `serious-content-translation-review.v1` route before writing prose. In addition to audience relevance, tension, stakes, and central judgment, record the protagonist's immediate goal or the reader's concrete task, one fact-bound scene/dialogue anchor, the question that should keep the viewer watching, the later payoff, and what the viewer can do with the result. If the target action is consultation or conversion, record one concrete service action and its immediate process effect. Also classify `sensitivity_profile` as `ordinary`, `professional-sensitive`, `medical-sensitive`, `affected-person-severe-illness`, `customer-loss`, `privacy-high-risk`, or `compound-high-sensitivity`. Severe illness, customer loss, privacy-high-risk, and compound-high-sensitivity content default to `humor_level=none`; `light` requires an explicit human-approved exception that never targets the affected person. Moderate or experimental humor is blocked. A case summary, abstract lesson, or dramatic wording cannot satisfy these fields.
 5. **Run the mandatory 11-gate initial-draft quality gate**
-   Before language polishing, hooks, trial shooting, or publishing preparation, review the first draft with [initial-draft-quality-gate.md](../../content-studio-poc/README.md). The exact ordered gates are: fact/evidence, single task, service causality, interview integrity, distribution compliance, medical/insurance, privacy/authorization, title/opening alignment, preliminary voice/AI trace, CTA/product, and production/series. If the creator's concrete action can be removed without changing the story, the service-causality gate fails and the draft returns to step 4. The machine binding is [contract-binding.json](references/contract-binding.json); missing or drifted contracts block downstream work.
+   Before language polishing, hooks, trial shooting, or publishing preparation, review the first draft with [initial-draft contract validator](https://github.com/lightcoloror/content-visual-studio-oss/blob/e5bdff31cd2598d681a2b71e701e596673e9e7c6/scripts/initial_draft_quality_gate.py). The exact ordered gates are: fact/evidence, single task, service causality, interview integrity, distribution compliance, medical/insurance, privacy/authorization, title/opening alignment, preliminary voice/AI trace, CTA/product, and production/series. If the creator's concrete action can be removed without changing the story, the service-causality gate fails and the draft returns to step 4. The machine binding is [contract-binding.json](references/contract-binding.json); missing or drifted contracts block downstream work.
 5a. **Return flat but correct drafts for structural revision**
    Run the postcreative attention section of `serious-content-translation-review.v1`. The draft must preserve an immediate watch reason, audience relevance, the protagonist goal or reader task, concrete stakes, a scene/dialogue/direct-utility anchor, progressive information, a real completion payoff, a usable takeaway, and service causality when acquisition is intended. These are independent revision checks, not a score. One missing item returns the piece to steps 4–4a; factual and compliance strength cannot average it into a pass.
 5b. **Run the fun-integrity hard gate**
@@ -234,7 +234,7 @@ For case-based video, also run:
 - pressure-choice check from [story-design.md](../../self-media-creation-system/docs/story-realization-review.md)
 - subtext/original-audio check from [dialogue-and-voice.md](../human-voice-editor/references/rulebook.md)
 - IP evidence check from [ip-and-character.md](../../self-media-creation-system/docs/story-material-inbox.md)
-- mandatory initial-draft review from [initial-draft-quality-gate.md](../../content-studio-poc/README.md)
+- mandatory initial-draft review from [initial-draft contract validator](https://github.com/lightcoloror/content-visual-studio-oss/blob/e5bdff31cd2598d681a2b71e701e596673e9e7c6/scripts/initial_draft_quality_gate.py)
 - serious-content attention precheck and postcheck from the registered `serious-content-translation-review.v1` route
 
 For short video, ask these questions before wording polish:
@@ -286,3 +286,5 @@ If a piece still sounds generic after pass 3, do not merely edit words. Rechoose
 ## Public reference boundary
 
 Original private book notes, local case history and update receipts are not distributed. The public edition binds the same fact/review contracts and uses the available first-party guides. Books are optional craft references, never evidence for a current case.
+
+公开链接适配：2026-11-08，Codex（精确运行模型未独立核验）。三处初稿复核链接改指现有 contract-binding.json 所绑定提交的真实校验器，不再以通用 README 冒充方法文档。四份合同哈希和十一项 gate 顺序保持原样；原方法文档未随公开版分发，记录校验仍不能替代实际内容判断、作者确认或发布授权。

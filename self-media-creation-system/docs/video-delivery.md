@@ -57,7 +57,7 @@ preflight/check 每次重新哈希、探测媒体、运行 VKP 字幕检查和�
 - `--decision not_used --reason <具体原因>`：适用于本片不需要进度提示；绑定当前媒体和时间轴，不需要布局和渲染证据。
 - `--decision use`：另须提供 `--packaging / --layout / --spec / --workspace-root`。复用 MVP 的 `progress_overlay.build`、字号和最终布局检查，计算整个条带（含章节名）的预留矩形，不接受手填“已预留”代替检查。字幕、人物重点、证据重点及平台遮挡区域由本片布局证据声明，不能用一个通用模板代替真实标注。
 - 当进度条位于既有字幕烧录等操作之后，另传 `--program <带字幕的中间成片>`，并在 `render_chain_refs` 登记从 `edited_media` 到该文件的真实连续回执；缺少输入输出衔接就阻断。默认输入仍为 `edited_media`。
-- 使用已有 [MVP 进度条组件](../../ai-video-tools-20260708/mvp-video-pipeline/docs/progress-overlay-workflow.md) 的 `build / validate / render` 生成新候选，音频流复制。把真实 `result.json` 的哈希引用登记到 `progress_overlay.result_ref`；它不是计划文件，也不是包装待办。最终渲染回执登记到原 `render_receipt_ref`，上游操作登记到 `render_chain_refs`，发布台的 video 指向真正带条的候选。
+- 使用已有 [MVP 进度条组件](https://github.com/lightcoloror/mvp-video-pipeline-oss/blob/2b45f93cdf1d439485cdfb3e7447ce57de2d9b4f/docs/progress-overlay-workflow.md) 的 `build / validate / render` 生成新候选，音频流复制。把真实 `result.json` 的哈希引用登记到 `progress_overlay.result_ref`；它不是计划文件，也不是包装待办。最终渲染回执登记到原 `render_receipt_ref`，上游操作登记到 `render_chain_refs`，发布台的 video 指向真正带条的候选。
 - `check / deliver` 的 `progress_render_and_layout` 重新核对：当前计划/布局/字体/实现版本、真实执行的滤镜和章节文字、FFmpeg 输入输出回执、完整解码帧数、最终布局回执及**实际交付视频**。缺条、旧条、错误成片、只登记计划均不能通过。
 
 选择的 `basis` 绑定 `edited_media` 哈希、整个 `timeline` 和已登记的视频脚本；脚本正文/小标题、布局/spec/导航预设/字体/实现变化也使旧选择、预留或渲染计划失效。修改这些输入后重新选择、build 和 render，不能复制旧通过状态。`progress-select` 会清除旧 `acceptance_ref`，但不渲染、不签人审。
@@ -136,4 +136,6 @@ render-job 的 schema 为 `self-media.local-render-job.v1`；包含当前 prefli
 
 `init`现在提供script_ref；`progress-select --script`绑定当前视频脚本，context返回default_title_source=script、default_font_preset=compact及navigation_font_independent_of_body_and_subtitles=true。默认标题原文复用，导航字号不再调用正文/字幕/motion_label最小门；small/compact/comfortable在540短边分别16/20/24px，font_size_px可明确覆盖。原布局、渲染、解码及手机可读性人审不变。
 
-意图：默认行为跨项目复用；决策：原共享组件读取稿件并使用独立预设，选择依据绑定script_ref；理由：上一轮项目局部修改仍不足以满足通用流程要求；证据：76项通过、1项环境跳过，包含真实合成章节条生产/交付及RWE原稿十章默认计划；生效范围：新进度计划和通用交付入口，不修改历史媒体或作者确认。完整用法、兼容迁移与逐项五字段：[共享变更记录](../../ai-video-tools-20260708/mvp-video-pipeline/docs/progress-script-title-navigation-defaults-20261028.md)。
+意图：默认行为跨项目复用；决策：原共享组件读取稿件并使用独立预设，选择依据绑定script_ref；理由：上一轮项目局部修改仍不足以满足通用流程要求；证据：76项通过、1项环境跳过，包含真实合成章节条生产/交付及RWE原稿十章默认计划；生效范围：新进度计划和通用交付入口，不修改历史媒体或作者确认。完整用法、兼容迁移与逐项五字段：[共享变更记录](https://github.com/lightcoloror/mvp-video-pipeline-oss/blob/2b45f93cdf1d439485cdfb3e7447ce57de2d9b4f/docs/progress-script-title-navigation-defaults-20261028.md)。
+
+公开链接适配：2026-11-08，Codex（精确运行模型未独立核验）。仅将相邻本机仓库引用绑定到已公开固定提交；未改变交付门或声明新的渲染/人审结果。
