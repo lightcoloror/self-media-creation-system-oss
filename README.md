@@ -222,3 +222,11 @@ The unchanged local panel browser runner is available with an existing synthetic
 ### Current local publication-project regression source
 
 [Runner and boundary guide](self-media-creation-system/docs/current-projects-browser-runner.md): existing page/data comparison and editing assertions, with full-manifest preflight before output/browser work. Requires caller-supplied synthetic pages/data and external Playwright/Edge. Source-only batch: syntax checked; Node test runner was blocked by spawn EPERM before test cases; browser and full context-chain behavior remain unverified.
+
+
+## Browser regression source collection
+
+Five existing browser-regression sources retain their current, legacy and optional
+branches. See [the source collection guide](self-media-creation-system/docs/browser-regression-source-collection.md)
+for exact arguments, synthetic scenario requirements and unverified runtime limits.
+This addition does not claim browser acceptance or publication readiness.
