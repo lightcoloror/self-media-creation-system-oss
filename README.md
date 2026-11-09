@@ -188,3 +188,27 @@ The public adaptation was prepared on 2026-11-08 with DeepSeek Harness
 original method authorship and the 2026-07-22 review date are unchanged.
 Fewer broken links do not mean those methods, historical checks or real content
 workflows were verified.
+
+## Synthetic 50590 Fixture Generator
+
+A portable fixture generator reproduces the byte-stable synthetic 50590 owner-review fixtures:
+
+- Script: [`self-media-creation-system/scripts/generate_content_contract_50590_fixtures.py`](self-media-creation-system/scripts/generate_content_contract_50590_fixtures.py)
+- Test Suite: [`self-media-creation-system/tests/test_portable_50590_generator.py`](self-media-creation-system/tests/test_portable_50590_generator.py)
+- Shipped Baseline: [`self-media-creation-system/fixtures/declared-synthetic-baseline.json`](self-media-creation-system/fixtures/declared-synthetic-baseline.json)
+- Documentation: [`docs/content-creation-system/portable-50590-generator.md`](docs/content-creation-system/portable-50590-generator.md)
+- Provenance: [`FIXTURE_GENERATOR_PROVENANCE.json`](FIXTURE_GENERATOR_PROVENANCE.json)
+
+### Usage
+
+Run the 12-test suite directly from the repository root:
+```
+python self-media-creation-system/tests/test_portable_50590_generator.py -f
+```
+
+Generate fixtures into a target directory:
+```
+python self-media-creation-system/scripts/generate_content_contract_50590_fixtures.py --baseline self-media-creation-system/fixtures/declared-synthetic-baseline.json --output-dir <output-directory>
+```
+
+Scope is strictly synthetic fixture reproduction under Apache-2.0; it confers no production publishing authority or live workflow approval.

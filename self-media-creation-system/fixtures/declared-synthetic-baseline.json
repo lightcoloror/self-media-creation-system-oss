@@ -1,0 +1,102 @@
+{
+  "schema_version": "0.2",
+  "content_id": "demo-family-risk-001",
+  "title": "一个家庭风险主题的统一内容样例",
+  "status": "candidate",
+  "owner_thread": null,
+  "provenance": {
+    "sources": [],
+    "verified_facts": [],
+    "uncertainties": [
+      "样例尚未接入真实事实来源"
+    ],
+    "forbidden_claims": []
+  },
+  "gates": {
+    "fact": {
+      "status": "not-checked"
+    },
+    "privacy": {
+      "status": "not-checked"
+    },
+    "compliance": {
+      "status": "not-checked"
+    },
+    "rights": {
+      "status": "not-checked"
+    }
+  },
+  "intent": {
+    "topic": "家庭风险判断",
+    "speaker_role": "家庭风险顾问",
+    "audience": "希望系统梳理保障问题的普通家庭",
+    "content_object": "一个待核实的家庭风险问题",
+    "desired_action": "先识别风险，再决定是否需要进一步了解",
+    "risk_boundary": "不作收益、理赔或产品适用性的保证"
+  },
+  "composition": {
+    "expression_mode": "待定",
+    "voice_profile": "voice/moments-personal-expression",
+    "voice_profile_version": "0.1-review",
+    "semantic_reversibility": {
+      "status": "not-checked"
+    },
+    "retention_mode": "summary-only",
+    "canonical_summary": "用于验证统一内容对象结构的空白样例，尚未接入真实事实来源。"
+  },
+  "channels": {},
+  "visual": {
+    "visual_profile": "visual/personal-ip-professional-trust",
+    "visual_profile_version": "0.1.1",
+    "route": "none",
+    "cognitive_anchors": [],
+    "assets": [],
+    "render_recipe": {
+      "renderer": "none",
+      "output_format": "none",
+      "output_refs": []
+    }
+  },
+  "qa": {
+    "deterministic": [],
+    "promptfoo": {
+      "status": "not-run"
+    },
+    "human_review": {
+      "status": "required",
+      "reviewer": null,
+      "reviewed_at": null
+    }
+  },
+  "publication": {
+    "boundary": "manual-only",
+    "receipts": []
+  },
+  "feedback": {
+    "signal_status": "not-observed",
+    "platform_signals": {},
+    "business_signals": {},
+    "qualitative_feedback": [],
+    "learning_decision": "none",
+    "content_signal_status": "not-observed",
+    "business_signal_status": "not-observed",
+    "measurement_layers": {
+      "admission": [],
+      "attraction": [],
+      "consumption": [],
+      "value": [],
+      "negative_feedback": [],
+      "business": []
+    }
+  },
+  "primary_format": "multi-channel",
+  "operating_plan": {
+    "production_unit": "real-problem-or-service-action",
+    "origin_kind": "real-question",
+    "private_validation": {
+      "channel": "wechat_moments",
+      "status": "candidate",
+      "note": "Validate privately before choosing any public adaptation."
+    }
+  }
+}

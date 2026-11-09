@@ -1,0 +1,105 @@
+{
+  "schema_version": "self-media-fixture-generator-provenance.v1",
+  "public_baseline_commit": "9b7b6a2ab5a3627e7ec8acf19b3744b4724807d5",
+  "artifact_kind": "synthetic_fixture_generator_public_integration_candidate",
+  "license": "Apache-2.0",
+  "changed_paths": {
+    "additions": [
+      "self-media-creation-system/scripts/generate_content_contract_50590_fixtures.py",
+      "self-media-creation-system/tests/test_portable_50590_generator.py",
+      "self-media-creation-system/fixtures/declared-synthetic-baseline.json",
+      "docs/content-creation-system/portable-50590-generator.md",
+      "FIXTURE_GENERATOR_PROVENANCE.json"
+    ],
+    "appends": [
+      "README.md"
+    ]
+  },
+  "source_files": [
+    {
+      "path": "self-media-creation-system/scripts/generate_content_contract_50590_fixtures.py",
+      "sha256": "b5a01f1bc6ada31ad49c4b98bf76170d55d936b391c99118e64ab3f2f4526c51",
+      "bytes": 11743
+    },
+    {
+      "path": "self-media-creation-system/tests/test_portable_50590_generator.py",
+      "sha256": "84bf1f1de920a7c6a084cc3ab817f1490fea826a15bfed5d6ef560f95c247cee",
+      "bytes": 17393
+    }
+  ],
+  "shipped_baseline": {
+    "path": "self-media-creation-system/fixtures/declared-synthetic-baseline.json",
+    "sha256": "3f51281181bb0aa663192ebc52e46e84d0bca8476ae2beefcba7f7ea668cc627",
+    "bytes": 2701,
+    "derived_from_public_path": "self-media-creation-system/fixtures/content-contract-50590-owner.v1.json",
+    "json_pointer": "/positive_cases/legacy_baseline",
+    "source_sha256": "bb1b36c9752e93d236dd8ae9262a37e945c5e1884327fddff2440866d67e8e19"
+  },
+  "existing_golden_fixtures": [
+    {
+      "path": "self-media-creation-system/fixtures/content-contract-50590-owner.v1.json",
+      "sha256": "bb1b36c9752e93d236dd8ae9262a37e945c5e1884327fddff2440866d67e8e19"
+    },
+    {
+      "path": "self-media-creation-system/fixtures/content-contract-50590-owner.v1.negative-cases.json",
+      "sha256": "8ce2a6949801a23b8a407f5a9df06f8870f184ce8855f2a43d4d1a5b82ad9a45"
+    }
+  ],
+  "tests": [
+    "test_generates_byte_exact_public_fixtures",
+    "test_repeated_runs_preserve_bytes_and_source_hashes",
+    "test_relocated_unicode_space_project_produces_same_bytes",
+    "test_positive_structure_matches_17_cases_and_15_fields",
+    "test_negative_matrix_structure_matches_26_cases_and_15_fields",
+    "test_declared_negative_flag_controls_are_preserved",
+    "test_first_second_values_and_case_independence",
+    "test_synthetic_markers_are_preserved",
+    "test_missing_required_cli_arguments_fail_without_outputs",
+    "test_invalid_baseline_fails_before_any_output",
+    "test_baseline_output_alias_refusal_before_writes",
+    "test_cli_writes_only_requested_output_directory"
+  ],
+  "actual_verification": {
+    "platform": "Windows",
+    "python": "CPython 3.13.5 x64",
+    "positive": {
+      "run": 12,
+      "pass": 12,
+      "fail": 0,
+      "skip": 0,
+      "exit": 0
+    },
+    "same_suite_mutant": {
+      "run": 1,
+      "failures": 1,
+      "exit": 1,
+      "expected_failure": true,
+      "failfast": true,
+      "test_suite_bytes_unchanged": true,
+      "mutation": "Remove only the two temporary output-path guard entries; baseline-alias regression rejects mutant."
+    },
+    "scope": "One explicitly authorized ordinary nonadministrator host run, source checkout. No test retry or permission/security repair."
+  },
+  "not_verified": [
+    "Full repository default suite",
+    "JSON Schema/facade validation and real review approval",
+    "Installed package",
+    "Cross-platform runtime",
+    "Hardlink/TOCTOU safety",
+    "Multi-file transaction or fsync durability",
+    "Real content or publishing"
+  ],
+  "stale_test_header": {
+    "file": "self-media-creation-system/tests/test_portable_50590_generator.py",
+    "lines": "13-17",
+    "status": "retained_frozen_bytes",
+    "note": "Historical overlay text describes manual baseline derivation. Current repository ships synthetic baseline directly; direct execution requires no pre-run extraction."
+  },
+  "exit_status_assertion_limit": {
+    "suite_assertion": "non_zero",
+    "runtime_claim": "12 passed, 0 skipped, exit 0 (clean); 1 expected failure, exit 1 (mutant)",
+    "note": "Harness asserts generic non-zero exit rather than exit code 2; no assertion strengthening or re-runs claimed.",
+    "baseline_validation_exit_code": 2,
+    "io_errors": "Propagate; not covered by the BaselineError exit-code-2 claim."
+  }
+}
