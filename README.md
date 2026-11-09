@@ -212,3 +212,8 @@ python self-media-creation-system/scripts/generate_content_contract_50590_fixtur
 ```
 
 Scope is strictly synthetic fixture reproduction under Apache-2.0; it confers no production publishing authority or live workflow approval.
+
+
+### Local publication platform panel runner source
+
+The unchanged local panel browser runner is available with an existing synthetic fixture builder and an [operator guide](self-media-creation-system/docs/publication-platform-panels-runner.md). This source edition has syntax and dependency checks only; browser assertions, media playback, actual accounts and publishing remain unverified.
