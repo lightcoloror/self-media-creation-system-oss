@@ -217,3 +217,8 @@ Scope is strictly synthetic fixture reproduction under Apache-2.0; it confers no
 ### Local publication platform panel runner source
 
 The unchanged local panel browser runner is available with an existing synthetic fixture builder and an [operator guide](self-media-creation-system/docs/publication-platform-panels-runner.md). This source edition has syntax and dependency checks only; browser assertions, media playback, actual accounts and publishing remain unverified.
+
+
+### Current local publication-project regression source
+
+[Runner and boundary guide](self-media-creation-system/docs/current-projects-browser-runner.md): existing page/data comparison and editing assertions, with full-manifest preflight before output/browser work. Requires caller-supplied synthetic pages/data and external Playwright/Edge. Source-only batch: syntax checked; Node test runner was blocked by spawn EPERM before test cases; browser and full context-chain behavior remain unverified.
