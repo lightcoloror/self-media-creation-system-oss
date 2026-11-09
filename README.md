@@ -212,3 +212,6 @@ python self-media-creation-system/scripts/generate_content_contract_50590_fixtur
 ```
 
 Scope is strictly synthetic fixture reproduction under Apache-2.0; it confers no production publishing authority or live workflow approval.
+
+### Legacy Browser Smoke Reference
+Reference documentation for the legacy cover PK layout verification script is located at [cover-design-browser-source.md](self-media-creation-system/docs/cover-design-browser-source.md). This documentation covers a legacy, source-only script. Browser runtimes, fixtures, and execution environments remain unverified; no runtime installation, account credentials, or actual publication readiness is provided or claimed.
