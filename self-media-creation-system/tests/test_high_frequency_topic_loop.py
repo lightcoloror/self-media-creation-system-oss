@@ -74,6 +74,32 @@ class HighFrequencyTopicLoopTests(unittest.TestCase):
         self.assertEqual(changed["title"], "An unrelated invented topic")
         self.assertEqual(changed["provenance"]["verified_facts"], [])
 
+    def test_provenance_sources_fixture_regression_and_controls(self) -> None:
+        item = LOOP.build_content_item(source_fixture(), blueprint_fixture())
+        sources = item["provenance"]["sources"]
+        self.assertEqual(len(sources), 2)
+        self.assertEqual(len({row["ref"] for row in sources}), 2)
+        self.assertTrue(all(row["source_type"] == "candidate-evidence" for row in sources))
+        self.assertEqual([row["evidence_status"] for row in sources], ["unverified", "unverified"])
+
+        self.assertEqual(LOOP.provenance_sources({"evidence_refs": []}), [])
+        noncounting = {"evidence_refs": [{"ref": "r1", "counts_toward_frequency": False, "independence_group": "g1"}]}
+        self.assertEqual(LOOP.provenance_sources(noncounting), [])
+        duplicate = {
+            "evidence_refs": [
+                {"ref": "r1", "counts_toward_frequency": True, "independence_group": "g1"},
+                {"ref": "r2", "counts_toward_frequency": True, "independence_group": "g1"},
+                {"ref": "r3", "counts_toward_frequency": True, "independence_group": "g2"},
+            ]
+        }
+        self.assertEqual(
+            LOOP.provenance_sources(duplicate),
+            [
+                {"source_type": "candidate-evidence", "ref": "r1", "evidence_status": "unverified"},
+                {"source_type": "candidate-evidence", "ref": "r3", "evidence_status": "unverified"},
+            ],
+        )
+
 
     def test_unconfirmed_service_expression_is_non_blocking_self_help_copy(self) -> None:
         blueprint = blueprint_fixture()
