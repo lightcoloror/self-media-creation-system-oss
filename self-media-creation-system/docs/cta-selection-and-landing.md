@@ -97,4 +97,4 @@ python scripts/self_media_agent.py video-delivery cta-bind --input <交付manife
 | 最终落地验收 | 防止只验计划不验实际成片 | 计划/视频哈希、完整观察、时间、文案核对 | 本次已发布案例暴露载体复核缺口 | `video_delivery.py`、真实合成媒体回归 | 后续完整交付；原人审和资源保护保留 |
 | 入口与测试适配 | 保持可发现且不放松已有校验 | 历史长说明保留到详细文档；合成视频补实际 AI 标识 | 发现入口原超长，测试素材缺少现行标识要求 | 原始文件快照、回归记录 | 发现入口及合成测试，不改真实项目 |
 
-当前测试结果和修改清单见 [实施与验证记录](cta-workflow-implementation-20261029.md)。
+历史实施与验证记录未随仓分发。公开回归源码见 [CTA 选择与落地测试](../tests/test_cta_review.py)、[视频交付测试](../tests/test_video_delivery.py)及 [CTA 浏览器回归](../tests/cta-review-browser.cjs)。这些文件列出了检查内容，实际结果以对应版本的运行回执为准。
