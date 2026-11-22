@@ -139,3 +139,11 @@ render-job 的 schema 为 `self-media.local-render-job.v1`；包含当前 prefli
 意图：默认行为跨项目复用；决策：原共享组件读取稿件并使用独立预设，选择依据绑定script_ref；理由：上一轮项目局部修改仍不足以满足通用流程要求；证据：76项通过、1项环境跳过，包含真实合成章节条生产/交付及RWE原稿十章默认计划；生效范围：新进度计划和通用交付入口，不修改历史媒体或作者确认。完整用法、兼容迁移与逐项五字段：[共享变更记录](https://github.com/lightcoloror/mvp-video-pipeline-oss/blob/2b45f93cdf1d439485cdfb3e7447ce57de2d9b4f/docs/progress-script-title-navigation-defaults-20261028.md)。
 
 公开链接适配：2026-11-08，Codex（精确运行模型未独立核验）。仅将相邻本机仓库引用绑定到已公开固定提交；未改变交付门或声明新的渲染/人审结果。
+
+## 可选成片音频测量（final_audio_measurement_ref / final_audio_auto，2026-11-17 移植）
+
+要把已有的成片 True Peak 和响度测量纳入交付，可在清单中填写可选的 `final_audio_measurement_ref`，包含测量报告的 `path`、`bytes` 和 `sha256`。报告使用 MVP 仓（`lightcoloror/mvp-video-pipeline-oss` @ `antigravity/final-audio-measurement-20261122`）的 `audio_mastering_output_verification.v1`，且测量文件的路径和哈希必须对应本版交付视频。交付时重新校验报告与既有项目策略，当前测量范围为第一条音轨 `0:a:0`。省略引用时交付报告显示 `final_audio.status=not_measured`；提交串版、无效或未通过策略的测量时，交付检查会阻止输出正式页。测量作为独立技术证据，可在成片、布局和文案未变时补充到现行清单并沿用已绑定的人工验收。
+
+若当前项目已有适用的 MVP 音频计划，且交付听取的是第一条音轨，可在同一交付清单中设置 `final_audio_auto`，填写 `audio_stream: "0:a:0"` 与 `plan_ref: {path, sha256}`。其余交付检查通过后，`video_delivery deliver` 会调用同批 MVP 源码中的 `measure_final_audio` 复测最终文件并验证响度与峰值策略，返回指向派生清单的 `delivery_manifest_ref`（含自动写入的 `final_audio_measurement_ref`），原始清单与既有人工验收继续沿用。
+
+输出目录须已存在。该目录下的 `final-audio-evidence/<key>/` 保存原始测量输出与派生清单；媒体、计划与音轨哈希完全匹配时复用并复验同一报告，中断或未产出 `loudnorm-output-verification.json` 的运行目录会被保留并阻断隐式重试。
