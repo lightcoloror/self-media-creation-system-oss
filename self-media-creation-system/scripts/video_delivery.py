@@ -263,7 +263,84 @@ def acceptance_fingerprint(manifest):
     # Context metadata has its own live requirement gate below. A provenance-only
     # binding must not discard unchanged, media-bound human observations.
     value.pop('context_manifest_ref', None)
+    # Measurement evidence is independently checked against the current file.
+    value.pop('final_audio_measurement_ref', None)
+    value.pop('final_audio_auto', None)
     return fingerprint(value)
+
+
+def final_audio_plan(manifest):
+    config = manifest['final_audio_auto']
+    if not isinstance(config, dict) or config.get('audio_stream') != '0:a:0':
+        raise ValueError('final_audio_requires_explicit_supported_stream_0:a:0')
+    return bound(config['plan_ref']).resolve()
+
+
+def final_audio_check(manifest, data):
+    if data is None:
+        raise ValueError('current_render_required_for_final_audio')
+    final = data['items'][0]['video']
+    ref = manifest['final_audio_measurement_ref']
+    if bound(ref).stat().st_size != ref.get('bytes'):
+        raise ValueError('final_audio_measurement_size_mismatch')
+    verification = read_ref(ref)
+    measured = verification.get('mastered_audio')
+    if (not isinstance(measured, dict) or measured.get('sha256') != final['sha256']
+            or bound(measured).resolve() != bound(final).resolve()):
+        raise ValueError('final_audio_verification_media_mismatch')
+    renderer_module()
+    from video_creation_pipeline.audio_mastering import validate_audio_mastering_output_verification
+    validate_audio_mastering_output_verification(verification)
+    if manifest.get('final_audio_auto') is not None:
+        plan = verification['source_plan']
+        if (Path(plan['path']).resolve() != final_audio_plan(manifest)
+                or plan['sha256'] != manifest['final_audio_auto']['plan_ref']['sha256']):
+            raise ValueError('final_audio_verification_plan_mismatch')
+    if verification['readiness']['technical_ready'] is not True:
+        raise ValueError('final_audio_verification_not_technical_ready')
+    return dict(status='verified', audio_stream='0:a:0', media_sha256=final['sha256'],
+                integrated_lufs=verification['measurements']['input_i'],
+                true_peak_dbtp=verification['measurements']['input_tp'])
+
+
+def attach_final_audio_measurement(manifest, output):
+    # This runs only on deliver after the existing non-audio checks pass.
+    final = desk.normalize(read_ref(manifest['desk_ref']))['items'][0]['video']
+    media = bound(final).resolve()
+    plan = final_audio_plan(manifest)
+    parent = output.parent.resolve(strict=True)
+    cache = parent / 'final-audio-evidence'
+    key = fingerprint(dict(media=str(media), media_sha256=final['sha256'],
+                           plan=str(plan), plan_sha256=manifest['final_audio_auto']['plan_ref']['sha256'],
+                           stream='0:a:0'))
+    run = cache / key
+    for directory in (cache, run):
+        if directory.resolve() != directory:
+            raise ValueError('final_audio_evidence_directory_must_not_redirect')
+    cache.mkdir(exist_ok=True)
+    renderer_module()
+    from video_creation_pipeline.audio_mastering import measure_final_audio
+    from video_creation_pipeline.contract_io import atomic_write_json
+
+    report = run / 'loudnorm-output-verification.json'
+    # A run directory is claimed once. An interrupted run keeps its logs and
+    # must not be treated as a completed measurement or restarted implicitly.
+    try:
+        run.mkdir()
+    except FileExistsError:
+        if not report.is_file() or report.resolve() != report:
+            raise ValueError('final_audio_measurement_run_incomplete: ' + str(run))
+        origin = 'reused'
+    else:
+        produced = Path(measure_final_audio(media, plan, run)).resolve()
+        if produced != report or not report.is_file():
+            raise ValueError('unexpected_final_audio_measurement_output')
+        origin = 'measured'
+    ref = dict(**covers.reference(report), bytes=report.stat().st_size)
+    manifest['final_audio_measurement_ref'] = ref
+    derived = run / ('delivery-' + uuid.uuid4().hex + '.json')
+    atomic_write_json(manifest, derived)
+    return derived, ref, origin
 
 
 def final_sample_times(manifest, duration):
@@ -547,6 +624,19 @@ def audit(path, phase='delivery', context_manifest=None):
     result['preflight_ready'] = all(r['status'] == 'passed' for r in result['checks'])
     if phase == 'delivery':
         data=run('render_and_desk', lambda: render_check(manifest))
+        if manifest.get('final_audio_measurement_ref') is None:
+            result['final_audio'] = dict(status='not_measured')
+            if manifest.get('final_audio_auto') is not None:
+                plan = run('final_audio_plan', lambda: final_audio_plan(manifest))
+                if plan is not None:
+                    result['checks'].append(dict(stage='final_audio_verification', status='blocked',
+                                                 reason='final_audio_measurement_pending_deliver'))
+        else:
+            result['final_audio'] = run('final_audio_verification', lambda: final_audio_check(manifest, data))
+            if result['final_audio'] is None and manifest.get('final_audio_auto') is not None:
+                reason = result['checks'][-1]['reason']
+                result['final_audio'] = dict(status='failed' if reason == 'final_audio_verification_not_technical_ready'
+                                             else 'unverified', reason=reason)
         result['final_layout'] = run('final_media_layout_and_observations',lambda:final_layout_check(manifest,data))
         run('progress_render_and_layout', lambda: progress.check(manifest,'delivery',data['items'][0]['video'] if data else None))
         def check_cover():
@@ -556,6 +646,8 @@ def audit(path, phase='delivery', context_manifest=None):
             return cover_strategy.review_check(bound(manifest['cover_review_ref']))
         run('covers', check_cover)
         def check_acceptance():
+            if manifest.get('acceptance_ref') is None:
+                raise ValueError('current_human_acceptance_required')
             receipt = read_ref(manifest['acceptance_ref'])
             if (receipt.get('schema') != 'self-media.video-acceptance.v1' or
                     receipt.get('input_fingerprint') != result['acceptance_fingerprint'] or
@@ -715,12 +807,28 @@ def main(argv=None):
         else:
             result = audit(args.input, 'preflight' if args.action == 'preflight' else 'delivery',args.context_manifest)
             if args.action == 'deliver':
+                manifest = covers.read(args.input)
+                delivery_manifest = args.input
+                blockers = [row for row in result['checks'] if row['status'] == 'blocked']
+                if (len(blockers) == 1
+                        and blockers[0]['reason'] == 'final_audio_measurement_pending_deliver'):
+                    if not args.output or args.output.exists() or args.output.is_symlink():
+                        raise ValueError('new_output_required')
+                    try:
+                        delivery_manifest, ref, origin = attach_final_audio_measurement(manifest, args.output)
+                    except (OSError, ValueError, KeyError, TypeError, ImportError, RuntimeError) as error:
+                        result['final_audio'] = dict(status='not_measured', reason=str(error))
+                        blockers[0]['reason'] = str(error)
+                    else:
+                        result = audit(delivery_manifest, 'delivery', args.context_manifest)
+                        result['final_audio_measurement_ref'] = ref
+                        result['delivery_manifest_ref'] = covers.reference(delivery_manifest)
+                        result['final_audio_measurement_origin'] = origin
                 if not result['complete']:
                     print(json.dumps(result, ensure_ascii=False)); return 2
                 if not args.output:
                     raise ValueError('new_output_required')
-                manifest = covers.read(args.input)
-                page = desk.render(read_ref(manifest['desk_ref']), delivery_manifest=args.input)
+                page = desk.render(read_ref(manifest['desk_ref']), delivery_manifest=delivery_manifest)
                 desk.write_new(args.output, page)
             elif args.output:
                 desk.write_new(args.output, result)
@@ -768,5 +876,3 @@ def rough_audio_check(manifest, mapped):
 
 if __name__ == '__main__':
     raise SystemExit(main())
-
-
