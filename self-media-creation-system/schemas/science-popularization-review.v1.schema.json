@@ -35,6 +35,30 @@
     },
     "scientific_review": {"$ref": "#/$defs/scientific_review"},
     "audience_readability_review": {"$ref": "#/$defs/audience_review"},
+    "audience_validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "audience_effect_verified",
+        "limitations"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "not-tested",
+            "sample-review-recorded"
+          ]
+        },
+        "audience_effect_verified": {
+          "const": false
+        },
+        "limitations": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
     "ai_assistance": {"$ref": "#/$defs/ai_assistance"},
     "gate_status": {"const": "passed"},
     "release_status": {"const": "review-required"},
@@ -48,6 +72,24 @@
     },
     "receipt_payload_sha256": {"$ref": "#/$defs/sha256"}
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "audience_readability_review": {
+            "required": [
+              "review_level"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "audience_validation"
+        ]
+      }
+    }
+  ],
   "$defs": {
     "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "repo_ref": {
@@ -89,27 +131,114 @@
       }
     },
     "audience_review": {
-      "type": "object", "additionalProperties": false,
+      "type": "object",
+      "additionalProperties": false,
       "required": [
-        "decision", "primary_audience", "reviewer_roles", "jargon_explained",
-        "structure_and_information_density_fit", "feedback_resolved", "review_evidence_refs"
+        "decision",
+        "primary_audience",
+        "reviewer_roles",
+        "jargon_explained",
+        "structure_and_information_density_fit",
+        "feedback_resolved",
+        "review_evidence_refs"
       ],
       "properties": {
-        "decision": {"const": "passed"},
-        "primary_audience": {"type": "string", "minLength": 1, "maxLength": 240},
-        "reviewer_roles": {
-          "type": "array", "minItems": 1, "uniqueItems": true,
-          "contains": {"const": "target-audience-representative"},
-          "items": {"enum": ["target-audience-representative", "plain-language-editor", "subject-matter-expert"]}
+        "decision": {
+          "const": "passed"
         },
-        "jargon_explained": {"const": true},
-        "structure_and_information_density_fit": {"const": true},
-        "feedback_resolved": {"const": true},
+        "primary_audience": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "reviewer_roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "author",
+              "target-audience-representative",
+              "plain-language-editor",
+              "subject-matter-expert"
+            ]
+          }
+        },
+        "jargon_explained": {
+          "const": true
+        },
+        "structure_and_information_density_fit": {
+          "const": true
+        },
+        "feedback_resolved": {
+          "const": true
+        },
         "review_evidence_refs": {
-          "type": "array", "minItems": 1, "uniqueItems": true,
-          "items": {"$ref": "#/$defs/repo_ref"}
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/repo_ref"
+          }
+        },
+        "review_level": {
+          "enum": [
+            "author-self-check",
+            "editor-review",
+            "target-audience-sample"
+          ]
+        },
+        "limitations": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_bindings": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "sha256"
+            ],
+            "properties": {
+              "path": {
+                "$ref": "#/$defs/repo_ref"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "review_level"
+            ]
+          },
+          "then": {
+            "required": [
+              "limitations",
+              "evidence_bindings"
+            ]
+          },
+          "else": {
+            "properties": {
+              "reviewer_roles": {
+                "contains": {
+                  "const": "target-audience-representative"
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "ai_assistance": {
       "type": "object", "additionalProperties": false,
