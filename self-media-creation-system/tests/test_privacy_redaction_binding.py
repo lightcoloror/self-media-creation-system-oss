@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import shutil
 import sys
 import unittest
@@ -9,17 +10,89 @@ from pathlib import Path
 from uuid import uuid4
 
 
+# MVP checkout prerequisites (2b45f93cdf1d439485cdfb3e7447ce57de2d9b4f):
+# Python 3.11+, jsonschema, psutil, and rfc3339-validator (strict RFC 3339 format checking).
+# Importing video_creation_pipeline.contract_io executes package __init__ in that checkout.
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
-MVP_ROOT = ROOT.parent / "ai-video-tools-20260708" / "mvp-video-pipeline"
-sys.path.insert(0, str(SCRIPTS))
-sys.path.insert(0, str(MVP_ROOT / "src"))
+_LEGACY_MVP_ROOT = ROOT.parent / "ai-video-tools-20260708" / "mvp-video-pipeline"
+_REQUIRED_CONTRACT_IO = Path("src/video_creation_pipeline/contract_io.py")
+_REQUIRED_ZONES_SCHEMA = Path(
+    "src/video_creation_pipeline/schemas/privacy_exclusion_zones.v1.schema.json"
+)
 
-if not (MVP_ROOT / "src/video_creation_pipeline/contract_io.py").is_file():
-    raise unittest.SkipTest("Full MVP redaction owner is not public; integration remains unverified")
+
+def _resolve_mvp_checkout() -> tuple[Path, Path]:
+    if "SELF_MEDIA_TEST_MVP_ROOT" in os.environ:
+        raw_root = os.environ["SELF_MEDIA_TEST_MVP_ROOT"].strip()
+        if not raw_root:
+            raise RuntimeError(
+                "SELF_MEDIA_TEST_MVP_ROOT is set but empty; provide a valid MVP checkout path"
+            )
+        candidate = Path(raw_root)
+        if not candidate.is_dir():
+            raise RuntimeError(
+                f"SELF_MEDIA_TEST_MVP_ROOT directory does not exist: {candidate}"
+            )
+        resolved_root = candidate.resolve(strict=True)
+        contract_io_path = resolved_root / _REQUIRED_CONTRACT_IO
+        zones_schema_path = resolved_root / _REQUIRED_ZONES_SCHEMA
+        if not contract_io_path.is_file() or not zones_schema_path.is_file():
+            raise RuntimeError(
+                f"SELF_MEDIA_TEST_MVP_ROOT checkout is incomplete (missing contract_io.py or privacy_exclusion_zones.v1.schema.json): {resolved_root}"
+            )
+        return resolved_root, contract_io_path.resolve(strict=True)
+
+    contract_io_path = _LEGACY_MVP_ROOT / _REQUIRED_CONTRACT_IO
+    zones_schema_path = _LEGACY_MVP_ROOT / _REQUIRED_ZONES_SCHEMA
+    if not contract_io_path.is_file() or not zones_schema_path.is_file():
+        raise unittest.SkipTest(
+            "Full MVP redaction owner is not public; integration remains unverified"
+        )
+    return _LEGACY_MVP_ROOT.resolve(strict=True), contract_io_path.resolve(strict=True)
+
+
+def _assert_expected_mvp_module_origin(mvp_src: Path, expected_contract_io: Path) -> None:
+    expected_pkg_dir = (mvp_src / "video_creation_pipeline").resolve(strict=True)
+    for mod_name in ("video_creation_pipeline", "video_creation_pipeline.contract_io"):
+        cached = sys.modules.get(mod_name)
+        if cached is None:
+            continue
+        raw_file = getattr(cached, "__file__", None)
+        if not raw_file:
+            raise RuntimeError(
+                f"Pre-loaded module {mod_name} originates from an unexpected checkout (missing __file__)"
+            )
+        resolved_file = Path(raw_file).resolve()
+        if mod_name == "video_creation_pipeline.contract_io":
+            if resolved_file != expected_contract_io:
+                raise RuntimeError(
+                    f"Pre-loaded {mod_name} originates from unexpected checkout: {resolved_file} != {expected_contract_io}"
+                )
+        elif expected_pkg_dir not in resolved_file.parents:
+            raise RuntimeError(
+                f"Pre-loaded {mod_name} originates from unexpected checkout: {resolved_file} not under {expected_pkg_dir}"
+            )
+
+
+MVP_ROOT, _EXPECTED_CONTRACT_IO = _resolve_mvp_checkout()
+_MVP_SRC = (MVP_ROOT / "src").resolve(strict=True)
+_assert_expected_mvp_module_origin(_MVP_SRC, _EXPECTED_CONTRACT_IO)
+
+sys.path.insert(0, str(SCRIPTS))
+sys.path.insert(0, str(_MVP_SRC))
 
 import privacy_redaction_binding as BINDING  # noqa: E402
-from video_creation_pipeline.contract_io import artifact_reference, payload_sha256  # noqa: E402
+import video_creation_pipeline.contract_io as _MVP_CONTRACT_IO  # noqa: E402
+
+_ACTUAL_CONTRACT_IO = getattr(_MVP_CONTRACT_IO, "__file__", None)
+if not _ACTUAL_CONTRACT_IO or Path(_ACTUAL_CONTRACT_IO).resolve() != _EXPECTED_CONTRACT_IO:
+    raise RuntimeError(
+        f"Imported video_creation_pipeline.contract_io from unexpected checkout: {_ACTUAL_CONTRACT_IO} != {_EXPECTED_CONTRACT_IO}"
+    )
+
+artifact_reference = _MVP_CONTRACT_IO.artifact_reference
+payload_sha256 = _MVP_CONTRACT_IO.payload_sha256
 
 
 class PrivacyRedactionBindingTests(unittest.TestCase):
