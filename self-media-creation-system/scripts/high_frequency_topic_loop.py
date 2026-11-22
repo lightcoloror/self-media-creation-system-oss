@@ -191,10 +191,18 @@ def provenance_sources(candidate: dict[str, Any]) -> list[dict[str, Any]]:
     sources: list[dict[str, Any]] = []
     seen_groups: set[str] = set()
     for ref in candidate["evidence_refs"]:
-        if not ref["counts_toward_frequency"] or ref["independence_group"] in seen_groups:
+        group = ref["independence_group"]
+        if not ref["counts_toward_frequency"] or group in seen_groups:
             continue
-        seen_groups.add(ref["independence_group"])
-        return sources
+        seen_groups.add(group)
+        sources.append(
+            {
+                "source_type": "candidate-evidence",
+                "ref": ref["ref"],
+                "evidence_status": "unverified",
+            }
+        )
+    return sources
 
 
 def build_content_item(source: dict[str, Any], blueprint: dict[str, Any]) -> dict[str, Any]:
