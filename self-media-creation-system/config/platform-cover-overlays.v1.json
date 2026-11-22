@@ -1,0 +1,80 @@
+{
+  "schema": "self-media.platform-cover-overlays.v1",
+  "version": "2026-11-18.1",
+  "source": "2026-11-18 用户实机实测核定；彻底剔除播放态点赞/评论等臆造浮层，仅保留真实外显浮层",
+  "platforms": {
+    "bilibili": {
+      "name": "哔哩哔哩",
+      "ratios": ["16:9", "4:3"],
+      "overlays": [
+        {
+          "id": "bottom_stats_and_duration",
+          "name": "底部播放量、弹幕数与右下角时长",
+          "type": "rect",
+          "level": "hard_block",
+          "coordinateSpace": "viewport_normalized",
+          "normalizedRect": [0.0, 0.84, 1.0, 0.16],
+          "description": "底部带黑透渐变底色，左侧展示小电视播放量与弹幕数图标及数字，右下角展示固定白字时长戳(如 12:34)"
+        }
+      ]
+    },
+    "xiaohongshu": {
+      "name": "小红书",
+      "ratios": ["3:4"],
+      "overlays": [
+        {
+          "id": "top_right_video_triangle_tag",
+          "name": "右上角三角形播放视频标记",
+          "type": "rect",
+          "level": "hard_block",
+          "coordinateSpace": "viewport_normalized",
+          "normalizedRect": [0.86, 0.02, 0.12, 0.08],
+          "description": "双列瀑布流中视频笔记右上角的半透明白色三角形播放图标"
+        }
+      ]
+    },
+    "douyin": {
+      "name": "抖音",
+      "ratios": ["3:4", "4:3"],
+      "overlays": [
+        {
+          "id": "top_right_video_triangle_tag",
+          "name": "双列封面右上角三角形播放视频标记",
+          "type": "rect",
+          "level": "hard_block",
+          "coordinateSpace": "viewport_normalized",
+          "normalizedRect": [0.86, 0.02, 0.12, 0.08],
+          "description": "双列信息流与搜索结果中，视频封面右上角的三角形播放图标标记"
+        }
+      ]
+    },
+    "weixin_channels": {
+      "name": "微信视频号",
+      "ratios": ["3:4"],
+      "overlays": [
+        {
+          "id": "chat_share_center_play_icon",
+          "name": "微信聊天卡片正中三角形播放标记",
+          "type": "rect",
+          "level": "hard_block",
+          "coordinateSpace": "viewport_normalized",
+          "normalizedRect": [0.38, 0.38, 0.24, 0.24],
+          "description": "视频号分享至微信聊天记录卡片时，封面正中间叠加的半透明圆形白色三角形播放标记"
+        },
+        {
+          "id": "chat_share_bottom_left_account_name",
+          "name": "微信聊天卡片左下角账号名称",
+          "type": "rect",
+          "level": "hard_block",
+          "coordinateSpace": "viewport_normalized",
+          "normalizedRect": [0.03, 0.88, 0.55, 0.09],
+          "description": "微信聊天记录卡片左下角半透明底上的账号名称与视频号图标"
+        }
+      ]
+    }
+  },
+  "forbidden_assumptions": [
+    "严禁将视频播放态的点赞栏、评论区、转发栏当成静态封面图片的遮挡浮层",
+    "除上述明确记录项外，严禁凭空臆造其他全屏大面积假想禁区"
+  ]
+}
