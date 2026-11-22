@@ -1,0 +1,346 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://local.invalid/schemas/cover-ir.v1.schema.json",
+  "title": "CoverIR",
+  "description": "Unified Cover Intermediate Representation (Cover IR v1.0) for multi-aspect ratio social media thumbnail generation, co-editing, and deterministic rendering.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "document",
+    "metadata",
+    "assets",
+    "layers",
+    "constraints"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "enum": ["1.0.0"]
+    },
+    "document": {
+      "type": "object",
+      "required": ["id", "revision", "updatedAt", "canvas"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-zA-Z0-9_-]+$" },
+        "revision": { "type": "integer", "minimum": 1 },
+        "baseRevision": { "type": "integer", "minimum": 0 },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "canvas": {
+          "type": "object",
+          "required": ["width", "height", "aspectRatio"],
+          "additionalProperties": false,
+          "properties": {
+            "width": { "type": "integer", "minimum": 100 },
+            "height": { "type": "integer", "minimum": 100 },
+            "aspectRatio": { "type": "string", "enum": ["9:16", "3:4", "16:9", "1:1"] }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["topic", "track"],
+      "additionalProperties": true,
+      "properties": {
+        "topic": { "type": "string" },
+        "track": {
+          "type": "string",
+          "enum": [
+            "track_a_code_animation",
+            "track_b_real_photo_collage",
+            "track_c_typography_only",
+            "track_d_editorial_illustration"
+          ]
+        },
+        "targetAudience": { "type": "string" },
+        "provenance": {
+          "type": "object",
+          "properties": {
+            "model": { "type": "string" },
+            "brief": { "type": "string" },
+            "author": { "type": "string" },
+            "createdAt": { "type": "string", "format": "date-time" }
+          }
+        }
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "path"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string", "enum": ["image", "svg", "font", "data_table"] },
+          "path": { "type": "string" },
+          "hash": { "type": "string" },
+          "cutoutPath": { "type": "string" },
+          "license": { "type": "string" },
+          "dimensions": {
+            "type": "object",
+            "properties": {
+              "width": { "type": "integer" },
+              "height": { "type": "integer" }
+            }
+          }
+        }
+      }
+    },
+    "layers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "role", "type", "zIndex", "position"],
+        "additionalProperties": true,
+        "properties": {
+          "id": { "type": "string" },
+          "role": {
+            "type": "string",
+            "enum": [
+              "background",
+              "headline",
+              "subheadline",
+              "badge",
+              "host_portrait",
+              "evidence_card",
+              "annotation",
+              "watermark",
+              "component_root"
+            ]
+          },
+          "type": {
+            "type": "string",
+            "enum": ["text", "image", "shape", "group", "component_ref"]
+          },
+          "zIndex": { "type": "integer" },
+          "position": {
+            "type": "object",
+            "required": ["x", "y", "width", "height"],
+            "additionalProperties": false,
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" },
+              "width": { "type": "number" },
+              "height": { "type": "number" }
+            }
+          },
+          "transform": {
+            "type": "object",
+            "properties": {
+              "scale": { "type": "number", "default": 1.0 },
+              "rotation": { "type": "number", "default": 0 },
+              "origin": { "type": "string", "enum": ["center", "top-left", "bottom-right"] }
+            }
+          },
+          "crop": {
+            "type": "object",
+            "required": ["x", "y", "width", "height"],
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" },
+              "width": { "type": "number" },
+              "height": { "type": "number" }
+            }
+          },
+          "clipRect": {
+            "type": "array",
+            "items": { "type": "number", "minimum": 0, "maximum": 1 },
+            "minItems": 4,
+            "maxItems": 4,
+            "description": "归一化矩形裁切 [x, y, w, h]，三端(Remotion clip-path:inset / Takumi / Canvix Image crop) 原生像素级对齐，用于肩前头后等穿插盖板"
+          },
+          "followTransformOf": {
+            "type": "string",
+            "description": "跟随主图层的变换属性 (位置、缩放、旋转)，用于分层主体锁定联动"
+          },
+          "content": { "type": "string" },
+          "assetId": { "type": "string" },
+          "typography": {
+            "type": "object",
+            "properties": {
+              "fontFamily": { "type": "string" },
+              "fontWeight": { "type": "integer" },
+              "fontSize": { "type": "number" },
+              "lineHeight": { "type": "number" },
+              "letterSpacing": { "type": "number" },
+              "textAlign": { "type": "string", "enum": ["left", "center", "right"] },
+              "verticalAlign": {
+                "type": "string",
+                "enum": ["top", "middle", "bottom"],
+                "default": "middle",
+                "description": "定高锚点盒垂直对齐，锁死字号缩放时的穿插基准线，消除行高垂直抖动"
+              },
+              "fit": { "type": "string", "enum": ["text-fit-auto", "none", "fixed"] },
+              "minFontSize": { "type": "number", "minimum": 24 },
+              "maxFontSize": { "type": "number" },
+              "maxLines": { "type": "integer", "enum": [1, 2] },
+              "strokePaddingPx": {
+                "type": "number",
+                "default": 12,
+                "description": "预留给文字粗外描边与发光的安全内垫，防止描边被容器切边"
+              },
+              "opticalTrackingMaxEm": {
+                "type": "number",
+                "default": 0.10,
+                "description": "极短词 (<=4字) 未撑满宽度时允许自动微张字距的上限"
+              },
+              "overflowBehavior": {
+                "type": "string",
+                "enum": ["shrink_then_fail", "balance_wrap_2lines_then_fail"],
+                "default": "shrink_then_fail",
+                "description": "严禁静默省略截断(ellipsis)；缩至 minFontSize 仍放不下时必须阻断报错或自动平衡换双行"
+              }
+            }
+          },
+          "frontStrokeEcho": {
+            "type": "object",
+            "properties": {
+              "enabled": { "type": "boolean", "default": false },
+              "zIndex": { "type": "integer" },
+              "strokeWidth": { "type": "number", "default": 3 },
+              "strokeColor": { "type": "string", "default": "rgba(255,255,255,0.45)" }
+            },
+            "description": "文字穿透描边回声：人像挡住文字时，在更高 zIndex 派生同坐标空心描边层，免去人工复制图层"
+          },
+          "shape": {
+            "type": "object",
+            "properties": {
+              "kind": { "type": "string", "enum": ["rect", "circle", "capsule", "path"] },
+              "radius": { "type": "number" },
+              "pathData": { "type": "string" }
+            }
+          },
+          "style": {
+            "type": "object",
+            "properties": {
+              "fill": { "type": "string" },
+              "stroke": { "type": "string" },
+              "strokeWidth": { "type": "number" },
+              "opacity": { "type": "number", "minimum": 0, "maximum": 1 },
+              "shadow": {
+                "type": "object",
+                "properties": {
+                  "color": { "type": "string" },
+                  "blur": { "type": "number" },
+                  "offsetX": { "type": "number" },
+                  "offsetY": { "type": "number" }
+                }
+              }
+            }
+          },
+          "locked": { "type": "boolean", "default": false },
+          "visible": { "type": "boolean", "default": true },
+          "componentProps": { "type": "object" }
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "required": ["platformSafeZones"],
+      "additionalProperties": false,
+      "properties": {
+        "faceProtection": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "points", "strictness"],
+            "properties": {
+              "id": { "type": "string" },
+              "points": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": { "type": "number" },
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              },
+              "strictness": { "type": "string", "enum": ["hard_block", "warn"] }
+            }
+          }
+        },
+        "platformSafeZones": {
+          "type": "object",
+          "required": ["platform", "scene", "exclusions"],
+          "properties": {
+            "platform": { "type": "string", "enum": ["douyin", "xhs", "bilibili", "youtube"] },
+            "scene": { "type": "string", "enum": ["double_column_feed", "immersive_video", "desktop_recommendation"] },
+            "maskVersion": { "type": "string" },
+            "safeZoneProfiles": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "外部引用的标准安全区 Profile 标识符列表 (如 douyin.feed.9x16.v2026, douyin.profile_grid.3x4_crop)"
+            },
+            "exclusions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["id", "type"],
+                "properties": {
+                  "id": { "type": "string" },
+                  "type": { "type": "string", "enum": ["rect", "polygon"] },
+                  "level": {
+                    "type": "string",
+                    "enum": ["hard_block", "device_envelope_warn"],
+                    "default": "hard_block",
+                    "description": "hard_block: UI必挡或主页裁切区，核心文字零容忍；device_envelope_warn: 细长屏边缘裁切或手势条浮动带"
+                  },
+                  "coordinateSpace": {
+                    "type": "string",
+                    "enum": ["viewport_normalized", "canvas_normalized", "canvas_pixels"],
+                    "default": "viewport_normalized"
+                  },
+                  "normalizedRect": {
+                    "type": "array",
+                    "items": { "type": "number", "minimum": 0, "maximum": 1 },
+                    "minItems": 4,
+                    "maxItems": 4,
+                    "description": "[x, y, w, h] 归一化矩形"
+                  },
+                  "normalizedPoints": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": { "type": "number", "minimum": 0, "maximum": 1 },
+                      "minItems": 2,
+                      "maxItems": 2
+                    },
+                    "description": "归一化多边形顶点序列 [[x, y], ...]"
+                  },
+                  "coordinates": { "type": "array" },
+                  "reason": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "contrastRequirements": {
+          "type": "object",
+          "properties": {
+            "minWcagRatio": { "type": "number", "minimum": 1, "default": 4.5 },
+            "targetLayerPair": {
+              "type": "array",
+              "items": { "type": "string" },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        }
+      }
+    },
+    "renderConfig": {
+      "type": "object",
+      "properties": {
+        "engine": { "type": "string", "enum": ["remotion_still", "takumi", "sharp"] },
+        "outputFormats": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["png", "webp", "jpeg", "svg"] }
+        },
+        "scale": { "type": "number", "default": 1.0 }
+      }
+    }
+  }
+}
