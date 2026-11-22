@@ -84,6 +84,43 @@ class SciencePopularizationGateTests(unittest.TestCase):
         value["ai_assistance"]["disclosure_assessment"] = "no-ai-used"
         self.assert_code(value, "ai_disclosure_inconsistent")
 
+    def tiered(self, level='author-self-check'):
+        value=self.load()
+        review=value['audience_readability_review']
+        roles={'author-self-check':'author','editor-review':'plain-language-editor',
+               'target-audience-sample':'target-audience-representative'}
+        review.update(review_level=level,reviewer_roles=[roles[level]],
+            limitations='Synthetic check only; no audience effect or population inference.',
+            evidence_bindings=[dict(path=p,sha256=GATE.text_sha256(GATE.resolve_ref(p))) for p in review['review_evidence_refs']])
+        return value
+
+    def test_explicit_tiers_do_not_require_a_representative_for_self_check(self):
+        from unittest import mock
+        for level in ('author-self-check','editor-review','target-audience-sample'):
+            with self.subTest(level=level):
+                value=self.tiered(level);GATE.validate_input(value)
+                original=GATE.load_json
+                with mock.patch.object(GATE,'load_json',side_effect=lambda p: value if p==Path('synthetic-input') else original(p)):
+                    receipt=GATE.create_receipt(Path('synthetic-input'))
+                GATE.validate_receipt(receipt)
+                self.assertFalse(receipt['audience_validation']['audience_effect_verified'])
+                self.assertEqual('sample-review-recorded' if level=='target-audience-sample' else 'not-tested',
+                                 receipt['audience_validation']['status'])
+
+    def test_self_check_cannot_claim_representative_and_evidence_cannot_drift(self):
+        value=self.tiered();value['audience_readability_review']['reviewer_roles'].append('target-audience-representative')
+        self.assert_code(value,'audience_tier_misrepresented')
+        value=self.tiered();value['audience_readability_review']['evidence_bindings'][0]['sha256']='0'*64
+        self.assert_code(value,'audience_evidence_drift')
+        value=self.tiered();value['audience_readability_review']['limitations']=''
+        self.assert_code(value,'audience_limits_required')
+
+    def test_tier_does_not_waive_scientific_review_or_unresolved_feedback(self):
+        value=self.tiered();value['scientific_review']['subject_matter_review_status']='pending'
+        self.assert_code(value,'subject_matter_review_missing')
+        value=self.tiered();value['audience_readability_review']['feedback_resolved']=False
+        self.assert_code(value,'audience_review_incomplete')
+
     def test_body_and_receipt_drift_fail_closed(self) -> None:
         value = self.load()
         value["body_binding"]["body_sha256"] = "0" * 64

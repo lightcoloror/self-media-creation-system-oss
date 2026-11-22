@@ -203,14 +203,23 @@ def validate_input(value: dict[str, Any]) -> dict[str, Any]:
         "decision", "primary_audience", "reviewer_roles", "jargon_explained",
         "structure_and_information_density_fit", "feedback_resolved", "review_evidence_refs",
     }
+    # Explicit tier extension; old receipts keep their original representative
+    # requirement. Self-check is never silently relabelled as audience evidence.
+    if 'review_level' in audience:
+        audience_keys |= {'review_level', 'limitations', 'evidence_bindings'}
     exact_keys(audience, audience_keys, "audience_readability_review")
     if audience["decision"] != "passed":
         raise ScienceReviewError("audience_review_blocked", "readability review must pass")
     if not isinstance(audience["primary_audience"], str) or not audience["primary_audience"].strip():
         raise ScienceReviewError("audience_missing", "primary audience is required")
     roles = audience["reviewer_roles"]
-    if not isinstance(roles, list) or "target-audience-representative" not in roles:
-        raise ScienceReviewError("target_audience_review_missing", "a target-audience representative must review the frozen body")
+    level = audience.get('review_level', 'target-audience-sample')
+    needed_role = {'author-self-check':'author', 'editor-review':'plain-language-editor',
+                   'target-audience-sample':'target-audience-representative'}.get(level)
+    if needed_role is None or not isinstance(roles, list) or needed_role not in roles:
+        raise ScienceReviewError("target_audience_review_missing", "review tier requires its actual reviewer role")
+    if level != 'target-audience-sample' and 'target-audience-representative' in roles:
+        raise ScienceReviewError('audience_tier_misrepresented', 'self/editor check cannot claim target audience participation')
     if any(audience[key] is not True for key in ("jargon_explained", "structure_and_information_density_fit", "feedback_resolved")):
         raise ScienceReviewError("audience_review_incomplete", "readability findings must be resolved")
     review_refs = audience["review_evidence_refs"]
@@ -218,6 +227,18 @@ def validate_input(value: dict[str, Any]) -> dict[str, Any]:
         raise ScienceReviewError("audience_review_evidence_missing", "readability review evidence is required")
     for ref in review_refs:
         resolve_ref(ref)
+    if 'review_level' in audience:
+        if not isinstance(audience['limitations'], str) or not audience['limitations'].strip():
+            raise ScienceReviewError('audience_limits_required', 'record sample limits or absence of audience testing')
+        bindings = audience['evidence_bindings']
+        if not isinstance(bindings, list) or len(bindings) != len(review_refs):
+            raise ScienceReviewError('audience_evidence_binding_missing', 'bind current review evidence')
+        if {r.get('path') for r in bindings} != set(review_refs):
+            raise ScienceReviewError('audience_evidence_binding_missing', 'all readability evidence must be bound')
+        for ref in bindings:
+            exact_keys(ref, {'path','sha256'}, 'audience evidence binding')
+            if text_sha256(resolve_ref(ref['path'])) != ref['sha256']:
+                raise ScienceReviewError('audience_evidence_drift', 'readability evidence changed')
 
     ai = value["ai_assistance"]
     ai_keys = {
@@ -268,6 +289,13 @@ def create_receipt(input_path: Path) -> dict[str, Any]:
         "next_gate": "author-plus-subject-matter-check",
         "authority": AUTHORITY,
     }
+    if 'review_level' in value['audience_readability_review']:
+        level = value['audience_readability_review']['review_level']
+        payload['audience_validation'] = {
+            'status': 'sample-review-recorded' if level=='target-audience-sample' else 'not-tested',
+            'audience_effect_verified': False,
+            'limitations': value['audience_readability_review']['limitations'],
+        }
     payload["receipt_payload_sha256"] = canonical_sha256(payload)
     Draft202012Validator(load_json(SCHEMA), format_checker=FormatChecker()).validate(payload)
     return payload
@@ -282,6 +310,17 @@ def validate_receipt(value: dict[str, Any]) -> None:
     if text_sha256(resolve_ref(value["body_binding"]["body_ref"])) != value["body_binding"]["body_sha256"]:
         raise ScienceReviewError("body_hash_drift", "frozen body changed after review")
     validate_source_card(resolve_ref(value["source_basis"]["source_card_ref"]))
+    # Reuse live input checks so tier/role/evidence cannot be changed merely by
+    # recomputing a receipt digest. Scientific and AI gates remain unchanged.
+    validated = validate_input({k:value[k] for k in ('generated_at','content_id','content_domains',
+        'body_binding','scientific_review','audience_readability_review','ai_assistance')} |
+        {'source_card_ref':value['source_basis']['source_card_ref']})
+    audience = validated['audience_readability_review']
+    if 'review_level' in audience:
+        expected = dict(status='sample-review-recorded' if audience['review_level']=='target-audience-sample' else 'not-tested',
+                        audience_effect_verified=False, limitations=audience['limitations'])
+        if value.get('audience_validation') != expected:
+            raise ScienceReviewError('audience_tier_misrepresented', 'receipt must preserve unverified audience effects')
 
 
 def write_receipt(path: Path, value: dict[str, Any]) -> str:
