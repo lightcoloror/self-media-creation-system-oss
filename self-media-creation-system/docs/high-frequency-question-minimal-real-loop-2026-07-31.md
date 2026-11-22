@@ -1,50 +1,40 @@
-# 高频客户问题驱动的自媒体最小真实闭环
+# 高频问题驱动的自媒体最小闭环方法
 
-- 状态：`draft_only`
-- 执行者：Codex（GPT-5.6）
-- 时间：2026-07-31 20:11:52（Asia/Shanghai）
-- 范围：只读检索既有脱敏资料；产物仅写入本仓库；未写 Logseq、Obsidian、CRM，未发布或联系客户
+- 状态：`draft_only`（公开方法指南；仅引用仓内合成夹具，不含历史业务结果）
+- 原指南归属与日期：`Codex (GPT-5.6)`，`2026-07-31`（保留原始归属与日期）
+- 公开源整理：`Antigravity`，`2026-11-22`（基于公开基线 `f685f08a96868230d795ddc92ba90fedf162a722` 去除历史业务叙事与未随仓私有路径，替换为仓内合成夹具与相对链接；未修改代码）
+- 范围：通用方法与仓内合成夹具参考；仅写入本地 `draft_only` 产物，不写外部知识库或 CRM，不自动发布或联系任何人；本次整理未执行运行时命令。
 
-## 1. 结论
+## 1. 方法定位与可重复频率口径
 
-本轮不预设选题，也不使用模型印象或平台固定权重。排序单位是“去重后的合格独立证据组”，不是消息条数、客户人数或文件数量。
+本方法不预设选题，也不使用模型印象或平台固定权重。排序单位是“去重后的合格独立证据组”（`unique_qualified_evidence_group_not_people_or_messages`），不是消息条数、客户人数或文件数量。
 
-默认一周主题为：
-
-> 以前买过保险，但现在说不清自己或家里到底有什么，应该先怎么查清楚？
-
-它有 2 个去重后的合格证据组：
-
-1. 1260 段脱敏历史聊天经人工精读、去重后形成的真实问题池，将其列为反复出现的 P0 问题；
-2. 脱敏的保单托管真实工作流，将“查保单”和“不清楚自己已有保障”记录为实际服务入口。
-
-原资料没有保存每个主题对应的精确人数或出现次数，所以 `raw_occurrence_count = null`，公开稿不得写“多少客户都问过”。
-
-核保信息整理也有 2 个证据组，但医学/核保事实依赖和误导风险更高。风险调整后排名第二，不构成“分数接近且业务方向完全不同”的二选一条件。
-
-## 2. 数据入口与证据状态
-
-| 资料 | 证据状态 | 本轮用途 | 是否计频 |
-|---|---|---|---|
-| `历史客户真实问题选题素材池-脱敏版-2026-07-17.md` | 人工精读后的脱敏聚合事实 | 重复问题与 P0 优先级 | 是 |
-| `policy-custody-real-workflow-handbook-2026-07-09.md` | 脱敏真实服务流程 | 独立佐证保单不清楚问题 | 是 |
-| `moments-underwriting-info-sorting-20260620.json` | 用户确认已发布的真实问题表达 | 独立佐证核保问题 | 是 |
-| Obsidian 的历史问题池镜像 | 同源镜像 | 发现与交叉定位 | 否，避免重复计数 |
-| `缓存-保险高频问题.md` | 无完整出处的 AI 整理稿 | 候选词表 | 否 |
-| `常见异议处理.md` | 来源混合、含未核验与敏感旧材料 | 排除项 | 否 |
-| 朋友圈本人语料画像 | 部分核验的风格画像 | 控制句式、语气和禁用腔调 | 否，不是频率证据 |
-| 朋友圈渠道默认规则、双 IP 路由、内容 Schema | 现有系统契约 | 渠道、状态、反馈和账号路由 | 否，不是频率证据 |
-
-## 3. 可重复频率口径
+可重复频率口径如下：
 
 1. 候选必须先有“人工确认反复出现”的脱敏本地证据，否则不能进入高频排序。
 2. 只统计 `counts_toward_frequency=true` 的证据，并按 `independence_group` 去重。
 3. AI 草稿、同源镜像、流程规范、风格画像和风险卡不能抬高频率。
-4. 精确出现次数未被原资料保留时固定为 unknown，不从 640 条机器候选或 66 个去重主题反推。
-5. 排序在证据组数量基础上加入风险和事实依赖扣减；低风险、低事实依赖的主题优先进入真实闭环。
-6. 个人经历、授权状态和当前产品事实不明时保留 `unknown`，不得补写。
+4. 精确出现次数没有记录时固定为 `unknown`（在 JSON 夹具中记为 `null`），不得从候选数量或机器条目数反推。
+5. 排序在证据组数量基础上加入风险和事实依赖扣减；低风险、低事实依赖的主题优先进入最小闭环。
+6. 个人经历、授权状态和当前产品事实不明时保留 `unknown`（或显式未声明/不适用状态），不得补写。
 
-稳定命令：
+## 2. 仓内合成夹具、脚本与关联文档
+
+下表所列相对路径均以本文件所在目录 `self-media-creation-system/docs/` 为基准，指向公开仓库已随仓分发的合成夹具、脚本与契约文档：
+
+| 仓内文件 | 用途 |
+|---|---|
+| [../fixtures/high-frequency-question-candidates.v1.synthetic.json](../fixtures/high-frequency-question-candidates.v1.synthetic.json) | 仓内合成候选证据夹具（`source_scope: "synthetic-only"`，示例仅演示独立证据组去重、同源镜像不计频与 AI 草稿排除，所有状态与字段均为虚构模拟） |
+| [../fixtures/minimal-synthetic-week.v1.draft-only.json](../fixtures/minimal-synthetic-week.v1.draft-only.json) | 仓内合成一周草稿包蓝图（`package_status: "draft_only"`，示例私域草稿、单个公域改写候选与非阻塞最小用户确认） |
+| [../scripts/high_frequency_topic_loop.py](../scripts/high_frequency_topic_loop.py) | 离线确定性排序与草稿包生成脚本（默认读取上述两份合成夹具，默认输出目录为 `outputs/draft-only/synthetic-week-example`） |
+| [../tests/test_high_frequency_topic_loop.py](../tests/test_high_frequency_topic_loop.py) | 高频选题闭环合成回归测试 |
+| [../scripts/check_self_media_contracts.py](../scripts/check_self_media_contracts.py) | 仓库统一合同检查入口（聚合调用 `package_errors()`） |
+| [../../docs/content-creation-system/content-item.schema.json](../../docs/content-creation-system/content-item.schema.json) | 复用的既有内容项 Schema |
+| [./continuous-topic-discovery.md](./continuous-topic-discovery.md) | 持续选题发现追加入口指南 |
+
+## 3. 稳定命令与输出边界
+
+在 `self-media-creation-system/` 目录下，文档化的稳定命令如下：
 
 ```powershell
 python scripts/high_frequency_topic_loop.py --print-ranked
@@ -53,82 +43,31 @@ python scripts/high_frequency_topic_loop.py --check-generated
 python scripts/check_self_media_contracts.py
 ```
 
-## 4. 现有状态机的复用方式
+`scripts/high_frequency_topic_loop.py` 文档化的 CLI 参数边界如下：
 
-本轮没有新增发布状态机。生成的 `content-item.json` 继续服从既有 `content-item.schema.json`：
+- `--print-ranked`：以 JSON 格式打印按独立合格证据组和风险/事实依赖扣减计算后的排序结果（未指定 `--write` 时默认同时打印排序 JSON）。
+- `--write`：将 `draft_only` 一周草稿包写入 `--output-dir` 指定目录（默认 `outputs/draft-only/synthetic-week-example`）。
+- `--check-generated`：校验已生成的本地输出文件与内容哈希。
+- `--output-dir`：覆盖默认本地输出目录（默认为 `DEFAULT_OUTPUT`，即 `outputs/draft-only/synthetic-week-example`）。
 
-- 内容状态为 `draft`；
-- 发布边界为 `manual-only`；
-- 朋友圈是私域草稿，小红书仅是一个公域改写候选；
-- 发布回执为空，内容信号和业务信号均为 `not-observed`；
-- 最多保留 1–2 个公域候选，本轮只生成 1 个；
-- 未发布时观察卡记 `not_applicable`，不能记 `content_no_signal`；
-- 已发布但没有可观察内容信号时，`content_no_signal` 只表示证据不足，不进入客户负面结论，不写 CRM，不触发联系客户。
+边界说明：
 
-## 5. 一周闭环
+- 该 CLI 在当前基线提交上读取仓内捆绑的合成候选源与合成一周蓝图；打印结果统计的是合格独立证据组，不代表真实人群规模或真实消息条数。
+- `--write` 仅生成本地 `draft_only` 文件，不执行任何平台发布、消息发送或 CRM 写入动作。
+- 本次文档整理未执行上述任何命令，不声称已复现排序计数或完成运行时验证。
 
-| 阶段 | 本轮实现 |
-|---|---|
-| 高频问题候选 | 5 个脱敏候选及证据状态 |
-| 证据计数 | 独立证据组去重、原始次数 unknown |
-| 风险/合规 | 风险等级、事实依赖、未知项、直接标识符检测 |
-| 一周主题 | 默认选中保单目录/查清已有保障 |
-| 私域 | 一条符合本人朋友圈语料规则的 `draft_only` 草稿 |
-| 公域 | 一个“灿哥诊风险”小红书图文候选，仍为 draft |
-| 48–72 小时 | 六层观察卡；朋友圈不可观察数据明确留空 |
-| 第 7 天 | 内容信号与业务信号分开复盘；无信号为 `insufficient-evidence` |
+## 4. 状态机复用、人工确认与发布边界
 
-## 6. 最小用户确认
+本流程不新增第二套发布状态机，生成的内容项继续服从既有 `content-item.schema.json`：
 
-只剩一个不阻塞生成的问题：
+- 内容状态固定为 `draft`，发布边界固定为 `manual-only`，发布回执 `receipts` 为空数组 `[]`。
+- `content_signal_status` 与 `business_signal_status` 初始均保持 `not-observed`。
+- 公域改写候选最多保留 1–2 个且保持 `draft_only`（仓内合成一周蓝图仅包含 1 个公域候选）。
+- 最小用户确认边界：待确认项未获人工答复时，不阻塞本地草稿生成；在明确人工审阅与确认前，未知项保持待确认/未核实状态，不得发布，不得作出服务承诺或补写未核实事实。
+- 中性无信号口径：未发布条目不计入负面信号；已发布但无可观察内容信号时，仅记录 `content_no_signal` / `insufficient-evidence` 表示证据不足，不得转化为负面受众/客户结论、不得写入 CRM 或触发外联动作。
 
-> 是否保留“一页纸保单目录”作为当前愿意公开使用的服务表达？
+## 5. 公开范围说明与未验证边界
 
-用户未回答时，公开候选只写成个人自查清单，不声称当前提供该项服务。
-
-## 7. 变更依据与回滚
-
-### A. 候选证据夹具
-
-- 意图：让“高频”可追溯、可去重、可重复运行。
-- 决策：新增 5 个脱敏候选，逐条记录证据状态和独立证据组。
-- 理由：避免模型印象、AI 草稿或同源镜像抬高频率。
-- 证据：人工精读问题池、真实服务流程、用户确认的已发布表达。
-- 生效范围：本地选题排序；不改变生产 Schema。
-- 回滚：删除 `fixtures/high-frequency-question-candidates.v1.deidentified.json`。
-
-### B. 一周内容蓝图
-
-- 意图：把第一名主题接入现有私域到公域流程。
-- 决策：只生成一条朋友圈草稿和一个小红书候选，全部 `draft_only`。
-- 理由：符合“私域先验证、公域最多 1–2 个改写”的现有规则。
-- 证据：历史问题池既有最小闭环、朋友圈渠道规则和双 IP 路由。
-- 生效范围：2026-08-03 起的一周草稿包。
-- 回滚：删除 `fixtures/minimal-real-week.v1.draft-only.json` 和对应输出目录。
-
-### C. 确定性生成器与负例
-
-- 意图：让排序、脱敏、草稿边界和产物哈希可回归。
-- 决策：新增离线 Python 生成器及 10 项单元测试。
-- 理由：不调用模型或外部 API也能复现相同结论，并阻止 AI 证据计频、直接标识符、公域候选超限和伪造信号。
-- 证据：既有 `content-item.schema.json`、统一 checker 和当前 fixtures。
-- 生效范围：仓库本地验证命令。
-- 回滚：删除生成器和对应测试，不影响原有生产 Schema。
-
-### D. 统一检查器接入
-
-- 意图：避免新闭环成为平行流程。
-- 决策：让 `check_self_media_contracts.py` 同时调用高频闭环校验。
-- 理由：继续以单一稳定命令覆盖 Schema、fixture、迁移、诊断和最小真实闭环。
-- 证据：原统一 checker 的模块化入口。
-- 生效范围：仓库回归测试；不修改发布逻辑。
-- 回滚：移除 `HIGH_FREQUENCY` 导入和 `package_errors()` 聚合行。
-
-### E. 生成产物
-
-- 意图：交付可人工审阅的一周内容包、证据索引和复盘卡。
-- 决策：只写 `outputs/draft-only/week-2026-08-03-policy-inventory/`。
-- 理由：让所有可见产物在路径和 manifest 中同时标明 `draft_only`。
-- 证据：生成器固定哈希和 `--check-generated` 校验。
-- 生效范围：本地草稿；不代表发布许可。
-- 回滚：删除该输出目录后可随时用 `--write` 重建。
+- 历史业务材料与未随仓输入：历史真实账号、客户、业务结果、真实计数与未随仓的本地历史路径及夹具均已移除；操作者若在本地输入经脱敏的真实候选材料，仍须自行完成隐私脱敏复核、合规检查与人工审阅。
+- 候选来源定位符缺陷边界：既有的内容项候选来源定位符（`provenance.sources`）导出缺陷由独立源码候选分支（`codex/topic-provenance-source-20261113`）单独处理，本文档不声称该问题已在基线修复或已通过行为验证。
+- 公开历史说明：如果后续另行批准普通分支推送，只会更新目标分支的最终文件树；较早的公开提交历史中仍可能保留本文件的原始版本。
