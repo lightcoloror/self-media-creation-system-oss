@@ -3,6 +3,7 @@ import contextlib
 import copy
 import io
 import json
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -30,6 +31,10 @@ class VideoDeliveryAvailabilityTests(unittest.TestCase):
 @unittest.skipUnless(
     (v.ROOT.parent / 'ai-video-tools-20260708/mvp-video-pipeline/src/video_creation_pipeline/execution_receipts.py').is_file(),
     'Full MVP renderer owner is separately supplied; local-rough-cut is not a substitute',
+)
+@unittest.skipUnless(
+    shutil.which('ffmpeg') and shutil.which('ffprobe'),
+    'FFmpeg/FFprobe executables are not available on PATH; install FFmpeg to run real media delivery tests',
 )
 class VideoDeliveryTests(unittest.TestCase):
     @classmethod

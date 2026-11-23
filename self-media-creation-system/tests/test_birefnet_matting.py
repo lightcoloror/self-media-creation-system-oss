@@ -8,7 +8,10 @@ import sys
 import tempfile
 import unittest
 
-import numpy as np
+try:
+    import numpy as np
+except ImportError as exc:
+    raise unittest.SkipTest(f"Optional CV dependency not installed: {exc}") from exc
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]

@@ -1,5 +1,5 @@
 """Bounded false-event regressions; no real operating writes."""
-import copy,json,os,sys,unittest
+import copy,json,os,sys,tempfile,unittest
 from datetime import timedelta
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
@@ -18,6 +18,11 @@ class OutcomeFeedbackTests(unittest.TestCase):
             else: os.environ['OUTCOME_LINK_FIXTURE'] = previous
         cls.addClassCleanup(restore)
         cls.request=link.read(path)
+        tmp_base = Path(os.environ.get('TEST_TMP_ROOT', str(ROOT / '.test-runtime')))
+        tmp_base.mkdir(parents=True, exist_ok=True)
+        cls._tmp_dir = tempfile.TemporaryDirectory(dir=tmp_base)
+        cls.addClassCleanup(cls._tmp_dir.cleanup)
+        cls.tmp_root = Path(cls._tmp_dir.name)
     def setUp(self): self.r=copy.deepcopy(self.request)
     def rejects(self,code):
         with self.assertRaises(Exception) as e: link.build(self.r)
@@ -59,13 +64,13 @@ class OutcomeFeedbackTests(unittest.TestCase):
         self.r['observations'][0]['observation']['metrics']=[{'layer':'business','metric_key':'views','value':500,'unit':'count'}]
         self.rejects('metric_layer_mismatch')
     def test_resume_and_idempotence(self):
-        root=Path(os.environ['TEST_TMP_ROOT'])/'outcome-link-resume'
+        root=self.tmp_root/'outcome-link-resume'
         text={'request.json':'one','review.json':'two'}
         link.persist(root,text,stop_after=1);self.assertFalse((root/'review.json').exists())
         link.persist(root,text);before={p.name:p.stat().st_mtime_ns for p in root.iterdir()}
         link.persist(root,text);self.assertEqual(before,{p.name:p.stat().st_mtime_ns for p in root.iterdir()})
     def test_drift_refuses_partial_overwrite(self):
-        root=Path(os.environ['TEST_TMP_ROOT'])/'outcome-link-drift';link.persist(root,{'z.json':'a'})
+        root=self.tmp_root/'outcome-link-drift';link.persist(root,{'z.json':'a'})
         with self.assertRaises(link.LinkError):link.persist(root,{'a.json':'new','z.json':'b'})
         self.assertFalse((root/'a.json').exists())
     def test_native_approval_gate_stays_required(self):
@@ -90,14 +95,14 @@ class OutcomeFeedbackTests(unittest.TestCase):
     def test_native_review_cross_account(self):
         fixture=Path(os.environ['OUTCOME_LINK_FIXTURE']).parent
         value=link.read(fixture/'native-build-review.json');value['account_ids']=['other-account']
-        p=Path(os.environ['TEST_TMP_ROOT'])/'cross-account-native-review.json';p.write_text(link.text(value),encoding='utf-8')
+        p=self.tmp_root/'cross-account-native-review.json';p.write_text(link.text(value),encoding='utf-8')
         self.r['native_requests']=[{'operation':'build-review','input':{'ref':p.relative_to(link.W).as_posix(),'sha256':link.sha(p)}}]
         self.rejects('event_binding_drift')
 
     def test_native_snapshot_wrong_publication(self):
         fixture=Path(os.environ['OUTCOME_LINK_FIXTURE']).parent
         value=link.read(fixture/'native-snapshot-early.json');value['publication_id']='wrong-publication'
-        p=Path(os.environ['TEST_TMP_ROOT'])/'wrong-publication.json';p.write_text(link.text(value),encoding='utf-8')
+        p=self.tmp_root/'wrong-publication.json';p.write_text(link.text(value),encoding='utf-8')
         self.r['native_requests']=[{'operation':'record-snapshot','input':{'ref':p.relative_to(link.W).as_posix(),'sha256':link.sha(p)}}]
         self.rejects('publication_binding_drift')
 
@@ -108,7 +113,7 @@ class OutcomeFeedbackTests(unittest.TestCase):
             with self.subTest(decision=decision):
                 self.r['outcome']['decision']=decision
                 ev={k:self.r['outcome'][k] for k in ['content_id','closure_run_id','account_id','decision','decided_at']}
-                p=Path(os.environ['TEST_TMP_ROOT'])/(decision+'.json');p.write_text(link.text(ev),encoding='utf-8')
+                p=self.tmp_root/(decision+'.json');p.write_text(link.text(ev),encoding='utf-8')
                 self.r['outcome']['evidence']={'ref':p.relative_to(link.W).as_posix(),'sha256':link.sha(p)}
                 self.assertEqual(link.build(self.r)['outcome_candidate']['human_outcome'],decision)
 

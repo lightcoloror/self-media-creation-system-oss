@@ -22,7 +22,7 @@
       "directory": "question-research-poc",
       "discovery": "AGENT_DISCOVERY.md",
       "repository": "https://github.com/lightcoloror/question-research-poc-oss",
-      "commit": "646b3871257b0861446615e7c96390f5dc714bde",
+      "commit": "c9957bf680da8a7232ef332519e33a788a17c93d",
       "source_status": "published-public-source",
       "commands": {
         "help": "python -m question_research_poc --help"
@@ -32,7 +32,7 @@
       "directory": "video-knowledge-pipeline",
       "discovery": "AGENT_DISCOVERY.md",
       "repository": "https://github.com/lightcoloror/video-knowledge-pipeline-oss",
-      "commit": "26da44ea972d009fdad8820bc62e44f1d4617bbc",
+      "commit": "870460c9e758850aadd548011510c7b7e780ddc5",
       "source_status": "published-public-source-native-runtime-and-per-use-approval-remain-separate",
       "commands": {
         "help": "video-knowledge --help",
@@ -43,7 +43,7 @@
       "directory": "ai-video-tools-20260708/mvp-video-pipeline",
       "discovery": "AGENT_DISCOVERY.md",
       "repository": "https://github.com/lightcoloror/mvp-video-pipeline-oss",
-      "commit": "9f55b12864df642f08fcbd96df15acb0f97652d5",
+      "commit": "8592e867b2e0c969205b3e30ec6ef05b0ec18217",
       "source_status": "published-public-source-native-runtime-and-per-use-approval-remain-separate",
       "commands": {
         "help": "video-content-brief --help",
@@ -54,7 +54,7 @@
       "directory": "content-studio-poc",
       "discovery": "README.md",
       "repository": "https://github.com/lightcoloror/content-visual-studio-oss",
-      "commit": "5a4ac1a9937ff580b06674a408be4c101dd27bff",
+      "commit": "db610dda39548d6eab4502bf23117e303bc5062b",
       "source_status": "published-public-source-native-runtime-and-per-use-approval-remain-separate",
       "commands": {}
     },

@@ -73,6 +73,11 @@ class ResearchDeliveryTests(unittest.TestCase):
             candidate.project_candidate(source,self.root,self.root/'candidate',materials.QRP,work_request=self.request())
         self.assertFalse((self.root/'candidate').exists())
 
+    @unittest.skipUnless(
+        importlib.util.find_spec('web_content_fetcher') is not None
+        and importlib.util.find_spec('research_workflow') is not None,
+        'Optional web-content-fetcher / ai-research-workflow owner packages are not installed',
+    )
     def test_selected_capture_cli_uses_existing_autoflow_without_article_fallback(self):
         import capture_research_candidate as capture
         spec=importlib.util.spec_from_file_location('capture_fixtures',STUDIO/'tests/test_capture_research_candidate.py')

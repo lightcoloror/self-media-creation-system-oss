@@ -9,7 +9,10 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
 import cover_design as d
 import cover_workbench as w
-if not (Path(w.DEFAULT_PIPE) / 'src/video_creation_pipeline/cover_layers.py').is_file():
+if not (
+    (Path(w.DEFAULT_PIPE) / 'src/video_creation_pipeline/cover_layers.py').is_file()
+    and (Path(w.DEFAULT_PIPE) / 'src/video_creation_pipeline/case_cover_visual_plan.py').is_file()
+):
     raise unittest.SkipTest('Full MVP cover renderer owner is not public; integration remains unverified')
 w.pipeline_import(w.DEFAULT_PIPE)
 from video_creation_pipeline.contract_io import artifact_reference

@@ -23,7 +23,7 @@
     "skill_registry": {
       "path": "skill-registry.json",
       "schema_version": "1.2",
-      "canonical_json_sha256": "4d8d11055d82c0c8c00c70105e056b0e94fbee1f37e2c46c68eb4c252d4da30a"
+      "canonical_json_sha256": "aa09749e15b9d97f7aafe6a6ba90cb3583a9116925825e65b29db08700ad72f0"
     },
     "quality_gates": {
       "path": "quality-gates.json",

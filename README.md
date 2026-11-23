@@ -1,5 +1,7 @@
 # Self-media creation system: public workspace
 
+> 中文用户请直接阅读：[中文快速上手指南（QUICKSTART_ZH.md）](QUICKSTART_ZH.md)
+
 This is the existing self-media framework in a portable workspace layout. It
 selects a deliverable, audience and purpose, carries sourced feedback through
 the applicable stages, and keeps research, author decisions and manual

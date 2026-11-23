@@ -313,7 +313,7 @@
       ],
       "loader": {
         "skill_path": "../../../skills/insurance-content-storycraft/SKILL.md",
-        "skill_sha256": "413d50a09ca61d734c87ae0c60aa181ab6209c9ebfa50a39df91bf317628ed79",
+        "skill_sha256": "47568e7420c8ad4a91fc2e6377e3a7d49877282843e97a16ca4652bff356df91",
         "contract_binding_path": "../../../skills/insurance-content-storycraft/references/contract-binding.json",
         "contract_binding_sha256": "4cb148d1378ba84e0791a874dc84d4dbc0bff813e45342b3bbe3579fc889d111",
         "deployment_mode": "copy-only",
