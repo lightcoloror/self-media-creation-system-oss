@@ -226,3 +226,13 @@ The unchanged local panel browser runner is available with an existing synthetic
 
 ### Archived CTA Review Browser Reference
 Documentation for the legacy CTA review browser regression script is available in [cta-review-browser.md](self-media-creation-system/docs/cta-review-browser.md). This archived source reflects historical DOM contracts; neither browser runtimes nor compatible fixtures are bundled, and execution remains unverified.
+
+## Browser regression source collection
+
+Five existing browser-regression sources retain their current, legacy and optional
+branches. See [the source collection guide](self-media-creation-system/docs/browser-regression-source-collection.md)
+for exact arguments, synthetic scenario requirements and unverified runtime limits.
+This addition does not claim browser acceptance or publication readiness.
+
+### Legacy Browser Smoke Reference
+Reference documentation for the legacy cover PK layout verification script is located at [cover-design-browser-source.md](self-media-creation-system/docs/cover-design-browser-source.md). This documentation covers a legacy, source-only script. Browser runtimes, fixtures, and execution environments remain unverified; no runtime installation, account credentials, or actual publication readiness is provided or claimed.
