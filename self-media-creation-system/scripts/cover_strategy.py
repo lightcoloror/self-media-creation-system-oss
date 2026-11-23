@@ -9,6 +9,7 @@ import itertools
 import math
 
 import cover_workbench as w
+import cover_policy
 
 SIGNALS={'emotion','relationship','discovery','character','reaction','sequence','demonstration',
          'reversal','contrast','before_after','wordplay','metaphor','explanation','evidence','result'}
@@ -47,9 +48,12 @@ def _ids(values, allowed, field, minimum=1):
 
 def init(route_path):
     rp=w.read(route_path);w.plan(rp['brief'])
+    policy = dict(selection_mode='all_applicable', min_angles=2, min_layout_families=2)
+    if rp['brief'].get('cover_stage') == 'final':
+        policy = dict(selection_mode='fixed_count', target_count=1, min_angles=1, min_layout_families=1)
     return dict(schema='self-media.cover-strategy-request.v1',project_id=rp['project_id'],route_plan_ref=w.reference(route_path),
         analysis=dict(synopsis='',evidence=[],angles=[]),
-        policy=dict(selection_mode='all_applicable',min_angles=2,min_layout_families=2),candidate_only=True,manual_publish_only=True,
+        policy=policy,candidate_only=True,manual_publish_only=True,
         instruction='Agent inspects current video, reviewed transcript and user corrections. Populate grounded angles and observations, not genre keywords alone. Never invent source review or image-generation consent.')
 
 
@@ -99,11 +103,15 @@ def _load_request(path):
 
 def select(request_path):
     req,rp,assets,evidence,angles=_load_request(request_path)
+    brief = rp['brief']
+    style_choice = brief['style_choice'] if brief.get('cover_stage') == 'final' else None
     routes={r['id']:r for r in rp['routes']};dispositions=[];eligible=[]
     for angle in angles.values():
         for method in STRATEGIES:
             cid=w.safe_id(angle['id']+'--'+method['id'])
             row=dict(id=cid,angle_id=angle['id'],strategy_id=method['id'],route=method['route'])
+            if style_choice and cid != style_choice['candidate_id']:
+                continue
             matched=sorted(set(angle['signals'])&set(method['signals']))
             if not matched:
                 dispositions.append(dict(**row,status='not_applicable',reason='内容角度没有支持此方法的叙事信号'));continue
@@ -270,6 +278,16 @@ def review_init(desk_path,item_id='main'):
     if len(matches)!=1:raise ValueError('review_item_not_found')
     item=matches[0]
     pk=item['cover_pk']
+    stage = pk.get('cover_stage')
+    text_rules = {}
+    if stage or 'cover_build_ref' in pk:
+        spec = w.read(w.bound(pk['cover_build_ref']))
+        brief = w.validate_spec(spec)['brief']
+        if stage != brief.get('cover_stage') or brief['project_id'] != data['project_id']:
+            raise ValueError('cover_review_stage_or_project_mismatch')
+        plans = {c['id']: w.read(w.bound(c['visual_plan_ref'])) for c in spec['candidates'] if c.get('visual_plan_ref')}
+        text_rules = {c['id']: dict(headline=w.cover_headline(c, plans),
+                                  approved_labels=brief.get('approved_cover_labels', {})) for c in spec['candidates']}
     if not pk.get('strategy_plan_ref'):raise ValueError('content_selection_required_before_review')
     saved=w.read(w.bound(pk['strategy_plan_ref']));selection=verify(pk['strategy_plan_ref'],saved['route_plan_ref'])
     byid={a['id']:a for a in item['covers']};images={};rows=[]
@@ -282,11 +300,17 @@ def review_init(desk_path,item_id='main'):
             a=byid[aid];w.bound(a);images[c['id']][ratio]=a
             rows.append(dict(candidate_id=c['id'],ratio=ratio,image_ref=dict(path=a['path'],sha256=a['sha256']),
                 semantic_correct=None,mobile_readable=None,subject_safe=None,observation=''))
+            if stage:
+                rows[-1].update(visible_text=None, **text_rules[c['id']])
     if set(images)!={c['id'] for c in selection['selected']}:raise ValueError('review_selected_concept_set_mismatch')
     delivery(selection,images)
     pairs=[dict(a=a,b=b,ratio=r,different=None,observation='') for a,b in itertools.combinations(sorted(images),2) for r in selection['required_ratios']]
-    return dict(schema='self-media.cover-visual-review.v1',desk_ref=w.reference(desk_path),strategy_plan_ref=pk['strategy_plan_ref'],item_id=item_id,
+    result = dict(schema='self-media.cover-visual-review.v1',desk_ref=w.reference(desk_path),strategy_plan_ref=pk['strategy_plan_ref'],item_id=item_id,
         reviewer_kind='agent',reviewer='',images=rows,pairs=pairs,review_instructions='Inspect actual full-size and phone-size images, not JSON. Semantic truth and visible distinctness require direct inspection. This never sets human adoption.')
+    if stage:
+        result['cover_stage'] = stage
+        result['review_instructions'] += ' Transcribe visible_text from each PNG, including text inside any illustration; group headline fragments as one entry.'
+    return result
 
 
 def review_check(path):
@@ -295,6 +319,10 @@ def review_check(path):
     _text(review.get('reviewer'),'reviewer')
     expected=review_init(w.bound(review['desk_ref']),review['item_id'])
     if review.get('strategy_plan_ref')!=expected['strategy_plan_ref']:raise ValueError('review_strategy_drift')
+    stage = expected.get('cover_stage')
+    if review.get('cover_stage') != stage:
+        raise ValueError('cover_review_stage_drift')
+    expected_images = {(row['candidate_id'],row['ratio']): row for row in expected['images']}
     for key,identity,checks in [('images',lambda x:(x['candidate_id'],x['ratio'],x['image_ref']['path'],x['image_ref']['sha256']),['semantic_correct','mobile_readable','subject_safe']),
                                 ('pairs',lambda x:(x['a'],x['b'],x['ratio']),['different'])]:
         actual=review.get(key,[])
@@ -302,6 +330,15 @@ def review_check(path):
         for row in actual:
             _text(row.get('observation'),'visual_observation')
             if any(row.get(field) is not True for field in checks):raise ValueError('visual_review_not_passed')
-    return dict(schema='self-media.cover-delivery-check.v1',status='complete_candidate_package_pending_human_selection',
+            if key == 'images' and stage:
+                rule = expected_images[(row['candidate_id'],row['ratio'])]
+                cover_policy.check_text(row.get('visible_text'), rule['headline'], rule['approved_labels'],
+                                        context=f"{row['candidate_id']}/{row['ratio']}")
+    status = {'preview': 'preview_reviewed', 'final': 'final_cover_package_complete'}.get(
+        stage, 'complete_candidate_package_pending_human_selection')
+    return dict(schema='self-media.cover-delivery-check.v1',status=status,
         review_ref=w.reference(path),images=len(review['images']),distinctness_checks=len(review['pairs']),
-        agent_visual_review_passed=True,human_quality_approved=False,publish_authorized=False)
+        agent_visual_review_passed=True,human_quality_approved=False,publish_authorized=False,
+        image_checks=dict(hash_bound=True, png_decoded=True, ratio_and_resolution_checked=True),
+        subject_safety=dict(status='declared_in_bound_visual_observations',
+                            automatic_subject_detection=False, observation_author_authenticated=False))

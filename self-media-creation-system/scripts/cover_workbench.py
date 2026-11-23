@@ -18,6 +18,7 @@ from pathlib import Path
 import publication_desk as desk
 import cover_methods
 import cover_colors
+import cover_policy
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_PIPE = ROOT.parent / 'ai-video-tools-20260708/mvp-video-pipeline'
@@ -60,12 +61,15 @@ def safe_id(value):
     return value
 
 
-def init(project_id, title):
-    return dict(schema='self-media.cover-brief.v1', workflow_version=2, project_id=safe_id(project_id), title=title,
+def init(project_id, title, *, stage=None):
+    brief = dict(schema='self-media.cover-brief.v1', workflow_version=2, project_id=safe_id(project_id), title=title,
                 promise='', facts=[], forbidden_claims=[], requested_ratios=['3:4','9:16','16:9','4:3'],
                 ai_authorization=dict(allowed=False, user_quote=''), assets=[], routes=[],
                 content_kind='generic', method_ids=[],
                 note='Agent fills this from the current project; paths and facts must not be copied from a previous project.')
+    if stage == 'preview':
+        brief.update(cover_stage='preview', requested_ratios=['3:4', '16:9'], approved_cover_labels={})
+    return brief
 
 
 def cover_requirements(reference, brief, **actual):
@@ -89,6 +93,11 @@ def plan(brief, context_ref=None):
     ratios = brief['requested_ratios']
     if not ratios or len(set(ratios)) != len(ratios) or set(ratios) - set(RATIOS.values()):
         raise ValueError('invalid_requested_ratios')
+    if 'cover_stage' in brief:
+        cover_policy.check_ratios(brief['cover_stage'], ratios)
+        cover_policy.validate_labels(brief.get('approved_cover_labels', {}))
+        if brief['cover_stage'] == 'final':
+            cover_policy.resolve_choice(brief['style_choice'], brief['project_id'])
     assets = brief.get('assets', [])
     ids = set()
     for a in assets:
@@ -202,8 +211,38 @@ def validate_spec(spec):
                 raise ValueError('native_generation_not_completed')
     import cover_strategy
     plans={c['id']:read(bound(c['visual_plan_ref'])) for c in spec['candidates'] if c['route']!='ai-illustration'}
+    brief = current['brief']
+    if 'cover_stage' in brief:
+        if brief['cover_stage'] == 'final':
+            choice = cover_policy.resolve_choice(brief['style_choice'], current['project_id'])
+            cards = spec['candidates']
+            if len(cards) != 1 or cards[0]['id'] != choice['id'] or style_id(cards[0]) != choice['style_id']:
+                raise ValueError('final_cover_style_differs_from_confirmed_preview')
+        labels = brief.get('approved_cover_labels', {})
+        for card in spec['candidates']:
+            headline = cover_headline(card, plans)
+            cover_policy.text_key(headline)
+            if card['id'] in plans:
+                visual_plan = plans[card['id']]
+                ratios = [RATIOS[profile['profile_id']] for profile in visual_plan['profiles']]
+                cover_policy.check_plan_text(visual_plan, headline, labels)
+            else:
+                ratios = [row['ratio'] for row in card['outputs']]
+            cover_policy.check_ratios(brief['cover_stage'], ratios)
+            if set(ratios) != set(brief['requested_ratios']):
+                raise ValueError('cover_output_ratio_set_differs_from_plan')
     cover_strategy.check_binding(spec,current['brief'],plans)
     return current
+
+
+def style_id(card):
+    return safe_id(card.get('style_id') or card.get('design_method') or card['route'])
+
+
+def cover_headline(card, plans):
+    if card['id'] in plans:
+        return plans[card['id']]['candidate']['overlay_text']
+    return card.get('headline')
 
 
 def pipeline_import(pipe):
@@ -293,6 +332,12 @@ def collect(spec_path, receipt_paths, desk_path, item_id, out, pipe=DEFAULT_PIPE
                           prompt_ref=c['prompt_ref'], execution='agent_generated_then_imported'))
         if not images[cid]:
             raise ValueError('candidate_has_no_image: '+cid)
+    stage = rp['brief'].get('cover_stage')
+    if stage:
+        for row in images.values():
+            cover_policy.check_ratios(stage, list(row))
+            if set(row) != set(rp['brief']['requested_ratios']):
+                raise ValueError('cover_output_ratio_set_differs_from_plan')
     delivery=cover_strategy.delivery(selection,images)
     data = desk.normalize(read(desk_path), str(desk_path))
     if data['project_id'] != spec['project_id']:
@@ -322,6 +367,8 @@ def collect(spec_path, receipt_paths, desk_path, item_id, out, pipe=DEFAULT_PIPE
              cover_by_ratio={ratio:a['id'] for ratio,a in images[cid].items()},
              missing_ratios=[r for r in rp['brief']['requested_ratios'] if r not in images[cid]]) for cid,c in candidates.items()])
     item['cover_pk']['delivery']=delivery
+    if stage:
+        item['cover_pk'].update(cover_stage=stage, cover_build_ref=reference(spec_path))
     if selection:
         item['cover_pk']['strategy_plan_ref']=spec['strategy_plan_ref']
         item['cover_pk']['strategy_dispositions']=selection['dispositions']
@@ -349,7 +396,7 @@ def collect(spec_path, receipt_paths, desk_path, item_id, out, pipe=DEFAULT_PIPE
 
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('action', choices=['catalog','methods','styles','doctor','init','plan','strategy-init','strategy-plan','review-init','review-check','design-recipes','design-init','design-build','compile','render','collect'])
+    p.add_argument('action', choices=['catalog','methods','styles','doctor','init','plan','strategy-init','strategy-plan','review-init','review-check','package-check','design-recipes','design-init','design-build','compile','render','collect'])
     p.add_argument('--query', default=''); p.add_argument('--template-id')
     p.add_argument('--pipeline-root',type=Path,default=DEFAULT_PIPE)
     p.add_argument('--input',type=Path); p.add_argument('--output',type=Path)
@@ -373,6 +420,9 @@ def main(argv=None):
             elif args.action=='review-init':result=cover_strategy.review_init(args.input,args.item_id)
             else:result=cover_strategy.review_check(args.input)
             write(args.output,result)
+        elif args.action=='package-check':
+            if not args.input or not args.output:raise ValueError('input_and_output_required')
+            result=cover_policy.package_check(args.input);write(args.output,result)
         elif args.action=='design-recipes':
             import cover_design
             result=cover_design.recipes()
@@ -384,7 +434,7 @@ def main(argv=None):
             else: result=cover_design.build(args.input,args.output,args.pipeline_root)
         elif args.action=='init':
             if not args.output or not args.title: raise ValueError('output_and_title_required')
-            result=init(args.project_id,args.title);write(args.output,result)
+            result=init(args.project_id,args.title,stage='preview');write(args.output,result)
         elif args.action=='plan':
             if not args.input or not args.output: raise ValueError('input_and_output_required')
             result=plan(read(args.input),reference(args.context_manifest) if args.context_manifest else None);result['brief_ref']=reference(args.input);write(args.output,result)
