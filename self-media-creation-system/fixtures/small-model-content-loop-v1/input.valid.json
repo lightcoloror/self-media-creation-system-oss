@@ -33,7 +33,7 @@
     "human_voice_rulebook_sha256": "583a89a9e6092d8266cdf864b793b57042293cf21196aa452b88347acc2c7ee3",
     "human_voice_skill_sha256": "96a626636e3a5909e1380e28c54f5e19b1d90ab720eba0cab9d0d6fa92d8cbc4",
     "routing_contract_version": "1.9.1",
-    "routing_set_sha256": "1dd1f19ed9ab874da99abce475b4bf60345cfc7dd7ad76fa5f823d9cebcc2390"
+    "routing_set_sha256": "d027af4f708f839e2b7305f95e6bb1112ad2b755abb5573101ef124a0dbc8693"
   },
   "evidence_bundle": {
     "facade_contract": "evidence-bundle.v1",

@@ -115,6 +115,10 @@ class FlowConnectionsTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'article_item_entry_binding_drift'):
             agent.resolve_request(req)
 
+    @unittest.skipUnless(
+        (ROOT.parent / 'external/ryan-wechat-publisher/scripts/render.js').is_file(),
+        'Optional external ryan-wechat-publisher checkout is not present',
+    )
     def test_actual_formatter_then_same_output_review_and_drift(self):
         req,fx=self.article();self.item(req)
         selection=agent.resolve_request(req)
