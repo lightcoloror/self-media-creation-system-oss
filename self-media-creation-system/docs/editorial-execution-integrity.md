@@ -11,6 +11,7 @@
 2. 写稿输出仍交付主稿和 `author-writing-revision.v1`。输出验证同时查询该版本的编辑记录。缺记录、缺项、必改未关闭，都不能通过该步骤。
 3. 作者审核使用同版作者确认。编辑检查不能替代作者确认，也不会把全文收录成表达样本。
 4. `sequence-status --require-complete` 仍要求原来所有 Owner 验证；编辑记录齐全不会提升通用 transport 回执的权限。历史步骤回放仅说明当时版本的覆盖，最新写作/审核步骤必须验证当前版本及最新反馈。
+5. （2026-11-22 补充）当 `author_writing_context.py prepare` 通过 `--topic-decision` 绑定了已确认 `continue` 决定的 `topic_facets` 时，结构推进项 `C04` 必须附加 `facet_realization`（核对 `angle_id`、`dominant_action`、主角要素正文锚点、全部配角要素 `realized` 锚点或 `omitted_with_reason` 说明、以及主导动作正文锚点）；`carry-over` 会检测正文是否删改了这些锚点并同步更新 `C04` 待核状态。受管配方在 `validate_context_manifest` 同样强制核对 `author_context` 与 manifest 中含 `topic_facets` 决定的 `--topic-decision` 绑定一致（非历史回放）。若初稿尚缺主角要素或主导动作，`C04` 可如实记为 `state="findings"`（允许省略或将配角标为 `missing` 并将对应缺失 `quote` 留空，仍禁止编造不存在的引言），此时记录落库但 `facet_realization_complete` 置为 `false`、`may_advance` 保持 `false`；`retained`/`revised_verified` 仍要求全部有效正文锚点。
 
 `records_complete` 表示九项都有状态；`checks_complete` 表示适用项有可校验的具体证据（可以有问题）；`required_issues_closed` 单独表示必改已处置；`may_advance` 还要求前置准备、适用实际观察、当前作者确认。四者不可互换。`proves_editorial_quality` 和 `publication_authorized` 恒为 false。
 
@@ -41,6 +42,8 @@ python -B scripts/self_media_agent.py review-integrity check-draft --draft <exis
 前置输入：`route`（expository/story/travel-experience/text）、`actor`、`source`、`items`。七项 id：goal_audience、materials、facts、author_expression、angle、promise、production。每项有 state（ready/not_applicable/missing_input）、reason、evidence。任何缺项或 missing_input 阻止开写；不是要求消除一切未知，reason 应说明材料足够进入本阶段的边界。
 
 ### 每版编辑输入
+
+新选题或新形式按[选题入口的试做指引](workflow-entry-selection.md#从真实素材到可试做的选题)整理真实场景、观众承诺和代表段。沿用前置记录的 `materials`、`promise`、`production` 及正文复核的 C03、C04。来源为 2026-11-25 的 Tim 深度访谈转写，2026-11-26 09:52:05 +08:00 由 Codex 整理接入。
 
 顶层：request_id、draft_ref（path/sha256）、phase（draft/readthrough/final_media）、route、previous_review_id、feedback_ids、changes、checks、issues、actor、source、observations。
 

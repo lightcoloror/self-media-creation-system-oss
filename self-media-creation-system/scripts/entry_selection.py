@@ -7,7 +7,11 @@ classify free text, execute commands, dispatch threads or create production stat
 from __future__ import annotations
 
 import copy
+import json
+import sys
 from pathlib import Path
+
+import runtime_paths
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = ROOT / 'schemas/self-media-work-request.v1.schema.json'
@@ -25,11 +29,10 @@ def entry_binding(agent, request, result):
         content_format=result['content_format'], platform=result['platform']))
 
 
-def article_next(agent, request, refs, result, action, cmd):
+def _editorial_author_chain(agent, request, refs, result, action, cmd, *, primary_entry, guide, is_article=False, pre_gate=None):
     """Read existing author records and select one consumer, without a new store."""
     import author_writing_context as author
     import editorial_integrity as editorial
-    guide = 'docs/article-editorial-connection.md'
     context = result['editorial_context']
     # Preserve existing article preflight hashes; managed handoffs additionally bind request ID.
     binding = agent.sha256_value(dict(topic=context['topic_selection'],
@@ -39,18 +42,73 @@ def article_next(agent, request, refs, result, action, cmd):
         content_format=result['content_format'], platform=result['platform']))
     result['entry_binding'] = binding
     result['consumer_context_ref'] = request['current']['context_manifest']
-    result['completion_boundary'] = 'Editorial author-review package only; layout, rendered inspection and manual publication remain separate.'
+    topic_facets = (result.get('framework_decision') or {}).get('topic_facets')
+    topic_decision_ref = request.get('current', {}).get('topic_decision')
+    if topic_facets is not None:
+        handoff = result.setdefault('writing_handoff', {})
+        handoff.update(
+            topic_facets=copy.deepcopy(topic_facets),
+            topic_decision_ref=copy.deepcopy(topic_decision_ref),
+            note='Draft from confirmed topic_facets; C04 editorial review must anchor the main element, supporting element relations, and dominant action in the actual draft.',
+        )
+    if is_article:
+        result['completion_boundary'] = 'Editorial author-review package only; layout, rendered inspection and manual publication remain separate.'
+    else:
+        result['completion_boundary'] = 'Draft editorial and author-review check only; final media, packaging and manual publication remain separate.'
     def author_cmd(*args):
-        return ['python', str(ROOT/'scripts/author_writing_context.py'), *map(str,args)]
+        return runtime_paths.managed_self_argv(ROOT, 'scripts/author_writing_context.py', *args)
+    prepare_args = ['prepare', '--store', '<existing-author-store>', '--input', '<author-brief.json>',
+                    '--request-id', request['request_id']]
+    if topic_facets is not None and 'topic_decision' in refs:
+        prepare_args.extend(['--topic-decision', str(refs['topic_decision'])])
+    if 'fact_card' in refs:
+        prepare_args.extend(['--fact-card', str(refs['fact_card'])])
+    if 'plain_language_plan' in refs:
+        prepare_args.extend(['--plain-language-plan', str(refs['plain_language_plan'])])
+    prepare_args.extend(['--output', '<new-author-context.json>'])
     if 'author_context' not in refs:
-        action('article_editorial', '复用作者上下文；先查找本稿已有记录，不重建作者库。',
-            author_cmd('prepare','--store','<existing-author-store>', '--input','<author-brief.json>',
-                       '--request-id',request['request_id'],'--output','<new-author-context.json>'),
-            guide, ['author_context'])
+        action(primary_entry, '复用作者上下文；先查找本稿已有记录，不重建作者库。',
+            author_cmd(*prepare_args), guide, ['author_context'])
         return
-    author_context = author.validate_context(refs['author_context'], request['request_id'])
+    try:
+        author_context = author.validate_context(refs['author_context'], request['request_id'])
+    except author.AuthorWritingError as error:
+        raise agent.AgentEntryError(error.code, str(error)) from error
     if author_context['author_brief']['content_id'] != context['content_id']:
-        raise agent.AgentEntryError('article_content_mismatch', 'Author and purpose must identify the same content')
+        raise agent.AgentEntryError('article_content_mismatch' if is_article else 'editorial_content_mismatch',
+                                    'Author and purpose must identify the same content')
+    if topic_facets is not None:
+        if 'topic_decision_ref' not in author_context:
+            action(primary_entry, '作者上下文缺少已绑定的选题分面决定；复用已有记录并补充 --topic-decision 后重试。',
+                author_cmd(*prepare_args), guide, ['author_context_with_topic_facets'])
+            return
+        bound_decision = author.checked_ref(author_context['topic_decision_ref']).resolve()
+        expected_decision = Path(topic_decision_ref['path']).resolve() if topic_decision_ref else None
+        if (expected_decision is None or bound_decision != expected_decision
+                or author_context['topic_decision_ref']['sha256'] != topic_decision_ref['sha256']
+                or author_context.get('topic_facets') != topic_facets):
+            raise agent.AgentEntryError('editorial_topic_facets_mismatch',
+                'Author context topic_facets must match the bound topic_decision')
+    current_refs = request.get('current', {})
+    if 'fact_card' in refs or (pre_gate and pre_gate.get('needs_fact_lock')):
+        if 'fact_card' in refs and 'fact_card_ref' not in author_context:
+            action(primary_entry, '作者上下文缺少已锁定的事实卡绑定；补充 --fact-card 后重试。',
+                author_cmd(*prepare_args), guide, ['author_context_with_fact_card'])
+            return
+        if 'fact_card' in refs and 'fact_card_ref' in author_context:
+            bound_fc = author.checked_ref(author_context['fact_card_ref']).resolve()
+            if bound_fc != refs['fact_card'].resolve() or author_context['fact_card_ref']['sha256'] != current_refs['fact_card']['sha256']:
+                raise agent.AgentEntryError('editorial_fact_card_mismatch',
+                    'Author context fact_card_ref must match the locked current.fact_card')
+    if 'plain_language_plan' in refs and pre_gate and pre_gate.get('plan_applicable'):
+        if 'plain_language_plan_ref' not in author_context:
+            action(primary_entry, '作者上下文缺少通俗化计划绑定；补充 --plain-language-plan 后重试。',
+                author_cmd(*prepare_args), guide, ['author_context_with_plain_language_plan'])
+            return
+        bound_plan = author.checked_ref(author_context['plain_language_plan_ref']).resolve()
+        if bound_plan != refs['plain_language_plan'].resolve() or author_context['plain_language_plan_ref']['sha256'] != current_refs['plain_language_plan']['sha256']:
+            raise agent.AgentEntryError('editorial_plain_language_plan_mismatch',
+                'Author context plain_language_plan_ref must match current.plain_language_plan')
     # Missing/stale preparation selects the existing preflight, never a passing fixture.
     try:
         editorial.require_preflight(refs['author_context'])
@@ -61,12 +119,12 @@ def article_next(agent, request, refs, result, action, cmd):
             raise
         preparation = {}
     if preparation.get('entry_binding') != binding:
-        action('article_editorial', '沿用七项写前判断，核对本次选题与平台后绑定当前 entry_binding；不能自动填通过。',
+        action(primary_entry, '沿用七项写前判断，核对本次选题与平台后绑定当前 entry_binding；不能自动填通过。',
             cmd('review-integrity','preflight','--context',refs['author_context'],'--input','<current-preparation.json>'),
             guide, ['current_preflight_with_entry_binding'])
         return
     if 'author_revision' not in refs:
-        action('article_editorial', '先复用或实际完成稿件，再登记该稿作者版本；命令只登记，不写正文。',
+        action(primary_entry, '先复用或实际完成稿件，再登记该稿作者版本；命令只登记，不写正文。',
             author_cmd('revision','--store',author.store_api.store_path(author_context['store_path']),
                 '--context',refs['author_context'],'--draft','<actual-current-draft.md>',
                 '--input','<revision-reasons.json>','--output','<new-author-revision.json>'),
@@ -74,42 +132,77 @@ def article_next(agent, request, refs, result, action, cmd):
         return
     revision = author.validate_revision(refs['author_revision'])
     if revision['context_ref'] != author.ref(refs['author_context']):
-        raise agent.AgentEntryError('article_revision_context_mismatch', 'Revision belongs to another author context')
+        raise agent.AgentEntryError('article_revision_context_mismatch' if is_article else 'editorial_revision_context_mismatch',
+                                    'Revision belongs to another author context')
     draft = author.checked_ref(revision['draft_ref'])
     body = context['current_body']
     if not body or Path(body['path']).resolve() != draft or body['sha256'] != revision['draft_ref']['sha256']:
-        raise agent.AgentEntryError('article_current_body_mismatch', 'Bind the actual current draft in the purpose manifest')
+        raise agent.AgentEntryError('article_current_body_mismatch' if is_article else 'editorial_current_body_mismatch',
+                                    'Bind the actual current draft in the purpose manifest')
     try:
         status = editorial.check_draft(draft, refs['author_revision'])
     except author.AuthorWritingError as error:
         if error.code != 'editorial_review_missing':
             raise
         status = dict(checks_complete=False, required_issues_closed=False, missing_checks=sorted(editorial.CHECKS))
-    result['article_editorial_status'] = status
+    result['editorial_status'] = status
+    if is_article:
+        result['article_editorial_status'] = status
     if status.get('is_current_revision') is False:
-        raise agent.AgentEntryError('article_revision_stale', 'Select the current author revision, not an old accepted copy')
+        raise agent.AgentEntryError('article_revision_stale' if is_article else 'editorial_revision_stale',
+                                    'Select the current author revision, not an old accepted copy')
     ready = all(status.get(k) for k in ('checks_complete','required_issues_closed',
-                'preparation_complete','purpose_continuity_complete','observations_complete'))
+                'preparation_complete','purpose_continuity_complete','facet_realization_complete',
+                'plain_language_complete','observations_complete'))
     if not ready:
-        action('article_editorial', '实际检查或修改未完成项，再写入同版编辑证据；有效旧项可复用。',
+        action(primary_entry, '实际检查或修改未完成项，再写入同版编辑证据；有效旧项可复用。',
             cmd('review-integrity','record','--revision',refs['author_revision'],'--input','<current-editorial-review.json>'),
             guide, ['current_editorial_checks_and_required_issue_resolution'])
         return
-    result['article_review_package'] = dict(draft=dict(path=str(draft),sha256=revision['draft_ref']['sha256']),
+    package = dict(draft=dict(path=str(draft),sha256=revision['draft_ref']['sha256']),
         revision=request['current']['author_revision'], topic=context['topic_selection'],
         content_format=result['content_format'], platform=result['platform'],
-        editorial=status, remaining_steps=['platform_layout','rendered_output_review','manual_publication'],
-        published=False, final_media_verified=False)
-    action('article_editorial', '当前稿编辑证据已核验，作者决定单独保留；不把审核包当成最终成品。',
-        cmd('review-integrity','check','--revision',refs['author_revision'],'--require-complete'), guide)
-    if not status.get('author_confirmation_recorded'):
-        result['status'] = 'awaiting_author'
-        result['next_action'] = dict(kind='human_review', selected_not_executed=True,
-            reason='Review this exact draft; do not create an author confirmation on their behalf.',
-            draft=str(draft), revision=str(refs['author_revision']))
-        result['article_review_package']['remaining_steps'].insert(0,'author_decision')
-    import article_delivery
-    article_delivery.select_next(agent, request, refs, result, action, cmd)
+        editorial=status, published=False, final_media_verified=False)
+    if topic_facets is not None:
+        package['topic_facets'] = copy.deepcopy(topic_facets)
+    if 'plain_language_guidance' in (result.get('writing_handoff') or {}):
+        package['plain_language_guidance'] = copy.deepcopy(result['writing_handoff']['plain_language_guidance'])
+    if is_article:
+        package['remaining_steps'] = ['platform_layout','rendered_output_review','manual_publication']
+        result['article_review_package'] = package
+        action(primary_entry, '当前稿编辑证据已核验，作者决定单独保留；不把审核包当成最终成品。',
+            cmd('review-integrity','check','--revision',refs['author_revision'],'--require-complete'), guide)
+        if not status.get('author_confirmation_recorded'):
+            result['status'] = 'awaiting_author'
+            result['next_action'] = dict(kind='human_review', selected_not_executed=True,
+                reason='Review this exact draft; do not create an author confirmation on their behalf.',
+                draft=str(draft), revision=str(refs['author_revision']))
+            result['article_review_package']['remaining_steps'].insert(0,'author_decision')
+        import article_delivery
+        article_delivery.select_next(agent, request, refs, result, action, cmd)
+    else:
+        result['draft_review_package'] = package
+        if not status.get('author_confirmation_recorded'):
+            action(primary_entry, '当前稿编辑证据已核验，作者决定单独保留；不把审核包当成最终成品。',
+                cmd('review-integrity','check','--revision',refs['author_revision'],'--require-complete'), guide)
+            result['status'] = 'awaiting_author'
+            result['next_action'] = dict(kind='human_review', selected_not_executed=True,
+                reason='Review this exact draft; do not create an author confirmation on their behalf.',
+                draft=str(draft), revision=str(refs['author_revision']))
+        else:
+            action(primary_entry, '当前稿编辑与作者确认已绑定，可进入后续制作或发布台；不自动渲染或发布。',
+                cmd('review-integrity','check','--revision',refs['author_revision'],'--require-complete'), guide)
+
+
+def article_next(agent, request, refs, result, action, cmd, pre_gate=None):
+    """Read existing author records and select one consumer, without a new store."""
+    return _editorial_author_chain(
+        agent, request, refs, result, action, cmd,
+        primary_entry='article_editorial',
+        guide='docs/article-editorial-connection.md',
+        is_article=True,
+        pre_gate=pre_gate,
+    )
 
 
 def skill_index(agent):
@@ -273,9 +366,209 @@ def resolve(request, agent):
             result['read_next']=[guide]
 
     def cmd(*args):
-        return ['python', str(ROOT/'scripts/self_media_agent.py'), *map(str,args)]
+        return runtime_paths.managed_self_argv(ROOT, 'scripts/self_media_agent.py', *args)
+
+    def _compute_gate_signals():
+        risk_flags = dict(request.get('risk_flags') or {})
+        trusted_domains = set()
+        for dom_src in (
+            (docs.get('creation_context') or {}).get('topic_domain'),
+            (docs.get('context_manifest') or {}).get('editorial_context', {}).get('topic_domain'),
+            request.get('topic_domain'),
+            (docs.get('fact_card') or {}).get('domain'),
+        ):
+            if isinstance(dom_src, str) and dom_src.strip():
+                trusted_domains.add(dom_src.strip())
+        # Explicit false flags cannot override risks indicated by a bound context.
+        if 'case' in trusted_domains or risk_flags.get('customer_case') is True:
+            risk_flags['customer_case'] = True
+        if 'insurance' in trusted_domains or risk_flags.get('insurance_terms') is True:
+            risk_flags['insurance_terms'] = True
+        if ({'medical', 'health'} & trusted_domains) or risk_flags.get('medical_claims') is True:
+            risk_flags['medical_claims'] = True
+        serious_domains = {'insurance', 'medical', 'health', 'science', 'finance'}
+        science_domains = {'medical', 'health', 'science'}
+        has_production_artifact = any(
+            k in refs for k in (
+                'author_revision', 'article_item', 'article_render_manifest',
+                'delivery_manifest', 'publication_data', 'package_receipt', 'rough_cut_delivery',
+            )
+        )
+        has_drafting_artifact = has_production_artifact or ('author_context' in refs) or ('topic_decision' in refs)
+        explicit_pl_refs = any(
+            k in refs for k in (
+                'plain_language_plan', 'plain_language_review', 'translation_review', 'clause_explanation',
+            )
+        )
+        serious_professional = bool(
+            risk_flags.get('serious_professional') is True
+            or risk_flags.get('insurance_terms') is True
+            or (trusted_domains & serious_domains)
+        )
+        science_claims = bool(
+            risk_flags.get('science_claims') is True
+            or (trusted_domains & science_domains)
+            or (
+                isinstance(docs.get('science_review'), dict)
+                and docs['science_review'].get('schema_version') == 'science-popularization-review.v1'
+            )
+        )
+        active_pl_scope = (kind in CREATIVE) or ('fact_card' in refs) or explicit_pl_refs or has_production_artifact
+        needs_fact_lock = active_pl_scope and bool(
+            risk_flags.get('fact_confirmation_required') is True
+            or risk_flags.get('requires_plain_language') is True
+            or serious_professional
+            or science_claims
+            or ('fact_card' in refs)
+            or explicit_pl_refs
+            or (has_drafting_artifact and risk_flags.get('medical_claims') is True)
+        )
+        needs_plain_language = active_pl_scope and bool(
+            risk_flags.get('requires_plain_language') is True
+            or serious_professional
+            or science_claims
+            or explicit_pl_refs
+            or (has_drafting_artifact and risk_flags.get('medical_claims') is True)
+        )
+        return dict(
+            risk_flags=risk_flags,
+            trusted_domains=trusted_domains,
+            has_production_artifact=has_production_artifact,
+            has_drafting_artifact=has_drafting_artifact,
+            serious_professional=serious_professional,
+            science_claims=science_claims,
+            needs_fact_lock=needs_fact_lock,
+            needs_plain_language=needs_plain_language,
+        )
+
+    def _collect_consumer_surfaces(pl_gate):
+        surfaces = {}
+        if 'article_item' in docs:
+            item = docs['article_item']
+            bits = [item.get('title', '')]
+            comp = item.get('composition') or {}
+            if isinstance(comp.get('canonical_body'), str):
+                bits.append(comp['canonical_body'])
+            for ch in (item.get('channels') or {}).values():
+                if isinstance(ch, dict):
+                    bits.extend([ch.get('title', ''), ch.get('hook', ''), ch.get('cta', ''), ch.get('body', '')])
+            joined = '\n'.join(str(b).strip() for b in bits if isinstance(b, str) and b.strip())
+            if joined:
+                surfaces['article_item'] = joined
+        if 'publication_data' in docs:
+            pdata = docs['publication_data']
+            pbits = []
+            for it in pdata.get('items') or []:
+                if isinstance(it, dict):
+                    pbits.append(str(it.get('title', '')))
+                    for p in (it.get('platforms') or {}).values():
+                        if isinstance(p, dict):
+                            pbits.extend(str(p.get(k, '')) for k in ('title', 'caption', 'description', 'body', 'opening_text'))
+                    for card in (it.get('graphic_cards') or it.get('cards') or []):
+                        if isinstance(card, dict):
+                            pbits.extend(str(card.get(k, '')) for k in ('title', 'text', 'caption', 'headline'))
+            joined_pub = '\n'.join(b.strip() for b in pbits if isinstance(b, str) and b.strip())
+            if joined_pub:
+                surfaces['publication_data'] = joined_pub
+        if 'delivery_manifest' in docs:
+            dm = docs['delivery_manifest']
+            import cover_workbench as covers
+            dbits = []
+            sub_cfg = dm.get('subtitles') or {}
+            if isinstance(sub_cfg.get('pack_ref'), dict) and sub_cfg['pack_ref'].get('path'):
+                try:
+                    pack = covers.read(covers.bound(sub_cfg['pack_ref']))
+                    dbits.extend(str(c.get('text', '')) for row in pack.get('requests', []) for c in row.get('subtitle_cues', []))
+                except Exception:
+                    pass
+            if isinstance(sub_cfg.get('render_file_ref'), dict) and sub_cfg['render_file_ref'].get('path'):
+                try:
+                    dbits.append(pl_gate._extract_surface_text(covers.bound(sub_cfg['render_file_ref'])))
+                except Exception:
+                    pass
+            if isinstance(dm.get('cover_review_ref'), dict) and dm['cover_review_ref'].get('path'):
+                try:
+                    cov = covers.read(covers.bound(dm['cover_review_ref']))
+                    dbits.extend(str(cov.get(k, '')) for k in ('title', 'headline') if cov.get(k))
+                except Exception:
+                    pass
+            joined_dm = '\n'.join(b.strip() for b in dbits if isinstance(b, str) and b.strip())
+            if joined_dm:
+                surfaces['delivery_manifest'] = joined_dm
+        return surfaces
+
+    def _evaluate_pre_draft_handoff():
+        import plain_language_gate as pl_gate
+        sig = _compute_gate_signals()
+        state = {
+            'needs_fact_lock': sig['needs_fact_lock'],
+            'needs_plain_language': sig['needs_plain_language'],
+            'plan_applicable': False,
+            'fact_card_ok': False,
+            'fact_card_doc': None,
+            'plan_doc': None,
+        }
+        ctx_editorial = (docs.get('context_manifest') or {}).get('editorial_context') or {}
+        cid = ctx_editorial.get('content_id') or (docs.get('fact_card') or {}).get('content_id') or request['request_id']
+        topic_text = ((ctx_editorial.get('topic_selection') or {}).get('topic') or request.get('selection_basis') or '')
+        audience_text = ((ctx_editorial.get('audience_source') or {}).get('quote') or '')
+        purpose_text = ((ctx_editorial.get('purpose_source') or {}).get('quote') or '')
+        if 'fact_card' in refs or sig['needs_fact_lock']:
+            fc_doc = docs.get('fact_card')
+            err_msg = None
+            if 'fact_card' in refs:
+                try:
+                    fc_doc, fc_meta = pl_gate.validate_fact_card_lock(
+                        refs['fact_card'],
+                        expected_content_id=ctx_editorial.get('content_id'),
+                        expected_sha256=current['fact_card']['sha256'],
+                    )
+                    state['fact_card_ok'] = True
+                    state['fact_card_doc'] = fc_doc
+                    result['fact_card_status'] = {'status': 'locked_for_draft', **fc_meta}
+                except pl_gate.PlainLanguageError as error:
+                    err_msg = str(error)
+                    result['fact_card_status'] = {'status': 'blocked', 'code': error.code, 'message': err_msg}
+            else:
+                result['fact_card_status'] = {'status': 'missing', 'code': 'fact_card_missing'}
+            if not state['fact_card_ok']:
+                result['fact_confirmation_checklist'] = pl_gate.build_fact_confirmation_checklist(
+                    content_id=str(cid),
+                    topic=str(topic_text),
+                    audience=str(audience_text),
+                    purpose=str(purpose_text),
+                    fact_card=fc_doc,
+                    fact_card_path=refs.get('fact_card'),
+                    risk_flags=sig['risk_flags'],
+                    error_reason=err_msg,
+                )
+        if 'plain_language_plan' in refs:
+            try:
+                plan_doc, fc_from_plan = pl_gate.validate_plan(
+                    docs['plain_language_plan'],
+                    expected_request_id=request['request_id'],
+                    expected_content_id=ctx_editorial.get('content_id'),
+                    risk_flags=sig['risk_flags'],
+                    trusted_domains=sig['trusted_domains'],
+                    base_dir=refs['plain_language_plan'].parent,
+                )
+                state['plan_doc'] = plan_doc
+                if plan_doc.get('applicability') == 'applicable':
+                    state['plan_applicable'] = True
+                    guidance = pl_gate.build_writing_guidance(plan_doc, state['fact_card_doc'] or fc_from_plan)
+                    handoff = result.setdefault('writing_handoff', {})
+                    handoff['plain_language_guidance'] = guidance
+                    if 'fact_card' in current:
+                        handoff['fact_card_ref'] = copy.deepcopy(current['fact_card'])
+                    handoff['plain_language_plan_ref'] = copy.deepcopy(current['plain_language_plan'])
+            except pl_gate.PlainLanguageError:
+                pass
+        return state
 
     def finish():
+        import plain_language_gate as pl_gate
+        import serious_content_translation_gate as trans_gate
+
         # Selection remains the original route. Purpose is shared context, not a
         # second selector or a requirement to rewrite a locked body.
         needs_purpose = kind in CREATIVE | {'title_options', 'cover_options', 'fine_cut_review', 'performance_review'}
@@ -300,10 +593,409 @@ def resolve(request, agent):
         if needs_purpose or 'context_manifest' in refs:
             result['read_next'].append(str(ROOT/'docs/purpose-continuity.md'))
             result['purpose_completion'] = 'context_only; use review-integrity check-stage on actual output; not semantic or audience verification'
+
+        sig = _compute_gate_signals()
+        risk_flags = sig['risk_flags']
+        trusted_domains = sig['trusted_domains']
+        has_production_artifact = sig['has_production_artifact']
+        expected_proj = (
+            result.get('project_id')
+            or request.get('project_id')
+            or (docs.get('creation_context') or {}).get('project_id')
+        )
+        expected_req_id = request.get('request_id')
+        editorial_ctx = result.get('editorial_context') or {}
+        expected_content_id = editorial_ctx.get('content_id')
+
+        def risk_review_ok(doc, allowed_decisions):
+            if not isinstance(doc, dict):
+                return False
+            # Require an explicit decision field; generic display or pipeline status cannot pass.
+            decision = doc.get('decision')
+            if not isinstance(decision, str) or decision not in allowed_decisions:
+                return False
+            # Require at least one explicit binding (request_id or project_id) to prevent cross-project reuse.
+            doc_proj = doc.get('project_id')
+            doc_req_id = doc.get('request_id')
+            has_proj = isinstance(doc_proj, str) and bool(doc_proj.strip())
+            has_req = isinstance(doc_req_id, str) and bool(doc_req_id.strip())
+            if not has_proj and not has_req:
+                return False
+            if has_proj and (not expected_proj or doc_proj != expected_proj):
+                return False
+            if has_req and (not expected_req_id or doc_req_id != expected_req_id):
+                return False
+            return True
+
+        current_body_ref = (
+            (result.get('article_review_package') or {}).get('draft')
+            or (result.get('draft_review_package') or {}).get('draft')
+            or editorial_ctx.get('current_body')
+            or (docs.get('author_revision') or {}).get('draft_ref')
+        )
+        current_body_path = None
+        current_body_sha = None
+        if isinstance(current_body_ref, dict) and current_body_ref.get('path'):
+            try:
+                current_body_path = pl_gate.resolve_artifact_path(current_body_ref['path'], base_dir=ROOT)
+                current_body_sha = current_body_ref.get('sha256')
+            except pl_gate.PlainLanguageError:
+                current_body_path = None
+
+        diagnostics = []
+        gate_missing = []
+
+        def _add_gate_missing(code):
+            if code not in gate_missing:
+                gate_missing.append(code)
+
+        # 1. Fact card confirmation checklist & lock
+        fc_doc = None
+        fc_locked = False
+        if 'fact_card' in refs or sig['needs_fact_lock']:
+            err_reason = None
+            if 'fact_card' in refs:
+                try:
+                    fc_doc, fc_meta = pl_gate.validate_fact_card_lock(
+                        refs['fact_card'],
+                        expected_content_id=expected_content_id,
+                        expected_sha256=current['fact_card']['sha256'],
+                    )
+                    fc_locked = True
+                    result['fact_card_status'] = {'status': 'locked_for_draft', **fc_meta}
+                except pl_gate.PlainLanguageError as error:
+                    err_reason = str(error)
+                    result['fact_card_status'] = {'status': 'blocked', 'code': error.code, 'message': err_reason}
+                    diagnostics.append({'gate': 'fact_card', 'code': error.code, 'message': err_reason})
+                    _add_gate_missing('locked_fact_card_for_draft')
+            else:
+                result['fact_card_status'] = {'status': 'missing', 'code': 'fact_card_missing'}
+                _add_gate_missing('locked_fact_card_for_draft')
+            if not fc_locked:
+                topic_text = ((editorial_ctx.get('topic_selection') or {}).get('topic') or request.get('selection_basis') or '')
+                audience_text = ((editorial_ctx.get('audience_source') or {}).get('quote') or '')
+                purpose_text = ((editorial_ctx.get('purpose_source') or {}).get('quote') or '')
+                result['fact_confirmation_checklist'] = pl_gate.build_fact_confirmation_checklist(
+                    content_id=str(expected_content_id or (docs.get('fact_card') or {}).get('content_id') or request['request_id']),
+                    topic=str(topic_text),
+                    audience=str(audience_text),
+                    purpose=str(purpose_text),
+                    fact_card=fc_doc or docs.get('fact_card'),
+                    fact_card_path=refs.get('fact_card'),
+                    risk_flags=risk_flags,
+                    error_reason=err_reason,
+                )
+
+        # 2. Pre-draft plain-language plan
+        valid_plan = None
+        pl_status = {}
+        if 'plain_language_plan' in refs or sig['needs_plain_language']:
+            if 'plain_language_plan' in refs:
+                try:
+                    valid_plan, fc_from_plan = pl_gate.validate_plan(
+                        docs['plain_language_plan'],
+                        expected_request_id=request['request_id'],
+                        expected_content_id=expected_content_id,
+                        risk_flags=risk_flags,
+                        trusted_domains=trusted_domains,
+                        base_dir=refs['plain_language_plan'].parent,
+                    )
+                    pl_status['plan'] = 'passed'
+                    pl_status['applicability'] = valid_plan['applicability']
+                    if valid_plan['applicability'] == 'applicable':
+                        guidance = pl_gate.build_writing_guidance(valid_plan, fc_doc or fc_from_plan)
+                        handoff = result.setdefault('writing_handoff', {})
+                        handoff['plain_language_guidance'] = guidance
+                        if 'fact_card' in current:
+                            handoff['fact_card_ref'] = copy.deepcopy(current['fact_card'])
+                        handoff['plain_language_plan_ref'] = copy.deepcopy(current['plain_language_plan'])
+                except pl_gate.PlainLanguageError as error:
+                    pl_status['plan'] = 'blocked'
+                    diagnostics.append({'gate': 'plain_language_plan', 'code': error.code, 'message': str(error)})
+                    _add_gate_missing('plain_language_plan')
+            else:
+                pl_status['plan'] = 'missing'
+                _add_gate_missing('plain_language_plan')
+
+        # 3. Legacy + formal risk gates
+        active_risk_gates = []
+        if risk_flags.get('medical_claims') is True or sig['science_claims']:
+            active_risk_gates.append('science_popularization_review')
+            sci_doc = docs.get('science_review')
+            if isinstance(sci_doc, dict) and sci_doc.get('schema_version') == 'science-popularization-review.v1':
+                try:
+                    pl_gate.validate_formal_science_review(
+                        refs['science_review'],
+                        expected_content_id=expected_content_id,
+                        expected_body_path=current_body_path if has_production_artifact else None,
+                        expected_body_sha256=current_body_sha if (has_production_artifact and current_body_path is None) else None,
+                    )
+                    result['risk_review_verification_level'] = 'formal_schema_verified'
+                except pl_gate.PlainLanguageError as error:
+                    diagnostics.append({'gate': 'science_popularization_review', 'code': error.code, 'message': str(error)})
+                    _add_gate_missing('science_popularization_review')
+                    _add_gate_missing('formal_science_popularization_review')
+            elif has_production_artifact or sig['science_claims'] or sig['serious_professional'] or risk_flags.get('requires_plain_language') is True:
+                _add_gate_missing('formal_science_popularization_review')
+                if not risk_review_ok(sci_doc, {'approved', 'pass', 'passed'}):
+                    _add_gate_missing('science_popularization_review')
+            else:
+                result.setdefault('risk_review_verification_level', 'pre_draft_binding_only')
+                if not risk_review_ok(sci_doc, {'approved', 'pass', 'passed'}):
+                    _add_gate_missing('science_popularization_review')
+        if risk_flags.get('customer_case') is True or risk_flags.get('minor_subject') is True:
+            active_risk_gates.append('privacy_treatment_review')
+            if not risk_review_ok(docs.get('privacy_review'), {'approved', 'pass', 'passed', 'not_applicable'}):
+                _add_gate_missing('privacy_treatment_review')
+        if risk_flags.get('third_party_copyright') is True:
+            active_risk_gates.append('rights_authorization_review')
+            if not risk_review_ok(docs.get('rights_review'), {'approved', 'pass', 'passed'}):
+                _add_gate_missing('rights_authorization_review')
+        if risk_flags.get('insurance_terms') is True:
+            active_risk_gates.append('insurance_compliance_disclosure')
+            if not risk_review_ok(docs.get('insurance_review'), {'approved', 'pass', 'passed'}):
+                _add_gate_missing('insurance_compliance_review')
+
+        # 4. Serious content translation gate (precheck before draft; full review on draft/production)
+        if sig['serious_professional'] or 'translation_review' in refs:
+            active_risk_gates.append('serious_content_translation_review')
+            trans_doc = docs.get('translation_review')
+            if 'translation_review' not in refs:
+                _add_gate_missing('serious_content_translation_review')
+                pl_status['translation'] = 'missing'
+            elif isinstance(trans_doc, dict) and trans_doc.get('schema_version') == 'serious-content-translation-precheck.v1':
+                if has_production_artifact:
+                    pl_status['translation'] = 'blocked'
+                    diagnostics.append({'gate': 'serious_content_translation_review', 'code': 'translation_postcreative_required', 'message': '草稿/交付阶段不能只提供写前 precheck，必须提供完整的 serious-content-translation-review.v1'})
+                    _add_gate_missing('serious_content_translation_review')
+                else:
+                    try:
+                        trans_gate.validate_precheck_receipt(refs['translation_review'])
+                        if expected_content_id and trans_doc.get('content_id') != expected_content_id:
+                            raise ValueError('translation precheck content_id mismatch')
+                        pl_status['translation'] = 'precheck_passed'
+                    except Exception as error:
+                        pl_status['translation'] = 'blocked'
+                        diagnostics.append({'gate': 'serious_content_translation_review', 'code': getattr(error, 'code', 'translation_precheck_invalid'), 'message': str(error)})
+                        _add_gate_missing('serious_content_translation_review')
+            else:
+                try:
+                    pl_gate.validate_formal_translation_review(
+                        refs['translation_review'],
+                        expected_content_id=expected_content_id,
+                        expected_body_path=current_body_path if has_production_artifact else None,
+                        expected_body_sha256=current_body_sha if (has_production_artifact and current_body_path is None) else None,
+                        expected_plan=valid_plan,
+                    )
+                    pl_status['translation'] = 'passed'
+                except pl_gate.PlainLanguageError as error:
+                    pl_status['translation'] = 'blocked'
+                    diagnostics.append({'gate': 'serious_content_translation_review', 'code': error.code, 'message': str(error)})
+                    _add_gate_missing('serious_content_translation_review')
+
+        # 5. Post-draft plain-language review & multi-surface cross-check
+        plan_explicit_na = isinstance(valid_plan, dict) and valid_plan.get('applicability') == 'not_applicable'
+        requires_pl_review = ('plain_language_review' in refs) or (
+            has_production_artifact and (sig['needs_plain_language'] or 'plain_language_plan' in refs) and not plan_explicit_na
+        )
+        if requires_pl_review:
+            active_risk_gates.append('plain_language_review')
+            if 'plain_language_review' not in refs:
+                pl_status['review'] = 'missing'
+                _add_gate_missing('plain_language_review')
+            else:
+                extra_surfaces = _collect_consumer_surfaces(pl_gate)
+                try:
+                    pl_gate.validate_review(
+                        docs['plain_language_review'],
+                        expected_request_id=request['request_id'],
+                        expected_content_id=expected_content_id,
+                        expected_body_path=current_body_path,
+                        expected_body_sha256=None if current_body_path is not None else current_body_sha,
+                        expected_plan_ref=current.get('plain_language_plan'),
+                        expected_fact_card_ref=current.get('fact_card'),
+                        extra_surface_texts=extra_surfaces,
+                        base_dir=refs['plain_language_review'].parent,
+                        require_passed=True,
+                    )
+                    pl_status['review'] = 'passed'
+                    result['plain_language_review_findings'] = []
+                except pl_gate.PlainLanguageError as error:
+                    pl_status['review'] = 'blocked'
+                    result['plain_language_review_findings'] = error.details or [{'code': error.code, 'message': str(error)}]
+                    diagnostics.append({'gate': 'plain_language_review', 'code': error.code, 'message': str(error)})
+                    _add_gate_missing('plain_language_review')
+
+        # 6. Insurance clause explanation validation
+        if 'clause_explanation' in refs or (has_production_artifact and risk_flags.get('insurance_terms') is True and 'insurance' in trusted_domains):
+            active_risk_gates.append('insurance_clause_explanation_review')
+            if 'clause_explanation' not in refs:
+                _add_gate_missing('insurance_clause_explanation_review')
+            else:
+                cdoc = docs['clause_explanation']
+                if isinstance(cdoc, dict) and cdoc.get('applicability') == 'not_applicable':
+                    if not isinstance(cdoc.get('reason'), str) or not cdoc['reason'].strip():
+                        diagnostics.append({'gate': 'clause_explanation', 'code': 'clause_explanation_reason_missing', 'message': 'not_applicable 必须填写 reason'})
+                        _add_gate_missing('insurance_clause_explanation_review')
+                else:
+                    clause_errs = pl_gate.validate_clause_explanation(refs['clause_explanation'])
+                    if clause_errs:
+                        diagnostics.append({'gate': 'clause_explanation', 'code': 'clause_explanation_semantic_error', 'message': '; '.join(clause_errs)})
+                        _add_gate_missing('insurance_clause_explanation_review')
+
+        for item in gate_missing:
+            if item not in result['missing_inputs']:
+                result['missing_inputs'].append(item)
+        if pl_status:
+            result['plain_language_status'] = pl_status
+        if diagnostics:
+            result['plain_language_diagnostics'] = diagnostics
+
+        if result.get('primary_entry') in {'creation_route', 'travel_experience', 'canonical_format_adapter', 'video_delivery', 'video_review', 'rough_cut_post_check', 'publication_desk'} and result.get('workflow_goal') is None:
+            completed_stages = []
+            pre_draft_blockers = {'locked_fact_card_for_draft', 'plain_language_plan'}
+            post_draft_blockers = {
+                'locked_fact_card_for_draft', 'plain_language_plan', 'plain_language_review',
+                'serious_content_translation_review', 'science_popularization_review',
+                'formal_science_popularization_review', 'insurance_compliance_review',
+                'insurance_clause_explanation_review', 'privacy_treatment_review', 'rights_authorization_review',
+            }
+            if 'context_manifest' in refs and 'creation_decision' in refs and not (pre_draft_blockers & set(result['missing_inputs'])):
+                completed_stages.append('stage_1_charter')
+            editorial_status = result.get('editorial_status')
+            stage_2_artifact_present = ('author_revision' in refs) or ('rough_cut_delivery' in refs and 'rough_cut_acceptance' in refs)
+            if 'author_revision' in refs and editorial_status is not None:
+                stage_2_verified = (editorial_status.get('may_advance') is True) and not (post_draft_blockers & set(result['missing_inputs']))
+                stage_2_detail = {
+                    'status': 'completed' if stage_2_verified else 'pending_review',
+                    'artifact_present': True,
+                    'verified': stage_2_verified,
+                }
+            elif 'author_revision' in refs and result.get('writing_handoff') is not None:
+                stage_2_verified = False
+                stage_2_detail = {
+                    'status': 'pending_review',
+                    'artifact_present': True,
+                    'verified': False,
+                }
+            else:
+                stage_2_verified = stage_2_artifact_present and not (post_draft_blockers & set(result['missing_inputs']))
+                stage_2_detail = {'status': 'completed' if stage_2_verified else 'pending'}
+            if stage_2_verified:
+                completed_stages.append('stage_2_production')
+
+            stage_3_artifact_present = ('delivery_manifest' in refs) or ('publication_page_build' in refs)
+            stage_3_verified = False
+            stage_3_reason = None
+            if 'delivery_manifest' in refs:
+                m = docs.get('delivery_manifest') or {}
+                try:
+                    import cover_workbench as covers
+                    import video_delivery
+                    if not isinstance(m, dict) or m.get('schema') != 'self-media.video-delivery.v1':
+                        raise ValueError('invalid_delivery_manifest_schema')
+                    acc_ref = m.get('acceptance_ref')
+                    render_refs = ([m['render_receipt_ref']] if m.get('render_receipt_ref') else []) + list(m.get('render_chain_refs') or [])
+                    if not isinstance(acc_ref, dict) or not render_refs or not all(isinstance(r, dict) for r in render_refs):
+                        raise ValueError('delivery_acceptance_or_render_ref_missing')
+                    for r in render_refs:
+                        covers.bound(r)
+                    acc_path = covers.bound(acc_ref)
+                    acc_doc = covers.read(acc_path)
+                    expected_fp = video_delivery.acceptance_fingerprint(m)
+                    if (
+                        not isinstance(acc_doc, dict)
+                        or acc_doc.get('schema') != 'self-media.video-acceptance.v1'
+                        or acc_doc.get('reviewer_kind') != 'human'
+                        or acc_doc.get('decision') != 'pass'
+                        or not str(acc_doc.get('reviewer', '')).strip()
+                        or not str(acc_doc.get('reviewed_at', '')).strip()
+                        or acc_doc.get('input_fingerprint') != expected_fp
+                    ):
+                        raise ValueError('delivery_acceptance_unverified_or_fingerprint_mismatch')
+                    if post_draft_blockers & set(result['missing_inputs']):
+                        raise ValueError('plain_language_or_risk_gates_blocked')
+                    stage_3_verified = True
+                except (ValueError, KeyError, TypeError, OSError, json.JSONDecodeError) as err:
+                    stage_3_verified = False
+                    stage_3_reason = str(err)
+            elif 'publication_page_build' in refs:
+                b = docs.get('publication_page_build') or {}
+                try:
+                    import cover_workbench as covers
+                    import publication_desk as desk
+                    if not isinstance(b, dict) or b.get('schema_version') != 'self-media.publication-page-build.v1':
+                        raise ValueError('invalid_publication_page_build_schema')
+                    page_ref = b.get('page_ref')
+                    if not isinstance(page_ref, dict):
+                        raise ValueError('publication_page_ref_missing')
+                    if 'publication_data' in refs:
+                        if result.get('page_build', {}).get('status') == 'stale':
+                            raise ValueError('publication_page_build_stale')
+                        desk.verify_page_build(refs['publication_data'], refs['publication_page_build'])
+                    page_p = covers.bound(page_ref)
+                    content = page_p.read_text(encoding='utf-8')
+                    if 'data-state="verified_at_generation"' not in content or 'data-state="draft"' in content:
+                        raise ValueError('publication_page_not_verified_at_generation')
+                    if post_draft_blockers & set(result['missing_inputs']):
+                        raise ValueError('plain_language_or_risk_gates_blocked')
+                    stage_3_verified = True
+                except (ValueError, KeyError, TypeError, OSError, json.JSONDecodeError) as err:
+                    stage_3_verified = False
+                    stage_3_reason = str(err)
+
+            if stage_3_verified:
+                completed_stages.append('stage_3_final_audit')
+
+            all_stages = ['stage_1_charter', 'stage_2_production', 'stage_3_final_audit', 'stage_4_manual_publish']
+            current_stage = next((s for s in all_stages if s not in completed_stages), 'stage_4_manual_publish')
+            stage_entrypoints = {
+                'stage_1_charter': runtime_paths.managed_self_argv(ROOT, 'scripts/self_media_agent.py', 'creation-route'),
+                'stage_2_production': (
+                    runtime_paths.managed_self_argv(ROOT, 'scripts/self_media_agent.py', 'authoring')
+                    if kind == 'script'
+                    else runtime_paths.managed_self_argv(ROOT, 'scripts/self_media_agent.py', 'video-review', 'post-cut', '--help')
+                ),
+                'stage_3_final_audit': runtime_paths.managed_self_argv(ROOT, 'scripts/self_media_agent.py', 'video-delivery'),
+                'stage_4_manual_publish': runtime_paths.managed_self_argv(ROOT, 'scripts/publication_desk.py', 'render', '--help'),
+            }
+            stage_3_detail = {
+                'status': 'completed' if 'stage_3_final_audit' in completed_stages else ('pending_review' if stage_3_artifact_present else 'pending'),
+                'artifact_present': stage_3_artifact_present,
+                'verified': stage_3_verified,
+            }
+            if stage_3_reason and not stage_3_verified:
+                stage_3_detail['reason'] = stage_3_reason
+            stage_details = {
+                'stage_1_charter': {'status': 'completed' if 'stage_1_charter' in completed_stages else 'pending'},
+                'stage_2_production': stage_2_detail,
+                'stage_3_final_audit': stage_3_detail,
+                'stage_4_manual_publish': {'status': 'completed' if 'stage_4_manual_publish' in completed_stages else 'pending'},
+            }
+            lightweight = {
+                'mode': 'four_stage_general',
+                'stages': all_stages,
+                'completed_stages': completed_stages,
+                'current_stage': current_stage,
+                'stage_details': stage_details,
+                'next_stage_command': stage_entrypoints[current_stage],
+                'stage_entrypoints': stage_entrypoints,
+                'publication_mode': 'manual_fill_via_publication_desk_only',
+                'active_risk_gates': list(dict.fromkeys(active_risk_gates)),
+            }
+            if (result.get('writing_handoff') or {}).get('topic_facets') is not None:
+                lightweight['topic_facets_bound'] = True
+            if (result.get('writing_handoff') or {}).get('plain_language_guidance') is not None:
+                lightweight['plain_language_guidance_bound'] = True
+            result['lightweight_workflow'] = lightweight
+        elif active_risk_gates:
+            result['active_risk_gates'] = list(dict.fromkeys(active_risk_gates))
         if result['missing_inputs']:
             result['status'] = 'needs_context'
         result['payload_sha256']=agent.sha256_value(result)
         return result
+
+    pre_gate_state = _evaluate_pre_draft_handoff()
 
     def managed(goal, phase='production', preparation_kind='spoken_script'):
         catalog=agent.load_catalog()
@@ -414,6 +1106,59 @@ def resolve(request, agent):
 
     # Spoken delivery is a shared consumer of an already compiled plan. A
     # deliverable picks the route; a legacy plan's next_action never picks it.
+    # Final routing may not infer that rough-cut review happened from a later artifact.
+    final_manifest = docs.get("delivery_manifest") if kind == "finished_video" else None
+    if kind == "fine_cut_review" or final_manifest is not None or (
+            kind == "finished_video" and "rough_cut_delivery" in docs):
+        import rough_cut_checks as checks
+        current_review = docs.get("review_request", {})
+        registration = current.get("rough_cut_delivery")
+        acceptance = current.get("rough_cut_acceptance")
+        candidate = current_review.get("rough_cut_candidate")
+        if final_manifest is not None:
+            registration = final_manifest.get("rough_cut_delivery_ref") or registration
+            acceptance = final_manifest.get("rough_cut_acceptance_ref") or acceptance
+            candidate = final_manifest.get("edited_media")
+            for key, value in (("rough_cut_delivery", registration), ("rough_cut_acceptance", acceptance)):
+                if key in current and current[key] != value:
+                    raise agent.AgentEntryError("rough_cut_binding_conflict", key)
+        if not registration:
+            action("rough_cut_post_check", "缺当前粗剪登记。用实际导出的媒体、定稿和时间表恢复复核。",
+                   cmd("video-review", "post-cut", "--candidate", "<current-rough-cut>",
+                       "--timeline", "<current-timeline>", "--script", "<approved-script>",
+                       "--identity", "<current-project-identity.json>", "--output-dir", "<new-review-dir>", "--serve", "--open"),
+                   "docs/source-time-range-review.md", ["rough_cut_delivery"])
+            return finish()
+        try:
+            registered = checks.registration(registration)
+            if candidate is None and (final_manifest is not None or current_review):
+                raise ValueError("rough_cut_current_candidate_required")
+            if candidate is not None and candidate != registered["candidate"]:
+                raise ValueError("rough_cut_registration_candidate_mismatch")
+            if not acceptance:
+                action("rough_cut_post_check", "当前粗剪还需要 VKP 对稿、技术检查与疑点处理。",
+                       cmd("video-review", "post-cut", "--registration", registration["path"],
+                           "--candidate", registered["candidate"]["path"], "--timeline", registered["timeline_map"]["path"],
+                           "--script", ((final_manifest or {}).get("script_ref") or {}).get("path", "<approved-script>"),
+                           "--identity", "<current-project-identity.json>", "--output-dir", "<new-review-dir>", "--serve", "--open"),
+                       "docs/source-time-range-review.md", ["rough_cut_acceptance"])
+                return finish()
+            if kind == "fine_cut_review" and current_review:
+                checks.check_fine_request(current_review, refs["review_request"], registration, acceptance)
+            else:
+                checks.require_current(registration, acceptance, candidate=candidate,
+                                       script=(final_manifest or {}).get("script_ref"),
+                                       timeline=(final_manifest or {}).get("timeline"))
+        except (ValueError, OSError, TypeError, KeyError) as exc:
+            raise agent.AgentEntryError("rough_cut_check_blocked", str(exc)) from exc
+        if final_manifest is not None and (not final_manifest.get("rough_cut_delivery_ref") or
+                                           not final_manifest.get("rough_cut_acceptance_ref")):
+            action("video_delivery", "把当前粗剪和复核回执绑定到交付清单，供成片入口再次校验。",
+                   cmd("video-delivery", "rough-cut-bind", "--input", refs["delivery_manifest"],
+                       "--rough-cut-delivery", registration["path"], "--rough-cut-acceptance", acceptance["path"],
+                       "--output", "<new-delivery-manifest.json>"),
+                   "docs/source-time-range-review.md", ["delivery_manifest_rough_cut_binding"])
+            return finish()
     spoken_kinds={'rough_cut_review':'review', 'rough_cut_video':'video',
                   'finished_video':'video', 'editable_project':'editable_project'}
     # A retained source plan must not restart an already prepared review,
@@ -426,12 +1171,6 @@ def resolve(request, agent):
         mvp=ROOT.parent/'ai-video-tools-20260708/mvp-video-pipeline'
         if str(mvp/'src') not in sys.path:
             sys.path.insert(0,str(mvp/'src'))
-        if not (mvp/'src/video_creation_pipeline/spoken_delivery.py').is_file():
-            action('missing_spoken_delivery_owner',
-                   'The complete spoken-delivery owner is unavailable; do not substitute local-rough-cut P0.',
-                   guide=GUIDE, missing=['full_mvp_spoken_delivery_owner'])
-            result['external_owner_status']='not-available-in-this-public-workspace'
-            return finish()
         from video_creation_pipeline import spoken_delivery
         from video_creation_pipeline.errors import ContractError
         wrapper=str(mvp/'scripts/spoken_rough_cut.py')
@@ -460,7 +1199,7 @@ def resolve(request, agent):
                 else: missing.append('requested_editor')
             result['delivery_request_template']=template
             missing.append('spoken_delivery_request')
-        argv=['python',wrapper,'select-delivery','--plan',str(refs.get('spoken_edit_plan','<spoken-edit-plan.json>')),
+        argv=[sys.executable,wrapper,'select-delivery','--plan',str(refs.get('spoken_edit_plan','<spoken-edit-plan.json>')),
               '--request',str(refs.get('spoken_delivery_request','<delivery-request.json>')),'--output','<new-selection.json>']
         action('spoken_delivery','按交付需求选择原片审核、直接视频或指定编辑器工程；不执行旧配方的剪映下一步。',argv,
                str(mvp/'docs/spoken-delivery-routing.md'),missing)
@@ -477,7 +1216,9 @@ def resolve(request, agent):
             import video_review_delivery
             video_review_delivery.validate_request(docs['review_request'],purpose)
             action('video_review','审核使用原片时间区间；不进入媒体导出流程。',
-                cmd('video-review','prepare','--purpose',purpose,'--request',refs['review_request'],'--output-dir','<new-review-dir>'),
+                cmd('video-review','prepare','--purpose',purpose,'--request',refs['review_request'],'--output-dir','<new-review-dir>','--serve','--open',
+                    *(['--rough-cut-delivery',registration['path'],'--rough-cut-acceptance',acceptance['path']]
+                      if kind=='fine_cut_review' else [])),
                 'docs/source-time-range-review.md')
         else:
             action('video_review','先恢复原片、时间与已保存审核要求，不先剪审核片。',cmd('video-review'),
@@ -503,10 +1244,10 @@ def resolve(request, agent):
                     page_stale=True
                     result['page_build']=dict(status='stale',reason=str(error),old_ref=current['publication_page_build'])
             operation='upgrade' if needs_upgrade else 'render' if page_stale else 'check'
-            argv=['python',str(ROOT/'scripts/publication_desk.py'),operation,'--input',str(refs['publication_data'])]
+            argv=runtime_paths.managed_self_argv(ROOT,'scripts/publication_desk.py',operation,'--input',refs['publication_data'])
             argv+=['--output','<new-desk-data.json>'] if needs_upgrade else ['--stage','preparation']
             if page_stale and not needs_upgrade:
-                argv=['python',str(ROOT/'scripts/publication_desk.py'),'render','--input',str(refs['publication_data']),'--output','<new-current-page.html>']
+                argv=runtime_paths.managed_self_argv(ROOT,'scripts/publication_desk.py','render','--input',refs['publication_data'],'--output','<new-current-page.html>')
             elif 'publication_page_build' in refs and not needs_upgrade:
                 argv+=['--page-build',str(refs['publication_page_build'])]
             action('publication_desk','先同步旧数据和当前生成页；有当前页面证据才检查发布准备。',argv,'docs/publication-desk.md')
@@ -515,7 +1256,7 @@ def resolve(request, agent):
         return finish()
     if kind=='cover_options' and 'cover_brief' in refs:
         action('covers','用已绑定的当前封面 brief 和目的要求进入原封面计划入口。',
-            ['python',str(ROOT/'scripts/cover_workbench.py'),'plan','--input',str(refs['cover_brief']),'--output','<new-cover-route-plan.json>'],
+            runtime_paths.managed_self_argv(ROOT,'scripts/cover_workbench.py','plan','--input',refs['cover_brief'],'--output','<new-cover-route-plan.json>'),
             'docs/content-driven-covers.md')
         return finish()
     simple={
@@ -531,7 +1272,7 @@ def resolve(request, agent):
         return finish()
     if kind=='archive_plan':
         action('artifact_lifecycle','沿用现有归档分级及计划，不从头制作或直接清理。',
-            ['python',str(ROOT/'scripts/artifact_lifecycle.py'),'archive-policy','--help'],'docs/video-archive-levels.md')
+            runtime_paths.managed_self_argv(ROOT,'scripts/artifact_lifecycle.py','archive-policy','--help'),'docs/video-archive-levels.md')
         return finish()
     if kind=='workflow_repair':
         action('workflow_maintenance','这是现有流程代码与入口维护，不是创作新作品或转发 Owner 的授权。',cmd('doctor'),GUIDE)
@@ -605,6 +1346,12 @@ def resolve(request, agent):
                 result['framework_decision']=topic_angle_decision.continuation(docs['topic_decision'])
             except topic_angle_decision.TopicAngleError as error:
                 raise agent.AgentEntryError(error.code,str(error)) from error
+            if any(item.get('kind')=='theory' for item in docs['topic_decision'].get('framework_decision',{}).get('facet_elements',[])):
+                result['theory_grounding_hint'] = dict(
+                    skills=['dbs-theory-grounding', 'dbs-standard-answer'],
+                    runbook=str(ROOT.parent/'docs/content-creation-system/routing/skill-invocation-runbook.md'),
+                    note='On-demand theory grounding / counterexample audit only; unverified primary origins stay supplement and never replace fact verification.',
+                )
             if not result['framework_decision']['may_continue']:
                 missing.append('current_framework_decision_permits_drafting')
         elif topic and topic.get('framework_decision_ref'):
@@ -618,11 +1365,19 @@ def resolve(request, agent):
         if decision['primary_route']=='travel-experience':
             if kind not in ('script','video_plan','finished_video'):
                 raise agent.AgentEntryError('selected_entry_conflict','Vlog form conflicts with requested deliverable')
+            topic_facets = (result.get('framework_decision') or {}).get('topic_facets')
+            if topic_facets is not None:
+                handoff = result.setdefault('writing_handoff', {})
+                handoff.update(
+                    topic_facets=copy.deepcopy(topic_facets),
+                    topic_decision_ref=copy.deepcopy(current.get('topic_decision')),
+                    note='Draft or plan Vlog from confirmed topic_facets; keep travel-experience workflow independent of case-story recipes.',
+                )
             action('travel_experience','复用独立体验/Vlog工作单与现有素材工具；不冒充五条受管配方中的案例视频。',guide='docs/travel-experience-vlog-workflow.md')
             result['automatic_analysis_started']=False
         elif kind=='article':
             try:
-                article_next(agent,request,refs,result,action,cmd)
+                article_next(agent,request,refs,result,action,cmd,pre_gate=pre_gate_state)
             except ValueError as error:
                 if isinstance(error,agent.AgentEntryError): raise
                 raise agent.AgentEntryError(getattr(error,'code','article_editorial_invalid'),str(error)) from error
@@ -642,11 +1397,27 @@ def resolve(request, agent):
                 raise agent.AgentEntryError('unknown_content_format','Use an existing canonical format; do not invent an adapter')
             if kind=='article' and content_format!='longform-article':
                 raise agent.AgentEntryError('selected_entry_conflict','Article output conflicts with the supplied content format')
-            action('canonical_format_adapter','使用既有文体适配与作者表达要求，不借用不适用的案例配方。',
-                guide=str(ROOT.parent/'docs/content-creation-system/routing/format-adapter-playbooks.md'),
-                missing=[] if content_format else ['content_format'])
-            result['format_adapter']=by_format.get(content_format)
-            if not content_format:
-                result['available_formats']=list(by_format)
+            topic_facets = (result.get('framework_decision') or {}).get('topic_facets')
+            if topic_facets is not None or 'author_context' in refs or 'author_revision' in refs:
+                try:
+                    _editorial_author_chain(
+                        agent, request, refs, result, action, cmd,
+                        primary_entry='canonical_format_adapter',
+                        guide=str(ROOT.parent/'docs/content-creation-system/routing/format-adapter-playbooks.md'),
+                        is_article=False,
+                        pre_gate=pre_gate_state,
+                    )
+                except ValueError as error:
+                    if isinstance(error, agent.AgentEntryError):
+                        raise
+                    raise agent.AgentEntryError(getattr(error, 'code', 'editorial_invalid'), str(error)) from error
+                result['format_adapter']=by_format.get(content_format)
+            else:
+                action('canonical_format_adapter','使用既有文体适配与作者表达要求，不借用不适用的案例配方。',
+                    guide=str(ROOT.parent/'docs/content-creation-system/routing/format-adapter-playbooks.md'),
+                    missing=[] if content_format else ['content_format'])
+                result['format_adapter']=by_format.get(content_format)
+                if not content_format:
+                    result['available_formats']=list(by_format)
         return finish()
     raise agent.AgentEntryError('entry_selection_unresolved',kind)

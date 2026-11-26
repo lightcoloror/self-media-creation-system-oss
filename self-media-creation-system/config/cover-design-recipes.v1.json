@@ -12,6 +12,7 @@
     {"id":"comparison","name":"真实双图对照","route":"photo-collage","kinds":["photo"],"min_assets":2,"max_assets":2,"sources":["woop-thumbnail"],"mechanism":"同等展示面积配两项标签；必须写明比较依据，不能伪造前后效果。"},
     {"id":"storyboard","name":"真实两至三格叙事","route":"photo-collage","kinds":["photo"],"min_assets":2,"max_assets":3,"sources":["gbro-cover-design"],"mechanism":"用真实素材顺序与每格说明表达过程；顺序依据必须显式填写。"},
     {"id":"cutout-type","name":"透明主体与字体层次","route":"cutout-poster","kinds":["reviewed_cutout"],"min_assets":1,"max_assets":1,"sources":["canvas-design"],"mechanism":"已复核透明主体与几何背景叠合；本入口不执行分割模型或下载。"},
+    {"id":"magazine-depth-fusion","name":"杂志级前后景大字融合","route":"cutout-poster","kinds":["reviewed_cutout"],"min_assets":1,"max_assets":1,"sources":["gbro-cover-design","canvas-design","birefnet","any2poster"],"mechanism":"放大透明前景主体并与满宽巨字形成三层景深叠压（背景→巨字→前景发顶/道具破字→底边前景行动条），要求实测单字遮挡≤22%且受保护人脸零遮挡。"},
     {"id":"type-symbol","name":"字体与矢量符号","route":"type-led","kinds":[],"min_assets":0,"max_assets":0,"sources":["canvas-design"],"mechanism":"用真实文案、留白与可编辑线形表达概念；不用照片或生图兜底。"},
     {"id":"evidence-focus","name":"证据或界面主导","route":"evidence-ui","kinds":["evidence"],"min_assets":1,"max_assets":1,"sources":["lucas-case-cover-craft"],"mechanism":"展示已脱敏且有来源的原件；需填写核验焦点，不生成证据。"}
   ],

@@ -22,6 +22,11 @@ from jsonschema import Draft202012Validator, FormatChecker
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SCRIPTS_DIR = ROOT / "scripts"
+if str(SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_DIR))
+import runtime_paths
+
 SCHEMA = ROOT / "schemas" / "serious-content-translation-review.v1.schema.json"
 FIXTURE = ROOT / "fixtures" / "serious-content-translation-v1" / "synthetic.input.json"
 OUTPUT_ROOTS = (
@@ -94,6 +99,14 @@ def resolve_ref(ref: Any) -> Path:
     raw = Path(ref)
     if raw.is_absolute() or ".." in raw.parts:
         raise TranslationGateError("unsafe_body_ref", "body_ref leaves repository")
+    if raw.parts[:1] == (".runtime",):
+        resolved = runtime_paths.resolve_runtime_arg(ROOT, raw).resolve()
+        allowed_bases = (ROOT.resolve(),) + runtime_paths.allowed_runtime_roots(ROOT)
+        if not any(resolved.is_relative_to(base) for base in allowed_bases):
+            raise TranslationGateError("unsafe_body_ref", "body_ref leaves repository")
+        if not resolved.is_file():
+            raise TranslationGateError("artifact_missing", ref)
+        return resolved
     path = (ROOT / raw).resolve()
     try:
         path.relative_to(ROOT.resolve())
@@ -104,17 +117,11 @@ def resolve_ref(ref: Any) -> Path:
     return path
 
 
-def validate_input(value: dict[str, Any]) -> dict[str, Any]:
-    exact_keys(
-        value,
-        {"schema_version", "generated_at", "content_id", "risk_class", "sensitivity_profile", "content_nature", "body_binding", "precreative_gate", "translation_plan", "postcreative_gate"},
-        "input",
-    )
-    if value["schema_version"] != "serious-content-translation-review-input.v1":
-        raise TranslationGateError("schema_version_unsupported", str(value["schema_version"]))
-    if value["risk_class"] not in {"ordinary", "insurance-health", "high-risk"}:
-        raise TranslationGateError("risk_class_invalid", str(value["risk_class"]))
-    sensitivity_profile = value["sensitivity_profile"]
+def validate_precheck_payload(value: dict[str, Any]) -> tuple[dict[str, Any], datetime]:
+    """Validate risk profile, precreative gate, and translation plan without requiring a frozen body."""
+    if value.get("risk_class") not in {"ordinary", "insurance-health", "high-risk"}:
+        raise TranslationGateError("risk_class_invalid", str(value.get("risk_class")))
+    sensitivity_profile = value.get("sensitivity_profile")
     sensitivity_profiles = {
         "ordinary", "professional-sensitive", "medical-sensitive",
         "affected-person-severe-illness", "customer-loss", "privacy-high-risk",
@@ -126,18 +133,10 @@ def validate_input(value: dict[str, Any]) -> dict[str, Any]:
         raise TranslationGateError("risk_sensitivity_mismatch", "ordinary risk cannot carry a high-sensitivity profile")
     if value["risk_class"] == "high-risk" and sensitivity_profile == "ordinary":
         raise TranslationGateError("risk_sensitivity_mismatch", "high-risk content cannot declare ordinary sensitivity")
-    if value["content_nature"] not in {"education", "opinion", "case-review", "product-marketing", "individual-advice", "medical-insurance-cross"}:
-        raise TranslationGateError("content_nature_invalid", str(value["content_nature"]))
+    if value.get("content_nature") not in {"education", "opinion", "case-review", "product-marketing", "individual-advice", "medical-insurance-cross"}:
+        raise TranslationGateError("content_nature_invalid", str(value.get("content_nature")))
 
-    body_binding = value["body_binding"]
-    exact_keys(body_binding, {"body_ref", "body_sha256"}, "body_binding")
-    body = resolve_ref(body_binding["body_ref"])
-    if not isinstance(body_binding["body_sha256"], str) or not SHA256_RE.fullmatch(body_binding["body_sha256"]):
-        raise TranslationGateError("body_hash_invalid", "body_sha256 must be lowercase SHA-256")
-    if sha256_text_file(body) != body_binding["body_sha256"]:
-        raise TranslationGateError("body_hash_drift", "frozen body no longer matches reviewed hash")
-
-    pre = value["precreative_gate"]
+    pre = value.get("precreative_gate")
     exact_keys(pre, {"audience_decision", "evidence_spine_status", "privacy_status", "risk_boundary", "reviewed_at", "decision"}, "precreative_gate")
     if pre["decision"] != "passed" or pre["evidence_spine_status"] != "verified":
         raise TranslationGateError("precreative_gate_blocked", "evidence spine must be verified before creative work")
@@ -145,7 +144,7 @@ def validate_input(value: dict[str, Any]) -> dict[str, Any]:
         raise TranslationGateError("privacy_gate_blocked", "privacy must be cleared before creative work")
     pre_time = parse_time(pre["reviewed_at"], "precreative_gate.reviewed_at")
 
-    plan = value["translation_plan"]
+    plan = value.get("translation_plan")
     exact_keys(
         plan,
         {
@@ -288,6 +287,29 @@ def validate_input(value: dict[str, Any]) -> dict[str, Any]:
         raise TranslationGateError("sensitive_humor_exception_unexpected", "exception is only valid for a near-zero-humor sensitivity profile")
     if (plan["humor_level"] == "none") != (plan["humor_target"] == "none"):
         raise TranslationGateError("humor_level_target_mismatch", "none humor and none target must be declared together")
+    return copy.deepcopy(value), pre_time
+
+
+def validate_input(value: dict[str, Any]) -> dict[str, Any]:
+    exact_keys(
+        value,
+        {"schema_version", "generated_at", "content_id", "risk_class", "sensitivity_profile", "content_nature", "body_binding", "precreative_gate", "translation_plan", "postcreative_gate"},
+        "input",
+    )
+    if value["schema_version"] != "serious-content-translation-review-input.v1":
+        raise TranslationGateError("schema_version_unsupported", str(value["schema_version"]))
+
+    body_binding = value["body_binding"]
+    exact_keys(body_binding, {"body_ref", "body_sha256"}, "body_binding")
+    body = resolve_ref(body_binding["body_ref"])
+    if not isinstance(body_binding["body_sha256"], str) or not SHA256_RE.fullmatch(body_binding["body_sha256"]):
+        raise TranslationGateError("body_hash_invalid", "body_sha256 must be lowercase SHA-256")
+    if sha256_text_file(body) != body_binding["body_sha256"]:
+        raise TranslationGateError("body_hash_drift", "frozen body no longer matches reviewed hash")
+
+    _, pre_time = validate_precheck_payload(value)
+    plan = value["translation_plan"]
+    sensitivity_profile = value["sensitivity_profile"]
 
     post = value["postcreative_gate"]
     exact_keys(post, {"reviewed_at", "decision", "key_boundary_in_body", "source_detail_available_in_package", "safe_action_present", "individual_case_generalized", "misinterpretation_scenarios", "scores", "attention_review", "fun_integrity_review"}, "postcreative_gate")
@@ -361,6 +383,61 @@ def validate_input(value: dict[str, Any]) -> dict[str, Any]:
     return copy.deepcopy(value)
 
 
+def validate_precheck_input(value: dict[str, Any]) -> dict[str, Any]:
+    exact_keys(
+        value,
+        {"schema_version", "generated_at", "content_id", "risk_class", "sensitivity_profile", "content_nature", "precreative_gate", "translation_plan"},
+        "precheck_input",
+    )
+    if value["schema_version"] != "serious-content-translation-precheck-input.v1":
+        raise TranslationGateError("schema_version_unsupported", str(value["schema_version"]))
+    if not isinstance(value.get("content_id"), str) or len(value["content_id"].strip()) < 3:
+        raise TranslationGateError("content_id_invalid", str(value.get("content_id")))
+    parse_time(value["generated_at"], "generated_at")
+    validated, _ = validate_precheck_payload(value)
+    return validated
+
+
+def create_precheck_receipt(input_path: Path) -> dict[str, Any]:
+    value = validate_precheck_input(load_json(input_path))
+    payload = {
+        "schema_version": "serious-content-translation-precheck.v1",
+        "precheck_id": "serious-precheck-" + canonical_sha256(value)[:24],
+        "generated_at": value["generated_at"],
+        "artifact_status": "precheck-only",
+        "publication_boundary": "manual-only",
+        "content_id": value["content_id"],
+        "risk_class": value["risk_class"],
+        "sensitivity_profile": value["sensitivity_profile"],
+        "content_nature": value["content_nature"],
+        "precreative_gate": value["precreative_gate"],
+        "translation_plan": value["translation_plan"],
+        "gate_status": "passed",
+        "authority": AUTHORITY,
+    }
+    payload["receipt_payload_sha256"] = canonical_sha256(payload)
+    return payload
+
+
+def validate_precheck_receipt(value: dict[str, Any]) -> None:
+    expected = {
+        "schema_version", "precheck_id", "generated_at", "artifact_status",
+        "publication_boundary", "content_id", "risk_class", "sensitivity_profile",
+        "content_nature", "precreative_gate", "translation_plan", "gate_status",
+        "authority", "receipt_payload_sha256",
+    }
+    exact_keys(value, expected, "precheck_receipt")
+    if value["schema_version"] != "serious-content-translation-precheck.v1":
+        raise TranslationGateError("schema_version_unsupported", str(value["schema_version"]))
+    if value["gate_status"] != "passed" or value["artifact_status"] != "precheck-only" or value["publication_boundary"] != "manual-only":
+        raise TranslationGateError("precreative_gate_blocked", "invalid precheck boundary/status")
+    unsigned = copy.deepcopy(value)
+    digest = unsigned.pop("receipt_payload_sha256")
+    if canonical_sha256(unsigned) != digest:
+        raise TranslationGateError("receipt_hash_drift", "precheck receipt payload changed")
+    validate_precheck_payload(value)
+
+
 def create_receipt(input_path: Path) -> dict[str, Any]:
     value = validate_input(load_json(input_path))
     payload = {
@@ -403,18 +480,25 @@ def validate_receipt(value: dict[str, Any]) -> None:
         raise TranslationGateError("body_hash_drift", "frozen body changed after review")
 
 
+def _allowed_output_roots() -> tuple[Path, ...]:
+    roots = [root.resolve() for root in OUTPUT_ROOTS]
+    for base in runtime_paths.allowed_runtime_roots(ROOT):
+        roots.append((base / "serious-content-translation").resolve())
+    return tuple(dict.fromkeys(roots))
+
+
 def write_receipt(path: Path, value: dict[str, Any]) -> str:
-    resolved = path.resolve()
-    if not any(resolved.is_relative_to(root.resolve()) for root in OUTPUT_ROOTS):
+    resolved = runtime_paths.resolve_runtime_arg(ROOT, path).resolve() if not path.is_absolute() else path.resolve()
+    if not any(resolved.is_relative_to(root) for root in _allowed_output_roots()):
         raise TranslationGateError("output_path_prohibited", "output must stay under a gate runtime root")
     encoded = (json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2) + "\n").encode("utf-8")
-    path.parent.mkdir(parents=True, exist_ok=True)
+    resolved.parent.mkdir(parents=True, exist_ok=True)
     try:
-        with path.open("xb") as handle:
+        with resolved.open("xb") as handle:
             handle.write(encoded)
         return "created"
     except FileExistsError:
-        if path.read_bytes() != encoded:
+        if resolved.read_bytes() != encoded:
             raise TranslationGateError("output_conflict", "existing output differs")
         return "already-identical"
 
@@ -431,6 +515,11 @@ def check() -> dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
+    precheck = sub.add_parser("precheck")
+    precheck.add_argument("--input", type=Path, required=True)
+    precheck.add_argument("--output", type=Path, required=True)
+    verify_pre = sub.add_parser("validate-precheck")
+    verify_pre.add_argument("--receipt", type=Path, required=True)
     create = sub.add_parser("create")
     create.add_argument("--input", type=Path, required=True)
     create.add_argument("--output", type=Path, required=True)
@@ -439,12 +528,23 @@ def main() -> int:
     sub.add_parser("check")
     args = parser.parse_args()
     try:
-        if args.command == "create":
-            receipt = create_receipt(args.input)
+        if args.command == "precheck":
+            in_path = runtime_paths.resolve_runtime_arg(ROOT, args.input) if not args.input.is_absolute() else args.input
+            receipt = create_precheck_receipt(in_path)
+            status = write_receipt(args.output, receipt)
+            print(json.dumps({"status": status, "precheck_id": receipt["precheck_id"]}, ensure_ascii=False))
+        elif args.command == "validate-precheck":
+            receipt_path = runtime_paths.resolve_runtime_arg(ROOT, args.receipt) if not args.receipt.is_absolute() else args.receipt
+            validate_precheck_receipt(load_json(receipt_path))
+            print(json.dumps({"status": "passed"}))
+        elif args.command == "create":
+            in_path = runtime_paths.resolve_runtime_arg(ROOT, args.input) if not args.input.is_absolute() else args.input
+            receipt = create_receipt(in_path)
             status = write_receipt(args.output, receipt)
             print(json.dumps({"status": status, "review_id": receipt["review_id"]}, ensure_ascii=False))
         elif args.command == "validate":
-            validate_receipt(load_json(args.receipt))
+            receipt_path = runtime_paths.resolve_runtime_arg(ROOT, args.receipt) if not args.receipt.is_absolute() else args.receipt
+            validate_receipt(load_json(receipt_path))
             print(json.dumps({"status": "passed"}))
         else:
             print(json.dumps(check(), ensure_ascii=False, sort_keys=True))

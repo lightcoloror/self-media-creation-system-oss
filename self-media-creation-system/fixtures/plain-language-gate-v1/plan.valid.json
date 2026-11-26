@@ -1,0 +1,69 @@
+{
+  "analogies": [
+    {
+      "applicable_scope": "理解医保部门对定点医院的住院打包结算规则",
+      "boundary_where_it_breaks": "不适用于判定个人自付上限，且设有特例单议或除外支付例外",
+      "forbidden_misreading": "患者只能报一个固定金额",
+      "mapping": "医院从按项目结账改为按病组整体对医保算账",
+      "metaphor": "套餐价",
+      "target_concept": "DRG/DIP支付方式"
+    }
+  ],
+  "applicability": "applicable",
+  "audience_question": "DRG/DIP和报销比例到底决定了我能报多少钱？",
+  "authority": {
+    "execution_authorized": false,
+    "external_send_authorized": false,
+    "publish_authorized": false
+  },
+  "concepts_to_explain": [
+    {
+      "concrete_scenario": "普通参保人住院结算时，医院按病组评估整体费用，复杂危重症仍可走特例单议。",
+      "counterexample_or_boundary": "不能理解成患者只能报一个固定金额。",
+      "likely_misreadings": [
+        "患者只能报一个固定金额"
+      ],
+      "mechanism_summary": "医保对医院按病组整体打包结算，同时保留特例单议等除外机制。",
+      "must_keep_conditions": [
+        "医保向医院的结算方式",
+        "特例单议和除外支付机制"
+      ],
+      "plain_definition": "医保向医院整体算账的支付规则",
+      "source_fact_ids": [
+        "fact-drg-settlement"
+      ],
+      "term": "DRG/DIP"
+    },
+    {
+      "concrete_scenario": "同一张住院发票中的目录外自费部分不纳入该比例分母。",
+      "likely_misreadings": [
+        "误把政策范围内支付比例写成总账单报销比例"
+      ],
+      "mechanism_summary": "以政策范围内医疗费用而非医院总账单作为分母。",
+      "must_keep_conditions": [
+        "分母是政策范围内医疗费用"
+      ],
+      "plain_definition": "按符合医保目录范围的费用计算的比例",
+      "source_fact_ids": [
+        "fact-policy-ratio"
+      ],
+      "term": "政策范围内支付比例"
+    }
+  ],
+  "content_id": "synthetic-drg-plain-01",
+  "fact_card_ref": {
+    "fact_card_id": "fact-card-synthetic-drg-01",
+    "path": "fixtures/plain-language-gate-v1/locked-fact-card.json",
+    "revision_id": "fact-rev-synthetic-drg-001",
+    "sha256": "2bf518c3ff97d493a28a093ceb723f47baa4d00bf0583d671f9c15b028b74613"
+  },
+  "generated_at": "2026-11-24T09:10:00+08:00",
+  "intensity": "lightweight",
+  "payload_sha256": "232c63f8b337e64e1174da25e15470d7b49aa647dc6252ce6b211d1be9026eb9",
+  "plain_answer_lead": "DRG/DIP主要是医保给医院算账的规则，不是限制个人只能报一个固定金额；个人报销还要看政策范围内费用分母和起付线等条件。",
+  "plan_id": "plain-plan-9eaf96f31b698e78bf452b14",
+  "quoted_sources": [],
+  "request_id": "req-synthetic-drg-plain-01",
+  "schema_version": "plain-language-plan.v1",
+  "target_audience": "想看懂住院结算规则的普通参保读者"
+}

@@ -185,7 +185,7 @@
           "stop_on_error": true
         }
       ],
-      "quality_gates": ["topic-observation-binding", "editorial-goal-alignment", "reach-hypothesis-not-platform-fact", "fact", "privacy", "insurance-medical", "science-popularization-review-if-science-claim", "author-voice", "manual-publication"],
+      "quality_gates": ["topic-observation-binding", "editorial-goal-alignment", "reach-hypothesis-not-platform-fact", "fact", "fact-lock-plain-language-gate", "privacy", "insurance-medical", "science-popularization-review-if-science-claim", "author-voice", "manual-publication"],
       "outputs": ["topic-angle-decision", "editorial-angle-human-confirmation", "moments-candidate", "author-voice-confirmation", "manual-publication-handoff"],
       "stop_conditions": ["editorial-angle-review-required", "missing-sensitive-fact-source", "privacy-not-reviewed", "author-voice-not-confirmed", "candidate-ready-for-human"]
     },
@@ -285,7 +285,7 @@
           "stop_on_error": true
         }
       ],
-      "quality_gates": ["topic-observation-binding", "editorial-goal-alignment", "reach-hypothesis-not-platform-fact", "verified-evidence", "unknowns-preserved", "science-popularization-review-if-science-claim", "audience-entry-strategy", "title-cover-opening-promise", "ordered-information-progression", "standalone-item-completeness", "visual-rights", "privacy", "author-voice", "visual-typography-hard-gate", "frozen-body-hash", "manual-publication"],
+      "quality_gates": ["topic-observation-binding", "editorial-goal-alignment", "reach-hypothesis-not-platform-fact", "verified-evidence", "fact-lock-plain-language-gate", "unknowns-preserved", "science-popularization-review-if-science-claim", "audience-entry-strategy", "title-cover-opening-promise", "ordered-information-progression", "standalone-item-completeness", "visual-rights", "privacy", "author-voice", "visual-typography-hard-gate", "frozen-body-hash", "manual-publication"],
       "outputs": ["topic-angle-decision", "editorial-angle-human-confirmation", "research-output.v1", "content-item", "graphic-note-candidate", "content-packaging-human-review-credential", "content-packaging-review", "manual-publication-handoff"],
       "stop_conditions": ["editorial-angle-review-required", "research-output-missing-or-blocked", "research-blocked", "evidence-candidate-only", "visual-rights-unknown", "review-pending", "audience-path-review-failed", "series-item-not-standalone", "packaging-review-stale", "candidate-ready-for-human"]
     },
@@ -448,7 +448,7 @@
           "stop_on_error": true
         }
       ],
-      "quality_gates": ["production-run-lock", "topic-angle-decision-if-upstream-selected", "story-five-question-is-view-over-story-card", "verified-evidence", "case-governance-contracts", "paragraph-fact-routing", "privacy", "privacy-redaction-binding", "medical-insurance", "science-popularization-review-if-science-claim", "authorization", "rights", "author-voice", "audience-entry-strategy", "title-cover-opening-promise", "ordered-information-progression", "standalone-item-completeness", "visual-typography-hard-gate", "isolated-segment-motion-before-concat", "final-layout-safety", "initial-treatment-decision", "customer-effect-confirmation", "exact-candidate-hash", "prepublication-privacy-recheck", "platform-publication-package", "manual-publication"],
+      "quality_gates": ["production-run-lock", "topic-angle-decision-if-upstream-selected", "story-five-question-is-view-over-story-card", "verified-evidence", "fact-lock-plain-language-gate", "case-governance-contracts", "paragraph-fact-routing", "privacy", "privacy-redaction-binding", "medical-insurance", "science-popularization-review-if-science-claim", "authorization", "rights", "author-voice", "audience-entry-strategy", "title-cover-opening-promise", "ordered-information-progression", "standalone-item-completeness", "visual-typography-hard-gate", "isolated-segment-motion-before-concat", "final-layout-safety", "initial-treatment-decision", "customer-effect-confirmation", "exact-candidate-hash", "prepublication-privacy-recheck", "platform-publication-package", "manual-publication"],
       "outputs": ["production-run-lock-verification", "content-packaging-review", "internal-video-preview-handoff", "privacy-redaction-binding-receipt", "limited-rework-request", "manual-publication-handoff"],
       "stop_conditions": ["production-toolchain-drift", "real-case-review-owner-unavailable", "authorization-unresolved", "case-governance-failed", "body-changed-after-hook", "voice-not-confirmed", "audience-path-review-failed", "series-item-not-standalone", "motion-overlays-customer-interview", "final-layout-safety-failed", "redaction-window-uncovered", "privacy-treatment-undecided-internal-preview-only", "customer-effect-review-pending", "limited-rework-required", "customer-withdrawn", "platform-package-failed", "candidate-ready-for-human"]
     },
@@ -553,7 +553,7 @@
           "stop_on_error": true
         }
       ],
-      "quality_gates": ["source-hash", "affected-window-boundary", "single-heavy-media-slot", "exact-hash-qa-reuse", "resource-pressure-stop", "no-unnecessary-asr", "proxy-review", "science-popularization-review-invalidated-if-science-text-changed", "visual-typography-hard-gate-if-text-changed", "final-human-qa", "manual-publication"],
+      "quality_gates": ["source-hash", "affected-window-boundary", "single-heavy-media-slot", "exact-hash-qa-reuse", "resource-pressure-stop", "no-unnecessary-asr", "proxy-review", "science-popularization-review-invalidated-if-science-text-changed", "plain-language-review-invalidated-if-text-changed", "visual-typography-hard-gate-if-text-changed", "final-human-qa", "manual-publication"],
       "outputs": ["proxy-review-plan", "asr-decision-receipt", "mvp-review-execution-receipt", "proxy-review-receipt", "proxy-review-verification", "review-packet"],
       "stop_conditions": ["source-hash-drift", "owner-receipt-missing", "resource_pressure_pause_required", "proxy-review-failed", "final-qa-pending", "candidate-ready-for-human"]
     }

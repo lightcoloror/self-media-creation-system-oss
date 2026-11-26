@@ -22,11 +22,13 @@ import re
 
 from datetime import datetime, timezone, timedelta
 
+import sys
 from pathlib import Path
 
-
-
 ROOT = Path(__file__).resolve().parents[1]
+SCRIPTS_ROOT = Path(__file__).resolve().parent
+if str(SCRIPTS_ROOT) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_ROOT))
 
 SCHEMA = 'local-publication-desk.v2'
 
@@ -106,7 +108,9 @@ def verify_page_build(data_path,build_path):
 
         raise ValueError('publication_page_build_stale_data_or_consumer')
 
-    page=covers.bound(build['page_ref']).read_text(encoding='utf8')
+    page_bytes=covers.bound(build['page_ref']).read_bytes()
+
+    page=page_bytes.decode('utf8')
 
     match=re.search(r'<script id="desk-data" type="application/json">(.*?)</script>',page,re.S)
 
@@ -118,9 +122,45 @@ def verify_page_build(data_path,build_path):
 
         raise ValueError('publication_page_did_not_use_current_template')
 
+    delivery_ref=build.get('delivery_manifest_ref')
+
+    package_ref=build.get('package_receipt_ref')
+
+    manifest_path=covers.bound(delivery_ref) if delivery_ref is not None else None
+
+    package_path=covers.bound(package_ref) if package_ref is not None else None
+
+    if page_bytes != render(covers.read(data_path), manifest_path, package_path).encode('utf8'):
+
+        raise PublicationPageBindingError('handwritten_or_unbound_publication_desk: page differs from the official full render')
+
     return dict(status='current_generated_page',page_ref=build['page_ref'],data_ref=build['data_ref'],
 
+                delivery_manifest_ref=delivery_ref, package_receipt_ref=package_ref,
+
+                delivery_verified=(manifest_path is not None or package_path is not None),
+
                 generation_identity=build['generation_identity'],scope='actual_html_data_template_and_hashes; not human or live-account approval')
+
+
+class PublicationPageBindingError(ValueError):
+    code = 'handwritten_or_unbound_publication_desk'
+
+
+def verify_delivery_html(html_path, data_path=None, build_path=None):
+    """Reject hand-written or unbound HTML desks; require genuine publication_desk.py build receipt + official template."""
+    html_file = Path(html_path).resolve(strict=True)
+    if html_file.suffix.lower() != '.html':
+        raise ValueError('publication_desk_html_required')
+    build_file = Path(build_path).resolve() if build_path else html_file.with_suffix('.build.json')
+    data_file = Path(data_path).resolve() if data_path else html_file.with_suffix('.data.json')
+    if not build_file.is_file() or not data_file.is_file():
+        raise PublicationPageBindingError('handwritten_or_unbound_publication_desk: missing companion .build.json or .data.json')
+    result = verify_page_build(data_file, build_file)
+    import cover_workbench as covers
+    if covers.bound(result['page_ref']).resolve() != html_file:
+        raise PublicationPageBindingError('handwritten_or_unbound_publication_desk: build receipt points to a different html file')
+    return result
 
 
 
@@ -232,7 +272,7 @@ def platform_check_snapshot(item, key, name):
 
         candidates['platform_cover_test'] = copy.deepcopy(p['cover_test'])
 
-    values = dict(account=r.get('account',''), video=item['video'], copy=f,
+    values = dict(account=r.get('account',''), video=item.get('video', dict(path='', sha256='')), copy=f,
 
         covers=[assets[cid] for cid in platform_cover_ids(item, key)], tags=f.get('tags',''),
 
@@ -447,6 +487,7 @@ def check_platforms(data, stage='submission'):
     policy = platform_policy()
 
     issues = []
+    review_items = []
 
     def issue(item, key, code, detail):
 
@@ -456,6 +497,8 @@ def check_platforms(data, stage='submission'):
 
         target = data.get('target_platforms')
 
+        kind = item.get('item_kind', 'video')
+
         if not target:
 
             issue(item, '*', 'platform_scope_missing', '请先升级项目并明确本次平台集合')
@@ -464,7 +507,7 @@ def check_platforms(data, stage='submission'):
 
             issue(item, '*', 'platform_scope_mismatch', '缺少或多出平台：'+', '.join(sorted(set(item['platforms']) ^ set(target))))
 
-        covers = {c['id']: c for c in item['covers']}
+        covers = {c['id']: c for c in item.get('covers', [])}
 
         for key, p in item['platforms'].items():
 
@@ -522,6 +565,8 @@ def check_platforms(data, stage='submission'):
 
                     issue(item, key, 'missing_field', field)
 
+            skip_video_covers = (kind in ('article', 'moments_short_post') or (kind == 'graphic_note' and bool(item.get('images')) and not item.get('covers')))
+
             ratios = []
 
             for cid in platform_cover_ids(item, key):
@@ -558,17 +603,19 @@ def check_platforms(data, stage='submission'):
 
                     issue(item, key, 'unreadable_cover_geometry', cid)
 
-            if profile['cover_mode'] == 'unverified':
+            if not skip_video_covers:
 
-                issue(item, key, 'platform_profile_unverified', '封面规格尚未核准')
+                if profile['cover_mode'] == 'unverified':
 
-            elif profile['cover_mode'] == 'all' and not set(profile['cover_ratios']) <= set(ratios):
+                    issue(item, key, 'platform_profile_unverified', '封面规格尚未核准')
 
-                issue(item, key, 'missing_cover_slots', ', '.join(r for r in profile['cover_ratios'] if r not in ratios))
+                elif profile['cover_mode'] == 'all' and not set(profile['cover_ratios']) <= set(ratios):
 
-            elif profile['cover_mode'] == 'one' and not testing and len(p.get('cover_ids', [])) != 1:
+                    issue(item, key, 'missing_cover_slots', ', '.join(r for r in profile['cover_ratios'] if r not in ratios))
 
-                issue(item, key, 'choose_one_cover', '请选择一张适用封面；PK候选另行审核')
+                elif profile['cover_mode'] == 'one' and not testing and len(p.get('cover_ids', [])) != 1:
+
+                    issue(item, key, 'choose_one_cover', '请选择一张适用封面；PK候选另行审核')
 
             if stage == 'preparation':
 
@@ -606,7 +653,234 @@ def check_platforms(data, stage='submission'):
 
                     issue(item, key, 'platform_check_inputs_changed', name+'：当前输入与已核验内容不一致，或旧记录未绑定输入')
 
-    return dict(policy_version=policy['version'], stage=stage, complete=not issues, issues=issues)
+    if len(data.get('target_platforms', [])) >= 2 and (data.get('fact_consistency_receipt_ref') or data.get('fact_consistency_input_ref')):
+
+        try:
+
+            import cross_platform_fact_consistency_gate as fact_gate
+
+            import cover_workbench as cw
+
+            if data.get('fact_consistency_receipt_ref'):
+
+                fact_gate.validate_receipt(cw.read(cw.bound(data['fact_consistency_receipt_ref'])))
+
+            else:
+
+                receipt = fact_gate.create_receipt(cw.bound(data['fact_consistency_input_ref']))
+
+                fact_gate.validate_receipt(receipt)
+
+        except Exception as error:
+
+            issue(data['items'][0], '*', 'cross_platform_fact_inconsistent', str(error))
+
+    elif len(data.get('target_platforms', [])) >= 2:
+
+        for item in data['items']:
+
+            for code, detail, pkey in _inline_multiplatform_fact_issues(data, item):
+
+                if code == 'cross_platform_fact_inconsistent':
+                    review_items.append(dict(item_id=item['id'], platform=pkey, code=code, detail=detail))
+                else:
+                    issue(item, pkey, code, detail)
+
+    for item in data['items']:
+
+        do_not_infer = data.get('editorial_context', {}).get('do_not_infer', [])
+
+        for key, p in item['platforms'].items():
+
+            for fname, ftext in p['fields'].items():
+
+                if any(term and term in ftext for term in do_not_infer):
+
+                    issue(item, key, 'do_not_infer_violated', f'{key} / {fname}')
+
+    return dict(policy_version=policy['version'], stage=stage, complete=not issues,
+                issues=issues, review_items=review_items)
+
+
+_LABELED_FACT_METRIC_RE = re.compile(
+    r'(月入|月薪|年薪|收入|保额|保费|免赔额|赔付|理赔|报销|等待期|住院|手术费|花费|自费)'
+    r'\s*(?:约|大概|超|超过|近|不到|仅)?\s*[:：为是]?\s*'
+    r'([0-9]+(?:\.[0-9]+)?|[一二两三四五六七八九十百千万]+)\s*(万|千|百|亿)?\s*(元|块|天|年|个月|次|%)?'
+)
+
+
+def _parse_cn_number(s: str) -> float | None:
+    s = s.strip()
+    try:
+        return float(s)
+    except ValueError:
+        pass
+    cn_digits = {'零': 0, '一': 1, '二': 2, '两': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9}
+    units = {'十': 10, '百': 100, '千': 1000, '万': 10000, '亿': 100000000}
+    if not all(c in cn_digits or c in units for c in s):
+        return None
+    total = 0
+    section = 0
+    num = 0
+    for c in s:
+        if c in cn_digits:
+            num = cn_digits[c]
+        elif c in units:
+            unit_val = units[c]
+            if unit_val in (10000, 100000000):
+                section = (section + (num or (1 if section == 0 and c == '十' else 0))) * unit_val
+                total += section
+                section = 0
+                num = 0
+            else:
+                section += (num or (1 if not section else 0)) * unit_val
+                num = 0
+    section += num
+    total += section
+    return float(total)
+
+
+def _normalize_cn_metric(num_str, mag_str, unit_str):
+    mag_map = {'百': 100.0, '千': 1000.0, '万': 10000.0, '亿': 100000000.0}
+    base = _parse_cn_number(num_str)
+    if base is None:
+        return f'{num_str}{mag_str or ""}{unit_str or ""}'
+    mult = mag_map.get(mag_str or '', 1.0)
+    if mag_str and mag_str in num_str:
+        mult = 1.0
+    unit_norm = '元' if unit_str in ('元', '块', '') else (unit_str or '')
+    return f'{round(base * mult, 4)}:{unit_norm}'
+
+
+def _inline_multiplatform_fact_issues(data, item):
+    found = []
+    metric_by_label = {}
+    canonical_facts = data.get('editorial_context', {}).get('canonical_facts', [])
+    for key, p in item['platforms'].items():
+        combined = '\n'.join(
+            str(p['fields'].get(f, ''))
+            for f in ('title', 'short_title', 'body')
+            if p['fields'].get(f)
+        )
+        if not combined.strip():
+            continue
+        for match in _LABELED_FACT_METRIC_RE.finditer(combined):
+            label, num_s, mag_s, unit_s = match.groups()
+            norm_val = _normalize_cn_metric(num_s, mag_s, unit_s)
+            metric_by_label.setdefault(label, {}).setdefault(key, []).append((norm_val, match.group(0).strip()))
+        for fact in canonical_facts:
+            if isinstance(fact, dict) and fact.get('required_in_all_platforms') and fact.get('anchor'):
+                if fact['anchor'] not in combined:
+                    found.append(('canonical_fact_missing', f"missing canonical anchor {fact['anchor']}", key))
+    for label, per_platform in metric_by_label.items():
+        if len(per_platform) < 2:
+            continue
+        norm_sets = {pk: {v[0] for v in entries} for pk, entries in per_platform.items()}
+        all_unique_vals = set().union(*norm_sets.values())
+        if len(all_unique_vals) <= 1:
+            continue
+        all_sets_identical = all(s == next(iter(norm_sets.values())) for s in norm_sets.values())
+        if all_sets_identical:
+            continue
+        summary = ', '.join(
+            f"{pk}={'/'.join(raw for _, raw in entries)}"
+            for pk, entries in sorted(per_platform.items())
+        )
+        found.append(('cross_platform_fact_inconsistent', f'{label} 跨平台数值差异: {summary}', '*'))
+    return found
+
+
+def confirm_platform_copy(data, platform_key, evidence='人工核验通过', checked_at=None, item_id='main'):
+
+    item = next((row for row in data['items'] if row['id'] == item_id), None)
+
+    if item is None or platform_key not in item['platforms']:
+
+        raise ValueError('unknown_item_or_platform: ' + str(platform_key))
+
+    stamped = checked_at or datetime.now(timezone(timedelta(hours=8))).date().isoformat()
+
+    checks = item['platforms'][platform_key].setdefault('platform_checks', {})
+
+    checks['submission'] = dict(
+
+        status='confirmed',
+
+        evidence=evidence,
+
+        checked_at=stamped,
+
+        input_snapshot=platform_check_snapshot(item, platform_key, 'submission'),
+
+    )
+
+    return checks['submission']
+
+
+def platform_copy_statuses(data, item_id='main'):
+
+    item = next((row for row in data['items'] if row['id'] == item_id), None)
+
+    if item is None:
+
+        raise ValueError('unknown_item: ' + str(item_id))
+
+    statuses = {}
+
+    for key, p in item['platforms'].items():
+
+        check = p.get('platform_checks', {}).get('submission', {})
+
+        if check.get('status') != 'confirmed':
+
+            statuses[key] = 'pending'
+
+        elif check.get('input_snapshot') == platform_check_snapshot(item, key, 'submission'):
+
+            statuses[key] = 'passed'
+
+        else:
+
+            statuses[key] = 'stale'
+
+    return statuses
+
+
+def platform_lifecycle_stages(data, item_id='main'):
+
+    item = next((row for row in data['items'] if row['id'] == item_id), None)
+
+    if item is None:
+
+        raise ValueError('unknown_item: ' + str(item_id))
+
+    copy_states = platform_copy_statuses(data, item_id=item_id)
+
+    stages = {}
+
+    for key, p in item['platforms'].items():
+
+        rec = p.get('record', {})
+
+        status = rec.get('status', 'prepared')
+
+        if status == 'published' and str(rec.get('published_at', '')).strip():
+
+            stages[key] = 'observed' if rec.get('observed_snapshot_id') else 'manually_published'
+
+        elif status in ('planned', 'scheduled'):
+
+            stages[key] = 'handed_off'
+
+        elif copy_states[key] == 'passed':
+
+            stages[key] = 'packaged'
+
+        else:
+
+            stages[key] = 'validated'
+
+    return stages
 
 
 
@@ -802,7 +1076,111 @@ def normalize(source, source_ref='', *, retire_fields=False):
 
                             cover_ids=['cover'] if covers else [], record=record()) for k,v in source['platforms'].items()})])
 
-    elif isinstance(source.get('items'), list) and source['items'] and all('video' in i and 'platforms' in i for i in source['items']):
+    elif source.get('schema_version') == 'self-media-platform-publication-package.v2':
+
+        pkg_id = source.get('package_id', 'package-v2')
+
+        video_src = source.get('video', {})
+
+        covers_list = []
+
+        platforms_map = {}
+
+        cover_seq = 0
+
+        for entry in source.get('platforms', []):
+
+            raw_pid = entry['platform_id']
+
+            pid = ALIASES.get(raw_pid, raw_pid)
+
+            if pid not in DESK_PLATFORMS:
+
+                continue
+
+            c_ids = []
+
+            for c in entry.get('covers', []):
+
+                cover_seq += 1
+
+                cid = f'pkg-{pid}-{cover_seq}'
+
+                art = c.get('artifact', {})
+
+                covers_list.append(dict(id=cid, label=c.get('ratio', cid), path=art.get('path', ''), sha256=art.get('expected_sha256', '')))
+
+                c_ids.append(cid)
+
+            fields = dict(
+
+                title=entry.get('title', ''),
+
+                body=entry.get('description', ''),
+
+                tags=' '.join(t if t.startswith('#') else f'#{t}' for t in entry.get('tags', [])),
+
+                collection_name=entry.get('collection_name') or '',
+
+                collection_description=entry.get('collection_description') or '',
+
+            )
+
+            if entry.get('short_title') is not None:
+
+                fields['short_title'] = entry['short_title']
+
+            rec = record()
+
+            if entry.get('scheduled_at'):
+
+                rec.update(status='scheduled', scheduled_for=entry['scheduled_at'])
+
+            post_res = entry.get('post_upload_result')
+
+            if isinstance(post_res, dict) and post_res.get('manual_upload_confirmed') is True:
+
+                rec.update(status='published', published_at=post_res.get('checked_at', ''), url=post_res.get('published_item_ref', ''))
+
+            platforms_map[pid] = dict(fields=fields, cover_ids=c_ids, record=rec)
+
+        first_title = next((p['fields'].get('title', '') for p in platforms_map.values() if p['fields'].get('title')), '') or source.get('content_item_ref', pkg_id)
+
+        data = dict(
+
+            schema_version=SCHEMA,
+
+            project_id=pkg_id,
+
+            title=first_title,
+
+            revision=1,
+
+            rules=[],
+
+            target_platforms=list(platforms_map.keys()),
+
+            source_ref=source_ref,
+
+            source_snapshot=copy.deepcopy(source),
+
+            items=[dict(
+
+                id=source.get('content_item_ref', 'main'),
+
+                title=first_title,
+
+                video=dict(path=video_src.get('path', ''), sha256=video_src.get('expected_sha256', '')),
+
+                covers=covers_list,
+
+                platforms=platforms_map,
+
+            )],
+
+        )
+
+    elif isinstance(source.get('items'), list) and source['items'] and all(('video' in i or 'item_kind' in i) and 'platforms' in i for i in source['items']):
 
         data = dict(schema_version=SCHEMA, project_id=hashlib.sha256(source_ref.encode()).hexdigest()[:16],
 
@@ -944,7 +1322,41 @@ def validate(data):
 
                 raise ValueError('invalid_cover_test_candidates')
 
-        for asset in [item['video'], *item['covers']]:
+        item_kind = item.get('item_kind', 'video')
+
+        if item_kind not in ('video', 'graphic_note', 'article', 'moments_short_post'):
+
+            raise ValueError('invalid_item_kind: ' + str(item_kind))
+
+        assets_to_check = list(item.get('covers', []))
+
+        if item_kind == 'video' or item.get('video') is not None:
+
+            if not isinstance(item.get('video'), dict): raise ValueError('invalid_video_asset')
+
+            assets_to_check.append(item['video'])
+
+        if 'images' in item:
+
+            if not isinstance(item['images'], list): raise ValueError('invalid_images_list')
+
+            assets_to_check.extend(item['images'])
+
+        if item_kind == 'graphic_note' and not item.get('images'):
+
+            raise ValueError('graphic_note_images_required')
+
+        if 'body_html' in item and item['body_html'] is not None:
+
+            if not isinstance(item['body_html'], dict): raise ValueError('invalid_body_html_asset')
+
+            assets_to_check.append(item['body_html'])
+
+        if item_kind == 'article' and not item.get('body_html', {}).get('path'):
+
+            raise ValueError('article_body_html_required')
+
+        for asset in assets_to_check:
 
             if not isinstance(asset.get('path'),str) or len(asset['path']) > 4096: raise ValueError('invalid_path')
 
@@ -952,7 +1364,7 @@ def validate(data):
 
             if digest and (len(digest)!=64 or any(c not in '0123456789abcdef' for c in digest.lower())): raise ValueError('invalid_media_hash')
 
-        cover_ids=[c['id'] for c in item['covers']]
+        cover_ids=[c['id'] for c in item.get('covers', [])]
 
         if len(cover_ids)!=len(set(cover_ids)): raise ValueError('duplicate_cover_id')
 
@@ -1004,7 +1416,19 @@ def inspect_assets(data):
 
     for item in data['items']:
 
-        for asset in [item['video'], *item['covers']]:
+        kind = item.get('item_kind', 'video')
+
+        assets = list(item.get('covers', [])) + list(item.get('images', []))
+
+        if item.get('body_html') and (kind == 'article' or item['body_html'].get('path')):
+
+            assets.append(item['body_html'])
+
+        if item.get('video') and (kind == 'video' or item['video'].get('path')):
+
+            assets.insert(0, item['video'])
+
+        for asset in assets:
 
             path=Path(asset['path']); status='missing'
 
@@ -1042,17 +1466,21 @@ def check_packaging(data):
 
     for item in data['items']:
 
+        kind = item.get('item_kind', 'video')
+
         pk = item.get('cover_pk', {})
 
-        assets = {c['id']: c for c in item['covers']}
+        assets = {c['id']: c for c in item.get('covers', [])}
 
         candidates = pk.get('candidates', [])
 
-        if not pk or (pk.get('requested') is False and not str(pk.get('not_requested_reason','')).strip()):
+        skip_cover_pk = (kind in ('article', 'moments_short_post') or (kind == 'graphic_note' and bool(item.get('images')) and not item.get('covers'))) and not pk
+
+        if not skip_cover_pk and (not pk or (pk.get('requested') is False and not str(pk.get('not_requested_reason','')).strip())):
 
             issue(item, 'cover_comparison_scope_missing', '明确是否需要多方案；只迁移既有定稿时记录依据')
 
-        if pk.get('requested') is not False and len(candidates) < 2:
+        if not skip_cover_pk and pk.get('requested') is not False and len(candidates) < 2:
 
             issue(item, 'cover_comparison_missing', '已要求多方案比较；同一设计的多个比例不算多个创意')
 
@@ -1115,6 +1543,7 @@ def check_packaging(data):
                         issue(item, 'cover_candidate_image_invalid', c['id']+' / '+ratio+': '+str(error))
 
         terms = data.get('editorial_context', {}).get('forbidden_public_phrases', [])
+        do_not_infer = data.get('editorial_context', {}).get('do_not_infer', [])
 
         for key, p in item['platforms'].items():
 
@@ -1124,11 +1553,19 @@ def check_packaging(data):
 
                     issue(item, 'forbidden_public_phrase', key+' / '+name)
 
+                if any(term and term in text for term in do_not_infer):
+
+                    issue(item, 'do_not_infer_violated', key+' / '+name)
+
         for c in candidates:
 
             if any(term and term in c.get('title', '') for term in terms):
 
                 issue(item, 'forbidden_public_phrase', c['id']+' / title')
+
+            if any(term and term in c.get('title', '') for term in do_not_infer):
+
+                issue(item, 'do_not_infer_violated', c['id']+' / title')
 
     return dict(complete=not issues, issues=issues, proves_visual_quality=False)
 
@@ -1152,7 +1589,7 @@ def check_cta(data):
 
             issues.append(dict(item_id=item['id'], code='cta_review_pending', detail=str(error)))
 
-    snapshot = [dict(id=i['id'], plan_ref=i.get('cta_plan_ref'), video=i['video'],
+    snapshot = [dict(id=i['id'], plan_ref=i.get('cta_plan_ref'), video=i.get('video', dict(path='', sha256='')),
 
                      fields={k:p['fields'] for k,p in i['platforms'].items()}) for i in data['items']]
 
@@ -1194,61 +1631,221 @@ def bind_context(data,path):
 
 
 
+PLATFORM_QUOTE_KEYWORDS = {
+    'douyin': ('抖音', 'douyin', 'dy'),
+    'xiaohongshu': ('小红书', 'xiaohongshu', 'xhs'),
+    'weixin_channels': ('微信视频号', '视频号', 'weixin_channels', 'sph'),
+    'wechat-article': ('微信公众号', '公众号'),
+    'bilibili': ('b站', 'bilibili', '哔哩哔哩'),
+    'kuaishou': ('快手', 'ks'),
+    'weibo': ('微博', 'wb'),
+    'zhihu': ('知乎', 'zh'),
+}
+
+_QUOTE_PLATFORM_BY_NAME = {name: key for key, names in PLATFORM_QUOTE_KEYWORDS.items() for name in names}
+_QUOTE_PLATFORM_RE = re.compile('|'.join(
+    rf'(?<![a-z0-9_]){re.escape(name)}(?![a-z0-9_])' if name.isascii() else re.escape(name)
+    for name in sorted(_QUOTE_PLATFORM_BY_NAME, key=len, reverse=True)
+))
+_QUOTE_SENTENCE_RE = re.compile(r'[^。！？!?\n]+[。！？!?]?')
+_QUOTE_CLAUSE_RE = re.compile(r'[^，,；;：:。！？!?\n]+')
+_QUOTE_INDEFINITE_RE = re.compile(r'如果|假如|若是|要是|有人说|网传|据说|听说|传闻|以为|是否|了吗|吗\s*[。！？!?]?$')
+_QUOTE_PENDING_RE = re.compile(
+    r'未发|没发|没有.{0,8}发布|发布失败|定时|预约|排期|待发|草稿|撤回|删了|删掉|删除了|取消发布|已取消|'
+    r'稍后|即将|计划|准备|打算|将发布|要发布|今天发|明天|后天|不要发|别发|请[^，,；;]{0,12}(?:发布|上传)|'
+    r'\b(?:not|scheduled|schedule|draft|will)\b'
+)
+_QUOTE_COMPLETED_RE = re.compile(
+    r'(?:已(?:经)?|完成)(?:手动)?(?:发布|发出|发帖|发)|(?<!转)(?:发布了|发过了|发了)|'
+    r'发布成功|发完了|已上线|\b(?:i|we)\s+(?:have\s+)?published\b'
+)
+
+
+def verify_publication_quote_scope(quote: str, platforms: list[str], source_text: str | None = None,
+                                   *, allow_unscoped: bool = False) -> None:
+    if not isinstance(platforms, list) or (not platforms and not allow_unscoped):
+        raise ValueError('publication_fact_platform_scope_invalid')
+    source = quote if source_text is None else source_text
+    if not isinstance(source, str) or not isinstance(quote, str) or not quote.strip() or quote not in source:
+        raise ValueError('publication_fact_requires_bound_user_message')
+
+    requested = set(platforms)
+    sentences = list(_QUOTE_SENTENCE_RE.finditer(source))
+    for occurrence in re.finditer(re.escape(quote), source):
+        for sentence in sentences:
+            if sentence.end() <= occurrence.start():
+                continue
+            text = sentence[0].lower()
+            overlaps = sentence.start() < occurrence.end()
+            if overlaps and (text.endswith(('?', '？')) or _QUOTE_INDEFINITE_RE.search(text)):
+                raise ValueError('publication_fact_scheduled_not_published: quote is not a completed declaration')
+            sentence_mentioned = {_QUOTE_PLATFORM_BY_NAME[m[0]] for m in _QUOTE_PLATFORM_RE.finditer(text)}
+            for clause in _QUOTE_CLAUSE_RE.finditer(text):
+                if not _QUOTE_PENDING_RE.search(clause[0]):
+                    continue
+                mentioned = {_QUOTE_PLATFORM_BY_NAME[m[0]] for m in _QUOTE_PLATFORM_RE.finditer(clause[0])}
+                if not mentioned and not overlaps:
+                    mentioned = sentence_mentioned
+                if not requested or not mentioned or requested & mentioned:
+                    raise ValueError('publication_fact_scheduled_not_published: quote indicates a pending or cancelled release')
+
+    confirmed = set()
+    has_completion = False
+    for clause in _QUOTE_CLAUSE_RE.findall(quote.lower()):
+        if _QUOTE_PENDING_RE.search(clause) or not _QUOTE_COMPLETED_RE.search(clause):
+            continue
+        has_completion = True
+        mentions = list(_QUOTE_PLATFORM_RE.finditer(clause))
+        # Mixed, non-parallel mentions require separate declarations for each platform.
+        if all(re.fullmatch(r'\s*(?:和|与|及|以及|、|/|&)\s*', clause[left.end():right.start()])
+               for left, right in zip(mentions, mentions[1:])):
+            confirmed.update(_QUOTE_PLATFORM_BY_NAME[m[0]] for m in mentions)
+    missing = requested - confirmed
+    if missing or not has_completion:
+        raise ValueError('publication_fact_platform_unconfirmed_in_quote: ' + ','.join(sorted(missing)))
+
+
 def publication_summary(data):
-
     """Project facts are distinct from per-platform submission or publish authority."""
-
     recorded=[key for item in data['items'] for key,p in item['platforms'].items() if p['record']['status']=='published']
-
     result=dict(status='platform_records' if recorded else 'no_record_supplied',
-
         platforms=list(dict.fromkeys(recorded)),platform_scope_verified=False,publish_authorized=False)
-
     ref=data.get('publication_fact_ref')
-
     if ref is not None:
-
         import cover_workbench as covers
-
         fact=covers.read(covers.bound(ref))
-
+        expected_video_sha = (data['items'][0].get('video') or {}).get('sha256', '')
         if (fact.get('schema_version')!='self-media.publication-fact.v1' or fact.get('project_id')!=data['project_id']
-
                 or fact.get('kind')!='user_reported_published' or len(data['items'])!=1
-
-                or fact.get('video_sha256')!=data['items'][0]['video'].get('sha256')):
-
+                or fact.get('video_sha256', '')!=expected_video_sha):
             raise ValueError('publication_fact_project_or_media_mismatch')
-
         source=covers.read(covers.bound(fact['source_ref']))
-
         quote=fact.get('quote')
-
-        if source.get('role')!='user' or not isinstance(quote,str) or not quote.strip() or quote not in source.get('text',''):
-
+        if source.get('role')!='user':
             raise ValueError('publication_fact_requires_bound_user_message')
-
         platforms=fact.get('platforms',[])
-
         if not isinstance(platforms,list) or any(key not in data['items'][0]['platforms'] for key in platforms):
-
             raise ValueError('publication_fact_platform_scope_invalid')
-
+        # Existing project-level reports may have no platform scope.
+        verify_publication_quote_scope(quote, platforms, source.get('text', ''), allow_unscoped=True)
         result.update(status='user_reported_published',platforms=platforms,
-
             video_sha256=fact['video_sha256'],
-
             source_ref=fact['source_ref'],quote=quote,platform_scope_verified=False,
-
             note='用户报告已发布；未列明的平台不推定已发，旧平台记录保留')
-
     return result
 
 
 
 
 
-def render(data, delivery_manifest=None):
+def _verify_non_video_package(data, package_receipt):
+    import cover_workbench as covers
+    if len(data['items']) != 1:
+        raise ValueError('package_receipt_requires_single_item_desk')
+    item = data['items'][0]
+    kind = item.get('item_kind', 'video')
+    if kind == 'video':
+        raise ValueError('video_desk_requires_delivery_manifest_not_package_receipt')
+    assets = inspect_assets(data)
+    if not assets or any(r['status'] != 'verified' for r in assets):
+        raise ValueError('desk_assets_missing_changed_or_unhashed')
+    prep = check_platforms(data, 'preparation')
+    if not prep['complete']:
+        raise ValueError('platform_requirements_incomplete: ' + json.dumps(prep['issues'], ensure_ascii=False))
+    pkg_check = check_packaging(data)
+    if not pkg_check['complete']:
+        raise ValueError('packaging_requirements_incomplete: ' + json.dumps(pkg_check['issues'], ensure_ascii=False))
+    if item.get('cta_plan_ref') or kind == 'video':
+        cta_check = check_cta(data)
+        if not cta_check['complete']:
+            raise ValueError('cta_requirements_incomplete: ' + json.dumps(cta_check['issues'], ensure_ascii=False))
+    receipt_path = Path(package_receipt).resolve()
+    doc = covers.read(receipt_path)
+    def _collect_desk_surface_texts():
+        texts = {}
+        title = str(item.get('title', '')).strip()
+        if title:
+            texts['desk_title'] = title
+        plat_bits = []
+        for plat in (item.get('platforms') or {}).values():
+            if isinstance(plat, dict):
+                sources = [plat]
+                if isinstance(plat.get('fields'), dict):
+                    sources.append(plat['fields'])
+                for src in sources:
+                    for k in ('title', 'caption', 'description', 'body', 'opening_text', 'opening'):
+                        if isinstance(src.get(k), str) and src[k].strip():
+                            plat_bits.append(src[k].strip())
+        if plat_bits:
+            texts['desk_platforms'] = '\n'.join(plat_bits)
+        card_bits = []
+        for card_row in (item.get('graphic_cards') or item.get('cards') or []):
+            if isinstance(card_row, dict):
+                for k in ('title', 'text', 'caption', 'headline'):
+                    if isinstance(card_row.get(k), str) and card_row[k].strip():
+                        card_bits.append(card_row[k].strip())
+        if card_bits:
+            texts['desk_graphic_cards'] = '\n'.join(card_bits)
+        return texts
+    def _verify_optional_plain_language_refs():
+        import plain_language_gate as pl_gate
+        surfaces = _collect_desk_surface_texts()
+        pl_rev_ref = item.get('plain_language_review_ref') or doc.get('plain_language_review_ref')
+        sci_rev_ref = item.get('science_review_ref') or doc.get('science_review_ref')
+        trans_rev_ref = item.get('translation_review_ref') or doc.get('translation_review_ref')
+        clause_ref = item.get('clause_explanation_ref') or doc.get('clause_explanation_ref')
+        fc_ref = item.get('fact_card_ref') or doc.get('fact_card_ref')
+        if fc_ref and isinstance(fc_ref, dict) and fc_ref.get('path'):
+            expected_cid = (doc.get('content_binding') or {}).get('content_id') or (doc.get('editorial_context') or {}).get('content_id')
+            pl_gate.validate_fact_card_lock(pl_gate.resolve_artifact_path(fc_ref['path'], base_dir=receipt_path.parent), expected_content_id=expected_cid, expected_sha256=fc_ref.get('sha256'))
+        if sci_rev_ref and isinstance(sci_rev_ref, dict) and sci_rev_ref.get('path'):
+            pl_gate.validate_formal_science_review(pl_gate.resolve_artifact_path(sci_rev_ref['path'], base_dir=receipt_path.parent))
+        if trans_rev_ref and isinstance(trans_rev_ref, dict) and trans_rev_ref.get('path'):
+            pl_gate.validate_formal_translation_review(pl_gate.resolve_artifact_path(trans_rev_ref['path'], base_dir=receipt_path.parent))
+        if clause_ref and isinstance(clause_ref, dict) and clause_ref.get('path'):
+            clause_errs = pl_gate.validate_clause_explanation(pl_gate.resolve_artifact_path(clause_ref['path'], base_dir=receipt_path.parent))
+            if clause_errs:
+                raise ValueError('clause_explanation_invalid: ' + '; '.join(clause_errs))
+        if pl_rev_ref and isinstance(pl_rev_ref, dict) and pl_rev_ref.get('path'):
+            pl_path = pl_gate.resolve_artifact_path(pl_rev_ref['path'], base_dir=receipt_path.parent)
+            if pl_rev_ref.get('sha256') and pl_gate.file_sha256(pl_path) != pl_rev_ref['sha256']:
+                raise ValueError('plain_language_review_hash_drift')
+            pl_gate.validate_review(pl_gate.load_json(pl_path), extra_surface_texts=surfaces, base_dir=pl_path.parent, require_passed=True)
+    _verify_optional_plain_language_refs()
+    if kind == 'article':
+        if doc.get('schema_version') == 'self-media-entry-selection.v1':
+            blockers = [m for m in doc.get('missing_inputs', []) if m in {
+                'locked_fact_card_for_draft', 'plain_language_plan', 'plain_language_review',
+                'serious_content_translation_review', 'science_popularization_review',
+                'formal_science_popularization_review', 'insurance_compliance_review',
+                'insurance_clause_explanation_review',
+            }]
+            if blockers:
+                raise ValueError('article_package_plain_or_risk_gates_blocked: ' + ','.join(blockers))
+        pkg = doc.get('article_review_package') if doc.get('schema_version') == 'self-media-entry-selection.v1' else doc
+        if not isinstance(pkg, dict) or pkg.get('rendered_artifacts_verified') is not True:
+            raise ValueError('article_package_rendered_verification_required')
+        if not (pkg.get('visual_review') or {}).get('record_complete'):
+            raise ValueError('article_package_visual_review_required')
+        if not (pkg.get('editorial') or {}).get('author_confirmation_recorded'):
+            raise ValueError('article_package_author_confirmation_required')
+        outputs = pkg.get('rendered_outputs') or []
+        if not outputs or outputs[0].get('sha256') != (item.get('body_html') or {}).get('sha256'):
+            raise ValueError('article_package_body_html_mismatch')
+        return '生成时已通过公众号/长文编辑、内联排版与视觉审核交付检查；请人工核对后手动复制发布。'
+    if doc.get('schema_version') == 'content-packaging-review.v1':
+        import content_packaging_review
+        content_packaging_review.validate_receipt(receipt_path)
+        if doc.get('plain_language_review') is not None:
+            import plain_language_gate as pl_gate
+            pl_info = doc['plain_language_review']
+            pl_path = pl_gate.resolve_artifact_path(pl_info['review_ref'], base_dir=receipt_path.parent)
+            pl_gate.validate_review(pl_gate.load_json(pl_path), extra_surface_texts=_collect_desk_surface_texts(), base_dir=pl_path.parent, require_passed=True)
+        return '生成时已通过图文/短帖内容包装与冻结合同检查；请人工核对后手动复制发布。'
+    raise ValueError('unsupported_non_video_package_receipt')
+
+
+def render(data, delivery_manifest=None, package_receipt=None):
 
     # Adapt saved data at the actual renderer, not merely at an optional CLI.
 
@@ -1266,7 +1863,11 @@ def render(data, delivery_manifest=None):
 
     state = 'draft'
 
-    banner = '草稿预览 · 未通过完整视频交付检查；不代表素材、字幕、封面和人工审核齐备。'
+    banner = '草稿预览 · 请勿直接复制用于正式发布（未通过完整交付检查；不代表素材、字幕、封面和人工审核齐备）。'
+
+    if delivery_manifest is not None and package_receipt is not None:
+
+        raise ValueError('choose_either_delivery_manifest_or_package_receipt')
 
     if delivery_manifest is not None:
 
@@ -1290,7 +1891,13 @@ def render(data, delivery_manifest=None):
 
         state = 'verified_at_generation'
 
-        banner = '生成时已通过本地视频交付检查；实际上传与发布以记录为准。外部文件变化需重新检查，修改此页会使本标记失效。'
+        banner = '生成时已通过本地视频交付检查；实际上传与发布以手工操作记录为准。外部文件变化需重新检查，修改此页会使本标记失效。'
+
+    elif package_receipt is not None:
+
+        banner = _verify_non_video_package(data, package_receipt)
+
+        state = 'verified_at_generation'
 
     else:
 
@@ -1310,6 +1917,10 @@ def render(data, delivery_manifest=None):
     banner += (' CTA选择/位置已复核；允许有理由地不采用。' if cta['complete'] else ' CTA选择/位置复核待完成。')
 
     banner += (' 本地平台适配检查通过（按已记录规则）。' if preparation['complete'] else f" 本地适配缺项：{len(preparation['issues'])} 项。")
+    prep_reviews = preparation['review_items']
+    if prep_reviews:
+        review_details = '；'.join(item['detail'] for item in prep_reviews)
+        banner += f' 待人工复核：{len(prep_reviews)} 项。请对照各平台文案检查同一指标和对象（{review_details}）。'
 
     banner += (' 用户已报告发布，平台范围及链接待核对；本地旧记录保留。' if data['publication_summary']['status']=='user_reported_published'
 
@@ -1375,15 +1986,25 @@ def render(data, delivery_manifest=None):
 
                  preparation=preparation, packaging=packaging, cta=cta, requirement_report=requirement_report)
 
+    base_title = data['title'] if data['title'].endswith('发布辅助页') else data['title']+' · 发布辅助页'
+
+    page_title = ('[草稿预览] ' + base_title) if state == 'draft' else base_title
+
+    aside_style = (
+        'padding:16px;background:#fff0ee;color:#7a1c14;border-bottom:2px solid #c92a2a;font-weight:600'
+        if state == 'draft'
+        else 'padding:16px;background:#ecf8f1;color:#124b2c;border-bottom:2px solid #2b8a3e'
+    )
+
     return ('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">'
 
             '<meta name="viewport" content="width=device-width,initial-scale=1">'
 
-            '<title>'+html.escape(data['title'] if data['title'].endswith('发布辅助页') else data['title']+' · 发布辅助页')+'</title><style>'+css+'</style></head>'
+            '<title>'+html.escape(page_title)+'</title><style>'+css+'</style></head>'
 
-            '<body><details class="generation-status"><summary>素材状态与生成检查</summary><aside id="delivery-status" data-state="'+state+'" role="status" '
+            '<body><details class="generation-status" open><summary>素材状态与生成检查</summary><aside id="delivery-status" data-state="'+state+'" role="status" '
 
-            'style="padding:16px;background:#fff4d6;color:#332600;border-bottom:2px solid #b58023">'
+            'style="'+aside_style+'">'
 
             +html.escape(banner)+'</aside></details><div id="desk"></div><script id="desk-data" type="application/json">'+encoded+
 
@@ -1450,6 +2071,48 @@ def write_new(path, value):
         f.write(value if isinstance(value,str) else json.dumps(value,ensure_ascii=False,indent=2)+'\n')
 
 
+def write_render_bundle(path, data, delivery_manifest=None, package_receipt=None):
+    import cover_workbench as covers
+
+    path = Path(path)
+    sidecar, build_path = path.with_suffix('.data.json'), path.with_suffix('.build.json')
+    if any(p.exists() for p in (path, sidecar, build_path)):
+        raise ValueError('render_outputs_must_be_new_including_data_and_build')
+    data = upgrade(data)
+    data['publication_summary'] = publication_summary(data)
+    delivery_ref = covers.reference(delivery_manifest) if delivery_manifest is not None else None
+    package_ref = covers.reference(package_receipt) if package_receipt is not None else None
+    value = render(data, delivery_manifest, package_receipt)
+    if delivery_ref is not None:
+        covers.bound(delivery_ref)
+    if package_ref is not None:
+        covers.bound(package_ref)
+    write_new(path, value)
+    write_new(sidecar, data)
+    build = dict(schema_version='self-media.publication-page-build.v1', data_ref=covers.reference(sidecar),
+                 page_ref=covers.reference(path), generation_identity=generation_identity(),
+                 delivery_manifest_ref=delivery_ref, package_receipt_ref=package_ref)
+    write_new(build_path, build)
+    return build
+
+
+def check_delivery_bundle(data_path, data, build_path, delivery_manifest=None):
+    if build_path is None:
+        raise ValueError('submission_requires_current_publication_page_build')
+    if len(data.get('items', [])) != 1:
+        raise ValueError('submission_single_video_desk_required')
+    import cover_workbench as covers
+    if data != covers.read(data_path):
+        raise ValueError('submission_requires_the_exact_built_page_data')
+    page = verify_page_build(data_path, build_path)
+    if not page['delivery_verified']:
+        raise ValueError('submission_requires_full_current_video_delivery')
+    if delivery_manifest is not None:
+        if covers.reference(delivery_manifest) != page['delivery_manifest_ref']:
+            raise ValueError('submission_delivery_manifest_differs_from_page_build')
+    return dict(page, video_ref=dict(data['items'][0]['video']))
+
+
 
 
 
@@ -1457,7 +2120,7 @@ def main(argv=None):
 
     p=argparse.ArgumentParser(description=__doc__)
 
-    p.add_argument('action',choices=['init','upgrade','convert','render','check','operations-handoff','restore-archive'])
+    p.add_argument('action',choices=['init','upgrade','convert','render','check','operations-handoff','restore-archive','verify-html'])
 
     p.add_argument('--input',type=Path); p.add_argument('--output',type=Path)
 
@@ -1472,6 +2135,8 @@ def main(argv=None):
     p.add_argument('--archive',type=Path);p.add_argument('--archive-sha256');p.add_argument('--data-member');p.add_argument('--output-dir',type=Path)
 
     p.add_argument('--delivery-manifest',type=Path,help='Recheck full video delivery before marking this page complete')
+
+    p.add_argument('--package-receipt',type=Path,help='Recheck verified graphic-note/article package receipt before marking this page complete')
 
     p.add_argument('--stage',choices=['preparation','submission'],default='submission',help='Check local adaptation separately from actual upload UI checks')
 
@@ -1492,6 +2157,13 @@ def main(argv=None):
                 dict(path=str(args.archive.resolve()),sha256=args.archive_sha256),args.data_member,args.output_dir)
 
             print(json.dumps(result,ensure_ascii=True));return 0
+
+        if args.action == 'verify-html':
+            if not args.input:
+                raise ValueError('input_required')
+            result = verify_delivery_html(args.input, build_path=args.page_build)
+            print(json.dumps(result, ensure_ascii=True))
+            return 0
 
         if args.action == 'init':
 
@@ -1621,7 +2293,7 @@ def main(argv=None):
 
             if errors:raise ValueError('render_checkpoint_invalid: '+errors[0].message)
 
-        value=render(data, args.delivery_manifest) if args.action=='render' else operations_handoff(data) if args.action=='operations-handoff' else data
+        value=render(data, args.delivery_manifest, args.package_receipt) if args.action=='render' else operations_handoff(data) if args.action=='operations-handoff' else data
 
         write_new(args.output,value)
 
@@ -1637,7 +2309,11 @@ def main(argv=None):
 
             build=dict(schema_version='self-media.publication-page-build.v1',data_ref=current['publication_data'],
 
-                page_ref=covers.reference(args.output),generation_identity=generation_identity())
+                page_ref=covers.reference(args.output),generation_identity=generation_identity(),
+
+                delivery_manifest_ref=covers.reference(args.delivery_manifest) if args.delivery_manifest else None,
+
+                package_receipt_ref=covers.reference(args.package_receipt) if args.package_receipt else None)
 
             write_new(build_path,build)
 
@@ -1661,7 +2337,7 @@ def main(argv=None):
 
             write_new(request_path,checkpoint)
 
-        print(json.dumps(dict(status=('complete_local_candidate' if args.delivery_manifest else 'draft_preview')
+        print(json.dumps(dict(status=('complete_local_candidate' if (args.delivery_manifest or args.package_receipt) else 'draft_preview')
 
                               if args.action=='render' else 'ok',
 

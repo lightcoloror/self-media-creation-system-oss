@@ -1,0 +1,95 @@
+{
+  "schema_version": "content-fact-card.v0",
+  "fact_card_id": "fact-card-synthetic-drg-01",
+  "content_id": "synthetic-drg-plain-01",
+  "synthetic_only": true,
+  "revision_id": "fact-rev-synthetic-drg-001",
+  "canonical_status": "locked_for_draft",
+  "source_precedence": [
+    "official-policy-summary"
+  ],
+  "correction_log": [],
+  "facts": [
+    {
+      "fact_id": "fact-policy-ratio",
+      "text": "政策范围内住院费用按规定比例支付，实际个人自付还受起付线、封顶线及自费项目影响。",
+      "fact_type": "public-claim",
+      "sequence": 1,
+      "actor": "基本医保制度",
+      "action": "按政策范围内规定支付住院费用",
+      "status": "confirmed",
+      "allowed_wording": [
+        "政策范围内支付比例",
+        "受起付线、封顶线及目录外自费影响"
+      ],
+      "forbidden_paraphrases": [
+        "一定全报销",
+        "总账单报销比例"
+      ],
+      "last_confirmed_at": "2026-11-24T09:00:00+08:00",
+      "privacy_class": "public",
+      "quantitative_scope": {
+        "region": "合成全国制度说明",
+        "period": "现行医保政策说明窗口",
+        "population": "合成住院参保患者",
+        "event_or_condition": "符合医保目录条件的住院结算",
+        "measurement_window": "单次住院结算",
+        "metric_type": "ratio",
+        "denominator": "政策范围内医疗费用",
+        "value_nature": "observed-statistic",
+        "supports": [
+          "解释政策范围内报销比例的口径与限制"
+        ],
+        "does_not_support": [
+          "总账单报销比例",
+          "所有医院费用全部报销"
+        ]
+      },
+      "evidence_refs": [
+        {
+          "ref_type": "source",
+          "ref_id": "src-medicare-policy-01"
+        }
+      ]
+    },
+    {
+      "fact_id": "fact-drg-settlement",
+      "text": "DRG/DIP是医保部门按病组或病种向医院整体结算的支付方式，并设有特例单议等例外调整机制。",
+      "fact_type": "public-claim",
+      "sequence": 2,
+      "actor": "医保经办机构与定点医院",
+      "action": "按病组/病种整体结算并保留特例单议通道",
+      "status": "confirmed",
+      "allowed_wording": [
+        "医保向医院结算方式",
+        "特例单议或除外支付机制"
+      ],
+      "forbidden_paraphrases": [
+        "患者只能报一个固定金额"
+      ],
+      "last_confirmed_at": "2026-11-24T09:00:00+08:00",
+      "privacy_class": "public",
+      "evidence_refs": [
+        {
+          "ref_type": "source",
+          "ref_id": "src-drg-policy-01"
+        }
+      ]
+    }
+  ],
+  "unknowns": [
+    "具体医院院内病组年度微调细则未列入本合成说明。"
+  ],
+  "forbidden_claims": [
+    "一定赔",
+    "总账单报销比例",
+    "患者只能报一个固定金额"
+  ],
+  "gates": {
+    "fact": "pass",
+    "privacy": "pass",
+    "medical_insurance": "pass",
+    "authorization": "pass",
+    "rights": "pass"
+  }
+}

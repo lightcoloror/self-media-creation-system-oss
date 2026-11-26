@@ -77,7 +77,56 @@ def check_plan_text(plan, headline, approved_labels):
                    context=f"{plan['candidate']['candidate_id']}/{profile}")
 
 
-def package_check(path):
+def check_privacy_references(candidate, candidate_id):
+    """Fail-closed guard: self portrait references must be background-stripped, never raw bedroom/monitor originals."""
+    import cover_workbench as w
+
+    refs = []
+    if candidate.get('identity_reference_ref'):
+        refs.append(('candidate.identity_reference_ref', candidate['identity_reference_ref'], candidate.get('background_stripped')))
+    for idx, row in enumerate(candidate.get('identity_references') or []):
+        if isinstance(row, dict) and row.get('ref'):
+            refs.append((f'candidate.identity_references[{idx}]', row['ref'], row.get('background_stripped')))
+        elif isinstance(row, dict) and row.get('path'):
+            refs.append((f'candidate.identity_references[{idx}]', row, row.get('background_stripped')))
+    for label, ref, stripped in refs:
+        bound_path = w.bound(ref)
+        norm_p = str(bound_path).replace('\\', '/').casefold()
+        if stripped is False:
+            raise ValueError(f'cover_unstripped_private_reference: {candidate_id}/{label}')
+        if 'canonical-unmirrored' in norm_p and stripped is not True:
+            raise ValueError(f'cover_unstripped_private_reference: {candidate_id}/{label}: raw canonical-unmirrored portrait must be background-stripped first')
+        if stripped is not True and not any(tok in norm_p for tok in ('nobg', 'stripped', 'cutout', 'matting')):
+            raise ValueError(f'cover_privacy_strip_attestation_required: {candidate_id}/{label}')
+    return len(refs)
+
+
+def check_single_master(candidate, candidate_id, *, require_single_master=False):
+    """Fail-closed guard: all ratios of one cover candidate must share ONE locked visual master plate."""
+    import cover_workbench as w
+
+    images = candidate['images']
+    cand_master = candidate.get('master_plate_ref')
+    has_any_master = cand_master is not None or any(
+        isinstance(row, dict) and row.get('master_plate_ref') is not None for row in images.values()
+    )
+    if not require_single_master and not has_any_master:
+        return None
+    digests = set()
+    for ratio, row in images.items():
+        mref = row.get('master_plate_ref') if isinstance(row, dict) else None
+        if mref is None:
+            mref = cand_master
+        if not isinstance(mref, dict) or not mref.get('path') or not mref.get('sha256'):
+            raise ValueError(f'cover_candidate_master_plate_missing: {candidate_id}/{ratio}')
+        w.bound(mref)
+        digests.add(mref['sha256'].lower())
+    if len(digests) != 1:
+        raise ValueError(f'cover_candidate_master_plate_mismatch: {candidate_id}: all ratios of one candidate must derive from a single visual master')
+    return next(iter(digests))
+
+
+def package_check(path, *, require_single_master=None):
     """Review actual PNGs from either the workbench or another local renderer."""
     import cover_workbench as w
     from cover_strategy import _check_image
@@ -88,6 +137,11 @@ def package_check(path):
     stage = data.get('stage')
     if stage not in ('preview', 'final'):
         raise ValueError('invalid_cover_stage')
+    if require_single_master is None:
+        # Final stage always requires a locked single visual master (no self-declared JSON bypass).
+        enforce_master = (stage == 'final') or bool(data.get('require_single_master'))
+    else:
+        enforce_master = bool(require_single_master)
     project_id = w.safe_id(data['project_id'])
     text_key(data['reviewer'])
     candidates = data['candidates']
@@ -115,6 +169,8 @@ def package_check(path):
         if not isinstance(images, dict):
             raise ValueError('cover_images_must_be_keyed_by_ratio')
         check_ratios(stage, list(images))
+        check_privacy_references(candidate, candidate_id)
+        master_sha = check_single_master(candidate, candidate_id, require_single_master=enforce_master)
         checked = {}
         for ratio, row in images.items():
             if row.get('visual_passed') is not True:
@@ -122,7 +178,11 @@ def package_check(path):
             _check_image(row['image_ref'], ratio)
             check_text(row.get('visible_text'), headline, labels, context=f'{candidate_id}/{ratio}')
             checked[ratio] = row['image_ref']
-        rows.append(dict(id=candidate_id, style_id=style_id, headline=headline, images=checked))
+        entry = dict(id=candidate_id, style_id=style_id, headline=headline, images=checked)
+        if master_sha is not None:
+            entry['single_master_verified'] = True
+            entry['master_plate_sha256'] = master_sha
+        rows.append(entry)
     return dict(schema='self-media.cover-package-check.v1', project_id=project_id, stage=stage,
                 status='preview_reviewed' if stage == 'preview' else 'final_cover_package_complete',
                 package_ref=w.reference(path), candidates=rows,

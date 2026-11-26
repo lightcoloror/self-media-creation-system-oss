@@ -107,6 +107,8 @@
         },
         "publication_page_build": {"$ref": "#/$defs/reference"},
         "cover_brief": {"$ref": "#/$defs/reference"},
+        "rough_cut_delivery": {"$ref": "#/$defs/reference"},
+        "rough_cut_acceptance": {"$ref": "#/$defs/reference"},
         "review_request": {
           "$ref": "#/$defs/reference"
         },
@@ -118,7 +120,32 @@
         },
         "spoken_delivery_request": {
           "$ref": "#/$defs/reference"
-        }
+        },
+        "science_review": {"$ref": "#/$defs/reference"},
+        "privacy_review": {"$ref": "#/$defs/reference"},
+        "rights_review": {"$ref": "#/$defs/reference"},
+        "insurance_review": {"$ref": "#/$defs/reference"},
+        "package_receipt": {"$ref": "#/$defs/reference"},
+        "fact_card": {"$ref": "#/$defs/reference"},
+        "plain_language_plan": {"$ref": "#/$defs/reference"},
+        "plain_language_review": {"$ref": "#/$defs/reference"},
+        "translation_review": {"$ref": "#/$defs/reference"},
+        "clause_explanation": {"$ref": "#/$defs/reference"}
+      }
+    },
+    "risk_flags": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "medical_claims": {"type": "boolean"},
+        "insurance_terms": {"type": "boolean"},
+        "customer_case": {"type": "boolean"},
+        "minor_subject": {"type": "boolean"},
+        "third_party_copyright": {"type": "boolean"},
+        "serious_professional": {"type": "boolean"},
+        "science_claims": {"type": "boolean"},
+        "requires_plain_language": {"type": "boolean"},
+        "fact_confirmation_required": {"type": "boolean"}
       }
     },
     "editor": {

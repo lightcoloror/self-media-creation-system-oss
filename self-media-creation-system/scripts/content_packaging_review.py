@@ -595,26 +595,148 @@ def validate_schema(value: Any) -> None:
         raise PackagingReviewError("schema_validation_failed", errors[0])
 
 
+REQUIRED_INPUT_KEYS = {
+    "schema_version",
+    "content_id",
+    "platform",
+    "body_ref",
+    "body_sha256",
+    "title",
+    "cover_brief",
+    "opening_text",
+    "standalone_review",
+    "data_classification",
+    "human_review",
+    "privacy_review",
+}
+OPTIONAL_GATE_INPUT_KEYS = {
+    "plain_language_review",
+    "science_review",
+    "translation_review",
+    "fact_card_ref",
+    "clause_explanation_ref",
+}
+
+
+def _validate_optional_gate_bindings(
+    value: dict[str, Any],
+    *,
+    body_path: Path,
+    body_sha: str,
+    title: str,
+    cover: dict[str, Any],
+    opening_text: str,
+) -> dict[str, Any]:
+    """Validate optional plain-language / formal-science / translation / clause gates without disturbing legacy fixtures."""
+    import plain_language_gate as pl_gate
+
+    extras: dict[str, Any] = {}
+    fc_ref = value.get("fact_card_ref")
+    if fc_ref is not None:
+        if not isinstance(fc_ref, dict) or not {"path", "sha256"}.issubset(fc_ref):
+            raise PackagingReviewError("fact_card_ref_invalid", "fact_card_ref must provide path and sha256")
+        fc_path = resolve_repo_ref(fc_ref["path"], "fact_card_ref.path")
+        try:
+            _, fc_meta = pl_gate.validate_fact_card_lock(fc_path, expected_content_id=value["content_id"], expected_sha256=fc_ref["sha256"])
+        except pl_gate.PlainLanguageError as error:
+            raise PackagingReviewError(error.code, str(error)) from error
+        extras["fact_card_ref"] = {
+            "path": fc_ref["path"],
+            "sha256": fc_ref["sha256"],
+            "fact_card_id": fc_meta["fact_card_id"],
+            "revision_id": fc_meta["revision_id"],
+        }
+    sci_ref = value.get("science_review")
+    if sci_ref is not None:
+        if not isinstance(sci_ref, dict) or not {"review_ref", "review_sha256"}.issubset(sci_ref):
+            raise PackagingReviewError("formal_science_review_required", "science_review must bind review_ref and review_sha256")
+        sci_path = resolve_repo_ref(sci_ref["review_ref"], "science_review.review_ref")
+        if sha256_file(sci_path) != sci_ref["review_sha256"]:
+            raise PackagingReviewError("science_review_hash_drift", "science review credential bytes changed")
+        try:
+            sci_doc = pl_gate.validate_formal_science_review(sci_path, expected_content_id=value["content_id"], expected_body_path=body_path)
+        except pl_gate.PlainLanguageError as error:
+            raise PackagingReviewError(error.code, str(error)) from error
+        extras["science_review"] = {
+            "review_ref": sci_ref["review_ref"],
+            "review_sha256": sci_ref["review_sha256"],
+            "review_id": sci_doc["review_id"],
+            "gate_status": sci_doc["gate_status"],
+        }
+    trans_ref = value.get("translation_review")
+    if trans_ref is not None:
+        if not isinstance(trans_ref, dict) or not {"review_ref", "review_sha256"}.issubset(trans_ref):
+            raise PackagingReviewError("translation_review_invalid", "translation_review must bind review_ref and review_sha256")
+        trans_path = resolve_repo_ref(trans_ref["review_ref"], "translation_review.review_ref")
+        if sha256_file(trans_path) != trans_ref["review_sha256"]:
+            raise PackagingReviewError("translation_review_hash_drift", "translation review bytes changed")
+        try:
+            trans_doc = pl_gate.validate_formal_translation_review(trans_path, expected_content_id=value["content_id"], expected_body_path=body_path)
+        except pl_gate.PlainLanguageError as error:
+            raise PackagingReviewError(error.code, str(error)) from error
+        extras["translation_review"] = {
+            "review_ref": trans_ref["review_ref"],
+            "review_sha256": trans_ref["review_sha256"],
+            "review_id": trans_doc["review_id"],
+            "decision": trans_doc["decision"],
+        }
+    clause_ref = value.get("clause_explanation_ref")
+    if clause_ref is not None:
+        if not isinstance(clause_ref, dict) or not {"path", "sha256"}.issubset(clause_ref):
+            raise PackagingReviewError("clause_explanation_invalid", "clause_explanation_ref must bind path and sha256")
+        cpath = resolve_repo_ref(clause_ref["path"], "clause_explanation_ref.path")
+        if sha256_file(cpath) != clause_ref["sha256"]:
+            raise PackagingReviewError("clause_explanation_hash_drift", "clause explanation file changed")
+        clause_errs = pl_gate.validate_clause_explanation(cpath)
+        if clause_errs:
+            raise PackagingReviewError("clause_explanation_semantic_error", "; ".join(clause_errs))
+        extras["clause_explanation_ref"] = {"path": clause_ref["path"], "sha256": clause_ref["sha256"]}
+    pl_ref = value.get("plain_language_review")
+    if pl_ref is not None:
+        if not isinstance(pl_ref, dict) or not {"review_ref", "review_sha256"}.issubset(pl_ref):
+            raise PackagingReviewError("plain_language_review_invalid", "plain_language_review must bind review_ref and review_sha256")
+        pl_path = resolve_repo_ref(pl_ref["review_ref"], "plain_language_review.review_ref")
+        if sha256_file(pl_path) != pl_ref["review_sha256"]:
+            raise PackagingReviewError("plain_language_review_hash_drift", "plain-language-review bytes changed")
+        pl_doc = load_json(pl_path)
+        surfaces = {
+            "title": title,
+            "opening_text": opening_text,
+            "cover_headline": cover["headline"],
+            "cover_visual_direction": cover["visual_direction"],
+            "cover_supporting_text": cover.get("supporting_text") or "",
+        }
+        try:
+            pl_gate.validate_review(
+                pl_doc,
+                expected_content_id=value["content_id"],
+                expected_body_path=body_path,
+                expected_fact_card_ref=extras.get("fact_card_ref"),
+                extra_surface_texts=surfaces,
+                base_dir=pl_path.parent,
+                require_passed=True,
+            )
+        except pl_gate.PlainLanguageError as error:
+            raise PackagingReviewError(error.code, str(error)) from error
+        extras["plain_language_review"] = {
+            "review_ref": pl_ref["review_ref"],
+            "review_sha256": pl_ref["review_sha256"],
+            "review_id": pl_doc["review_id"],
+            "decision": pl_doc["decision"],
+        }
+    return extras
+
+
 def validate_input(value: dict[str, Any]) -> None:
     reject_sensitive_values(value)
-    require_exact_keys(
-        value,
-        {
-            "schema_version",
-            "content_id",
-            "platform",
-            "body_ref",
-            "body_sha256",
-            "title",
-            "cover_brief",
-            "opening_text",
-            "standalone_review",
-            "data_classification",
-            "human_review",
-            "privacy_review",
-        },
-        "input",
-    )
+    if not isinstance(value, dict):
+        raise PackagingReviewError("invalid_shape", "input must be an object")
+    missing = REQUIRED_INPUT_KEYS - set(value)
+    extra = set(value) - (REQUIRED_INPUT_KEYS | OPTIONAL_GATE_INPUT_KEYS)
+    if missing:
+        raise PackagingReviewError("missing_required_field", f"input missing: {sorted(missing)}")
+    if extra:
+        raise PackagingReviewError("unexpected_field", f"input extra: {sorted(extra)}")
     if value["schema_version"] != "content-packaging-review-input.v1":
         raise PackagingReviewError("schema_version_mismatch", str(value["schema_version"]))
     for key in ("content_id", "platform", "title", "opening_text"):
@@ -649,6 +771,14 @@ def _create_receipt_from_value(
     cover = cover_brief(value["cover_brief"])
     cover_sha = canonical_sha256(cover)
     opening_sha = sha256_bytes(value["opening_text"].encode("utf-8"))
+    optional_gates = _validate_optional_gate_bindings(
+        value,
+        body_path=body_path,
+        body_sha=observed_body_sha,
+        title=value["title"],
+        cover=cover,
+        opening_text=value["opening_text"],
+    )
     standalone = validate_standalone_review(
         value["standalone_review"],
         title=value["title"],
@@ -675,14 +805,15 @@ def _create_receipt_from_value(
         generated_at, "human_review.reviewed_at"
     ):
         generated_at = privacy["reviewed_at"]
-    identity_hash = canonical_sha256(
-        {
-            "review_scope_sha256": scope_sha,
-            "reviewed_input_sha256": input_sha256,
-            "human_credential_sha256": human["credential_sha256"],
-            "privacy_credential_sha256": None if privacy is None else privacy["credential_sha256"],
-        }
-    )
+    identity_payload: dict[str, Any] = {
+        "review_scope_sha256": scope_sha,
+        "reviewed_input_sha256": input_sha256,
+        "human_credential_sha256": human["credential_sha256"],
+        "privacy_credential_sha256": None if privacy is None else privacy["credential_sha256"],
+    }
+    if optional_gates:
+        identity_payload["optional_gates_sha256"] = canonical_sha256(optional_gates)
+    identity_hash = canonical_sha256(identity_payload)
     receipt: dict[str, Any] = {
         "schema_version": "content-packaging-review.v1",
         "receipt_id": f"packaging-review-{identity_hash[:24]}",
@@ -712,6 +843,7 @@ def _create_receipt_from_value(
         "privacy_review": privacy,
         "authority": copy.deepcopy(AUTHORITY),
     }
+    receipt.update(optional_gates)
     receipt["receipt_payload_sha256"] = canonical_sha256(receipt)
     validate_receipt_value(receipt)
     return receipt
@@ -800,6 +932,17 @@ def validate_receipt_value(receipt: dict[str, Any]) -> dict[str, Any]:
     )
     if receipt["privacy_review"] != privacy:
         raise PackagingReviewError("privacy_review_drift", "privacy review receipt fields changed")
+    optional_gates = _validate_optional_gate_bindings(
+        reviewed_input,
+        body_path=body_path,
+        body_sha=observed_body_sha,
+        title=package["title"],
+        cover=package["cover_brief"],
+        opening_text=reviewed_input["opening_text"],
+    )
+    for opt_key in OPTIONAL_GATE_INPUT_KEYS:
+        if receipt.get(opt_key) != optional_gates.get(opt_key):
+            raise PackagingReviewError("optional_gate_receipt_drift", f"optional gate '{opt_key}' differs from reviewed input")
     expected_generated_at = human["reviewed_at"]
     if privacy is not None and parse_time(privacy["reviewed_at"], "privacy_review.reviewed_at") > parse_time(
         expected_generated_at, "human_review.reviewed_at"
@@ -807,14 +950,15 @@ def validate_receipt_value(receipt: dict[str, Any]) -> dict[str, Any]:
         expected_generated_at = privacy["reviewed_at"]
     if receipt["generated_at"] != expected_generated_at:
         raise PackagingReviewError("generated_at_drift", "generated_at is not bound to the latest review")
-    identity_hash = canonical_sha256(
-        {
-            "review_scope_sha256": scope_sha,
-            "reviewed_input_sha256": input_binding["input_sha256"],
-            "human_credential_sha256": human["credential_sha256"],
-            "privacy_credential_sha256": None if privacy is None else privacy["credential_sha256"],
-        }
-    )
+    identity_payload: dict[str, Any] = {
+        "review_scope_sha256": scope_sha,
+        "reviewed_input_sha256": input_binding["input_sha256"],
+        "human_credential_sha256": human["credential_sha256"],
+        "privacy_credential_sha256": None if privacy is None else privacy["credential_sha256"],
+    }
+    if optional_gates:
+        identity_payload["optional_gates_sha256"] = canonical_sha256(optional_gates)
+    identity_hash = canonical_sha256(identity_payload)
     if receipt["receipt_id"] != f"packaging-review-{identity_hash[:24]}":
         raise PackagingReviewError("receipt_id_drift", "receipt_id does not match reviewed package")
     return {

@@ -27,10 +27,16 @@ STRATEGIES=[
          signals=['evidence','result'],kinds=['evidence'],minimum=1,maximum=1),
     dict(id='character-cutout',name='真实主体抠图',route='cutout-poster',recipe='cutout-type',family='cutout',
          signals=['character','reaction','emotion'],kinds=['reviewed_cutout'],minimum=1,maximum=1),
+    dict(id='magazine-fusion',name='杂志前后景大字融合',route='cutout-poster',recipe='magazine-depth-fusion',family='magazine-depth',
+         signals=['character','reaction','emotion','contrast','demonstration'],kinds=['reviewed_cutout'],minimum=1,maximum=1),
     dict(id='hybrid-metaphor',name='真实人物与概念装饰',route='hybrid',recipe=None,family='hybrid',
          signals=['wordplay','metaphor'],kinds=['photo','generated_decoration'],minimum=2,maximum=2),
     dict(id='ai-concept',name='AI 概念插画',route='ai-illustration',recipe=None,family='illustration',
          signals=['wordplay','metaphor','explanation'],kinds=[],minimum=0,maximum=0),
+    dict(id='ai-reference',name='参考图驱动封面',route='ai-reference',recipe=None,family='reference-guided',
+         signals=['character','emotion','demonstration','wordplay','metaphor','explanation',
+                  'contrast','before_after','sequence','relationship','discovery','reaction'],
+         kinds=['generation_reference'],minimum=1,maximum=None),
 ]
 
 
@@ -98,16 +104,21 @@ def _load_request(path):
     for key in ['min_angles','min_layout_families']+(['target_count'] if mode=='fixed_count' else []):
         if isinstance(policy.get(key),bool) or not isinstance(policy.get(key),int) or not 1<=policy[key]<=len(STRATEGIES):raise ValueError('invalid_selection_policy')
     if mode=='fixed_count' and max(policy['min_angles'],policy['min_layout_families'])>policy['target_count']:raise ValueError('impossible_selection_policy')
-    return req,current,assets,evidence,angles
+    saved_routes = {route['id']:route for route in rp['routes']}
+    methods = [method for method in STRATEGIES if method['route'] in saved_routes]
+    if 'ai-reference' in saved_routes and saved_routes['ai-reference'].get('reference_contract', 1) == 1:
+        methods = [dict(method, signals=method['signals'][:6]) if method['route']=='ai-reference' else method
+                   for method in methods]
+    return req,current,assets,evidence,angles,methods
 
 
 def select(request_path):
-    req,rp,assets,evidence,angles=_load_request(request_path)
+    req,rp,assets,evidence,angles,methods=_load_request(request_path)
     brief = rp['brief']
     style_choice = brief['style_choice'] if brief.get('cover_stage') == 'final' else None
     routes={r['id']:r for r in rp['routes']};dispositions=[];eligible=[]
     for angle in angles.values():
-        for method in STRATEGIES:
+        for method in methods:
             cid=w.safe_id(angle['id']+'--'+method['id'])
             row=dict(id=cid,angle_id=angle['id'],strategy_id=method['id'],route=method['route'])
             if style_choice and cid != style_choice['candidate_id']:
@@ -123,6 +134,8 @@ def select(request_path):
             for eid in order:
                 for aid in evidence[eid]['asset_ids']:
                     a=assets[aid];identity=a['artifact']['sha256']
+                    if a['kind'] == 'generation_reference' and a.get('generation_use_approved') is not True:
+                        continue
                     if a['kind'] in method['kinds'] and identity not in seen:
                         chosen.append(aid);seen.add(identity)
             # A mixed route needs one of each required kind, not merely the first
@@ -185,7 +198,7 @@ def select(request_path):
     # Keep legacy fixed-count plans byte-for-value replayable. New plans explain
     # their derived count; a new engine or recolor is not another treatment.
     if adaptive:
-        result['selection_scope']=dict(mode='all_applicable',registered_methods=len(STRATEGIES),
+        result['selection_scope']=dict(mode='all_applicable',registered_methods=len(methods),
             eligible_combinations=len(eligible),eligible_families=sorted(applicable_families),
             selected_count=len(selected),count_is_user_limit=False,
             reason='每个内容有依据、输入与授权齐备的构图族保留一个代表；数量由当前证据决定，不预设三套。登记方法库不是所有可能创意的穷举。')
@@ -227,6 +240,8 @@ def check_binding(spec, brief, plans, check_layouts=True):
         expected=chosen[cid]
         if c['route']!=expected['route']:raise ValueError('selected_route_substitution')
         if c.get('design_method') is not None and c['design_method']!=expected['recipe']:raise ValueError('selected_recipe_substitution')
+        if c['route'] == 'ai-reference' and set(c['generation_reference_ids']) != set(expected['asset_ids']):
+            raise ValueError('selected_generation_references_substitution')
         if cid in plans:
             plan=plans[cid]
             if {a['asset_id'] for a in plan['assets']}!=set(expected['asset_ids']):raise ValueError('selected_assets_substitution')
@@ -280,6 +295,7 @@ def review_init(desk_path,item_id='main'):
     pk=item['cover_pk']
     stage = pk.get('cover_stage')
     text_rules = {}
+    references = {}
     if stage or 'cover_build_ref' in pk:
         spec = w.read(w.bound(pk['cover_build_ref']))
         brief = w.validate_spec(spec)['brief']
@@ -288,6 +304,8 @@ def review_init(desk_path,item_id='main'):
         plans = {c['id']: w.read(w.bound(c['visual_plan_ref'])) for c in spec['candidates'] if c.get('visual_plan_ref')}
         text_rules = {c['id']: dict(headline=w.cover_headline(c, plans),
                                   approved_labels=brief.get('approved_cover_labels', {})) for c in spec['candidates']}
+        references = {c['id']:w.generation_references(c, brief) for c in spec['candidates']
+                      if c['route'] == 'ai-reference'}
     if not pk.get('strategy_plan_ref'):raise ValueError('content_selection_required_before_review')
     saved=w.read(w.bound(pk['strategy_plan_ref']));selection=verify(pk['strategy_plan_ref'],saved['route_plan_ref'])
     byid={a['id']:a for a in item['covers']};images={};rows=[]
@@ -300,6 +318,12 @@ def review_init(desk_path,item_id='main'):
             a=byid[aid];w.bound(a);images[c['id']][ratio]=a
             rows.append(dict(candidate_id=c['id'],ratio=ratio,image_ref=dict(path=a['path'],sha256=a['sha256']),
                 semantic_correct=None,mobile_readable=None,subject_safe=None,observation=''))
+            if c['id'] in references:
+                expected_refs = references[c['id']]
+                if (c.get('generation_references', expected_refs) != expected_refs or
+                    a.get('production_evidence', {}).get('generation_references') != expected_refs):
+                    raise ValueError('review_generation_reference_drift')
+                rows[-1]['generation_references'] = expected_refs
             if stage:
                 rows[-1].update(visible_text=None, **text_rules[c['id']])
     if set(images)!={c['id'] for c in selection['selected']}:raise ValueError('review_selected_concept_set_mismatch')
@@ -330,15 +354,79 @@ def review_check(path):
         for row in actual:
             _text(row.get('observation'),'visual_observation')
             if any(row.get(field) is not True for field in checks):raise ValueError('visual_review_not_passed')
-            if key == 'images' and stage:
+            if key == 'images':
                 rule = expected_images[(row['candidate_id'],row['ratio'])]
-                cover_policy.check_text(row.get('visible_text'), rule['headline'], rule['approved_labels'],
-                                        context=f"{row['candidate_id']}/{row['ratio']}")
+                if row.get('generation_references') != rule.get('generation_references'):
+                    raise ValueError('review_generation_reference_drift')
+                if stage:
+                    cover_policy.check_text(row.get('visible_text'), rule['headline'], rule['approved_labels'],
+                                            context=f"{row['candidate_id']}/{row['ratio']}")
     status = {'preview': 'preview_reviewed', 'final': 'final_cover_package_complete'}.get(
         stage, 'complete_candidate_package_pending_human_selection')
-    return dict(schema='self-media.cover-delivery-check.v1',status=status,
+    single_master_digests = {}
+    if stage == 'final' or any(row.get('master_plate_ref') for row in review.get('images', [])):
+        desk_data = w.desk.normalize(w.read(w.bound(review['desk_ref'])))
+        item = next(i for i in desk_data['items'] if i['id'] == review['item_id'])
+        pk = item['cover_pk']
+        byid = {a['id']: a for a in item['covers']}
+        spec_by_id = {}
+        if pk.get('cover_build_ref'):
+            spec = w.read(w.bound(pk['cover_build_ref']))
+            spec_by_id = {c['id']: c for c in spec.get('candidates', [])}
+        review_by_cid = {}
+        for row in review.get('images', []):
+            review_by_cid.setdefault(row['candidate_id'], {})[row['ratio']] = row
+        for pk_cand in pk['candidates']:
+            cid = pk_cand['id']
+            spec_cand = spec_by_id.get(cid, {})
+            spec_outputs = {o.get('ratio'): o for o in spec_cand.get('outputs', []) if isinstance(o, dict)}
+            declared_refs = []
+            for src_ref in (spec_cand.get('master_plate_ref'), pk_cand.get('master_plate_ref'), review.get('master_plate_ref')):
+                if src_ref is not None:
+                    declared_refs.append(src_ref)
+            cand_master = spec_cand.get('master_plate_ref') or pk_cand.get('master_plate_ref') or review.get('master_plate_ref')
+            images_payload = {}
+            for ratio, aid in pk_cand['cover_by_ratio'].items():
+                rrow = review_by_cid.get(cid, {}).get(ratio, {})
+                sout = spec_outputs.get(ratio, {})
+                cover_asset = byid.get(aid, {})
+                ratio_refs = [x for x in (sout.get('master_plate_ref'), cover_asset.get('master_plate_ref'), rrow.get('master_plate_ref')) if x is not None]
+                declared_refs.extend(ratio_refs)
+                mref = sout.get('master_plate_ref') or cover_asset.get('master_plate_ref') or rrow.get('master_plate_ref')
+                images_payload[ratio] = {'master_plate_ref': mref} if mref is not None else {}
+            if stage == 'final':
+                build_has_master = (
+                    spec_cand.get('master_plate_ref') is not None
+                    or (bool(pk_cand['cover_by_ratio']) and all(
+                        spec_outputs.get(r, {}).get('master_plate_ref') is not None
+                        for r in pk_cand['cover_by_ratio']
+                    ))
+                )
+                if not build_has_master:
+                    raise ValueError(f'cover_candidate_master_plate_missing: {cid}: build spec must provide master_plate_ref for final stage')
+            if declared_refs:
+                declared_digests = set()
+                for ref in declared_refs:
+                    if not isinstance(ref, dict) or not ref.get('path') or not ref.get('sha256'):
+                        raise ValueError(f'cover_candidate_master_plate_missing: {cid}')
+                    w.bound(ref)
+                    declared_digests.add(ref['sha256'].lower())
+                if len(declared_digests) > 1:
+                    raise ValueError(f'cover_candidate_master_plate_mismatch: {cid}: conflicting master_plate_ref between build spec and review')
+            digest = cover_policy.check_single_master(
+                {'master_plate_ref': cand_master, 'images': images_payload},
+                cid,
+                require_single_master=(stage == 'final'),
+            )
+            if digest:
+                single_master_digests[cid] = digest
+    out = dict(schema='self-media.cover-delivery-check.v1',status=status,
         review_ref=w.reference(path),images=len(review['images']),distinctness_checks=len(review['pairs']),
         agent_visual_review_passed=True,human_quality_approved=False,publish_authorized=False,
         image_checks=dict(hash_bound=True, png_decoded=True, ratio_and_resolution_checked=True),
         subject_safety=dict(status='declared_in_bound_visual_observations',
                             automatic_subject_detection=False, observation_author_authenticated=False))
+    if stage == 'final' or single_master_digests:
+        out['single_master_verified'] = bool(single_master_digests)
+        out['master_plate_sha256'] = single_master_digests
+    return out

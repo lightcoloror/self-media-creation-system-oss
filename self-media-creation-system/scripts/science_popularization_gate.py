@@ -16,6 +16,11 @@ from jsonschema import Draft202012Validator, FormatChecker
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SCRIPTS_DIR = ROOT / "scripts"
+if str(SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_DIR))
+import runtime_paths
+
 SCHEMA = ROOT / "schemas" / "science-popularization-review.v1.schema.json"
 SOURCE_CARD = ROOT / "docs" / "references" / "cast-science-popularization-guide-2026.v1.json"
 FIXTURE = ROOT / "fixtures" / "science-popularization-review-v1" / "synthetic.input.json"
@@ -75,6 +80,12 @@ def resolve_ref(value: Any) -> Path:
     candidate = Path(value)
     if candidate.is_absolute() or ".." in candidate.parts:
         raise ScienceReviewError("invalid_reference", value)
+    if candidate.parts[:1] == (".runtime",):
+        resolved = runtime_paths.resolve_runtime_arg(ROOT, candidate).resolve()
+        allowed_bases = (ROOT.resolve(),) + runtime_paths.allowed_runtime_roots(ROOT)
+        if not any(resolved.is_relative_to(base) for base in allowed_bases) or not resolved.is_file():
+            raise ScienceReviewError("artifact_missing", value)
+        return resolved
     resolved = (ROOT / candidate).resolve()
     if not resolved.is_relative_to(ROOT.resolve()) or not resolved.is_file():
         raise ScienceReviewError("artifact_missing", value)
@@ -323,18 +334,25 @@ def validate_receipt(value: dict[str, Any]) -> None:
             raise ScienceReviewError('audience_tier_misrepresented', 'receipt must preserve unverified audience effects')
 
 
+def _allowed_output_roots() -> tuple[Path, ...]:
+    roots = [root.resolve() for root in OUTPUT_ROOTS]
+    for base in runtime_paths.allowed_runtime_roots(ROOT):
+        roots.append((base / "science-popularization-review").resolve())
+    return tuple(dict.fromkeys(roots))
+
+
 def write_receipt(path: Path, value: dict[str, Any]) -> str:
-    resolved = path.resolve()
-    if not any(resolved.is_relative_to(root.resolve()) for root in OUTPUT_ROOTS):
+    resolved = runtime_paths.resolve_runtime_arg(ROOT, path).resolve() if not path.is_absolute() else path.resolve()
+    if not any(resolved.is_relative_to(root) for root in _allowed_output_roots()):
         raise ScienceReviewError("output_path_prohibited", "output must stay under a review runtime root")
     encoded = (json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2) + "\n").encode("utf-8")
-    path.parent.mkdir(parents=True, exist_ok=True)
+    resolved.parent.mkdir(parents=True, exist_ok=True)
     try:
-        with path.open("xb") as handle:
+        with resolved.open("xb") as handle:
             handle.write(encoded)
         return "created"
     except FileExistsError:
-        if path.read_bytes() != encoded:
+        if resolved.read_bytes() != encoded:
             raise ScienceReviewError("output_conflict", "existing output differs")
         return "already-identical"
 
@@ -363,10 +381,12 @@ def main() -> int:
     args = parser.parse_args()
     try:
         if args.command == "create":
-            receipt = create_receipt(args.input)
+            in_path = runtime_paths.resolve_runtime_arg(ROOT, args.input) if not args.input.is_absolute() else args.input
+            receipt = create_receipt(in_path)
             print(json.dumps({"status": write_receipt(args.output, receipt), "review_id": receipt["review_id"]}, ensure_ascii=False))
         elif args.command == "validate":
-            validate_receipt(load_json(args.receipt))
+            rec_path = runtime_paths.resolve_runtime_arg(ROOT, args.receipt) if not args.receipt.is_absolute() else args.receipt
+            validate_receipt(load_json(rec_path))
             print(json.dumps({"status": "passed"}))
         else:
             print(json.dumps(check(), ensure_ascii=False, sort_keys=True))

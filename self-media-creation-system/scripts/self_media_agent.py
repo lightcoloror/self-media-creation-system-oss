@@ -9,6 +9,7 @@ import hashlib
 import importlib.util
 import json
 import os
+import shutil
 import sys
 from types import SimpleNamespace
 from pathlib import Path
@@ -161,6 +162,10 @@ DIRECT_OPERATIONS = {
         "security": "python scripts/content_operations_cycle.py record-security --store <private-store> --input <security-input.json>",
     },
     "validation_command": "python scripts/content_operations_cycle.py validate-store --store <private-store>",
+    "distribution_review_command": (
+        "python scripts/content_operations_cycle.py review-distribution --store <private-store> "
+        "--review-id <operating-review-id> --metric <views|saves|shares|attributed_new_followers> --window d7"
+    ),
     "scheduled_content_policy": (
         "A human-reported scheduled date or time is not a publication event. Record it in "
         "the current platform publication package or publishing calendar, preserve date-only "
@@ -292,20 +297,21 @@ def _validate_author_context(manifest_path: Path, capsule: dict[str, Any], step:
         raise AgentEntryError(getattr(error, "code", "author_context_invalid"), str(error)) from error
 
 
-def _validate_framework_context(manifest_path: Path, step: dict[str, Any]) -> None:
-    """Consume the editorial decision before drafting; receipt presence is insufficient."""
+def _validate_framework_context(manifest_path: Path, step: dict[str, Any]) -> dict[str, Any] | None:
+    """Validate the editorial decision and return its selected facets for drafting."""
     stage_by_step = {
         "draft-one-observation": "draft", "build-evidence-draft": "draft",
-        "project-case-script": "draft", "discover-research-owner": "research",
+        "project-case-script": "draft", "draft-prerecord-case": "draft",
+        "draft-interview-guide": "draft", "discover-research-owner": "research",
         "produce-verified-research-output": "research",
     }
     if step["step_id"] not in stage_by_step:
-        return
+        return None
     manifest = load_json(manifest_path)
     refs = [a for a in manifest["artifacts"] if a.get("source_role") in {
         "topic-angle-decision", "topic-angle-decision-if-upstream-selected"}]
-    if not refs and step["step_id"] == "project-case-script":
-        return  # Existing case-only routes retain their explicitly conditional applicability.
+    if not refs and step["step_id"] in {"project-case-script", "draft-prerecord-case", "draft-interview-guide"}:
+        return None  # Existing case/prerecording routes retain conditional applicability.
     if len(refs) != 1:
         raise AgentEntryError("framework_decision_required", "one current v2 framework decision is required before this step")
     spec = importlib.util.spec_from_file_location("self_media_framework_gate", ROOT / "scripts/topic_angle_decision.py")
@@ -320,6 +326,30 @@ def _validate_framework_context(manifest_path: Path, step: dict[str, Any]) -> No
         raise AgentEntryError(getattr(error, "code", "framework_decision_invalid"), str(error)) from error
     if not result["may_continue"]:
         raise AgentEntryError("framework_return_required", json.dumps(result, ensure_ascii=False))
+    return result.get("topic_facets")
+
+
+def _framework_theory_hint(manifest_path: Path, step: dict[str, Any]) -> dict[str, Any] | None:
+    if step["step_id"] not in {
+        "draft-one-observation", "build-evidence-draft", "project-case-script",
+        "draft-prerecord-case", "draft-interview-guide", "discover-research-owner",
+        "produce-verified-research-output",
+    }:
+        return None
+    manifest = load_json(manifest_path)
+    refs = [a for a in manifest["artifacts"] if a.get("source_role") in {
+        "topic-angle-decision", "topic-angle-decision-if-upstream-selected"}]
+    if len(refs) != 1:
+        return None
+    decision = load_json((manifest_path.parent / refs[0]["path"]).resolve())
+    elements = decision.get("framework_decision", {}).get("facet_elements", [])
+    if not any(item.get("kind") == "theory" for item in elements):
+        return None
+    return {
+        "skills": ["dbs-theory-grounding", "dbs-standard-answer"],
+        "runbook": str((ROOT.parent / "docs/content-creation-system/routing/skill-invocation-runbook.md").resolve()),
+        "note": "On-demand theory grounding / counterexample audit only; unverified primary origins stay supplement and never replace fact verification.",
+    }
 
 
 def _load_creation_route():
@@ -346,7 +376,9 @@ def _purpose_context(manifest_path, capsule, step, *, historical=False):
         raise AgentEntryError(error.code, str(error)) from error
 
 
-def _execution_brief(full_step: dict[str, Any], decision: dict[str, Any] | None, purpose=None) -> dict[str, Any]:
+def _execution_brief(
+    full_step: dict[str, Any], decision: dict[str, Any] | None, purpose=None, *, topic_facets=None, theory_hint=None, plain_language_guidance=None,
+) -> dict[str, Any]:
     instruction = full_step["instruction"]
     authoring = _load_author_writing_context()
     if full_step["step_id"] in authoring.WRITING_STEPS | authoring.REVIEW_STEPS:
@@ -362,9 +394,25 @@ def _execution_brief(full_step: dict[str, Any], decision: dict[str, Any] | None,
             f"\nRoute={decision['primary_route']}; read {decision['guide']}; "
             f"story-design={decision['story_design_applicability']}; selected route only."
         )
+    if topic_facets is not None:
+        instruction += (
+            "\nDraft from the confirmed topic_facets. Use the main element and supporting relationships "
+            "to deliver the promised dominant action, then check the actual draft against that frame."
+        )
+    if plain_language_guidance is not None:
+        instruction += (
+            "\nApply the locked plain-language plan: explain every specialized concept on first use, "
+            "keep explicit analogy boundaries and quantitative denominators, and never use forbidden overclaims."
+        )
     result = {"instruction": instruction, "command": full_step.get("command"), "stop_on_error": True}
     if purpose is not None:
         result['purpose_context'] = purpose
+    if topic_facets is not None:
+        result["topic_facets"] = topic_facets
+    if theory_hint is not None:
+        result["theory_grounding_hint"] = theory_hint
+    if plain_language_guidance is not None:
+        result["plain_language_guidance"] = plain_language_guidance
     return result
 
 
@@ -412,7 +460,7 @@ def _tool_descriptor(tool_id: str, *, detailed: bool) -> dict[str, Any]:
                     "symbol": f"tool-registry://{registry_id}/AGENT_DISCOVERY",
                     "sha256": sha256_file(discovery),
                 },
-                "discovery_command": f"python ../tools/public_toolchain.py discover {registry_id}",
+                "discovery_command": f"local-tools discover {registry_id}",
                 "preferred_interfaces": sorted(entry.get("preferred_interfaces") or []),
                 "command_names": sorted((entry.get("commands") or {}).keys()),
                 "boundary_summary": list(entry.get("avoid_or_boundary") or [])[:4],
@@ -836,10 +884,18 @@ def prepare_step_handoff(
     missing = sorted(set(step["input_roles"]) - set(source_roles))
     if missing:
         raise AgentEntryError("context_roles_missing", ",".join(missing))
+    topic_facets = None
+    theory_hint = None
+    plain_language_guidance = None
     if not inspection_only:
         creation_decision = _validate_creation_context(context_manifest_path, capsule, step)
-        _validate_framework_context(context_manifest_path, step)
+        topic_facets = _validate_framework_context(context_manifest_path, step)
+        theory_hint = _framework_theory_hint(context_manifest_path, step)
         _validate_author_context(context_manifest_path, capsule, step)
+        author_inputs = _load_author_writing_context().manifest_inputs(context_manifest_path)
+        if "author-writing-context" in author_inputs:
+            actx = _load_author_writing_context().validate_context(author_inputs["author-writing-context"][0])
+            plain_language_guidance = actx.get("plain_language_guidance")
     else:
         creation_decision = None
     if step_id == "confirm-manual-publication-or-rework" and not inspection_only:
@@ -867,7 +923,14 @@ def prepare_step_handoff(
     catalog = load_catalog()
     recipe = _capsule_recipe(catalog, capsule)
     full_step = next(item for item in recipe["steps"] if item["step_id"] == step_id)
-    execution_brief = _execution_brief(full_step, creation_decision, purpose)
+    execution_brief = _execution_brief(
+        full_step,
+        creation_decision,
+        purpose,
+        topic_facets=topic_facets,
+        theory_hint=theory_hint,
+        plain_language_guidance=plain_language_guidance,
+    )
     seed = sha256_value(
         {
             "capsule": capsule["payload_sha256"],
@@ -946,9 +1009,12 @@ def validate_step_handoff(path: Path, expected_tool_id: str | None = None, *, al
     step = next((item for item in capsule["step_index"] if item["step_id"] == handoff["step"]["step_id"]), None)
     if step != handoff["step"] or capsule["request_id"] != handoff["request_id"]:
         raise AgentEntryError("handoff_capsule_drift", "handoff no longer matches its capsule")
+    topic_facets = None
+    theory_hint = None
     if handoff["status"] != "inspection_only":
         creation_decision = _validate_creation_context((path.parent / handoff["context"]["manifest"]["path"]).resolve(), capsule, step)
-        _validate_framework_context((path.parent / handoff["context"]["manifest"]["path"]).resolve(), step)
+        topic_facets = _validate_framework_context((path.parent / handoff["context"]["manifest"]["path"]).resolve(), step)
+        theory_hint = _framework_theory_hint((path.parent / handoff["context"]["manifest"]["path"]).resolve(), step)
         _validate_author_context((path.parent / handoff["context"]["manifest"]["path"]).resolve(), capsule, step, historical=historical)
     else:
         creation_decision = None
@@ -962,7 +1028,7 @@ def validate_step_handoff(path: Path, expected_tool_id: str | None = None, *, al
     full_step = next(item for item in recipe["steps"] if item["step_id"] == step["step_id"])
     purpose = _purpose_context((path.parent / handoff['context']['manifest']['path']).resolve(), capsule, step,
                                historical=historical) if handoff['status'] != 'inspection_only' else None
-    expected_brief = _execution_brief(full_step, creation_decision, purpose)
+    expected_brief = _execution_brief(full_step, creation_decision, purpose, topic_facets=topic_facets, theory_hint=theory_hint)
     if handoff["execution_brief"] != expected_brief:
         raise AgentEntryError("recipe_detail_drift", "step execution detail drifted")
     if handoff["status"] != "inspection_only":
@@ -1032,7 +1098,7 @@ def _validate_previous_step(capsule: dict[str, Any], step_id: str, previous_path
                     except Exception as error:
                         raise AgentEntryError(getattr(error, "code", "editorial_invalid"), str(error)) from error
                     fields = ["records_complete", "checks_complete", "required_issues_closed", "preparation_complete", "observations_complete"]
-                    fields.append('purpose_continuity_complete')
+                    fields.extend(["purpose_continuity_complete", "story_realization_complete", "facet_realization_complete"])
                     if probe_handoff["step"]["step_id"] in _load_author_writing_context().REVIEW_STEPS:
                         fields.append("author_confirmation_recorded")
                     if not all(verified[field] for field in fields):
@@ -1126,7 +1192,13 @@ def _validate_final_cut_timing_output(handoff_path: Path, receipt_path: Path, ha
         raise AgentEntryError("timing_input_revision_drift", "final timing evidence uses another observation input")
 
 
-def verify_step_output(handoff_path: Path, receipt_path: Path, *, historical: bool = False) -> dict[str, Any]:
+def verify_step_output(
+    handoff_path: Path,
+    receipt_path: Path,
+    *,
+    historical: bool = False,
+    require_semantic: bool = False,
+) -> dict[str, Any]:
     handoff = validate_step_handoff(handoff_path, historical=historical)
     receipt = load_json(receipt_path)
     validate_document(receipt, OUTPUT_RECEIPT_SCHEMA_PATH, "step_output_receipt")
@@ -1168,7 +1240,9 @@ def verify_step_output(handoff_path: Path, receipt_path: Path, *, historical: bo
     if editorial is not None:
         required = ["records_complete", "checks_complete", "required_issues_closed", "preparation_complete", "observations_complete"]
         if not historical:
-            required.append('purpose_continuity_complete')
+            required.extend(["purpose_continuity_complete", "story_realization_complete", "facet_realization_complete"])
+            if "plain_language_complete" in editorial:
+                required.append("plain_language_complete")
         if handoff["step"]["step_id"] in _load_author_writing_context().REVIEW_STEPS:
             required.append("author_confirmation_recorded")
         if not all(editorial[field] for field in required):
@@ -1198,6 +1272,21 @@ def verify_step_output(handoff_path: Path, receipt_path: Path, *, historical: bo
     scope = "transport_and_sequence_only"
     workflow_step_completed = False
     completion_claim = "handoff-validated-owner-semantics-unverified"
+    import evidence_checks
+
+    non_purpose_outputs: list[Any] = []
+    has_non_json_output = False
+    for ref in receipt["outputs"]:
+        out_path = (receipt_path.parent / ref["path"]).resolve()
+        if out_path in purpose_review_paths:
+            continue
+        if out_path.suffix.lower() == ".json":
+            non_purpose_outputs.append(load_json(out_path))
+        elif out_path.stat().st_size > 0:
+            has_non_json_output = True
+
+    outputs_are_hollow = bool(non_purpose_outputs) and all(evidence_checks.is_hollow_payload(item) for item in non_purpose_outputs)
+
     if handoff["step"]["step_id"] == "produce-verified-research-output":
         matching = [ref for ref in receipt["outputs"] if ref["path"].lower().endswith(".json")
                     and (receipt_path.parent / ref['path']).resolve() not in purpose_review_paths]
@@ -1207,12 +1296,12 @@ def verify_step_output(handoff_path: Path, receipt_path: Path, *, historical: bo
         scope = "research_output_schema_and_answer_readiness"
         workflow_step_completed = True
         completion_claim = "verified-research-output-admitted"
-    if handoff["step"]["step_id"] == "final-timing":
+    elif handoff["step"]["step_id"] == "final-timing":
         _validate_final_cut_timing_output(handoff_path, receipt_path, handoff, receipt)
         scope = "final_cut_timing_schema_hash_and_observed_thresholds"
         workflow_step_completed = True
         completion_claim = "final-cut-timing-evidence-validated"
-    if capsule.get("creation_phase") == "prerecording":
+    elif capsule.get("creation_phase") == "prerecording":
         spec = importlib.util.spec_from_file_location("prerecording_validation", ROOT / "scripts/prerecording_validation.py")
         adapter = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(adapter)
@@ -1222,6 +1311,48 @@ def verify_step_output(handoff_path: Path, receipt_path: Path, *, historical: bo
         scope = "prerecord_contract_and_existing_gates"
         workflow_step_completed = True
         completion_claim = "prerecord-contract-and-required-human-gates-validated"
+    elif editorial is not None and not outputs_are_hollow and (purpose_review is not None or historical):
+        scope = "editorial_integrity_and_purpose_continuity"
+        workflow_step_completed = True
+        completion_claim = "author-writing-and-purpose-review-verified"
+    elif handoff["step"]["interface"] == "human_gate" and non_purpose_outputs and not outputs_are_hollow:
+        valid_gates = [
+            evidence_checks.validate_human_gate_credential(item, step_id=handoff["step"]["step_id"])
+            for item in non_purpose_outputs
+            if isinstance(item, dict)
+        ]
+        if valid_gates and any(ok for ok, _ in valid_gates):
+            scope = "human_gate_hash_bound_credential"
+            workflow_step_completed = True
+            completion_claim = "human-gate-credential-bound"
+    elif non_purpose_outputs and not outputs_are_hollow:
+        structured = [
+            item for item in non_purpose_outputs
+            if isinstance(item, dict) and (isinstance(item.get("schema_version"), str) or isinstance(item.get("schema"), str))
+        ]
+        if structured:
+            progress_records = [item for item in structured if item.get("schema_version") == "self-media-step-progress.v1"]
+            if progress_records:
+                if all(
+                    rec.get("handoff_id") == handoff["handoff_id"]
+                    and rec.get("step_id") == handoff["step"]["step_id"]
+                    and rec.get("status") in {"recorded", "completed", "not_required", "passed"}
+                    for rec in progress_records
+                ):
+                    scope = "lightweight_step_progress_recorded"
+                    workflow_step_completed = True
+                    completion_claim = "step-progress-recorded-bound-to-handoff"
+            else:
+                scope = "domain_contract_verified"
+                workflow_step_completed = True
+                completion_claim = "step-domain-contract-verified"
+
+    if require_semantic and not workflow_step_completed:
+        raise AgentEntryError(
+            "hollow_or_unverified_step_output",
+            f"step {handoff['step']['step_id']} output lacks verified semantic/progress or hash-bound human gate evidence",
+        )
+    _ = has_non_json_output
     return {
         "ok": True,
         "status": receipt["status"],
@@ -1311,6 +1442,8 @@ def derive_sequence_status(capsule_path: Path, receipt_paths: list[Path]) -> dic
         state = "sequence_complete_owner_semantics_pending"
     else:
         state = "sequence_complete"
+    import evidence_checks
+
     status = {
         "schema_version": "self-media-sequence-status.v1",
         "capsule_id": capsule["capsule_id"],
@@ -1327,6 +1460,7 @@ def derive_sequence_status(capsule_path: Path, receipt_paths: list[Path]) -> dic
             "managed_pipeline_completion_claim_allowed": all_owner_semantics_verified,
         },
         "publication_authority": False,
+        "stage_summary": evidence_checks.summarize_sequence_checkpoints(steps, accepted),
     }
     status["payload_sha256"] = sha256_value(status)
     validate_document(status, SEQUENCE_STATUS_SCHEMA_PATH, "sequence_status")
@@ -1420,8 +1554,7 @@ def doctor() -> dict[str, Any]:
     return {
         "schema_version": "self-media-agent-doctor.v1",
         "ok": True,
-        "status": "metadata_contracts_ready",
-        "external_runtime_verification": "not-performed",
+        "status": "local_operational_consumer_ready",
         "canonical_route": {
             "contract_set_id": route["manifest"]["contract_set_id"],
             "contract_set_version": route["manifest"]["contract_set_version"],
@@ -1472,12 +1605,14 @@ def capabilities() -> dict[str, Any]:
         "direct_operations": copy.deepcopy(DIRECT_OPERATIONS),
         "publication_desk": publication_desk_capability(),
         "video_delivery": {"entrypoint": "python scripts/self_media_agent.py video-delivery",
-                           "guide": "docs/video-delivery.md", "automatic_publish": False},
+                           "guide": "docs/video-delivery.md", "automatic_publish": False,
+                           "frame_safety": ["frame-safety-bind", "frame-postcheck", "observe-final"]},
         "video_review": {
             "entrypoint": "python scripts/self_media_agent.py video-review",
             "guide": "docs/source-time-range-review.md",
             "purposes": ["rough_cut_recipe", "fine_cut_recipe", "material_requirement"],
             "surface": "targeted-review.html", "review_access_mode": "source_time_range",
+            "pre_page_frame_check": "frame-precheck; required by fine_cut_recipe prepare",
             "media_export_allowed": False,
             "production_requires_separate_explicit_user_request": True,
         },
@@ -1506,6 +1641,22 @@ def capabilities() -> dict[str, Any]:
             "transport_only_is_managed_completion": False,
             "guide": "docs/agent-sequence-enforcement-2026-09-05.md",
         },
+        "plain_language_and_fact_gates": {
+            "entrypoint": "python scripts/self_media_agent.py plain-language",
+            "tool_script": "scripts/plain_language_gate.py",
+            "fact_card_schema": "content-fact-card.v0 (locked_for_draft)",
+            "plan_schema": "plain-language-plan.v1",
+            "review_schema": "plain-language-review.v1",
+            "companion_gates": [
+                "scripts/serious_content_translation_gate.py",
+                "scripts/science_popularization_gate.py",
+                "validate_insurance_clause_explanations.py",
+            ],
+            "fail_closed_surfaces": [
+                "body", "subtitle_cues", "burned_subtitles",
+                "title", "cover_brief", "opening_text", "desk_cards",
+            ],
+        },
         "boundaries": copy.deepcopy(catalog["boundaries"]),
     }
 
@@ -1531,6 +1682,7 @@ def publication_desk_capability() -> dict[str, Any]:
             "verify_current_page": "python scripts/publication_desk.py check --stage preparation --input <page.data.json> --page-build <page.build.json>",
             "restore_archive": "python scripts/publication_desk.py restore-archive --archive <archive.zip> --archive-sha256 <sha256> --data-member <saved-data-member> --output-dir <new-workspace>",
             "sync_project": "python scripts/self_media_agent.py sync-project --state <STATE.json> --request <page.work-request.json> --expected-state-sha256 <sha256> --receipt <new-receipt.json> --apply",
+            "mark_published": "python scripts/self_media_agent.py mark-published --desk <desk.json> --platforms <p1> [<p2> ...] --user-message <user-msg.json> --quote <exact-quote> --output-dir <new-dir> [--state <STATE.json> --expected-state-sha256 <sha256> --apply]",
             "operations_handoff": "python scripts/publication_desk.py operations-handoff --input <project.json> --output <new-observations.json>",
         },
         "template_policy": "shared_renderer_project_data_only", "requires_previous_project": False,
@@ -1583,7 +1735,7 @@ def authoring_capability() -> dict[str, Any]:
         "store_tool": "scripts/author_expression_store.py",
         "store_help_command": "python scripts/author_expression_store.py --help",
         "commands": {
-            "prepare_context": "python scripts/author_writing_context.py prepare --store <store.sqlite3> --input <brief.json> --request-id <request-id> --output <author-context.json>",
+            "prepare_context": "python scripts/author_writing_context.py prepare --store <store.sqlite3> --input <brief.json> --request-id <request-id> [--topic-decision <topic-decision.v2.json>] --output <author-context.json>",
             "bind_revision": "python scripts/author_writing_context.py revision --store <store.sqlite3> --input <revision.json> --context <author-context.json> --draft <draft.json> --output <author-revision.json>",
             "bind_review": "python scripts/author_writing_context.py review --store <store.sqlite3> --input <review.json> --revision <author-revision.json> --output <author-reviewed.json>",
             "check_context": "python scripts/author_writing_context.py check --context <author-context.json>",
@@ -1626,6 +1778,214 @@ def resume_receipt(receipt: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def mark_published(
+    desk_path: Path,
+    platforms: list[str],
+    user_message_path: Path,
+    quote: str,
+    output_dir: Path,
+    *,
+    state_path: Path | None = None,
+    expected_state_sha256: str | None = None,
+    apply_state: bool = False,
+    state_output: Path | None = None,
+    receipt_output: Path | None = None,
+) -> dict[str, Any]:
+    from contextlib import ExitStack
+    from datetime import datetime, timezone
+    from tempfile import TemporaryDirectory
+    import archive_workflow
+    import cover_workbench as covers
+    import entry_selection
+    import publication_desk as desk
+
+    desk_file = Path(desk_path).resolve()
+    msg_file = Path(user_message_path).resolve()
+    out_root = Path(output_dir).resolve()
+    if not desk_file.is_file():
+        raise AgentEntryError("publication_desk_input_missing", str(desk_file))
+    if not msg_file.is_file():
+        raise AgentEntryError("publication_user_message_missing", str(msg_file))
+    user_msg = load_json(msg_file)
+    source_text = user_msg.get("text")
+    if (user_msg.get("role") != "user" or not isinstance(source_text, str)
+            or not isinstance(quote, str) or not quote.strip() or quote not in source_text):
+        raise AgentEntryError("publication_fact_requires_bound_user_message", "quote must appear in a role=user message record")
+    try:
+        desk_data = desk.upgrade(load_json(desk_file), str(desk_file))
+    except Exception as error:
+        raise AgentEntryError("publication_desk_invalid", str(error)) from error
+    if len(desk_data.get("items", [])) != 1:
+        raise AgentEntryError("publication_desk_single_item_required", "mark-published requires a single-item publication desk")
+    normalized_platforms = list(dict.fromkeys(desk.ALIASES.get(p, p) for p in platforms if p))
+    if not normalized_platforms or any(p not in desk_data["items"][0]["platforms"] for p in normalized_platforms):
+        raise AgentEntryError("publication_fact_platform_scope_invalid", ",".join(platforms))
+    try:
+        desk.verify_publication_quote_scope(quote, normalized_platforms, source_text)
+    except ValueError as err:
+        err_msg = str(err)
+        if "publication_fact_scheduled_not_published" in err_msg:
+            raise AgentEntryError("publication_fact_scheduled_not_published", err_msg)
+        if "publication_fact_platform_unconfirmed_in_quote" in err_msg:
+            raise AgentEntryError("publication_fact_platform_unconfirmed_in_quote", err_msg)
+        raise AgentEntryError("publication_fact_scope_invalid", err_msg)
+    if state_path is not None and not expected_state_sha256:
+        raise AgentEntryError("project_sync_expected_hash_required", "--expected-state-sha256 is required when --state is supplied")
+    if (state_path is None and (apply_state or state_output is not None)) or (apply_state and state_output is not None):
+        raise AgentEntryError("project_sync_new_receipt_and_explicit_mode_required", "Choose a STATE and either apply or write a new projection")
+    apply_mode = state_path is not None and state_output is None
+    state_target = None
+    if state_path is not None:
+        state_path = Path(state_path).absolute()
+        state_target = state_path if apply_mode else Path(state_output).absolute()
+        for path in (state_path, state_target):
+            if archive_workflow.linked(path):
+                raise AgentEntryError("project_sync_link_protected", str(path))
+    receipt_output = Path(receipt_output).absolute() if receipt_output is not None else None
+
+    out_root.mkdir(parents=True, exist_ok=True)
+    fact_path = out_root / "publication-fact.json"
+    upgraded_desk_path = out_root / "publication-data.published.json"
+    work_request_path = out_root / "publication.work-request.json"
+    state_receipt_path = out_root / "state-sync-receipt.json"
+    state_before_path = state_receipt_path.with_suffix(".state-before.json")
+    targets = [fact_path, upgraded_desk_path, work_request_path]
+    if state_path is not None:
+        targets.extend((state_receipt_path, state_before_path))
+    if state_target is not None and not apply_mode:
+        targets.append(state_target)
+    if receipt_output is not None:
+        targets.append(receipt_output)
+    if len({target.resolve() for target in targets}) != len(targets):
+        raise AgentEntryError("mark_published_output_conflict", "Publication outputs must have distinct paths")
+    for target in targets:
+        if target.exists() or target.is_symlink():
+            raise AgentEntryError("mark_published_output_exists", str(target))
+
+    committed_files: list[Path] = []
+
+    def commit_new(src: Path, target: Path) -> None:
+        # Single-file, same-volume publication without replacing existing bytes.
+        if os.name == "nt":
+            os.rename(src, target)
+        else:
+            os.link(src, target)
+        committed_files.append(target)
+
+    with ExitStack() as staging:
+        staging_dir = Path(staging.enter_context(TemporaryDirectory(
+            prefix=".mark-published-", dir=out_root, ignore_cleanup_errors=True,
+        )))
+        staging_fact_path = staging_dir / fact_path.name
+        staging_upgraded_path = staging_dir / upgraded_desk_path.name
+        staging_work_req_path = staging_dir / work_request_path.name
+        staging_state_receipt_path = staging_dir / state_receipt_path.name
+
+        def stage_for(target: Path) -> Path:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            directory = staging.enter_context(TemporaryDirectory(
+                prefix=".mark-published-", dir=target.parent, ignore_cleanup_errors=True,
+            ))
+            return Path(directory) / target.name
+
+        video_sha256 = (desk_data["items"][0].get("video") or {}).get("sha256", "")
+        fact = {
+            "schema_version": "self-media.publication-fact.v1",
+            "project_id": desk_data["project_id"],
+            "kind": "user_reported_published",
+            "video_sha256": video_sha256,
+            "source_ref": {"path": str(msg_file), "sha256": sha256_file(msg_file)},
+            "quote": quote,
+            "platforms": normalized_platforms,
+            "recorded_at": datetime.now(timezone.utc).isoformat(),
+        }
+        desk.write_new(staging_fact_path, fact)
+        desk_data["publication_fact_ref"] = {"path": str(staging_fact_path), "sha256": sha256_file(staging_fact_path)}
+        try:
+            desk_data["publication_summary"] = desk.publication_summary(desk_data)
+        except Exception as error:
+            raise AgentEntryError("publication_fact_validation_failed", str(error)) from error
+        desk_data["publication_fact_ref"]["path"] = str(fact_path)
+        desk.write_new(staging_upgraded_path, desk_data)
+
+        request_id = "desk-" + hashlib.sha256(desk_data["project_id"].encode("utf-8")).hexdigest()[:20]
+        current_refs: dict[str, Any] = {"publication_data": {"path": str(upgraded_desk_path), "sha256": sha256_file(staging_upgraded_path)}}
+        if desk_data.get("context_manifest_ref"):
+            current_refs["context_manifest"] = desk_data["context_manifest_ref"]
+            request_id = covers.read(covers.bound(desk_data["context_manifest_ref"]))["task_id"]
+        checkpoint = {
+            "schema_version": "self-media-work-request.v1",
+            "request_id": request_id,
+            "requested_output": "publication_page",
+            "selection_basis": "Record user-confirmed manual publication fact; no automatic upload or browser prefill.",
+            "current": current_refs,
+        }
+        validate_document(checkpoint, entry_selection.SCHEMA, "mark_published_work_request")
+        desk.write_new(staging_work_req_path, checkpoint)
+        request_ref = {"path": str(work_request_path), "sha256": sha256_file(staging_work_req_path)}
+
+        try:
+            for source, target in (
+                (staging_fact_path, fact_path),
+                (staging_upgraded_path, upgraded_desk_path),
+                (staging_work_req_path, work_request_path),
+            ):
+                commit_new(source, target)
+
+            sync_report = None
+            staged_state = None
+            if state_path is not None:
+                staged_state = stage_for(state_target)
+                sync_report = entry_selection.sync_project(
+                    sys.modules[__name__], state_path, work_request_path, expected_state_sha256,
+                    staging_state_receipt_path, output=staged_state,
+                )
+                sync_report["target_ref"]["path"] = str(state_target)
+                staging_state_receipt_path.unlink()
+                desk.write_new(staging_state_receipt_path, sync_report)
+                commit_new(staging_state_receipt_path.with_suffix(".state-before.json"), state_before_path)
+                commit_new(staging_state_receipt_path, state_receipt_path)
+
+            result = {
+                "schema_version": "self-media.manual-publication-receipt.v1",
+                "status": "manual_publication_recorded",
+                "publication_mode": "manual_fill_only_no_ai_prefill",
+                "project_id": desk_data["project_id"],
+                "platforms": normalized_platforms,
+                "publication_fact_ref": desk_data["publication_fact_ref"],
+                "publication_data_ref": current_refs["publication_data"],
+                "work_request_ref": request_ref,
+                "state_sync_receipt": sync_report,
+                "early_snapshot_window_hours": [48, 72],
+                "d7_snapshot_window_hours": [156, 180],
+                "operations_next_command": "python scripts/content_operations_cycle.py record-publication --store <operations-store> --input <live-publication-record.json>",
+            }
+            if receipt_output is not None:
+                staged_receipt = stage_for(receipt_output)
+                desk.write_new(staged_receipt, result)
+                commit_new(staged_receipt, receipt_output)
+
+            # STATE is committed last. Every earlier synchronous write can roll back.
+            if state_path is not None:
+                if sha256_file(state_path) != expected_state_sha256:
+                    raise AgentEntryError("project_state_drift", "State changed before publication commit")
+                if apply_mode:
+                    os.replace(staged_state, state_target)
+                else:
+                    commit_new(staged_state, state_target)
+        except Exception as error:
+            rollback_failures = []
+            for target in reversed(committed_files):
+                try:
+                    target.unlink(missing_ok=True)
+                except OSError as cleanup_error:
+                    rollback_failures.append(f"{target}: {cleanup_error}")
+            if rollback_failures:
+                raise AgentEntryError("mark_published_rollback_incomplete", "; ".join(rollback_failures)) from error
+            raise
+    return result
+
+
 def write_or_print(value: dict[str, Any], output: Path | None) -> None:
     rendered = json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
     if output is None:
@@ -1659,6 +2019,8 @@ def parse_args() -> argparse.Namespace:
     integrity.add_argument("integrity_args", nargs=argparse.REMAINDER)
     article = subparsers.add_parser("article-delivery", help="Connect existing editorial records to article layout and review; no publishing.")
     article.add_argument("article_args", nargs=argparse.REMAINDER)
+    plain = subparsers.add_parser("plain-language", help="Validate locked fact cards, build/check plain-language plans, and evaluate readability & meaning fidelity reviews.")
+    plain.add_argument("plain_args", nargs=argparse.REMAINDER)
     creation = subparsers.add_parser("creation-route", help="Select story, independent Vlog, explanation or technical-rework route before creating content.")
     creation.add_argument("route_args", nargs=argparse.REMAINDER)
     review = subparsers.add_parser("video-review", help="Review rough/fine editing recipes or materials by original time ranges; never export review media.")
@@ -1673,6 +2035,17 @@ def parse_args() -> argparse.Namespace:
     sync.add_argument("--receipt", type=Path, required=True)
     sync.add_argument("--output", dest="state_output", type=Path)
     sync.add_argument("--apply", action="store_true")
+    mark = subparsers.add_parser("mark-published", help="Record user-reported manual publication, upgrade the desk, and optionally sync STATE with rollback on write failure.")
+    mark.add_argument("--desk", type=Path, required=True)
+    mark.add_argument("--platforms", nargs="+", required=True)
+    mark.add_argument("--user-message", type=Path, required=True)
+    mark.add_argument("--quote", required=True)
+    mark.add_argument("--output-dir", type=Path, required=True)
+    mark.add_argument("--state", type=Path)
+    mark.add_argument("--expected-state-sha256")
+    mark.add_argument("--state-output", type=Path)
+    mark.add_argument("--apply", action="store_true")
+    mark.add_argument("--output", type=Path)
     prepare = subparsers.add_parser("prepare-step", help="Build and bind the mandatory context receipt for one existing-owner step.")
     prepare.add_argument("--capsule", type=Path, required=True)
     prepare.add_argument("--step-id", required=True)
@@ -1684,6 +2057,11 @@ def parse_args() -> argparse.Namespace:
     verify = subparsers.add_parser("verify-step-output", help="Verify an existing owner output receipt before the next step.")
     verify.add_argument("--handoff", type=Path, required=True)
     verify.add_argument("--receipt", type=Path, required=True)
+    verify.add_argument(
+        "--require-semantic",
+        action="store_true",
+        help="Fail closed on hollow or transport-only step outputs.",
+    )
     sequence = subparsers.add_parser("sequence-status", help="Derive the only allowed next step from ordered receipts; optionally require complete owner-verified execution.")
     sequence.add_argument("--capsule", type=Path, required=True)
     sequence.add_argument("--receipt", type=Path, action="append", default=[])
@@ -1717,26 +2095,36 @@ def main() -> int:
             result=entry_selection.sync_project(sys.modules[__name__],args.state,args.request,
                 args.expected_state_sha256,args.receipt,output=args.state_output,apply=args.apply)
             write_or_print(result,None)
+        elif args.command == "mark-published":
+            result = mark_published(
+                args.desk,
+                args.platforms,
+                args.user_message,
+                args.quote,
+                args.output_dir,
+                state_path=args.state,
+                expected_state_sha256=args.expected_state_sha256,
+                apply_state=args.apply,
+                state_output=args.state_output,
+                receipt_output=args.output,
+            )
+            if args.output is None:
+                write_or_print(result, None)
         elif args.command == "publication-desk":
             if args.desk_args:
                 import publication_desk
                 return publication_desk.main(args.desk_args)
             write_or_print(publication_desk_capability(), None)
         elif args.command == "video-delivery":
+            import video_delivery
             if not args.delivery_args:
-                write_or_print({"entrypoint": "python scripts/self_media_agent.py video-delivery",
-                    "actions": ["init", "context", "context-bind", "identity-select", "bgm-select", "progress-select", "cta-init", "cta-bind", "observe-final", "preflight", "render", "check", "deliver"],
-                    "cta_review": "Separate interaction/acquisition decisions; no mandatory CTA. Reuse one plan from script review through final-media landing acceptance.",
-                    "progress_overlay": "explicit use/not_used decision; default script headings and independent navigation font presets; checked reservation, actual render/layout evidence and current human checks required",
-                    "guide": "docs/video-delivery.md", "workflow_count": 5,
-                    "draft_render_is_complete": False, "automatic_publish": False}, None)
+                write_or_print(video_delivery.describe_capabilities(), None)
             else:
-                import video_delivery
                 return video_delivery.main(args.delivery_args)
         elif args.command == "covers":
             write_or_print({"entrypoint":"python scripts/cover_workbench.py", "guide":"docs/cover-workbench.md",
-                "actions":["catalog","methods","styles","doctor","init","plan","strategy-init","strategy-plan","design-recipes","design-init","design-build","compile","render","collect","review-init","review-check"],
-                "default_flow":"content evidence -> distinct angle/treatment selection -> per-ratio design -> render -> matrix and visual review",
+                "actions":["catalog","methods","styles","doctor","init","plan","strategy-init","strategy-plan","design-recipes","design-init","design-build","compile","render","collect","review-init","review-check","package-check"],
+                "default_flow":"content evidence -> style previews (1–2 ratios each) -> review actual images -> user confirms style -> final (3:4, 9:16, 4:3, 16:9) -> review visible text on all current PNGs",
                 "selection_guide":"docs/content-driven-covers.md",
                 "color_policy":"No universal palette. Choose colors for current content, emotion and source imagery; brand colors require explicit account/content applicability. Candidate palettes may differ; ratio derivatives share each candidate's palette.",
                 "color_guide":"docs/generic-cover-design.md#配色选择与账号边界",
@@ -1755,6 +2143,9 @@ def main() -> int:
         elif args.command == "article-delivery":
             import article_delivery
             return article_delivery.main(args.article_args)
+        elif args.command == "plain-language":
+            import plain_language_gate
+            return plain_language_gate.main(args.plain_args or ["check"])
         elif args.command == "video-review":
             import video_review_delivery
             return video_review_delivery.main(args.review_args or ["policy"])
@@ -1768,7 +2159,7 @@ def main() -> int:
         elif args.command == "prepare-step":
             prepare_step_handoff(args.capsule, args.step_id, args.context_manifest, args.context_receipt, args.output, args.previous_receipt, args.inspect_only)
         elif args.command == "verify-step-output":
-            result = verify_step_output(args.handoff, args.receipt)
+            result = verify_step_output(args.handoff, args.receipt, require_semantic=args.require_semantic)
             write_or_print(result, None)
             if not result["ok"]:
                 return 2
@@ -1792,7 +2183,7 @@ def main() -> int:
                 "message": str(error),
                 "automatic_retry": False,
             },
-            getattr(args, "output", None),
+            None if args.command == "mark-published" else getattr(args, "output", None),
         )
         return 2
     return 0

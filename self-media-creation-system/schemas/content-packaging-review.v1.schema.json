@@ -83,6 +83,59 @@
         "external_send_authorized": false
       }
     },
+    "plain_language_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["review_ref", "review_sha256", "review_id", "decision"],
+      "properties": {
+        "review_ref": {"$ref": "#/$defs/repo_ref"},
+        "review_sha256": {"$ref": "#/$defs/sha256"},
+        "review_id": {"type": "string", "pattern": "^plain-review-[a-f0-9]{24}$"},
+        "decision": {"const": "passed"}
+      }
+    },
+    "science_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["review_ref", "review_sha256", "review_id", "gate_status"],
+      "properties": {
+        "review_ref": {"$ref": "#/$defs/repo_ref"},
+        "review_sha256": {"$ref": "#/$defs/sha256"},
+        "review_id": {"type": "string", "minLength": 3, "maxLength": 120},
+        "gate_status": {"const": "passed"}
+      }
+    },
+    "translation_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["review_ref", "review_sha256", "review_id", "decision"],
+      "properties": {
+        "review_ref": {"$ref": "#/$defs/repo_ref"},
+        "review_sha256": {"$ref": "#/$defs/sha256"},
+        "review_id": {"type": "string", "minLength": 3, "maxLength": 120},
+        "decision": {"const": "pass"}
+      }
+    },
+    "fact_card_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "fact_card_id", "revision_id"],
+      "properties": {
+        "path": {"$ref": "#/$defs/repo_ref"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "fact_card_id": {"type": "string", "minLength": 1, "maxLength": 160},
+        "revision_id": {"type": "string", "minLength": 1, "maxLength": 160}
+      }
+    },
+    "clause_explanation_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/repo_ref"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
     "receipt_payload_sha256": {"$ref": "#/$defs/sha256"}
   },
   "allOf": [

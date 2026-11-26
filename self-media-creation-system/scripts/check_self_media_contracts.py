@@ -20,13 +20,19 @@ from jsonschema import Draft202012Validator, FormatChecker
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKSPACE_ROOT = ROOT.parent
+SCRIPTS_ROOT = Path(__file__).resolve().parent
+if str(SCRIPTS_ROOT) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_ROOT))
+
+import runtime_paths  # noqa: E402
 
 
 def controlled_subprocess_env() -> dict[str, str]:
-    """Keep Python and test temp writes inside a repository-owned runtime root."""
+    """Keep Python and test temp writes inside the governed runtime root."""
 
-    temp_root = ROOT / ".runtime" / "test-temp"
-    pycache_root = ROOT / ".runtime" / "python-cache"
+    active_runtime = runtime_paths.runtime_root(ROOT)
+    temp_root = active_runtime / "test-temp"
+    pycache_root = active_runtime / "python-cache"
     temp_root.mkdir(parents=True, exist_ok=True)
     pycache_root.mkdir(parents=True, exist_ok=True)
     env = os.environ.copy()
@@ -86,6 +92,12 @@ PUBLICATION_FREEZE = importlib.util.module_from_spec(PUBLICATION_FREEZE_SPEC)
 PUBLICATION_FREEZE_SPEC.loader.exec_module(PUBLICATION_FREEZE)
 
 CONTENT_OPERATIONS_CYCLE_SCRIPT = ROOT / "scripts" / "content_operations_cycle.py"
+
+PLAIN_LANGUAGE_SCRIPT = ROOT / "scripts" / "plain_language_gate.py"
+PLAIN_LANGUAGE_SPEC = importlib.util.spec_from_file_location("plain_language_gate", PLAIN_LANGUAGE_SCRIPT)
+assert PLAIN_LANGUAGE_SPEC and PLAIN_LANGUAGE_SPEC.loader
+PLAIN_LANGUAGE_GATE = importlib.util.module_from_spec(PLAIN_LANGUAGE_SPEC)
+PLAIN_LANGUAGE_SPEC.loader.exec_module(PLAIN_LANGUAGE_GATE)
 
 CONTENT_PACKAGING_REVIEW_SCRIPT = ROOT / "scripts" / "content_packaging_review.py"
 CONTENT_PACKAGING_REVIEW_SPEC = importlib.util.spec_from_file_location(
@@ -159,6 +171,30 @@ assert STORY_MATERIAL_INBOX_SPEC and STORY_MATERIAL_INBOX_SPEC.loader
 STORY_MATERIAL_INBOX = importlib.util.module_from_spec(STORY_MATERIAL_INBOX_SPEC)
 STORY_MATERIAL_INBOX_SPEC.loader.exec_module(STORY_MATERIAL_INBOX)
 
+OWNER_50590_SCRIPT = ROOT / "scripts" / "content_contract_50590_owner_receipt.py"
+OWNER_50590_SPEC = importlib.util.spec_from_file_location(
+    "content_contract_50590_owner_receipt", OWNER_50590_SCRIPT
+)
+assert OWNER_50590_SPEC and OWNER_50590_SPEC.loader
+OWNER_50590 = importlib.util.module_from_spec(OWNER_50590_SPEC)
+OWNER_50590_SPEC.loader.exec_module(OWNER_50590)
+
+OWNER_353DC9_SCRIPT = ROOT / "scripts" / "content_contract_353dc9_owner_receipt.py"
+OWNER_353DC9_SPEC = importlib.util.spec_from_file_location(
+    "content_contract_353dc9_owner_receipt", OWNER_353DC9_SCRIPT
+)
+assert OWNER_353DC9_SPEC and OWNER_353DC9_SPEC.loader
+OWNER_353DC9 = importlib.util.module_from_spec(OWNER_353DC9_SPEC)
+OWNER_353DC9_SPEC.loader.exec_module(OWNER_353DC9)
+
+OWNER_202B82_SCRIPT = ROOT / "scripts" / "content_contract_202b82_owner_receipt.py"
+OWNER_202B82_SPEC = importlib.util.spec_from_file_location(
+    "content_contract_202b82_owner_receipt", OWNER_202B82_SCRIPT
+)
+assert OWNER_202B82_SPEC and OWNER_202B82_SPEC.loader
+OWNER_202B82 = importlib.util.module_from_spec(OWNER_202B82_SPEC)
+OWNER_202B82_SPEC.loader.exec_module(OWNER_202B82)
+
 CANONICAL_ROUTING_SCRIPT = ROOT / "scripts" / "canonical_routing.py"
 CANONICAL_ROUTING_SPEC = importlib.util.spec_from_file_location(
     "canonical_routing", CANONICAL_ROUTING_SCRIPT
@@ -205,8 +241,15 @@ BASELINE_OPERATIONS_VALIDATOR = WORKSPACE_ROOT / "scripts" / "validate-content-o
 BASELINE_OPERATIONS_TESTS = WORKSPACE_ROOT / "tests"
 QUALITY_GATES_PATH = ROOT.parent / "docs" / "content-creation-system" / "routing" / "quality-gates.json"
 RECIPES_PATH = ROOT / "recipes" / "self-media-recipes.v1.json"
-TYPOGRAPHY_POLICY_PATH = ROOT / "schemas" / "typography-gates.v1.policy.json"
-
+TYPOGRAPHY_POLICY_PATH = (
+    WORKSPACE_ROOT
+    / "ai-video-tools-20260708"
+    / "mvp-video-pipeline"
+    / "src"
+    / "video_creation_pipeline"
+    / "policies"
+    / "typography-gates.v1.json"
+)
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -365,6 +408,38 @@ def validate_science_popularization_gate() -> list[str]:
         return ["science_popularization_gate: deterministic fixture check did not pass"]
 
     return [f"science_popularization_gate: {error}" for error in SCIENCE_POPULARIZATION_GATE.routing_errors()]
+
+
+def validate_plain_language_gate() -> list[str]:
+    """Run the plain-language plan/review gate check and prove binding/recipe wiring."""
+
+    errors: list[str] = []
+    try:
+        result = PLAIN_LANGUAGE_GATE.check()
+    except Exception as error:
+        return [f"plain_language_gate: {error}"]
+    if result.get("status") != "passed" or result.get("idempotency") != "byte-stable":
+        errors.append("plain_language_gate: deterministic fixture check did not pass")
+    binding = load_json(ROOT / "routing-binding.v1.json")
+    roles = {item.get("role") for item in binding.get("operational_extensions", [])}
+    required_roles = {
+        "plain-language-pre-draft-plan",
+        "plain-language-comprehension-fidelity-review",
+        "plain-language-and-fact-lock-gate",
+    }
+    missing_roles = sorted(required_roles - roles)
+    if missing_roles:
+        errors.append("plain_language_gate: missing operational extensions " + ", ".join(missing_roles))
+    catalog = load_json(ROOT / "recipes" / "self-media-recipes.v1.json")
+    recipes = {item["recipe_id"]: item for item in catalog["recipes"]}
+    for rid in ("moments-short-post", "xhs-evidence-graphic", "case-video-candidate"):
+        gates = set(recipes[rid].get("quality_gates") or [])
+        if "fact-lock-plain-language-gate" not in gates:
+            errors.append(f"plain_language_gate: {rid} missing quality gate fact-lock-plain-language-gate")
+    rework_gates = set(recipes["context-efficient-rework"].get("quality_gates") or [])
+    if "plain-language-review-invalidated-if-text-changed" not in rework_gates:
+        errors.append("plain_language_gate: context-efficient-rework missing plain-language invalidation gate")
+    return errors
 
 
 def validate_editorial_angle_integration() -> list[str]:
@@ -552,20 +627,27 @@ def validate_story_material_inbox() -> list[str]:
     return []
 
 
+def validate_owner_50590_candidate() -> list[str]:
+    try:
+        OWNER_50590.validate_owner_candidate()
+    except Exception as error:
+        return [f"content_contract_50590_owner: {error}"]
+    return []
 
 
+def validate_owner_353dc9_candidate() -> list[str]:
+    try:
+        OWNER_353DC9.validate_current_candidate()
+    except Exception as error:
+        return [f"content_contract_353dc9_owner: {error}"]
+    return []
 
 
-
-
-def validate_public_content_owner() -> list[str]:
-    """Compare the current reviewed owner schema, without claiming historical receipts."""
-    owner = WORKSPACE_ROOT / "content-studio-poc" / "schemas" / "content-item.schema.json"
-    shared = WORKSPACE_ROOT / "docs" / "content-creation-system" / "content-item.schema.json"
-    if not owner.is_file():
-        return ["public_content_owner: fixed public ContentStudio source checkout is missing"]
-    if owner.read_bytes() != shared.read_bytes():
-        return ["public_content_owner: content-item schema bytes differ from the explicit public owner"]
+def validate_owner_202b82_candidate() -> list[str]:
+    try:
+        OWNER_202B82.validate_current_candidate()
+    except Exception as error:
+        return [f"content_contract_202b82_owner: {error}"]
     return []
 
 
@@ -578,13 +660,7 @@ def validate_canonical_routing() -> list[str]:
 
 
 def validate_channel_portfolio() -> list[str]:
-    # This is an explicitly superseded synthetic compatibility example. The
-    # actual operator portfolio is separately supplied and never copied here.
-    fixture = load_json(ROOT / "fixtures" / "channel-portfolio.v1.synthetic.json")
-    if fixture.get("status") != "superseded":
-        return ["channel_portfolio: public fixture must not claim active user approval"]
-    return [f"channel_portfolio: {error}" for error in CHANNEL_PORTFOLIO.validate(fixture)]
-
+    return [f"channel_portfolio: {error}" for error in CHANNEL_PORTFOLIO.validate()]
 
 
 def validate_agent_entry() -> list[str]:
@@ -814,11 +890,14 @@ def contract_errors(
         + validate_publication_version_freeze()
         + validate_serious_content_translation_gate()
         + validate_science_popularization_gate()
+        + validate_plain_language_gate()
         + validate_cross_platform_fact_consistency_gate()
         + validate_content_packaging_review()
         + [f"content_bundle: {error}" for error in validate_diagnosis_fixture()]
         + validate_baseline_operations_fixture()
-        + validate_public_content_owner()
+        + validate_owner_50590_candidate()
+        + validate_owner_353dc9_candidate()
+        + validate_owner_202b82_candidate()
         + validate_canonical_routing()
         + validate_channel_portfolio()
         + validate_agent_entry()
@@ -852,9 +931,9 @@ def main() -> int:
         "serious-content dual-gate translation review, science-popularization review, "
         "and cross-platform fact consistency, "
         "frozen-body standalone-item packaging review, "
-        "content-bundle contract, byte-matched current public ContentStudio schema, "
-        "and the registered "
-        "canonical routing contract set with a superseded synthetic twelve-platform portfolio, "
+        "content-bundle contract, immutable content-item 50590/353dc9 lineage plus the "
+        "current 202b82 owner candidate, and the registered "
+        "canonical routing contract set with the twelve-platform channel portfolio, "
         "plus five compact weak-Agent cold-start paths and the owner-local small-model "
         "evidence-to-candidate loop."
     )

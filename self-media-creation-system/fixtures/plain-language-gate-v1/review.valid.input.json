@@ -1,0 +1,96 @@
+{
+  "schema_version": "plain-language-review.v1",
+  "request_id": "req-synthetic-drg-plain-01",
+  "content_id": "synthetic-drg-plain-01",
+  "reviewed_at": "2026-11-24T09:20:00+08:00",
+  "plan_ref": {
+    "path": "fixtures/plain-language-gate-v1/plan.valid.json",
+    "sha256": "5abb224a32ff5e2a9c05476169050a94f6ac24d271506c26feffb607443a320d"
+  },
+  "fact_card_ref": {
+    "path": "fixtures/plain-language-gate-v1/locked-fact-card.json",
+    "sha256": "2bf518c3ff97d493a28a093ceb723f47baa4d00bf0583d671f9c15b028b74613",
+    "fact_card_id": "fact-card-synthetic-drg-01",
+    "revision_id": "fact-rev-synthetic-drg-001"
+  },
+  "body_binding": {
+    "body_ref": "fixtures/plain-language-gate-v1/synthetic-body.md",
+    "body_sha256": "81d2c6896e29d5398e2d7a57fb603a610092410dc94d779f8248dc7a5ad5bea2"
+  },
+  "draft_mode": "article",
+  "review_level": "editor-review",
+  "reviewer_roles": [
+    "plain-language-editor"
+  ],
+  "readability_limitations": "Synthetic offline fixture review; no real audience sampling conducted.",
+  "comprehension_check": {
+    "terms_checked": [
+      {
+        "term": "DRG/DIP",
+        "first_use_anchor": "DRG/DIP主要是医保给医院算账的规则",
+        "understandable_at_first_use": true,
+        "order_logical": true
+      },
+      {
+        "term": "政策范围内支付比例",
+        "first_use_anchor": "政策范围内支付比例只按医保目录和政策范围内医疗费用做分母计算",
+        "understandable_at_first_use": true,
+        "order_logical": true
+      }
+    ],
+    "read_aloud_checked": true,
+    "issues": [],
+    "reader_can_retell_core": true,
+    "reader_can_retell_scope": true
+  },
+  "meaning_fidelity_check": {
+    "claim_comparisons": [
+      {
+        "fact_id": "fact-policy-ratio",
+        "original_quote": "政策范围内住院费用按规定比例支付，实际个人自付还受起付线、封顶线及自费项目影响。",
+        "draft_quote": "政策范围内支付比例只按医保目录和政策范围内医疗费用做分母计算，受起付线、封顶线及目录外自费影响",
+        "subject_preserved": true,
+        "conditions_preserved": true,
+        "numbers_and_units_preserved": true,
+        "time_and_scope_preserved": true,
+        "exceptions_preserved": true,
+        "strength_preserved": true,
+        "denominator_and_source_checked": true
+      },
+      {
+        "fact_id": "fact-drg-settlement",
+        "original_quote": "DRG/DIP是医保部门按病组或病种向医院整体结算的支付方式，并设有特例单议等例外调整机制。",
+        "draft_quote": "注意这个类比只用来理解医保按病组向医院整体结算，不适用于个人自费兜底判断，而且遇到复杂危重症还有特例单议或除外支付机制",
+        "subject_preserved": true,
+        "conditions_preserved": true,
+        "numbers_and_units_preserved": true,
+        "time_and_scope_preserved": true,
+        "exceptions_preserved": true,
+        "strength_preserved": true,
+        "denominator_and_source_checked": true
+      }
+    ],
+    "analogy_checks": [
+      {
+        "metaphor": "套餐价",
+        "draft_quote": "注意这个类比只用来理解医保按病组向医院整体结算，不适用于个人自费兜底判断，而且遇到复杂危重症还有特例单议或除外支付机制",
+        "mapping_explicit": true,
+        "boundary_explicit": true,
+        "misleading_conflation_detected": false
+      }
+    ],
+    "quote_attribution_checks": [],
+    "clause_fidelity_checked": true
+  },
+  "surface_claim_bindings": [
+    {
+      "surface": "body",
+      "artifact_ref": "fixtures/plain-language-gate-v1/synthetic-body.md",
+      "artifact_sha256": "81d2c6896e29d5398e2d7a57fb603a610092410dc94d779f8248dc7a5ad5bea2",
+      "key_claims": [
+        "DRG/DIP主要是医保给医院算账的规则",
+        "政策范围内支付比例只按医保目录和政策范围内医疗费用做分母计算"
+      ]
+    }
+  ]
+}

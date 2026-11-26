@@ -24,7 +24,16 @@ def preparation(context_path, route="expository"):
     context_path = Path(context_path)
     source = _purpose_source(context_path.parent)
     evidence = {**author.ref(source), "quote": PURPOSE}
+    ctx = author.load(context_path)
+    fact_card = context_path.parent / f"synthetic-fact-card-{context_path.stem}.json"
+    fact_card.write_text(json.dumps({
+        "schema": "content-fact-card.v0",
+        "content_id": ctx["author_brief"]["content_id"],
+        "canonical_status": "locked_for_draft",
+        "human_confirmation": {"quote": "Synthetic fixture fact confirmation"},
+    }, ensure_ascii=False), encoding="utf-8")
     integrity.record_preflight(context_path, {"route": route, "actor": "synthetic_fixture", "source": evidence,
+        "fact_card_ref": author.ref(fact_card),
         "items": [{"id": k, "state": "ready", "reason": "Synthetic preparation for " + k, "evidence": [evidence]}
                   for k in sorted(integrity.PRE)]})
     return evidence
@@ -97,6 +106,33 @@ def review(envelope_path):
                     "reason": "Invented scope-specific assessment for " + c, "evidence": [evidence],
                     "issue_ids": [], "reuse_from": None} for c in sorted(integrity.CHECKS)],
     }
+    if context.get("topic_facets") is not None:
+        facets = context["topic_facets"]
+        anchor = text[:50]
+        c04 = next(row for row in assessment["checks"] if row["id"] == "C04")
+        c04["facet_realization"] = {
+            "angle_id": facets["angle_id"],
+            "dominant_action": facets["dominant_action"],
+            "main_element": {
+                "element_id": facets["main_element"]["element_id"],
+                "quote": anchor,
+                "assessment": "Synthetic main-element anchor matched inside the isolated test draft.",
+            },
+            "supporting_elements": [
+                {
+                    "element_id": item["element_id"],
+                    "relation": item["relation"],
+                    "status": "realized",
+                    "quote": anchor,
+                    "assessment": "Synthetic supporting-element anchor matched inside the isolated test draft.",
+                }
+                for item in facets["supporting_elements"]
+            ],
+            "dominant_action_check": {
+                "quote": anchor,
+                "assessment": "Synthetic dominant-action anchor matched inside the isolated test draft.",
+            },
+        }
     assessment["checks"][0]["purpose_alignment"] = {
         "stage_duty": "Make the invented author's declared meaning understandable in this synthetic draft.",
         "contribution": "The cited draft fragment carries the invented author's statement into the review.",

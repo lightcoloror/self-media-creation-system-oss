@@ -5,7 +5,7 @@
   "workspace_root_relative_to_repository": "..",
   "canonical_root_relative_to_workspace": "docs/content-creation-system/routing",
   "canonical_contract_set_id": "registered-content-routing",
-  "canonical_contract_set_version": "1.9.1",
+  "canonical_contract_set_version": "1.9.2",
   "load_policy": "whole-contract-set-only",
   "fallback_policy": "fail-closed-no-legacy-fallback",
   "mixed_roots_prohibited": true,
@@ -101,6 +101,21 @@
       "path": "schemas/topic-angle-decision.v2.schema.json",
       "role": "framework-four-outcome-editorial-decision",
       "may_replace_canonical_component": false
+    },
+    {
+      "path": "schemas/plain-language-plan.v1.schema.json",
+      "role": "plain-language-pre-draft-plan",
+      "may_replace_canonical_component": false
+    },
+    {
+      "path": "schemas/plain-language-review.v1.schema.json",
+      "role": "plain-language-comprehension-fidelity-review",
+      "may_replace_canonical_component": false
+    },
+    {
+      "path": "scripts/plain_language_gate.py",
+      "role": "plain-language-and-fact-lock-gate",
+      "may_replace_canonical_component": false
     }
   ],
   "boundaries": {
@@ -112,7 +127,9 @@
   },
   "provenance": {
     "created_at": "2026-08-21T16:29:46+08:00",
-    "updated_at": "2026-11-02T20:20:30+08:00",
-    "acting_tool_model": "Codex (gpt-6.1-sol)"
+    "updated_at": "2026-11-22T09:48:00+08:00",
+    "acting_tool_model": "Antigravity",
+    "dispatch_id": "SELF-MEDIA-ROUTING-AUDIT-FIX-20260905-01",
+    "supersedes_dispatch_id": "SELF-MEDIA-EDITORIAL-ANGLE-INTEGRATION-20260903-01"
   }
 }

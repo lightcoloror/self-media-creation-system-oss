@@ -28,7 +28,14 @@ class IntegrityTests(unittest.TestCase):
             "synthetic_only": True, "privacy_status": "non_sensitive", "source_ref": "synthetic:source",
             "judgments": [],
         }, "synthetic-request"))
+        self.fact_card = self.write({
+            "schema": "content-fact-card.v0",
+            "content_id": "synthetic-content",
+            "canonical_status": "locked_for_draft",
+            "human_confirmation": {"quote": "Synthetic fixture fact confirmation"},
+        })
         self.pre = {"route": "expository", "actor": "synthetic_fixture", "source": self.ev(),
+                    "fact_card_ref": author.ref(self.fact_card),
                     "items": [{"id": k, "state": "ready", "reason": "Synthetic preparation decision: " + k,
                                "evidence": [self.ev()]} for k in sorted(gate.PRE)]}
         gate.record_preflight(self.context, self.pre)

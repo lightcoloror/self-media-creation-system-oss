@@ -70,6 +70,51 @@ class CoverWorkbenchTests(unittest.TestCase):
         self.assertFalse(r['human_quality_approved']);self.assertFalse(r['ctr_validated'])
         with self.assertRaises(FileExistsError):w.collect(sp,[],dp,'main',out)
 
+    def test_reference_route_binds_approved_non_person_references_through_collection(self):
+        from PIL import Image
+        source = self.root/'original.png'
+        Image.new('RGB',(64,64),'white').save(source)
+        ref = dict(id='object', kind='generation_reference', reference_role='object',
+                   artifact=w.reference(source), local_use_approved=True, privacy_reviewed=True,
+                   generation_use_approved=False)
+        self.brief['assets'] = [ref]
+        row = next(r for r in w.plan(self.brief)['routes'] if r['id']=='ai-reference')
+        self.assertEqual(row['missing'], ['ai_opt_in', 'approved_generation_reference'])
+        ref['generation_use_approved'] = True
+        spec = self.ai_spec()
+        card = spec['candidates'][0]
+        card.update(route='ai-reference', generation_reference_ids=['unknown'])
+        with self.assertRaisesRegex(ValueError, 'unapproved_or_missing'):
+            w.validate_spec(spec)
+        card['generation_reference_ids'] = ['object']
+        w.validate_spec(spec)
+        sp=self.root/'native-reference.json';w.write(sp,spec)
+        dp=self.root/'reference-desk.json';w.write(dp,w.desk.new_project('test-project','Fixture'))
+        out=self.root/'reference-review'
+        receipt = w.collect(sp,[],dp,'main',out)
+        self.assertEqual(receipt['routes'], ['ai-reference'])
+        saved=w.read(out/'publication-data.json')['items'][0]
+        references=[dict(id='object', role='object', artifact=ref['artifact'])]
+        self.assertEqual(receipt['generation_references']['A'], references)
+        self.assertEqual(saved['covers'][0]['production_evidence']['generation_references'], references)
+        self.assertEqual(saved['cover_pk']['candidates'][0]['generation_references'], references)
+        self.assertIsNone(saved['cover_pk']['selected'])
+
+    def test_identity_requires_consent_and_source_is_an_image(self):
+        from PIL import Image
+        source = self.root/'identity.png'
+        Image.new('RGB',(64,64),'white').save(source)
+        ref = dict(id='test-identity',kind='generation_reference',reference_role='identity',artifact=w.reference(source),
+                   local_use_approved=True,privacy_reviewed=True,generation_use_approved=True)
+        self.brief['assets'] = [ref]
+        with self.assertRaisesRegex(ValueError,'identity_reference_subject_scope_required'):
+            w.plan(self.brief)
+        ref.update(subject_scope='authorized_other',consent_quote='仅合成测试',use_boundary='合成测试，不涉及实际人物')
+        w.plan(self.brief)
+        ref['artifact'] = self.file('not-a-picture.txt')
+        with self.assertRaisesRegex(ValueError,'invalid_generation_reference_image'):
+            w.plan(self.brief)
+
     def test_ratio_mismatch_and_missing_output_rejected(self):
         spec=self.ai_spec();spec['candidates'][0]['outputs'][0]['ratio']='16:9'
         sp=self.root/'s.json';w.write(sp,spec)

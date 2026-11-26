@@ -23,6 +23,16 @@ It does not introduce another content state machine. It does not publish,
 schedule, send, call a provider, or authorize execution. Every generated
 artifact remains `candidate-only` and `manual-only`.
 
+## 制作前的包装草案与内容分段
+
+更新于 2026-11-26 09:49:27 +08:00，Codex。
+
+正式制作前，沿用已有标题、封面、开头预试，先写一条**可兑现的包装假设**。记录观众为什么会点、开头哪个场景或证据能立即接上、正文在哪一段完成承诺。没有可靠素材支撑时调整承诺或缩小范围。预试的草案只用来决定拍什么、哪些素材值得投入。成品冻结后的正式包装审查仍按下列顺序执行。
+
+长视频按共同问题串起多个段落。每段先写清本段要回答的问题、用到的镜头或证据、观众获得的新信息，以及下一段承接什么。相邻两段只有一句重述时，合并或删掉重复部分。拟拆成独立短片的段落要补齐必要语境并在本条兑现。可先用一个代表段验证一次节奏和成片可读性，再决定是否继续整条制作。短片和长版使用各自的标题、开头和反馈记录。
+
+依据为 2026-11-25 的 Tim 深度访谈转写，22:58–24:08 的长内容分段、01:16:23–01:17:48 的标题封面前置、02:02:22 起对包装预期的讨论。
+
 ## Order of operations
 
 1. Freeze the body artifact and calculate its real SHA-256.

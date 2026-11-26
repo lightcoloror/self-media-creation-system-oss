@@ -209,6 +209,23 @@ def _sample_index(references, candidate, renderer):
     return samples
 
 
+def check_layout_inventory(layout, cues, source_ranges):
+    elements = {row['element_id']: row for row in layout['elements']}
+    if any(not _required_text(row.get('source_text')) for row in source_ranges):
+        raise ValueError('protected_source_label_requires_expected_visible_text')
+    required = [(cue['id'], cue) for cue in cues if cue['area'] == 'visual_focus' and cue['kind'] == 'evidence']
+    required += [(row.get('source_layout_id'), row) for row in source_ranges]
+    for element_id, segment in required:
+        row = elements.get(element_id)
+        if (not row or row['role'] != 'information_motion' or row['critical_content'] is not True
+                or not row.get('text', '').strip()
+                or (segment.get('source_text') and segment['source_text'].strip() not in row['text'])
+                or row['start_seconds'] > segment['start_seconds'] + 1e-6
+                or row['end_seconds'] < segment['end_seconds'] - 1e-6):
+            raise ValueError('selected_evidence_or_source_label_missing_from_protected_layout: ' + str(element_id))
+    return len({element_id for element_id, _ in required})
+
+
 def check_final(manifest, candidate, duration, renderer):
     items, pending = intake(manifest, require_ready=False)
     review = _read(manifest.get('material_final_review_ref'), 'material_final_review_required')

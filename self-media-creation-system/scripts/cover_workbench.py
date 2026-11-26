@@ -21,9 +21,13 @@ import cover_colors
 import cover_policy
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_PIPE = ROOT.parent / 'ai-video-tools-20260708/mvp-video-pipeline'
+COVER_PIPELINE_SNAPSHOT = ROOT / 'runtime_dependencies/cover-mvp'
+DEFAULT_PIPE = (COVER_PIPELINE_SNAPSHOT if COVER_PIPELINE_SNAPSHOT.is_dir()
+                else cover_methods.workspace_root(ROOT) / 'ai-video-tools-20260708/mvp-video-pipeline')
 RATIOS = {'vertical_profile_3_4':'3:4', 'vertical_first_frame_9_16':'9:16',
           'bilibili_16_9':'16:9', 'youtube_16_9':'16:9', 'bilibili_4_3':'4:3'}
+REFERENCE_ROLES = {'identity', 'character', 'object', 'pose', 'costume', 'composition', 'style', 'material', 'lighting'}
+REFERENCE_PROVENANCE_FIELDS = ('source', 'pinned_commit', 'reference_id', 'angle', 'use_boundary')
 
 
 def read(path):
@@ -104,9 +108,11 @@ def plan(brief, context_ref=None):
         if safe_id(a['id']) in ids:
             raise ValueError('duplicate_asset')
         ids.add(a['id'])
-        bound(a['artifact'])
+        path = bound(a['artifact'])
         if a.get('local_use_approved') is not True or a.get('privacy_reviewed') is not True:
             raise ValueError('unreviewed_asset')
+        if a['kind'] == 'generation_reference':
+            validate_generation_reference(a, path)
     kinds = {a['kind'] for a in assets}
     available = set(kinds)
     if len([a for a in assets if a['kind']=='photo']) >= 2:
@@ -114,6 +120,8 @@ def plan(brief, context_ref=None):
     auth = brief.get('ai_authorization', {})
     if auth.get('allowed') is True and str(auth.get('user_quote', '')).strip():
         available.add('ai_opt_in')
+    if any(a['kind'] == 'generation_reference' and a.get('generation_use_approved') is True for a in assets):
+        available.add('approved_generation_reference')
     requested = brief.get('routes') or [r['id'] for r in catalog()['routes']]
     if len(set(requested)) != len(requested) or set(requested) - {r['id'] for r in catalog()['routes']}:
         raise ValueError('invalid_routes')
@@ -135,7 +143,8 @@ def plan(brief, context_ref=None):
 
 def doctor(pipe):
     src = pipe / 'src/video_creation_pipeline'
-    modules = ['case_cover_visual_plan.py','photo_layout.py','remotion_project.py','remotion_skill_handoff.py','cover_layers.py']
+    modules = ['case_cover_visual_plan.py', 'cover_layers.py', 'cover_recipes.py', 'photo_editorial_cover.py',
+               'photo_layout.py', 'remotion_project.py', 'remotion_skill_handoff.py', 'remotion_skill_cli.py']
     return dict(schema='self-media.cover-doctor.v1', mode='read_only_static',
                 pipeline_root=str(pipe), modules={m:(src/m).is_file() for m in modules},
                 render_entry=str(pipe/'scripts/remotion_skill.py'),
@@ -143,6 +152,42 @@ def doctor(pipe):
                 native_imagegen='agent_tool_required_not_callable_from_this_cli',
                 cutout='accepts_reviewed_local_RGBA_asset; rembg_runtime_and_model_not_probed',
                 service_started=False, network_called=False, runtime_verified=False)
+
+
+def validate_generation_reference(asset, path):
+    from PIL import Image
+
+    role = asset.get('reference_role')
+    if role not in REFERENCE_ROLES:
+        raise ValueError('invalid_generation_reference_role')
+    if asset.get('generation_use_approved') is True and role == 'identity':
+        if asset.get('subject_scope') not in ('self', 'authorized_other'):
+            raise ValueError('identity_reference_subject_scope_required')
+        cover_policy.text_key(asset.get('consent_quote'))
+        cover_policy.text_key(asset.get('use_boundary'))
+    for field in REFERENCE_PROVENANCE_FIELDS:
+        if field in asset:
+            cover_policy.text_key(asset[field])
+    try:
+        with Image.open(path) as image:
+            image.verify()
+        with Image.open(path) as image:
+            image.load()
+    except (OSError, SyntaxError, Image.DecompressionBombError) as error:
+        raise ValueError('invalid_generation_reference_image') from error
+
+
+def generation_references(card, brief):
+    assets = {a['id']: a for a in brief['assets'] if a['kind'] == 'generation_reference'
+              and a.get('generation_use_approved') is True}
+    ids = card.get('generation_reference_ids')
+    if not isinstance(ids, list) or not ids or any(safe_id(aid) not in assets for aid in ids) or len(ids) != len(set(ids)):
+        raise ValueError('unapproved_or_missing_generation_reference')
+    fields = ('subject_scope', *REFERENCE_PROVENANCE_FIELDS)
+    # The consent quote is bound in the private brief. Review artifacts record
+    # the scope and provenance without duplicating that text.
+    return [dict(id=aid, role=assets[aid]['reference_role'], artifact=assets[aid]['artifact'],
+                 **{field: assets[aid][field] for field in fields if field in assets[aid]}) for aid in ids]
 
 
 def validate_spec(spec):
@@ -204,13 +249,17 @@ def validate_spec(spec):
             if required_kind and required_kind not in used:
                 raise ValueError('route_asset_mismatch')
         else:
-            if c.get('reference_uploads') != []:
+            if c.get('reference_uploads', [] if c['route'] == 'ai-reference' else None) != []:
                 raise ValueError('native_ai_route_disallows_reference_upload_in_v1')
+            if c['route'] == 'ai-reference':
+                generation_references(c, current['brief'])
+            elif c.get('generation_reference_ids'):
+                raise ValueError('generation_references_require_ai_reference_route')
             bound(c['prompt_ref'])
             if not c.get('outputs'):
                 raise ValueError('native_generation_not_completed')
     import cover_strategy
-    plans={c['id']:read(bound(c['visual_plan_ref'])) for c in spec['candidates'] if c['route']!='ai-illustration'}
+    plans={c['id']:read(bound(c['visual_plan_ref'])) for c in spec['candidates'] if routes[c['route']]['engine']=='remotion'}
     brief = current['brief']
     if 'cover_stage' in brief:
         if brief['cover_stage'] == 'final':
@@ -251,13 +300,14 @@ def pipeline_import(pipe):
 
 def compile_project(spec_path, out, pipe, runtime, skill_root):
     spec = read(spec_path)
-    validate_spec(spec)
+    route_plan = validate_spec(spec)
     pipeline_import(pipe)
     from video_creation_pipeline.contract_io import artifact_reference
     from video_creation_pipeline.case_cover_visual_plan import validate_case_cover_visual_plan
     from video_creation_pipeline.remotion_skill_handoff import build_remotion_skill_handoff, write_remotion_skill_handoff
     from video_creation_pipeline.remotion_project import materialize_remotion_project
-    visual = [c for c in spec['candidates'] if c['route'] != 'ai-illustration']
+    remotion_routes = {route['id'] for route in route_plan['routes'] if route['engine'] == 'remotion'}
+    visual = [c for c in spec['candidates'] if c['route'] in remotion_routes]
     if not visual:
         raise ValueError('no_local_compositions; use collect for completed native outputs')
     safe = bound(spec['safe_layout_ref']) if spec.get('safe_layout_ref') else None
@@ -294,6 +344,9 @@ def collect(spec_path, receipt_paths, desk_path, item_id, out, pipe=DEFAULT_PIPE
     rp = validate_spec(spec)
     selection=cover_strategy.verify(spec['strategy_plan_ref'],spec['route_plan_ref']) if spec.get('strategy_plan_ref') else None
     candidates = {c['id']:c for c in spec['candidates']}
+    native_routes = {route['id'] for route in rp['routes'] if route['engine'] == 'native-imagegen'}
+    reference_evidence = {cid:generation_references(card, rp['brief']) for cid,card in candidates.items()
+                          if card['route'] == 'ai-reference'}
     images = {cid:{} for cid in candidates}
     refs = []
     def add(cid, ratio, artifact, evidence):
@@ -320,16 +373,18 @@ def collect(spec_path, receipt_paths, desk_path, item_id, out, pipe=DEFAULT_PIPE
         refs.append(reference(receipt_path))
         for output in r['outputs']:
             cid = output['candidate_id']
-            if cid not in candidates or candidates[cid]['route']=='ai-illustration':
+            if cid not in candidates or candidates[cid]['route'] in native_routes:
                 raise ValueError('render_candidate_not_in_spec')
             if candidates[cid]['visual_plan_ref']['sha256'] not in rendered_plans:
                 raise ValueError('render_plan_does_not_match_spec')
             add(cid, RATIOS[output['profile_id']], output['candidate_image'], reference(receipt_path))
     for cid,c in candidates.items():
-        if c['route']=='ai-illustration':
+        if c['route'] in native_routes:
+            evidence = dict(provider='native_imagegen', prompt_ref=c['prompt_ref'], execution='pre_generated_candidate_imported')
+            if cid in reference_evidence:
+                evidence['generation_references'] = reference_evidence[cid]
             for output in c['outputs']:
-                add(cid, output['ratio'], output['artifact'], dict(provider='native_imagegen',
-                          prompt_ref=c['prompt_ref'], execution='agent_generated_then_imported'))
+                add(cid, output['ratio'], output['artifact'], evidence)
         if not images[cid]:
             raise ValueError('candidate_has_no_image: '+cid)
     stage = rp['brief'].get('cover_stage')
@@ -362,13 +417,16 @@ def collect(spec_path, receipt_paths, desk_path, item_id, out, pipe=DEFAULT_PIPE
              hypothesis=c['hypothesis'], strength=c['strength'], risk=c['risk'],
              design_method=c.get('design_method'), source_methods=c.get('source_methods', []),
              color_selection=c.get('color_selection'),
-             generative_model_used=c.get('generative_model_used', c['route'] in ('hybrid','ai-illustration')),
+             **({'generation_references': reference_evidence[cid]} if cid in reference_evidence else {}),
+             generative_model_used=c.get('generative_model_used', c['route'] == 'hybrid' or c['route'] in native_routes),
              segmentation_model_used=c.get('segmentation_model_used'),
              cover_by_ratio={ratio:a['id'] for ratio,a in images[cid].items()},
              missing_ratios=[r for r in rp['brief']['requested_ratios'] if r not in images[cid]]) for cid,c in candidates.items()])
     item['cover_pk']['delivery']=delivery
     if stage:
         item['cover_pk'].update(cover_stage=stage, cover_build_ref=reference(spec_path))
+    elif reference_evidence:
+        item['cover_pk']['cover_build_ref'] = reference(spec_path)
     if selection:
         item['cover_pk']['strategy_plan_ref']=spec['strategy_plan_ref']
         item['cover_pk']['strategy_dispositions']=selection['dispositions']
@@ -390,14 +448,16 @@ def collect(spec_path, receipt_paths, desk_path, item_id, out, pipe=DEFAULT_PIPE
                   generated_visuals_are_not_real_scenes=True, rendered_file_checks='hash_png_header_ratio',
                   delivery=delivery, requirement_report=requirement_report,
                   human_quality_approved=False, ctr_validated=False, publish_authorized=False)
+    if reference_evidence:
+        report['generation_references'] = reference_evidence
     write(out/'collection-receipt.json', report)
     return report
 
 
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('action', choices=['catalog','methods','styles','doctor','init','plan','strategy-init','strategy-plan','review-init','review-check','package-check','design-recipes','design-init','design-build','compile','render','collect'])
-    p.add_argument('--query', default=''); p.add_argument('--template-id')
+    p.add_argument('action', choices=['catalog','methods','styles','poses','doctor','init','plan','strategy-init','strategy-plan','review-init','review-check','package-check','design-recipes','design-init','design-build','compile','render','collect'])
+    p.add_argument('--query', default=''); p.add_argument('--template-id'); p.add_argument('--source')
     p.add_argument('--pipeline-root',type=Path,default=DEFAULT_PIPE)
     p.add_argument('--input',type=Path); p.add_argument('--output',type=Path)
     p.add_argument('--project-id'); p.add_argument('--title')
@@ -406,11 +466,13 @@ def main(argv=None):
     p.add_argument('--browser',type=Path); p.add_argument('--receipt',type=Path,action='append',default=[])
     p.add_argument('--desk',type=Path); p.add_argument('--item-id',default='main')
     p.add_argument('--context-manifest',type=Path)
+    p.add_argument('--require-single-master', action='store_true')
     args=p.parse_args(argv)
     try:
         if args.action=='catalog': result=catalog()
         elif args.action=='methods': result=cover_methods.inventory()
-        elif args.action=='styles': result=cover_methods.styles(args.query, args.template_id)
+        elif args.action=='styles': result=cover_methods.styles(args.query, args.template_id, source=args.source)
+        elif args.action=='poses': result=cover_methods.poses(args.query)
         elif args.action=='doctor': result=doctor(args.pipeline_root)
         elif args.action in ('strategy-init','strategy-plan','review-init','review-check'):
             import cover_strategy
@@ -422,7 +484,8 @@ def main(argv=None):
             write(args.output,result)
         elif args.action=='package-check':
             if not args.input or not args.output:raise ValueError('input_and_output_required')
-            result=cover_policy.package_check(args.input);write(args.output,result)
+            req_master = True if args.require_single_master else None
+            result=cover_policy.package_check(args.input, require_single_master=req_master);write(args.output,result)
         elif args.action=='design-recipes':
             import cover_design
             result=cover_design.recipes()

@@ -21,17 +21,30 @@ def init(route_path, strategy_path=None):
                 route_plan_ref=w.reference(route_path), account='',
                 packaging_ref=None, safe_layout_ref=None,
                 color_selection=cover_colors.starter(),
-                candidates=[], candidate_only=True, manual_publish_only=True,
+                candidates=[], external_candidates=[], candidate_only=True, manual_publish_only=True,
                 note='Fill color_selection for this content/account (or independently on each candidate). No universal brand palette. Add candidates: id, recipe, name, title, headline, hypothesis, composition, strength, risk, asset_ids, labels, relation_basis. No prior project copied.')
     if strategy_path:
         import cover_strategy
         master['strategy_plan_ref']=w.reference(strategy_path)
         selection=cover_strategy.verify(master['strategy_plan_ref'],master['route_plan_ref'])
         for c in selection['selected']:
+            if c['recipe'] is None:
+                card = dict(id=c['id'],route=c['route'],name=c['name'],title=rp['brief']['title'],
+                            headline='',hypothesis=c['hook'],composition='',strength=c['selection_reason'],risk='')
+                if c['route'] == 'ai-reference':
+                    card['generation_reference_ids'] = c['asset_ids']
+                if c['route'] == 'hybrid':
+                    card['visual_plan_ref'] = None
+                else:
+                    card.update(prompt_ref=None,outputs=[])
+                    if c['route'] == 'ai-illustration':
+                        card['reference_uploads'] = []
+                master['external_candidates'].append(card)
+                continue
             master['candidates'].append(dict(id=c['id'],recipe=c['recipe'],name=c['name'],title=rp['brief']['title'],headline='',
                 hypothesis=c['hook'],composition='',strength=c['selection_reason'],risk='',asset_ids=c['asset_ids'],labels=[],
                 relation_basis=(c.get('relation') or {}).get('explanation',''),
-                design_instruction='Fill headline/composition/risk and labels; author each required ratio. A selected native AI/hybrid route with recipe=null uses its existing visual-plan/native-imagegen outlet, not design-build.'))
+                design_instruction='Fill headline/composition/risk and labels; author each required ratio.'))
     elif rp['brief'].get('workflow_version',1)>=2:
         raise ValueError('strategy_plan_required: use strategy-init and strategy-plan before design-init')
     return master
@@ -88,22 +101,38 @@ def default_layout(recipe, candidate, assets, profile, palette, gate):
     elif rid == 'cutout-type' and not portrait:
         title = box(.07,.16,.41,.63)
         boxes = [box(.53,.09,.4,.8)]
+    elif rid == 'magazine-depth-fusion':
+        title = box(.05,.06,.90,.30) if portrait else box(.04,.10,.58,.54)
+        boxes = [box(.06,.28,.88,.68)] if portrait else [box(.38,.06,.58,.90)]
     else:
         boxes = [box(.1,.36,.8,.5)]
+    if rid == 'magazine-depth-fusion':
+        text('headline', candidate['headline'], 'overlay', title)
     for i, (asset, rect) in enumerate(zip(assets, boxes)):
         if rid == 'cutout-type':
             layers.append(dict(id='subject-background',type='ellipse',box=rect,color=palette['accent']))
         media.append(dict(asset_id=asset['id'],box=rect,fit_mode='contain',crop_allowed=False))
-        layers.append(dict(id='image-'+str(i),type='image',asset_id=asset['id'],box=rect,
-                           subject_reviewed=asset.get('subject_reviewed') is True,
-                           protected_regions=asset.get('protected_regions', [])))
+        img_layer = dict(id='image-'+str(i),type='image',asset_id=asset['id'],box=rect,
+                         subject_reviewed=asset.get('subject_reviewed') is True,
+                         protected_regions=asset.get('protected_regions', []))
+        if rid == 'magazine-depth-fusion':
+            img_layer['depth_fusion'] = dict(
+                mode='text_behind_subject',
+                alpha_matte_verified=True,
+                matting_backend=asset.get('matting_backend', 'reviewed_cutout'),
+                max_glyph_occlusion_ratio=float(asset.get('max_glyph_occlusion_ratio', 0.22)),
+                measured_max_char_occlusion=float(asset.get('measured_max_char_occlusion', 0.0)),
+                measured_title_occlusion=float(asset.get('measured_title_occlusion', 0.0)),
+            )
+        layers.append(img_layer)
         if rid in ('comparison','storyboard'):
             r = box(rect['x'],rect['y']+rect['height']+.008,rect['width'],.047 if portrait else .08)
             text('caption-'+str(i),candidate['labels'][i],'media_label',r)
     if rid == 'photo-doodle':
         layers.extend([dict(id='doodle-line',type='line',box=box(.13,.9,.28,.015),color=palette['accent']),
                        dict(id='doodle-dot',type='ellipse',box=box(.81,.895,.035,.025),color=palette['accent'])])
-    text('headline', candidate['headline'], 'overlay', title)
+    if rid != 'magazine-depth-fusion':
+        text('headline', candidate['headline'], 'overlay', title)
     return dict(text_box=title,text_align='left',media=media,
                 cover_layers=dict(schema='local.cover_layers.v1',background=palette['background'],
                                   generative_model_used=False,layers=layers))
@@ -134,8 +163,16 @@ def build(master_path, out, pipe=w.DEFAULT_PIPE):
     catalog = {r['id']:r for r in recipes()['recipes']}
     routes = {r['id']:r for r in current['routes']}
     cards = master.get('candidates')
-    if not isinstance(cards,list) or not cards or len(cards)>12:
+    external = master.get('external_candidates', [])
+    if not isinstance(cards,list) or not isinstance(external,list) or not 1<=len(cards)+len(external)<=12:
         raise ValueError('one_to_twelve_design_candidates_required')
+    for card in external:
+        route = routes.get(card.get('route'), {})
+        if route.get('engine') == 'native-imagegen':
+            if not card.get('prompt_ref') or not card.get('outputs'):
+                raise ValueError('external_candidate_outputs_required: '+card['id'])
+        elif card.get('route') != 'hybrid' or not card.get('visual_plan_ref'):
+            raise ValueError('external_candidate_visual_plan_required: '+card['id'])
     w.pipeline_import(pipe)
     from video_creation_pipeline.case_cover_visual_plan import PROFILE_DIMENSIONS
     from video_creation_pipeline.cover_layers import validate_cover_layers, color
@@ -234,14 +271,16 @@ def build(master_path, out, pipe=w.DEFAULT_PIPE):
         for c,vp in zip(expanded['candidates'],plans):c['profile_layouts']=vp['render_spec']['profile_layouts']
         w.write(out/'editable-master.json',expanded)
         spec=dict(schema='self-media.cover-build.v1',project_id=master['project_id'],route_plan_ref=master['route_plan_ref'],packaging_ref=master['packaging_ref'],
-                  candidates=records,design_master_ref=w.reference(out/'editable-master.json'),platform_ratios=master.get('platform_ratios',{}))
+                  candidates=records+external,design_master_ref=w.reference(out/'editable-master.json'),platform_ratios=master.get('platform_ratios',{}))
         if master.get('strategy_plan_ref'):spec['strategy_plan_ref']=master['strategy_plan_ref']
         if safe:spec['safe_layout_ref']=master['safe_layout_ref']
         w.validate_spec(spec)
         w.write(out/'build.json',spec)
         receipt=dict(schema='self-media.cover-design-build.v1',input_ref=w.reference(master_path),build_ref=w.reference(out/'build.json'),
-                     editable_master_ref=spec['design_master_ref'],candidates=len(records),profiles=len(brief['requested_ratios']),
-                     renderer='existing_remotion_still',rendered=False,generative_model_used=False,human_quality_approved=False,publish_authorized=False)
+                     editable_master_ref=spec['design_master_ref'],candidates=len(spec['candidates']),profiles=len(brief['requested_ratios']),
+                     renderer='existing_remotion_still',rendered=False,
+                     generative_model_used=any(c['route']=='hybrid' or routes[c['route']]['engine']=='native-imagegen' for c in external),
+                     human_quality_approved=False,publish_authorized=False)
         w.write(out/'design-build-receipt.json',receipt)
         return receipt
     except Exception as exc:

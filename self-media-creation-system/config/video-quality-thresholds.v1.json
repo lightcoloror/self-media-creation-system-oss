@@ -1,0 +1,12 @@
+{
+  "schema_version": "self-media.video-quality-thresholds.v1",
+  "updated_at": "2026-11-25T15:15:00+08:00",
+  "mobile_subtitle": {
+    "reference_width_px": 270,
+    "min_glyph_px_at_270": 12
+  },
+  "pacing": {
+    "long_pause_seconds": 1.5,
+    "bgm_speech_gap_seconds": 1.5
+  }
+}

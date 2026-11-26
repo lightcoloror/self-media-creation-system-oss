@@ -8,7 +8,8 @@
     {"id":"evidence-ui","name":"证据或产品界面主导","engine":"remotion","needs":["evidence"],"method":"真实且已脱敏原件或截图承担焦点，不生成虚构证据或 UI。","sources":["gbro"]},
     {"id":"type-led","name":"文字视觉主导","engine":"remotion","needs":[],"method":"标题本身具有信息反差时选用；用字体、留白、节奏建立构图，不默认矩形色块。","sources":["canvas-design"]},
     {"id":"hybrid","name":"真实照片 + AI 装饰","engine":"remotion","needs":["photo","generated_decoration","ai_opt_in"],"method":"真人像素保留在本机；AI 只生成非人物装饰，单独生成、单独标识，再本地合成。","sources":["baoyu","gbro"]},
-    {"id":"ai-illustration","name":"AI 概念插画","engine":"native-imagegen","needs":["ai_opt_in"],"method":"完整概念图，与真实纪实封面并列比较；保存提示词，不伪装拍摄现场。","sources":["baoyu"]}
+    {"id":"ai-illustration","name":"AI 概念插画","engine":"native-imagegen","needs":["ai_opt_in"],"method":"完整概念图，与真实纪实封面并列比较；保存提示词，不伪装拍摄现场。","sources":["baoyu"]},
+    {"id":"ai-reference","reference_contract":2,"name":"参考图驱动 · AI 封面","engine":"native-imagegen","needs":["ai_opt_in","approved_generation_reference"],"method":"按用途绑定已授权的本人／他人、原创角色、物件、动作或视觉风格参考。生成候选沿用原生图像工具和现有收图流程。","sources":["extract-visual-style-2","open-pose-costume"]}
   ],
   "boundaries": {"new_renderer":false,"automatic_upload":false,"automatic_publish":false,"automatic_model_install":false,"ctr_prediction":false}
 }

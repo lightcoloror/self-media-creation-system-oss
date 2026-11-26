@@ -1,12 +1,12 @@
 # Optional owner packages for source-contract/case and artifact integrations.
 # Obtain the sibling source trees in public_toolchain.lock.json as well when a
 # selected consumer or fixture needs them. These pins grant no execution rights.
-question-research-poc @ git+https://github.com/lightcoloror/question-research-poc-oss.git@c9957bf680da8a7232ef332519e33a788a17c93d
-content-visual-studio @ git+https://github.com/lightcoloror/content-visual-studio-oss.git@db610dda39548d6eab4502bf23117e303bc5062b
+question-research-poc @ git+https://github.com/lightcoloror/question-research-poc-oss.git@0e0f8e4c819c59ec43ffb88e9db61c36245f87a8
+content-visual-studio @ git+https://github.com/lightcoloror/content-visual-studio-oss.git@dec8e0572f39a688a3cff28cd3aaf017ec51635c
 artifact-lifecycle-core @ git+https://github.com/lightcoloror/artifact-lifecycle-core-oss.git@fab239085724458c2a6b9452d0a1ba4f4012593e
 web-content-fetcher @ git+https://github.com/lightcoloror/web-content-fetcher-oss.git@99d63462ebe9b3e2dfb9f36f121a3f6cfc970e1a
 ai-research-workflow @ git+https://github.com/lightcoloror/ai-research-workflow-oss.git@82a00ec6a80e0e15fe5643be25c079466142b693
 
 # Optional video route owners; installed/source identity is not execution consent.
-video-knowledge-pipeline @ git+https://github.com/lightcoloror/video-knowledge-pipeline-oss.git@870460c9e758850aadd548011510c7b7e780ddc5
-video-creation-pipeline @ git+https://github.com/lightcoloror/mvp-video-pipeline-oss.git@8592e867b2e0c969205b3e30ec6ef05b0ec18217
+video-knowledge-pipeline @ git+https://github.com/lightcoloror/video-knowledge-pipeline-oss.git@219f1e7d9edbf520c8200a7c56a5051765dd4ff6
+video-creation-pipeline @ git+https://github.com/lightcoloror/mvp-video-pipeline-oss.git@214c049d15f0f3a41949d9bb23a0ec84a818fc67

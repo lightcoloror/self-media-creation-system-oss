@@ -2,12 +2,13 @@
 import argparse
 import importlib.util
 import json
+import re
 from pathlib import Path
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKSPACE = (ROOT.parent/'docs').resolve().parent
-VIEWS = {'desktop', 'mobile', 'mobile_dark'}
+VIEWS = {'wechat_body', 'desktop', 'mobile', 'mobile_dark'}
 
 
 def adapter():
@@ -41,6 +42,16 @@ def prepare(request_path, output):
     import self_media_agent as agent
     request = agent.load_json(request_path)
     selection = agent.resolve_request(request)
+    blockers = [
+        item for item in selection.get('missing_inputs', [])
+        if item in {
+            'locked_fact_card_for_draft', 'plain_language_plan', 'plain_language_review',
+            'serious_content_translation_review', 'science_popularization_review',
+            'formal_science_popularization_review', 'insurance_compliance_review',
+            'insurance_clause_explanation_review', 'privacy_treatment_review', 'rights_authorization_review',
+        }
+    ]
+    require(not blockers, 'article_gates_blocked: ' + ','.join(blockers))
     require('article_review_package' in selection, 'article_editorial_not_ready')
     require(selection['platform']=='wechat-article', 'article_renderer_not_available_for_platform')
     package = selection['article_review_package']
@@ -117,7 +128,18 @@ def rendered(module, item_path, manifest_path, selection):
         require(output in manifest.get('outputs',[]), 'article_manifest_receipt_mismatch')
         outputs.append(dict(path=str(path),sha256=output['sha256']))
     require(len(manifest['outputs'])==3,'article_manifest_outputs_invalid')
+    body_html = Path(outputs[0]['path']).read_text(encoding='utf8')
+    visible = re.sub(r'<[^>]+>', '', body_html).strip()
+    require(bool(visible) and not re.search(r'(?i)<\s*(?:script|link)\b', body_html), 'article_body_html_empty_or_unsafe')
     return outputs
+
+
+def _view_output_ref(view, outputs):
+    if view == 'wechat_body':
+        return outputs[0]
+    if view == 'mobile_dark':
+        return outputs[2]
+    return outputs[1]
 
 
 def visual_review(path, manifest_ref, outputs):
@@ -127,7 +149,7 @@ def visual_review(path, manifest_ref, outputs):
     views=value.get('views',[])
     require(len(views)==len(VIEWS) and {v.get('view') for v in views}==VIEWS,'article_visual_review_views_missing')
     for row in views:
-        expected=outputs[2 if row['view']=='mobile_dark' else 1]
+        expected=_view_output_ref(row['view'], outputs)
         require(row.get('artifact_ref')==expected,'article_visual_review_wrong_output')
         require(row.get('status')=='pass' and isinstance(row.get('observation'),str) and row['observation'].strip(),
                 'article_visual_review_incomplete')
@@ -189,7 +211,7 @@ def select_next(agent, request, refs, result, action, cmd):
             reason='Inspect desktop, mobile and dark preview; bind observations and screenshot hashes. Local preview needs applicable permission.')
         result['missing_inputs']=['article_visual_review']
         result['visual_review_template']=dict(render_manifest_ref=request['current']['article_render_manifest'],
-            views=[dict(view=v,artifact_ref=outputs[2 if v=='mobile_dark' else 1],status='pending',observation='',
+            views=[dict(view=v,artifact_ref=_view_output_ref(v, outputs),status='pending',observation='',
                         evidence_ref=dict(path='<actual-evidence>',sha256='<sha256>')) for v in sorted(VIEWS)])
         return
     package['visual_review']=visual_review(refs['article_visual_review'],request['current']['article_render_manifest'],outputs)

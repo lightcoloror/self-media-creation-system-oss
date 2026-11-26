@@ -4,6 +4,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'scripts'))
 import cover_methods as m
@@ -65,6 +66,25 @@ class CoverMethodsTests(unittest.TestCase):
             self.assertNotEqual(old,m.inventory(config,{'test':root})['entries'][0]['source_ref']['sha256'])
             self.assertIsNone(data['entries'][1]['source_ref'])
 
+    def test_managed_release_reads_workspace_method_sources(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            runtime = root / 'local-tools-runtime'
+            release = runtime / 'self-media-releases' / '2026.11.23-001' / 'self-media-creation-system'
+            source = runtime / 'self-media-source' / 'self-media-creation-system'
+            method = root / 'source-reviews' / 'cover-method' / 'SKILL.md'
+            method.parent.mkdir(parents=True)
+            method.write_text('fixture', encoding='utf-8')
+            config = root / 'catalog.json'
+            config.write_text(json.dumps({'entries': [{'id': 'cover-method', 'root': 'workspace',
+                                                        'path': method.relative_to(root).as_posix()}]}),
+                              encoding='utf-8')
+            for repo in (release, source, root / 'self-media-creation-system'):
+                with self.subTest(repo=repo), patch.object(m, 'ROOT', repo):
+                    data = m.inventory(config)
+                    self.assertEqual(data['counts'], {'registered': 1, 'located': 1})
+                    self.assertEqual(data['entries'][0]['source_ref']['path'], str(method.resolve()))
+
     def test_style_search_uses_real_structure_no_generation(self):
         with tempfile.TemporaryDirectory() as td:
             p=Path(td)/'style.json'
@@ -85,6 +105,25 @@ class CoverMethodsTests(unittest.TestCase):
         result=w.plan(brief)
         self.assertEqual(result['method_plan']['content_kind'],'generic')
         self.assertIn('ai_opt_in',next(r for r in result['routes'] if r['id']=='ai-illustration')['missing'])
+
+    def test_multi_source_style_search_keeps_provenance(self):
+        with tempfile.TemporaryDirectory() as td:
+            workspace = Path(td)
+            repo = workspace / 'self-media-creation-system'
+            (repo / 'config').mkdir(parents=True)
+            source = workspace / 'playbook.md'
+            source.write_text('fixture', encoding='utf-8')
+            cards = [{'id': 'fixture-vertical', 'title': {'zh': '竖版叠压'}, 'source_path': source.name, 'source_line': 1}]
+            (repo / 'config/cover-style-references.v1.json').write_text(
+                json.dumps({'sources': {'fixture-cover': cards}}), encoding='utf-8')
+            library = {'entries': [{'id': 'fixture-cover', 'source_ref': m.ref(source)}]}
+            with patch.object(m, 'ROOT', repo):
+                result = m.styles('叠压', library=library, source='fixture-cover')
+                self.assertEqual(result['matches'][0]['source_ref'], m.ref(source))
+                self.assertEqual(result['matches'][0]['source_id'], 'fixture-cover')
+                self.assertEqual(m.styles(template_id='fixture-vertical', library=library)['matches'], result['matches'])
+                with self.assertRaisesRegex(ValueError, 'unknown_style_source'):
+                    m.styles(library=library, source='unknown')
 
 
 if __name__=='__main__':unittest.main()

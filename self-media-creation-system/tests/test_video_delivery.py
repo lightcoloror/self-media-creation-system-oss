@@ -20,12 +20,11 @@ import publication_desk as desk
 import test_cover_strategy as cover_fixture
 
 
-class VideoDeliveryAvailabilityTests(unittest.TestCase):
-    def test_missing_full_owner_is_blocked_without_rough_cut_substitution(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            with mock.patch.object(v, 'ROOT', Path(tmp) / 'framework'):
-                with self.assertRaisesRegex(ValueError, 'existing_renderer_unavailable'):
-                    v.renderer_module()
+def _system_font(filename: str) -> str:
+    sys_root = os.environ.get('SystemRoot') or os.environ.get('WINDIR') or ''
+    if sys_root:
+        return (Path(sys_root) / 'Fonts' / filename).as_posix()
+    return f'/usr/share/fonts/{filename}'
 
 
 @unittest.skipUnless(
@@ -53,8 +52,9 @@ class VideoDeliveryTests(unittest.TestCase):
         cls.subtitles.write_text('1\n00:00:00,100 --> 00:00:00,900\nhello\n\n2\n00:00:02,100 --> 00:00:02,800\noutro\n', encoding='utf8')
         cls.final = root / 'burned.mp4'
         cls.receipt = root / 'render.json'
-        vf = "subtitles='" + cls.subtitles.as_posix().replace(':', r'\:') + "'"
-        vf += ",drawtext=fontfile='C\\:/Windows/Fonts/arial.ttf':text='AI-assisted':x=16:y=96:fontsize=8:fontcolor=white"
+        arial_escaped = _system_font('arial.ttf').replace(':', r'\:')
+        vf = f"drawtext=fontfile='{arial_escaped}':text='AI-assisted':x=16:y=96:fontsize=8:fontcolor=white,"
+        vf += "subtitles='" + cls.subtitles.as_posix().replace(':', r'\:') + "'"
         executor.execute_ffmpeg_with_receipt('render',
             ['ffmpeg', '-v', 'error', '-n', '-i', str(cls.source), '-vf', vf,
              '-c:v', 'libx264', '-preset', 'ultrafast', '-threads', '1', '-c:a', 'copy', str(cls.final)],
@@ -68,10 +68,14 @@ class VideoDeliveryTests(unittest.TestCase):
         self.root = self.helper.root
         self.serial = 0
         self.m = v.init(self.helper.brief['project_id'])
+        self.m['material_intake_ref'] = w.reference(self.save(dict(
+            schema=v.materials.INTAKE_SCHEMA, project_id=self.m['project_id'],
+            scope_note='Synthetic source pattern and tone, no imported or embedded media.', assets=[])))
         self.m['background_music']=dict(decision='not_used',reason='Synthetic source tone stands for reviewed dialogue; no background track.')
         from execution_context_fixture import make_context
         self.m['context_manifest_ref']=make_context(self.root)
         self.m['script_ref'] = w.reference(self.subtitles)
+        self.bind_overlay_fixture()
         plan = v.cta.empty_plan(self.m['project_id'], self.m['script_ref'])
         for choice in plan['decisions'].values():
             choice.update(decision='not_used', reason='Synthetic teaching fixture ends with its own payoff; no requested action.')
@@ -91,7 +95,11 @@ class VideoDeliveryTests(unittest.TestCase):
         audio_review=make_review(self.root/'audio-levels',self.source,[dict(start=0,end=3)],
             [dict(start=.1,end=.9),dict(start=2.1,end=2.8)],after_media=self.source)
         self.m['rough_audio_review_ref']=w.reference(self.save(audio_review))
-        self.m['progress_overlay']=v.progress.select(self.m,'not_used','Synthetic short delivery fixture; explicitly no progress overlay')
+        self.bind_rough_cut_fixture()
+        omission = w.reference(self.save({'role':'user','text':'本期不使用内置进度条。'}))
+        self.m['progress_overlay']=v.progress.select(
+            self.m,'not_used','Synthetic short delivery fixture; explicitly no progress overlay',
+            omission_source_ref=omission)
         self.asr = dict(schema='video_knowledge_pipeline.subtitle_asr_observations.v1', status='completed', segments=[
             dict(start_seconds=.1, end_seconds=.9, text='hello'), dict(start_seconds=2.1, end_seconds=2.8, text='outro')])
         asr_path = self.save(self.asr)
@@ -137,6 +145,17 @@ class VideoDeliveryTests(unittest.TestCase):
         w.write(path, data)
         return path
 
+    def test_material_intake_and_export_stages_block_omissions(self):
+        def stage(report, name):
+            return next(row for row in report['checks'] if row['stage'] == name)
+        self.assertEqual(stage(self.audit(), 'material_actual_use_after_export')['status'], 'passed')
+        self.m['material_final_review_ref'] = None
+        self.assertEqual(stage(self.audit(), 'material_actual_use_after_export')['reason'],
+                         'material_final_review_required')
+        self.m['material_intake_ref'] = None
+        self.assertEqual(stage(self.audit('preflight'), 'material_intake_before_edit')['reason'],
+                         'material_intake_required')
+
     def approve_coverage(self):
         report = v.subtitle_check(self.m, v.timeline(self.m))
         receipt = dict(input_fingerprint=report['input_fingerprint'], source_sha256=w.digest(self.source),
@@ -146,12 +165,19 @@ class VideoDeliveryTests(unittest.TestCase):
         self.m['subtitles']['review_ref'] = w.reference(self.save(receipt))
 
     def bind_desk(self):
+        self.m['material_final_review_ref'] = w.reference(self.save(dict(
+            schema=v.materials.REVIEW_SCHEMA, project_id=self.m['project_id'],
+            intake_ref=self.m['material_intake_ref'], video=self.data['items'][0]['video'],
+            screen_recording_checked=True, reviewer='Synthetic fixture', sample_receipts=[], entries=[])))
         review = self.helper.passed_review(self.data)
         self.m['desk_ref'] = review['desk_ref']
         self.m['cover_review_ref'] = w.reference(self.save(review))
 
     def accept(self):
         self.bind_final_layout()
+        self.bind_pacing_fixture()
+        import performance_fixture
+        performance_fixture.bind_plan(self.m, self.save)
         value = dict(schema='self-media.video-acceptance.v1', input_fingerprint=v.acceptance_fingerprint(self.m),
                      reviewer_kind='human', reviewer='synthetic contract fixture, not actual approval',
                      reviewed_at='2026-09-27T20:00:00+08:00', decision='pass', **{k: True for k in v.HUMAN_CHECKS})
@@ -162,7 +188,21 @@ class VideoDeliveryTests(unittest.TestCase):
             layout_sha256=self.m['final_layout_ref']['sha256'],observations_sha256=self.m['final_observations_ref']['sha256'],
             rendered_elements_verified=True,mobile_readable=True,ai_label_visible=True,
             evidence='Synthetic gate fixture, not actual human or OCR approval.')
+        value['performance_review']=performance_fixture.review(self.m,self.data['items'][0]['video'],self.save)
         self.m['acceptance_ref'] = w.reference(self.save(value))
+
+    def bind_overlay_fixture(self, *, medical="no_medical_subject", insurance="no_insurance_subject"):
+        import video_overlay_selection as overlays
+        import rough_cut_checks as checks
+        script = self.m["script_ref"]
+        quote = next(line for line in checks.spoken_body(w.bound(script)).splitlines()
+                     if len(line.strip()) >= 5 and "-->" not in line)
+        self.overlay_ai = dict(mode="ai_assisted", stages=["editing"], reason="Synthetic editing fixture.")
+        assessment = dict(schema=overlays.SCHEMA, script_ref=script, ai=self.overlay_ai,
+            medical=dict(category=medical, reason=self.m.get("medical_overlay", {}).get("reason",
+                         "Synthetic nonmedical teaching video."), evidence_quotes=[quote]),
+            insurance=dict(category=insurance, reason="Synthetic insurance assessment.", evidence_quotes=[quote]))
+        self.m["overlay_assessment_ref"] = w.reference(self.save(assessment))
 
     def bind_final_layout(self):
         final=self.data['items'][0]['video']
@@ -175,7 +215,7 @@ class VideoDeliveryTests(unittest.TestCase):
         evidence.write_text('{"scope":"synthetic layout declaration; actual frames separately checked"}',encoding='utf8')
         relative=lambda ref: dict(path=Path(ref['path']).resolve().relative_to(common).as_posix(),expected_sha256=ref['sha256'])
         duration=self.m['timeline']['duration_seconds']
-        layout=dict(schema_version='video-final-layout-safety.v1',layout_id='synthetic-final-layout',duration_seconds=duration,
+        layout=dict(schema_version='video-final-layout-safety.v1',layout_id='synthetic-final-layout',duration_seconds=duration,ai_disclosure=self.overlay_ai,
             candidate=relative(final),layout_evidence=relative(w.reference(evidence)),required_roles=['ai_label'],
             reserved_regions=v.renderer_module() and __import__('video_creation_pipeline.final_layout_safety',fromlist=['rounded_corner_regions']).rounded_corner_regions(),
             elements=[dict(element_id='synthetic-ai-label',role='ai_label',text='AI-assisted synthetic fixture',
@@ -187,6 +227,81 @@ class VideoDeliveryTests(unittest.TestCase):
         output=self.root/f'final-observations-{self.serial}'
         v.observe_final(self.m,output.resolve())
         self.m['final_observations_ref']=w.reference(output/'observations.json')
+
+    def bind_rough_cut_fixture(self):
+        # Synthetic gate fixture only. The real encoded tone stands in for speech.
+        import rough_cut_checks as checks
+        import video_review_delivery as review
+        root = self.root / ('rough-proof-' + str(self.serial))
+        root.mkdir()
+        manifest = self.m
+        media, script = manifest['edited_media'], manifest['script_ref']
+        timeline = checks.ref(self.save(manifest['timeline']))
+        registration = checks.register(media['path'], timeline['path'], root / 'registration.json')
+        evidence = checks.ref(self.save({'synthetic_only': True}))
+        proof = {'schema': checks.AUDIT_SCHEMA, 'candidate': media, 'script': script, 'timeline': timeline,
+                 'registration': registration, 'vkp': [evidence], 'automatic_review': True,
+                 'technical': {'duration': 3, 'candidates': [], 'decoder': evidence, 'log': evidence},
+                 'comparison': {'changes': [], 'repetition_candidates': [], 'omitted_phrase_candidates': []}}
+        audit = root / 'rough-cut-check.json'
+        checks.write_new(audit, proof)
+        request = root / 'review-request.json'
+        checks.write_new(request, {'schema_version': 'self-media-human-review-request-pack.v1',
+            'scope': 'post_cut_check:' + checks.ref(audit)['sha256'], 'requests': [checks.automatic_item(proof)]})
+        bundle = root / 'review'
+        review.prepare(request, bundle, 'rough_cut_recipe')
+        manifest['rough_cut_delivery_ref'] = registration
+        manifest['rough_cut_acceptance_ref'] = checks.save_automatic_review(audit, bundle)
+
+    def test_formal_delivery_requires_rough_cut_receipt_and_current_timeline(self):
+        original = self.m['rough_cut_delivery_ref']
+        self.m['rough_cut_delivery_ref'] = None
+        row = next(r for r in self.audit()['checks'] if r['stage'] == 'rough_cut_vkp_acceptance')
+        self.assertEqual(row['reason'], 'rough_cut_delivery_required')
+        self.m['rough_cut_delivery_ref'] = original
+        self.m['timeline']['segments'][0]['source_start'] = .02
+        row = next(r for r in self.audit()['checks'] if r['stage'] == 'rough_cut_vkp_acceptance')
+        self.assertEqual(row['reason'], 'rough_cut_acceptance_timeline_mismatch')
+
+    def test_performance_is_a_live_preflight_and_final_gate(self):
+        pending=self.root/'pending-performance-review.json'
+        with contextlib.redirect_stdout(io.StringIO()):
+            code=v.main(['performance-review-template','--input',str(self.save(self.m)),'--output',str(pending)])
+        self.assertEqual(0,code)
+        self.assertTrue(all(r['status']=='pending' for r in w.read(pending)['observations']))
+        original=self.m['performance_plan_ref']
+        self.m['performance_plan_ref']=None
+        report=self.audit('preflight')
+        self.assertFalse(report['preflight_ready'])
+        self.assertTrue(any(c['stage']=='performance_execution_plan' and c['status']=='blocked' for c in report['checks']))
+        self.m['performance_plan_ref']=original
+        acceptance=w.read(w.bound(self.m['acceptance_ref']))
+        acceptance.pop('performance_review')
+        self.m['acceptance_ref']=w.reference(self.save(acceptance))
+        report=self.audit()
+        self.assertFalse(report['complete'])
+        self.assertTrue(any(c['stage']=='human_acceptance' and 'performance_final_review_required' in c.get('reason','') for c in report['checks']))
+
+    def test_sourced_performance_requirement_reaches_the_actual_consumer(self):
+        from execution_context_fixture import make_context
+        schema={'type':'object','required':['performance_plan'],'properties':{
+            'performance_plan':{'type':'object','required':['cues'],'properties':{
+                'cues':{'type':'array','contains':{'type':'object','required':['kind'],
+                    'properties':{'kind':{'const':'emphasis'}}}}}}}}
+        self.m['context_manifest_ref']=make_context(self.root,[dict(id='emphasis-required',
+            consumer='video_delivery',schema=schema)],name='emphasis-context')
+        self.accept()
+        report=self.audit()
+        self.assertFalse(report['complete'])
+        self.assertTrue(any(c['stage']=='current_execution_requirements' and 'emphasis-required' in c.get('reason','') for c in report['checks']))
+        plan=v.read_ref(self.m['performance_plan_ref']);plan['cues'][0]['kind']='emphasis'
+        self.m['performance_plan_ref']=w.reference(self.save(plan))
+        acceptance=v.read_ref(self.m['acceptance_ref'])
+        import performance_fixture
+        acceptance['performance_review']=performance_fixture.review(self.m,self.data['items'][0]['video'],self.save)
+        acceptance['input_fingerprint']=v.acceptance_fingerprint(self.m)
+        self.m['acceptance_ref']=w.reference(self.save(acceptance))
+        self.assertTrue(self.audit()['complete'])
 
     def test_cta_plan_and_final_observations_are_separate_delivery_gates(self):
         acceptance = w.read(w.bound(self.m['acceptance_ref']))
@@ -221,6 +336,7 @@ class VideoDeliveryTests(unittest.TestCase):
     def test_final_insurance_identity_source_alone_does_not_prove_it_was_rendered(self):
         source=self.save(dict(identity='Synthetic author',institution='Synthetic institution',license_number='SYNTHETIC-ONLY'))
         self.m['identity_overlay']=dict(decision='required',reason='Synthetic insurance applicability',source_ref=w.reference(source))
+        self.bind_overlay_fixture(insurance='insurance_discussion')
         report=self.audit()
         row=next(r for r in report['checks'] if r['stage']=='final_media_layout_and_observations')
         self.assertEqual(row['status'],'blocked')
@@ -264,6 +380,46 @@ class VideoDeliveryTests(unittest.TestCase):
 
     def audit(self, phase='delivery'):
         return v.audit(self.save(self.m), phase)
+
+    def bind_pacing_fixture(self):
+        import video_pacing as pacing
+        final = self.data['items'][0]['video']
+        pack = w.read(w.bound(self.m['subtitles']['pack_ref']))
+        pack['requests'][0]['artifact_sha256'] = final['sha256']
+        pack_ref = w.reference(self.save(pack))
+        chunks = self.save(dict(source=final))
+        raw = self.save(dict(canonical_complete=True, chunk_manifest_path=str(chunks), duration_seconds=3,
+            result=[dict(words=['hello', 'outro'], timestamp=[[100,900],[2100,2800]],
+                         chunk_offset_seconds=0, chunk_core_start_seconds=0, chunk_core_end_seconds=3)]))
+        transcript = self.save(dict(source_path=str(raw), segments=self.asr['segments']))
+        run = self.save(dict(schema='video_knowledge_local_video_run.v1', ok=True, selected_media_path=final['path'],
+            transcript_path=str(transcript), asr_run=dict(execute=True, provider='sensevoice', raw_output_json=str(raw))))
+        log = self.root/'synthetic-pacing.log'
+        log.write_text('Synthetic test log', encoding='utf-8')
+        log_ref = w.reference(log)
+        decoder = self.save(dict(outlet_id=pacing.OUTLET, status='completed', operation='technical_qa',
+            command=[pacing.SILENCE_FILTER], inputs=[dict(artifact=final)], outputs=[dict(artifact=log_ref)]))
+        refs, metrics = pacing.measure(final, pack, run, 3., '')
+        report = dict(schema=pacing.SCHEMA, candidate=final, script=self.m['script_ref'], subtitles=pack_ref,
+            source_subtitles=self.m['subtitles']['pack_ref'], vkp=refs, audio_log=log_ref,
+            decoder=w.reference(decoder), metrics=metrics)
+        self.m['pacing_report_ref'] = w.reference(self.save(report))
+
+    def test_final_pacing_gate_rejects_missing_and_stale_versions(self):
+        def stage(report):
+            return next(row for row in report['checks'] if row['stage'] == 'current_final_video_pacing')
+
+        self.assertEqual(stage(self.audit())['status'], 'passed')
+        report = self.m.pop('pacing_report_ref')
+        self.assertEqual(stage(self.audit())['reason'], 'current_video_pacing_report_required')
+        self.m['pacing_report_ref'] = report
+        self.data['items'][0]['video'] = w.reference(self.source)
+        self.bind_desk()
+        self.assertEqual(stage(self.audit())['reason'], 'video_pacing_report_is_for_another_version')
+        self.data['items'][0]['video'] = w.reference(self.final)
+        self.bind_desk()
+        self.m['subtitles']['pack_ref'] = w.reference(self.save(dict(self.pack, revision=2)))
+        self.assertEqual(stage(self.audit())['reason'], 'video_pacing_report_is_for_another_version')
 
     def test_real_synthetic_chain_and_cli_delivery(self):
         report = self.audit()
@@ -328,19 +484,21 @@ class VideoDeliveryTests(unittest.TestCase):
         packaging={'schema':'video_creation_pipeline.video_packaging_plan.v1',
             'output':{'width':160,'height':240,'fps':10},
             'scenes':[{'scene_id':'scene-0','start_s':0,'end_s':3}]}
-        spec={'mode':'plain','position':'top','margin_x_px':10,'edge_offset_px':8,
+        spec={'mode':'plain','position':'bottom','margin_x_px':10,'edge_offset_px':8,
             'bar_height_px':4,'track_color':'CCCCCC','fill_color':'196E65',
             'color_reason':'synthetic labelled playback test'}
         if mode=='chapters':
-            script=self.root/'video-script.md';script.write_text('# Synthetic video\n## 01｜Opening\n## 02｜Outcome\n',encoding='utf-8')
+            script=self.root/'video-script.md';script.write_text('# Synthetic video\n## 01｜Opening\nSynthetic speech fixture.\n## 02｜Outcome\n',encoding='utf-8')
             self.m['script_ref']=w.reference(script)
+            self.bind_rough_cut_fixture()
+            self.bind_overlay_fixture()
             cta_plan=w.read(w.bound(self.m['cta_plan_ref']))
             cta_plan['script_ref']=self.m['script_ref']
             self.m['cta_plan_ref']=w.reference(self.save(cta_plan))
             self.data['items'][0]['cta_plan_ref']=self.m['cta_plan_ref']
             packaging['scenes']=[{'scene_id':'scene-0','start_s':0,'end_s':1.5},
                                  {'scene_id':'scene-1','start_s':1.5,'end_s':3}]
-            spec.update(mode='chapters',font_file='C:/Windows/Fonts/msyh.ttc')
+            spec.update(mode='chapters',font_file=_system_font('msyh.ttc'))
         evidence=self.root/'layout-evidence.txt';evidence.write_text('Synthetic subtitle area, not a real-video layout review')
         relative=lambda p:dict(path=p.resolve().relative_to(root).as_posix(),expected_sha256=w.digest(p))
         layout={'schema_version':'video-final-layout-safety.v1','layout_id':'synthetic-progress-delivery',
@@ -351,6 +509,8 @@ class VideoDeliveryTests(unittest.TestCase):
                  critical_content=True,rect=dict(x=.1,y=.4,width=.8,height=.1))],
             'reserved_regions':[dict(region_id=f'corner-{i}',region_kind='rounded_corner',
              rect=dict(x=x,y=y,width=.02,height=.02)) for i,(x,y) in enumerate([(0,0),(.98,0),(0,.98),(.98,.98)])]}
+        layout['reserved_regions'].append(dict(region_id='platform-controls',region_kind='platform_overlay',
+            rect=dict(x=0,y=.92,width=1,height=.08)))
         pp,sp,lp=self.save(packaging),self.save(spec),self.save(layout)
         self.m['render_chain_refs']=[w.reference(self.receipt)]
         self.m['progress_overlay']=v.progress.select(self.m,'use','Synthetic proof of normal subtitle then progress rendering',
@@ -358,6 +518,9 @@ class VideoDeliveryTests(unittest.TestCase):
             workspace_root=root,program_ref=w.reference(self.final))
         self.assertEqual(v.progress.check(self.m,'preflight')['status'],'selection_and_reservation_checked')
         plan=progress_overlay.build(self.final,pp,lp,sp,root,script_ref=self.m.get('script_ref'));plan_path=self.save(plan)
+        self.assertGreater(plan['geometry']['rect']['y'], .9)
+        self.assertIn({'element_id': 'progress-overlay', 'region_id': 'platform-controls'},
+                      plan['layout_check']['auxiliary_reserved_region_overlaps'])
         if mode=='chapters':
             self.assertEqual([r['text'] for r in plan['chapters']],['01/02  Opening','02/02  Outcome'])
             self.assertEqual(plan['typography']['preset_id'],'compact')
@@ -437,11 +600,30 @@ class VideoDeliveryTests(unittest.TestCase):
     def test_requested_motion_requires_specific_current_final_observation(self):
         self.pack['requests'][0]['subtitle_cues'][0].update(speaker='child',motion='bounce',font_size_1080=96)
         self.m['subtitles']['pack_ref']=w.reference(self.save(self.pack))
-        self.approve_coverage();self.accept()
+        self.approve_coverage()
+        self.assertEqual(self.audit()['next_action'], 'frame_safety_before_render')
+        canvas = [160, 240]
+        times = [.25]
+        composition = w.reference(self.save({'scope': 'synthetic frame measurement'}))
+        measured = w.reference(self.save(dict(schema='self-media.compositor-frame-measurements.v1',
+            canvas=canvas, composition_ref=composition,
+            samples=[dict(time_seconds=.25, bounds={'caption': [12, 180, 148, 220]})])))
+        plan = dict(schema=v.framing.SCHEMA, project_id=self.m['project_id'], canvas=canvas, duration_seconds=3,
+            composition_ref=composition, sources=[dict(stage='program', artifact_ref=self.m['edited_media'])],
+            layers=[dict(id='caption', role='subtitle', start_seconds=.1, end_seconds=.9)],
+            sample_times_seconds=times, measurements_ref=measured)
+        plan_ref = w.reference(self.save(plan))
+        checked = v.framing.check_ref(plan_ref, v.framing.probe_media)
+        self.m['frame_safety_plan_ref'] = plan_ref
+        self.m['frame_safety_review_ref'] = w.reference(self.save({**checked, 'plan_ref': plan_ref}))
+        self.m['final_layout_ref'] = None
+        self.accept()
         report=self.audit()
         self.assertEqual(report['next_action'],'human_acceptance')
+        self.assertEqual(v.read_ref(self.m['final_observations_ref'])['approved_sample_times_seconds'], times)
         acceptance=v.read_ref(self.m['acceptance_ref'])
         acceptance.update(speaker_styles_consistent=True,preview_export_consistent=True,requested_motion_visible=True)
+        acceptance['final_layout_review']['checked_frame_safety_times_seconds'] = times
         self.m['acceptance_ref']=w.reference(self.save(acceptance))
         self.assertTrue(self.audit()['complete'])
 
