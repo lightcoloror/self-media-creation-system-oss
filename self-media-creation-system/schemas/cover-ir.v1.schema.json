@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://local.invalid/schemas/cover-ir.v1.schema.json",
+  "$id": "https://json-schema.used-by-codex.org/cover-ir.v1.schema.json",
   "title": "CoverIR",
   "description": "Unified Cover Intermediate Representation (Cover IR v1.0) for multi-aspect ratio social media thumbnail generation, co-editing, and deterministic rendering.",
   "type": "object",

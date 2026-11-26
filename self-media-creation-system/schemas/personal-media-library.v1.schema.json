@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Explicit-root local personal media catalog (metadata only)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "library_id", "library_root", "synthetic_only", "created_at", "assets", "references"],
+  "properties": {
+    "schema_version": {"const": "personal-media-library.v1"},
+    "library_id": {"type": "string", "pattern": "^library-[a-f0-9]{32}$"},
+    "library_root": {"type": "string", "minLength": 1},
+    "synthetic_only": {"type": "boolean"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "assets": {"type": "array", "items": {"$ref": "#/$defs/asset"}},
+    "references": {"type": "array", "items": {"$ref": "#/$defs/reference"}}
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1},
+    "labels": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/text"}},
+    "asset": {
+      "type": "object", "additionalProperties": false,
+      "required": ["asset_id", "relative_path", "bytes", "sha256", "registered_at", "duration_seconds", "duration_basis", "data_classification", "summary", "spoken_text", "language", "tags", "suitable_topics", "unsuitable_contexts", "source_creator", "metadata_confirmed", "rights"],
+      "properties": {
+        "asset_id": {"type": "string", "pattern": "^asset-[a-f0-9]{32}$"},
+        "relative_path": {"$ref": "#/$defs/text"},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "registered_at": {"type": "string", "format": "date-time"},
+        "duration_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "duration_basis": {"enum": ["human-supplied", "synthetic-fixture"]},
+        "data_classification": {"enum": ["synthetic-only", "private-personal"]},
+        "summary": {"$ref": "#/$defs/text"},
+        "spoken_text": {"type": "string"},
+        "language": {"$ref": "#/$defs/text"},
+        "tags": {"$ref": "#/$defs/labels"},
+        "suitable_topics": {"$ref": "#/$defs/labels"},
+        "unsuitable_contexts": {"$ref": "#/$defs/labels"},
+        "source_creator": {"$ref": "#/$defs/text"},
+        "metadata_confirmed": {"const": true},
+        "rights": {
+          "type": "object", "additionalProperties": false,
+          "required": ["status", "scope_note", "cross_project_reference_allowed", "internal_review_only", "per_use_confirmation_required", "publication_authorized", "external_upload_authorized"],
+          "properties": {
+            "status": {"enum": ["confirmed", "unknown"]},
+            "scope_note": {"$ref": "#/$defs/text"},
+            "cross_project_reference_allowed": {"type": "boolean"},
+            "internal_review_only": {"const": true},
+            "per_use_confirmation_required": {"const": true},
+            "publication_authorized": {"const": false},
+            "external_upload_authorized": {"const": false}
+          }
+        }
+      }
+    },
+    "reference": {
+      "type": "object", "additionalProperties": false,
+      "required": ["reference_id", "asset_id", "project_root", "in_seconds", "out_seconds", "confirmed_at", "publication_authorized", "external_upload_authorized"],
+      "properties": {
+        "reference_id": {"type": "string", "pattern": "^ref-[a-f0-9]{32}$"},
+        "asset_id": {"type": "string", "pattern": "^asset-[a-f0-9]{32}$"},
+        "project_root": {"$ref": "#/$defs/text"},
+        "in_seconds": {"type": "number", "minimum": 0},
+        "out_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "confirmed_at": {"type": "string", "format": "date-time"},
+        "publication_authorized": {"const": false},
+        "external_upload_authorized": {"const": false}
+      }
+    }
+  }
+}

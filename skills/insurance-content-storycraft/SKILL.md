@@ -5,7 +5,7 @@ description: Structure, rewrite, plan, or critique Chinese self-media stories fo
 
 # Insurance Content Storycraft
 
-This skill turns the user's existing朋友圈/自媒体 framework into a repeatable, evidence-bound storytelling system. It combines McKee's `Story`, `Dialogue`, `Character`, and business-story work with `Storyworthy`, `Storycraft`, the Harvard narrative-nonfiction collection, and `Made to Stick`. Source status and retrieval are defined in [bookwiki-source-map.md](references/source-notes.md).
+This skill turns the user's existing朋友圈/自媒体 framework into a repeatable, evidence-bound storytelling system. It combines McKee's `Story`, `Dialogue`, `Character`, and business-story work with `Storyworthy`, `Storycraft`, the Harvard narrative-nonfiction collection, and `Made to Stick`. Source status and retrieval are defined in [bookwiki-source-map.md](references/bookwiki-source-map.md).
 
 ## Single Problem Contract
 
@@ -17,15 +17,15 @@ Load only what the task needs:
 
 | Need | Read on demand |
 | --- | --- |
-| Fast route and output check | [cheatsheet.md](../../self-media-creation-system/structure-route-playbook.md) |
-| Topic, audience, and channel choice | [channel-and-topics.md](../../self-media-creation-system/topic-reframing-playbook.md) |
-| Causal Story structure and machine card | [story-design.md](../../self-media-creation-system/docs/story-realization-review.md) |
-| Short video, WeChat article, interview, or personal-brand adaptation | [cross-media-storytelling.md](../../self-media-creation-system/format-adapter-playbooks.md) |
-| Dialogue, subtext, and interview audio | [dialogue-and-voice.md](../human-voice-editor/references/rulebook.md) |
-| Character and IP evidence | [ip-and-character.md](../../self-media-creation-system/docs/story-material-inbox.md) |
-| Emotional design | [emotional-resonance.md](../../self-media-creation-system/narrative-resonance-lens.md) |
-| Source Wiki and Evidence index | [bookwiki-source-map.md](references/source-notes.md) |
-| Sensitive-case contract and eleven gates | [contract-binding.json](references/contract-binding.json), [initial-draft contract validator](https://github.com/lightcoloror/content-visual-studio-oss/blob/e5bdff31cd2598d681a2b71e701e596673e9e7c6/scripts/initial_draft_quality_gate.py) |
+| Fast route and output check | [cheatsheet.md](references/cheatsheet.md) |
+| Topic, audience, and channel choice | [channel-and-topics.md](references/channel-and-topics.md) |
+| Causal Story structure and machine card | [story-design.md](references/story-design.md) |
+| Short video, WeChat article, interview, or personal-brand adaptation | [cross-media-storytelling.md](references/cross-media-storytelling.md) |
+| Dialogue, subtext, and interview audio | [dialogue-and-voice.md](references/dialogue-and-voice.md) |
+| Character and IP evidence | [ip-and-character.md](references/ip-and-character.md) |
+| Emotional design | [emotional-resonance.md](references/emotional-resonance.md) |
+| Source Wiki and Evidence index | [bookwiki-source-map.md](references/bookwiki-source-map.md) |
+| Sensitive-case contract and eleven gates | [contract-binding.json](references/contract-binding.json), [initial-draft-quality-gate.md](references/initial-draft-quality-gate.md) |
 
 ## When to use
 
@@ -47,27 +47,27 @@ Always work in this order:
 0. **Check the machine fact card**
    If the task involves news, hot topics, customer stories, insurance, finance, health, legal, privacy, or product claims, first build or request an exact `content-fact-card.v0` artifact through `$content-fact-card`. The machine Schema owns the field names and rejects undeclared fields. Do not turn inspiration into first-person fact or customer proof. Bind the story to the exact fact-card artifact/revision.
 1. **Select the topic and channel**
-   Decide audience, channel, and target action using [channel-and-topics.md](../../self-media-creation-system/topic-reframing-playbook.md).
+   Decide audience, channel, and target action using [channel-and-topics.md](references/channel-and-topics.md).
 2. **Choose who is speaking**
-   Clarify the speaker's role, personality, and trust signal using [ip-and-character.md](../../self-media-creation-system/docs/story-material-inbox.md).
+   Clarify the speaker's role, personality, and trust signal using [ip-and-character.md](references/ip-and-character.md).
 3. **Pull real experience first**
    Before drafting, extract 2-3 concrete memories, phrases, judgments, or lived details from the user using [de-ai-style.md](references/de-ai-style.md).
 3a. **Select the smallest truthful story unit**
-   Use [cross-media-storytelling.md](../../self-media-creation-system/format-adapter-playbooks.md) to distinguish a first-person memory, observed scene, authorized interview, or documented case. Identify the smallest moment that changes meaning. For repeatable local collection, first evaluate an already-deidentified candidate with `self-media-creation-system/scripts/story_material_inbox.py`; `ready-for-story-design` is only permission to continue to the fact-card and story-design gates, never permission to draft from unsupported material. If the material has no consequential change, keep a non-story route.
+   Use [cross-media-storytelling.md](references/cross-media-storytelling.md) to distinguish a first-person memory, observed scene, authorized interview, or documented case. Identify the smallest moment that changes meaning. For repeatable local collection, first evaluate an already-deidentified candidate with `self-media-creation-system/scripts/story_material_inbox.py`; `ready-for-story-design` is only permission to continue to the fact-card and story-design gates, never permission to draft from unsupported material. If the material has no consequential change, keep a non-story route.
 4. **Build and validate the story spine**
-   When `structure_route=story-arc`, create `story-design-card.v1` and pass the deterministic gate described in [story-design.md](../../self-media-creation-system/docs/story-realization-review.md). The card must record source/authorization treatment, one fact-bound scene anchor, first action and real feedback, and a format-fit number of truthful turns. Map emotional beats with [emotional-resonance.md](../../self-media-creation-system/narrative-resonance-lens.md). Direct answers, checklists, and mechanism explanations do not need a story card and must not be forced into this route.
+   When `structure_route=story-arc`, create `story-design-card.v1` and pass the deterministic gate described in [story-design.md](references/story-design.md). The card must record source/authorization treatment, one fact-bound scene anchor, first action and real feedback, and a format-fit number of truthful turns. Map emotional beats with [emotional-resonance.md](references/emotional-resonance.md). Direct answers, checklists, and mechanism explanations do not need a story card and must not be forced into this route.
 4a. **Build the serious-content attention contract before drafting**
    For insurance, health, high-risk, or declared serious professional content, complete the precreative part of the existing `serious-content-translation-review.v1` route before writing prose. In addition to audience relevance, tension, stakes, and central judgment, record the protagonist's immediate goal or the reader's concrete task, one fact-bound scene/dialogue anchor, the question that should keep the viewer watching, the later payoff, and what the viewer can do with the result. If the target action is consultation or conversion, record one concrete service action and its immediate process effect. Also classify `sensitivity_profile` as `ordinary`, `professional-sensitive`, `medical-sensitive`, `affected-person-severe-illness`, `customer-loss`, `privacy-high-risk`, or `compound-high-sensitivity`. Severe illness, customer loss, privacy-high-risk, and compound-high-sensitivity content default to `humor_level=none`; `light` requires an explicit human-approved exception that never targets the affected person. Moderate or experimental humor is blocked. A case summary, abstract lesson, or dramatic wording cannot satisfy these fields.
 5. **Run the mandatory 11-gate initial-draft quality gate**
-   Before language polishing, hooks, trial shooting, or publishing preparation, review the first draft with [initial-draft contract validator](https://github.com/lightcoloror/content-visual-studio-oss/blob/e5bdff31cd2598d681a2b71e701e596673e9e7c6/scripts/initial_draft_quality_gate.py). The exact ordered gates are: fact/evidence, single task, service causality, interview integrity, distribution compliance, medical/insurance, privacy/authorization, title/opening alignment, preliminary voice/AI trace, CTA/product, and production/series. If the creator's concrete action can be removed without changing the story, the service-causality gate fails and the draft returns to step 4. The machine binding is [contract-binding.json](references/contract-binding.json); missing or drifted contracts block downstream work.
+   Before language polishing, hooks, trial shooting, or publishing preparation, review the first draft with [initial-draft-quality-gate.md](references/initial-draft-quality-gate.md). The exact ordered gates are: fact/evidence, single task, service causality, interview integrity, distribution compliance, medical/insurance, privacy/authorization, title/opening alignment, preliminary voice/AI trace, CTA/product, and production/series. If the creator's concrete action can be removed without changing the story, the service-causality gate fails and the draft returns to step 4. The machine binding is [contract-binding.json](references/contract-binding.json); missing or drifted contracts block downstream work.
 5a. **Return flat but correct drafts for structural revision**
    Run the postcreative attention section of `serious-content-translation-review.v1`. The draft must preserve an immediate watch reason, audience relevance, the protagonist goal or reader task, concrete stakes, a scene/dialogue/direct-utility anchor, progressive information, a real completion payoff, a usable takeaway, and service causality when acquisition is intended. These are independent revision checks, not a score. One missing item returns the piece to steps 4–4a; factual and compliance strength cannot average it into a pass.
 5b. **Run the fun-integrity hard gate**
    When humor, a visual gag, a playful analogy, or any other entertaining device is present, classify its role as `related`, `decorative`, or `misleading`. Only `related` may pass. Record whether it helps answer the core question, whether its target is safe, whether the facts and service value still stand after removing it, and whether the primary memory target is the central judgment/action/mechanism rather than the gag. Decorative or misleading fun, unsafe targets, fun-dependent core value, and gag-first recall all return the draft for revision. When no fun is present, record `role=none`; do not invent entertainment merely to satisfy the gate.
 6. **Humanize the language**
-   Rewrite into spoken, emotional, low-pressure language with [dialogue-and-voice.md](../human-voice-editor/references/rulebook.md).
+   Rewrite into spoken, emotional, low-pressure language with [dialogue-and-voice.md](references/dialogue-and-voice.md).
 6a. **Adapt without changing the facts**
-   Apply the short-video, WeChat-article, interview, or personal-brand adapter in [cross-media-storytelling.md](../../self-media-creation-system/format-adapter-playbooks.md). Channel changes may compress, reorder, or reframe; they must not add scenes, quotes, motives, or results.
+   Apply the short-video, WeChat-article, interview, or personal-brand adapter in [cross-media-storytelling.md](references/cross-media-storytelling.md). Channel changes may compress, reorder, or reframe; they must not add scenes, quotes, motives, or results.
 6b. **Prove cross-platform fact consistency**
    When one item has two or more platform variants, bind every variant to the same fact-card reference and revision, declare the same normalized core claims, and run `cross-platform-fact-consistency-review.v1` through `self-media-creation-system/scripts/cross_platform_fact_consistency_gate.py`. A platform may omit a non-core claim only for `density`, `format`, or `duration`, with the reason recorded. Fact hash drift, mixed revisions, undeclared claims, changed claim text, omitted core claims, stale receipts, and publication escalation fail closed. This comparator reviews declared claims and hashes; it does not infer claims from prose and does not authorize publishing.
 7. **Choose a distinctive angle and block fallback paths**
@@ -231,10 +231,10 @@ Default to this order:
 
 For case-based video, also run:
 
-- pressure-choice check from [story-design.md](../../self-media-creation-system/docs/story-realization-review.md)
-- subtext/original-audio check from [dialogue-and-voice.md](../human-voice-editor/references/rulebook.md)
-- IP evidence check from [ip-and-character.md](../../self-media-creation-system/docs/story-material-inbox.md)
-- mandatory initial-draft review from [initial-draft contract validator](https://github.com/lightcoloror/content-visual-studio-oss/blob/e5bdff31cd2598d681a2b71e701e596673e9e7c6/scripts/initial_draft_quality_gate.py)
+- pressure-choice check from [story-design.md](references/story-design.md)
+- subtext/original-audio check from [dialogue-and-voice.md](references/dialogue-and-voice.md)
+- IP evidence check from [ip-and-character.md](references/ip-and-character.md)
+- mandatory initial-draft review from [initial-draft-quality-gate.md](references/initial-draft-quality-gate.md)
 - serious-content attention precheck and postcheck from the registered `serious-content-translation-review.v1` route
 
 For short video, ask these questions before wording polish:
@@ -282,9 +282,85 @@ Minimum passes:
 
 If a piece still sounds generic after pass 3, do not merely edit words. Rechoose the angle and rebuild from a more concrete opening.
 
+## References
 
-## Public reference boundary
+- Topic and channel selection: [channel-and-topics.md](references/channel-and-topics.md)
+- Story structure: [story-design.md](references/story-design.md)
+- Emotional resonance: [emotional-resonance.md](references/emotional-resonance.md)
+- Dialogue and emotional phrasing: [dialogue-and-voice.md](references/dialogue-and-voice.md)
+- IP and character design: [ip-and-character.md](references/ip-and-character.md)
+- Hooks and headlines: [hooks-and-headlines.md](references/hooks-and-headlines.md)
+- Compliance checks: [compliance-checks.md](references/compliance-checks.md)
+- McKee integration map: [mckee-mapping.md](references/mckee-mapping.md)
+- De-AI writing pass: [de-ai-style.md](references/de-ai-style.md)
+- Mandatory initial-draft quality gate: [initial-draft-quality-gate.md](references/initial-draft-quality-gate.md)
+- Machine contract binding: [contract-binding.json](references/contract-binding.json)
+- Cross-media adaptation: [cross-media-storytelling.md](references/cross-media-storytelling.md)
+- BookWiki source and evidence map: [bookwiki-source-map.md](references/bookwiki-source-map.md)
+- Fast route cheatsheet: [cheatsheet.md](references/cheatsheet.md)
 
-Original private book notes, local case history and update receipts are not distributed. The public edition binds the same fact/review contracts and uses the available first-party guides. Books are optional craft references, never evidence for a current case.
+## Update record
 
-公开链接适配：2026-11-08，Codex（精确运行模型未独立核验）。三处初稿复核链接改指现有 contract-binding.json 所绑定提交的真实校验器，不再以通用 README 冒充方法文档。四份合同哈希和十一项 gate 顺序保持原样；原方法文档未随公开版分发，记录校验仍不能替代实际内容判断、作者确认或发布授权。
+### 2026-09-03 17:23:59 | Codex (GPT-5.6 Sol)
+
+- Intent: turn the remaining serious-content fun and cross-platform consistency gaps into executable, fail-closed checks.
+- Decision: require a seven-value sensitivity profile, near-zero-humor defaults for severe illness/loss/privacy cases, a four-part fun-integrity review, and a hash-bound cross-platform claim comparator.
+- Reason: the previous route could reject unsafe humor but could still admit unrelated decorative fun, gag-first recall, or platform variants whose core claims silently changed.
+- Evidence: the user-approved gap audit; `serious-content-translation-review.v1`; `cross-platform-fact-consistency-review.v1`; deterministic positive and negative fixtures.
+- Effective scope: new or materially revised serious professional, insurance, health, customer-loss, privacy-sensitive, and multi-platform content candidates; it does not rewrite verified facts or authorize publishing.
+- Rollback: revert the four new contract fields/gates and restore the prior registered skill hash and routing contract-set version together; do not retain a partial binding.
+
+### 2026-09-03 14:00:56 | Codex (GPT-5.6 Sol)
+
+- Intent: integrate the user's full storytelling source set into the existing self-media workflow without creating a competing skill.
+- Decision: add a BookWiki evidence map, a shared story-unit test, and adapters for short video, WeChat articles, interviews, and personal-brand content.
+- Reason: McKee supplies causal structure, while the additional books supply nonfiction reporting, daily story discovery, scene craft, and memorable concrete communication.
+- Evidence: 14 processed BookWiki sources; seven passed the source-quality gate; the cross-book practice guide passed review at 0.96 with 80/80 evidence IDs traceable.
+- Effective scope: narrative planning, drafting, rewriting, and critique across the four requested media; sensitive case work still requires the existing fact card and eleven-gate review.
+- Rollback: remove the two new references and this update while preserving the prior McKee-based story-design and compliance chain.
+
+### 2026-09-03 16:20:00 | Codex (GPT-5.6 Sol)
+
+- Intent: make story structure and emotional resonance executable rather than advisory.
+- Decision: require an evidence-bound `story-design-card.v1` before drafting whenever `structure_route=story-arc`, and separate audience interest, identification, and immersion from unsupported emotion labels.
+- Reason: the previous six-beat note did not test causal progression, pressure-choice, turning-point value change, emotional evidence, or the risk that one vivid medical/insurance story could be mistaken for general proof.
+- Evidence: the user's local McKee collections, narrative transportation and health-narrative research, and the existing serious-content attention/integrity gates.
+- Effective scope: new or materially revised story-arc content; direct-answer, checklist, and mechanism routes remain unchanged.
+- Rollback: remove the conditional story card step and restore the prior references together; do not retain partial route bindings.
+
+### 2026-08-24 23:30:00 | Codex (GPT-5.6 Sol)
+
+- Intent: converge Storycraft with the current post-draft machine gate.
+- Decision: bind the Skill to `content-fact-card.v0`, the 11 exact review gates, and fail-closed contract drift behavior.
+- Reason: the earlier prose omitted `distribution_compliance` and therefore described ten gates while the current Schema and validator require eleven.
+- Evidence: `case-video-initial-draft-review.v1` and `initial_draft_quality_gate.py` in Content Studio.
+- Effective scope: all new or revised insurance/medical/customer-case Storycraft outputs.
+- Rollback: restore the prior prose only as historical reference; it is not compatible with the current 11-gate machine review.
+
+### 2026-08-14 18:55:26 | Codex (GPT-5.6 Sol)
+
+- Intent: prevent structurally wrong but fluent case scripts from reaching voice polishing and production.
+- Decision: add a mandatory, fail-closed post-Storycraft review before human-voice and hook stages.
+- Reason: the proton-treatment series exposed drafts whose customer story remained understandable after the creator's service actions were removed.
+- Evidence: the local `case-video-initial-draft-review.v1` contract and its validator/tests define ten exact gates and bind approval to the draft-body SHA-256.
+- Effective scope: all insurance/medical/customer case scripts created or revised with this Skill; it does not authorize publication or replace final high-risk review.
+
+### 2026-09-03 19:12:00 | Codex (GPT-5.6 Sol)
+
+- Intent: close the remaining gap between the storytelling references and the executable self-media route.
+- Decision: add deidentified story-material readiness, source/authorization/identity handling, fact-bound scene anchors, action-feedback gaps, and format-specific story profiles before drafting.
+- Reason: a fluent six-beat outline could still invent connective tissue, overbuild a short video, or treat an interview like narration.
+- Evidence: `story-material-observation.v1`, `story-design-card.v1`, the registered routing 1.5.0 contract set, and their synthetic positive/negative tests.
+- Effective scope: story discovery and story-arc planning for Moments, graphic notes, short video, interviews, longform, demos, and live modules; craft scoring remains advisory.
+- Rollback: revert the story-material step and the expanded story-design fields together, then restore the previous skill hash in the registered contract set.
+
+### 2026-09-03 16:30:05 | Codex (GPT-5.6 Sol)
+
+- Intent: stop factually correct but emotionally flat short-video plans from entering wording polish and production.
+- Decision: bind Storycraft to the existing serious-content attention plan before drafting and require a post-draft revision check for goal/task, concrete stakes, scene/dialogue, progression, payoff, reusable value, and acquisition service causality.
+- Reason: the proton-treatment redesign still produced case-summary openings and delayed the creator's meaningful actions even after the causal story gate passed.
+- Evidence: the user-reviewed propagation diagnosis, the existing `serious-content-translation-review.v1` dual-gate contract, and the already fact-bound story-material/story-design artifacts.
+- Effective scope: new or materially revised insurance, medical, high-risk, and serious professional short-video candidates; it does not change verified facts, authorize publication, or force non-story content into a story arc.
+- Rollback: remove steps 4a/5a and the short-video attention checklist together with the matching serious-content gate fields and tests.
+
+

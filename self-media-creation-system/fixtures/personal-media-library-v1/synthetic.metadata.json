@@ -1,0 +1,22 @@
+{
+  "duration_seconds": 2.0,
+  "duration_basis": "synthetic-fixture",
+  "data_classification": "synthetic-only",
+  "summary": "Invented two-second ending",
+  "spoken_text": "synthetic example",
+  "language": "en",
+  "tags": ["family", "ending"],
+  "suitable_topics": ["fictional family story"],
+  "unsuitable_contexts": ["serious loss"],
+  "source_creator": "synthetic test",
+  "metadata_confirmed": true,
+  "rights": {
+    "status": "confirmed",
+    "scope_note": "Synthetic test only; this is not a real human approval",
+    "cross_project_reference_allowed": true,
+    "internal_review_only": true,
+    "per_use_confirmation_required": true,
+    "publication_authorized": false,
+    "external_upload_authorized": false
+  }
+}

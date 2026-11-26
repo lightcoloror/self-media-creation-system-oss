@@ -1,7 +1,7 @@
 {
   "schema_version": "routing-contract-set.v1",
   "contract_set_id": "registered-content-routing",
-  "contract_set_version": "1.9.1",
+  "contract_set_version": "1.9.2",
   "canonical_root": ".",
   "hash_mode": "canonical-json-v1",
   "components": {
@@ -18,12 +18,12 @@
     "platform_overlays": {
       "path": "platform-overlays.json",
       "schema_version": "0.2",
-      "canonical_json_sha256": "52c42d9817b2d19b4c8805ada5ef6869ce74cdcc6a0152e82898e0bc44acbae0"
+      "canonical_json_sha256": "414227509f2011496890b9113c790975c1d51b3cff0ea0ed65b37081cf8f794d"
     },
     "skill_registry": {
       "path": "skill-registry.json",
       "schema_version": "1.2",
-      "canonical_json_sha256": "aa09749e15b9d97f7aafe6a6ba90cb3583a9116925825e65b29db08700ad72f0"
+      "canonical_json_sha256": "4f3da3bdc2423fcf2064158a27648e9350f06e1bc35a93e21f705a3e15718d52"
     },
     "quality_gates": {
       "path": "quality-gates.json",
@@ -112,8 +112,8 @@
   },
   "provenance": {
     "created_at": "2026-08-24T23:30:00+08:00",
-    "updated_at": "2026-11-02T20:20:30+08:00",
-    "acting_tool_model": "Codex (gpt-6.1-sol)",
+    "updated_at": "2026-11-22T09:48:00+08:00",
+    "acting_tool_model": "Antigravity",
     "supersedes": [
       "registered-routing-unbound-component-set-before-2026-08-21",
       "self-media-creation-system-root-routing-snapshots-before-2026-08-21",
@@ -126,7 +126,8 @@
       "registered-content-routing@1.6.0",
       "registered-content-routing@1.7.0",
       "registered-content-routing@1.8.0",
-      "registered-content-routing@1.9.0"
+      "registered-content-routing@1.9.0",
+      "registered-content-routing@1.9.1"
     ]
   }
 }

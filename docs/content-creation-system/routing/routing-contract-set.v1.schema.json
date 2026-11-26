@@ -8,7 +8,7 @@
   "properties": {
     "schema_version": {"const": "routing-contract-set.v1"},
     "contract_set_id": {"const": "registered-content-routing"},
-    "contract_set_version": {"const": "1.9.1"},
+    "contract_set_version": {"const": "1.9.2"},
     "canonical_root": {"const": "."},
     "hash_mode": {"const": "canonical-json-v1"},
     "components": {

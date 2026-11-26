@@ -1,7 +1,5 @@
 # De-AI Style
 
-公开适配：2026-11-08，Codex（精确运行模型未独立核验）。第一方通用流程参考；原历史署名保留。示意句只说明写法，不是客户经历、引语或已完成的事实。任何真实细节仍须有来源和作者确认。外部方法名仅保留为方法线索，未附带外部书籍、Skill 源码、字体或素材。
-
 ## Purpose
 
 Use this file to make content sound less like a polished AI answer and more like a real person with real experience.
@@ -396,7 +394,3 @@ Before final output, ask:
 11. Is the post too tidy for WeChat Moments: too many lists, symmetrical lines, or final slogans?
 
 If the answer to 3, 4, 7, 8, 9, 10, or 11 is yes, revise again.
-
-## Public adaptation boundary
-
-These editing checks do not establish a fact, improve a draft by themselves, or grant publication authority. Record an actual rewrite and its reason when a check identifies a problem; preserve original evidence and author confirmation. Do not create a witness line or near-quote from a style example.

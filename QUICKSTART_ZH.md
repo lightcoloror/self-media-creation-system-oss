@@ -59,20 +59,20 @@ python -m venv .venv
 
 ```bash
 git clone https://github.com/lightcoloror/question-research-poc-oss.git question-research-poc
-git -C question-research-poc checkout c9957bf680da8a7232ef332519e33a788a17c93d
+git -C question-research-poc checkout 0e0f8e4c819c59ec43ffb88e9db61c36245f87a8
 
 git clone https://github.com/lightcoloror/content-visual-studio-oss.git content-studio-poc
-git -C content-studio-poc checkout db610dda39548d6eab4502bf23117e303bc5062b
+git -C content-studio-poc checkout dec8e0572f39a688a3cff28cd3aaf017ec51635c
 
 git clone https://github.com/lightcoloror/artifact-lifecycle-core-oss.git artifact-lifecycle-core
 git -C artifact-lifecycle-core checkout fab239085724458c2a6b9452d0a1ba4f4012593e
 
 git clone https://github.com/lightcoloror/video-knowledge-pipeline-oss.git video-knowledge-pipeline
-git -C video-knowledge-pipeline checkout 870460c9e758850aadd548011510c7b7e780ddc5
+git -C video-knowledge-pipeline checkout 219f1e7d9edbf520c8200a7c56a5051765dd4ff6
 
 mkdir -p ai-video-tools-20260708
 git clone https://github.com/lightcoloror/mvp-video-pipeline-oss.git ai-video-tools-20260708/mvp-video-pipeline
-git -C ai-video-tools-20260708/mvp-video-pipeline checkout 8592e867b2e0c969205b3e30ec6ef05b0ec18217
+git -C ai-video-tools-20260708/mvp-video-pipeline checkout 214c049d15f0f3a41949d9bb23a0ec84a818fc67
 
 # 初始化并校验本地只读工具发现清单
 .venv/Scripts/python tools/public_toolchain.py init
@@ -115,19 +115,19 @@ cd ..
   - **41 项跳过明细（诚实边界）**：31 项因未安装 `ffmpeg`/`ffprobe` 跳过（`test_video_delivery.py`）；3 项因未装可选 `numpy`/`cv2` 跳过（抠图、接触表、图文视觉多样性测试）；1 项因完整封面渲染扩展未随公开版分发跳过（`test_cover_design.py`）；1 项因未克隆可选 `external/ryan-wechat-publisher` 跳过（`test_flow_connections.py`）；1 项因测试环境不支持目录符号链接跳过（`test_content_operations_cycle.py`）；其余 4 项为公开版保留的私有启动器/线程历史/发布包装边界占位校验。
 - **重要边界**：上述离线合成与契约测试通过，**不代表**已完成真实自媒体账号登录、外部大模型 API 鉴权配额验证或线上平台真实发布。
 
-## 5. 11 仓库生态版本矩阵（2026-11-23）
+## 5. 11 仓库生态版本矩阵（2026-11-26）
 
 | 角色 | 公开仓库 | 发行标签 | 锁定提交（`main`） | 说明 |
 | --- | --- | --- | --- | --- |
 | 总控与自媒体规则引擎 | [`self-media-creation-system-oss`](https://github.com/lightcoloror/self-media-creation-system-oss) | `v0.1.8` | `main`（本指南所属发布） | 入口调度、选题/口吻/合规/交付门禁与工作区粘合 |
-| 图文排版与视觉规范 | [`content-visual-studio-oss`](https://github.com/lightcoloror/content-visual-studio-oss) | `v0.1.11` | `db610dda39548d6eab4502bf23117e303bc5062b` | 图文/长文章卡片、视觉检查与候选交付适配 |
-| 视频知识抽提与切分 | [`video-knowledge-pipeline-oss`](https://github.com/lightcoloror/video-knowledge-pipeline-oss) | `v0.1.5` | `870460c9e758850aadd548011510c7b7e780ddc5` | 视频转录、知识点拆解与审计；前端需另行 `npm install && node build.mjs` |
-| 粗剪与渲染执行出口 | [`mvp-video-pipeline-oss`](https://github.com/lightcoloror/mvp-video-pipeline-oss) | `v0.8.2` | `8592e867b2e0c969205b3e30ec6ef05b0ec18217` | 唯一受控 FFmpeg 执行出口与成片清单核验 |
-| 问题研究编排入口 | [`question-research-poc-oss`](https://github.com/lightcoloror/question-research-poc-oss) | `v0.1.3` | `c9957bf680da8a7232ef332519e33a788a17c93d` | 研究问题规划、证据缺口与结构化结论桥接 |
+| 图文排版与视觉规范 | [`content-visual-studio-oss`](https://github.com/lightcoloror/content-visual-studio-oss) | `v0.1.11` | `dec8e0572f39a688a3cff28cd3aaf017ec51635c` | 图文/长文章卡片、视觉检查与候选交付适配 |
+| 视频知识抽提与切分 | [`video-knowledge-pipeline-oss`](https://github.com/lightcoloror/video-knowledge-pipeline-oss) | `v0.1.5` | `219f1e7d9edbf520c8200a7c56a5051765dd4ff6` | 视频转录、知识点拆解与审计；前端需另行 `npm install && node build.mjs` |
+| 粗剪与渲染执行出口 | [`mvp-video-pipeline-oss`](https://github.com/lightcoloror/mvp-video-pipeline-oss) | `v0.8.2` | `214c049d15f0f3a41949d9bb23a0ec84a818fc67` | 唯一受控 FFmpeg 执行出口与成片清单核验 |
+| 问题研究编排入口 | [`question-research-poc-oss`](https://github.com/lightcoloror/question-research-poc-oss) | `v0.1.3` | `0e0f8e4c819c59ec43ffb88e9db61c36245f87a8` | 研究问题规划、证据缺口与结构化结论桥接 |
 | 产物生命周期状态机 | [`artifact-lifecycle-core-oss`](https://github.com/lightcoloror/artifact-lifecycle-core-oss) | `v0.2.0` | `fab239085724458c2a6b9452d0a1ba4f4012593e` | 候选/审核/定稿产物哈希锁定与磁盘清理门禁 |
-| 多源检索与事实核查 | [`ai-research-workflow-oss`](https://github.com/lightcoloror/ai-research-workflow-oss) | `v0.1.2` | `82a00ec6a80e0e15fe5643be25c079466142b693` | 多来源检索与原子事实核验引擎 |
+| 多源检索与事实核查 | [`ai-research-workflow-oss`](https://github.com/lightcoloror/ai-research-workflow-oss) | `v0.1.2` | `6bd7a19eb02e9b3191d4fb96dc62c0bd60f589eb` | 多来源检索与原子事实核验引擎 |
 | 合规网页抓取与归档 | [`web-content-fetcher-oss`](https://github.com/lightcoloror/web-content-fetcher-oss) | `v0.1.2` | `99d63462ebe9b3e2dfb9f36f121a3f6cfc970e1a` | 公开网页正文抽取与证据快照归档（`wcf` CLI） |
-| 媒体下载调度层 | [`video-download-orchestrator-oss`](https://github.com/lightcoloror/video-download-orchestrator-oss) | `v0.1.1` | `b24e4e08446a91b41b07383ff20cc407b926f7fb` | 独立授权媒体下载与任务状态编排（按需单独安装） |
+| 媒体下载调度层 | [`video-download-orchestrator-oss`](https://github.com/lightcoloror/video-download-orchestrator-oss) | `v0.1.1` | `49242404f8a0c4d2950015b8e8ab85218ea259b0` | 独立授权媒体下载与任务状态编排（按需单独安装） |
 | 模型供应统一网关 | [`model-provider-gateway-oss`](https://github.com/lightcoloror/model-provider-gateway-oss) | `v0.3.1` | `bdbae4edf28f599c951d2e6f755d390961ddc134` | 统一大模型调用路由、配额与同意门控（按需配置密钥） |
 | 本地协作与规则治理 | [`codex-local-governance-oss`](https://github.com/lightcoloror/codex-local-governance-oss) | `v0.1.1` | `ba0bca6632979a35881583d531f4637593e2e66c` | 本地跨任务规则与门禁校验工具参考（按需查阅） |
 

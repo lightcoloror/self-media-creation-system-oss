@@ -136,8 +136,8 @@ no_signal / 保留 / 修改 / 退休：
 - Action: 在既有发布前质量门之前增加强制的初稿十一门检查、三个退出状态和哈希失效规则。
 - Intent: 防止初稿事实、单条任务或服务因果尚未成立时，直接进入去AI味、Hook和试拍。
 - Decision: 复用既有事实、隐私、医疗保险、声纹和发布门；新增初稿专属的单条任务、服务因果、采访完整性、标题对齐、CTA及系列制作检查。
-- Public boundary: use source-bound facts and actual service actions; private implementation examples are excluded.
-<!-- Private manuscript, case-history or local course-file reference omitted from the public edition. -->
+- Reason: 质子治疗系列中出现了客户感受完整、但讲述者服务动作消失的问题；既有最终七门审核能管风险，却不能保证初稿完成获客任务。
+- Evidence: 七条采访后脚本第03与第06条诊断；`case-video-script.v1`、现有 human voice gate 和最终 review receipt 的本地源码与通过测试。
 - Effective scope: 所有初稿；保险、医疗和客户案例必须形成初稿回执后才能进入后续脚本阶段。
 
 ## 2026-08-15 17:53:49 +08:00 | Codex（GPT-5.6 Sol）
@@ -146,7 +146,7 @@ no_signal / 保留 / 修改 / 退休：
 - Intent: 纠正“先写顺再核事实”的顺序，阻止旧事实通过已通过的正文回执继续流转。
 - Decision: D0 增加事实 ID、动作区分、最新纠错和失效检查；其他十门保持原职责。
 - Reason: 现有正文哈希只能发现稿件变化，不能发现上游事实已经改变。
-<!-- Private manuscript, case-history or local course-file reference omitted from the public edition. -->
+- Evidence: `case-video-initial-draft-review.v1` 与 validator 新增 `input_fact_card_ref`；质子案例纠错记录。
 - Effective scope: 所有 Storycraft 初稿和其后审核。
 
 ## 2026-08-17 20:20:43 +08:00 | Codex（GPT-5.6 Sol）

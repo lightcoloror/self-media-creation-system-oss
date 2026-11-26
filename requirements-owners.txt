@@ -5,7 +5,7 @@ question-research-poc @ git+https://github.com/lightcoloror/question-research-po
 content-visual-studio @ git+https://github.com/lightcoloror/content-visual-studio-oss.git@dec8e0572f39a688a3cff28cd3aaf017ec51635c
 artifact-lifecycle-core @ git+https://github.com/lightcoloror/artifact-lifecycle-core-oss.git@fab239085724458c2a6b9452d0a1ba4f4012593e
 web-content-fetcher @ git+https://github.com/lightcoloror/web-content-fetcher-oss.git@99d63462ebe9b3e2dfb9f36f121a3f6cfc970e1a
-ai-research-workflow @ git+https://github.com/lightcoloror/ai-research-workflow-oss.git@82a00ec6a80e0e15fe5643be25c079466142b693
+ai-research-workflow @ git+https://github.com/lightcoloror/ai-research-workflow-oss.git@6bd7a19eb02e9b3191d4fb96dc62c0bd60f589eb
 
 # Optional video route owners; installed/source identity is not execution consent.
 video-knowledge-pipeline @ git+https://github.com/lightcoloror/video-knowledge-pipeline-oss.git@219f1e7d9edbf520c8200a7c56a5051765dd4ff6

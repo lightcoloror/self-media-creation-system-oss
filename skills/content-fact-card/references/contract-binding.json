@@ -3,8 +3,7 @@
   "skill_id": "content-fact-card",
   "contract_owner": {
     "tool_id": "content-studio-poc",
-    "repository": "https://github.com/lightcoloror/content-visual-studio-oss",
-    "public_commit": "e5bdff31cd2598d681a2b71e701e596673e9e7c6"
+    "repository": "https://github.com/lightcoloror/content-visual-studio"
   },
   "contracts": [
     {

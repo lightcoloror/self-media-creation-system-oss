@@ -278,6 +278,11 @@
           "minLength": 3,
           "maxLength": 1200
         },
+        "facet_elements": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/facet_element"}
+        },
         "assessments": {
           "type": "array",
           "minItems": 3,
@@ -349,6 +354,7 @@
                 "minLength": 3,
                 "maxLength": 1200
               },
+              "topic_facets": {"$ref": "#/$defs/topic_facets"},
               "evidence_refs": {
                 "type": "array",
                 "minItems": 1,
@@ -366,6 +372,54 @@
     }
   },
   "$defs": {
+    "facet_element_id": {
+      "type": "string",
+      "pattern": "^element-[a-z0-9-]{2,60}$"
+    },
+    "facet_element": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["element_id", "label", "kind", "evidence_refs"],
+      "properties": {
+        "element_id": {"$ref": "#/$defs/facet_element_id"},
+        "label": {"type": "string", "pattern": "\\S", "maxLength": 160},
+        "kind": {"enum": ["material", "concept", "theory", "presentation"]},
+        "evidence_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^evidence-[a-z0-9-]{3,60}$"}
+        },
+        "theory_boundary": {"type": "string", "pattern": "\\S", "maxLength": 500}
+      },
+      "if": {"properties": {"kind": {"const": "theory"}}},
+      "then": {
+        "required": ["theory_boundary"],
+        "properties": {"evidence_refs": {"minItems": 1}}
+      }
+    },
+    "topic_facets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["main_element_id", "supporting_elements", "dominant_action", "action_note"],
+      "properties": {
+        "main_element_id": {"$ref": "#/$defs/facet_element_id"},
+        "supporting_elements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["element_id", "relation"],
+            "properties": {
+              "element_id": {"$ref": "#/$defs/facet_element_id"},
+              "relation": {"enum": ["illustrates", "supports", "contrasts", "context", "explains", "presentation"]},
+              "note": {"type": "string", "pattern": "\\S", "maxLength": 500}
+            }
+          }
+        },
+        "dominant_action": {"enum": ["knowledge", "judgment", "showcase", "experience", "other"]},
+        "action_note": {"type": "string", "pattern": "\\S", "maxLength": 500}
+      }
+    },
     "source_observation": {
       "type": "object",
       "additionalProperties": false,

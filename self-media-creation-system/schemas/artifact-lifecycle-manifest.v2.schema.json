@@ -145,7 +145,9 @@
         "delete_after": {"type": ["string", "null"], "format": "date-time"},
         "quarantine_path": {"oneOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]},
         "original_path": {"oneOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]},
-        "purge_approved": {"type": "boolean"}
+        "purge_approved": {"type": "boolean"},
+        "appeal_hold": {"type": "boolean"},
+        "appeal_hold_reason": {"type": ["string", "null"], "maxLength": 500}
       }
     },
     "history": {

@@ -67,6 +67,7 @@
       }
     },
     "publication_authority": {"const": false},
+    "stage_summary": {"type": "object"},
     "payload_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
   },
   "allOf": [

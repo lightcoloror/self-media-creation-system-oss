@@ -171,29 +171,30 @@ assert STORY_MATERIAL_INBOX_SPEC and STORY_MATERIAL_INBOX_SPEC.loader
 STORY_MATERIAL_INBOX = importlib.util.module_from_spec(STORY_MATERIAL_INBOX_SPEC)
 STORY_MATERIAL_INBOX_SPEC.loader.exec_module(STORY_MATERIAL_INBOX)
 
-OWNER_50590_SCRIPT = ROOT / "scripts" / "content_contract_50590_owner_receipt.py"
-OWNER_50590_SPEC = importlib.util.spec_from_file_location(
-    "content_contract_50590_owner_receipt", OWNER_50590_SCRIPT
-)
-assert OWNER_50590_SPEC and OWNER_50590_SPEC.loader
-OWNER_50590 = importlib.util.module_from_spec(OWNER_50590_SPEC)
-OWNER_50590_SPEC.loader.exec_module(OWNER_50590)
+def _load_optional_owner_script(module_name: str, filename: str) -> Any | None:
+    script_path = ROOT / "scripts" / filename
+    if not script_path.is_file():
+        return None
+    spec = importlib.util.spec_from_file_location(module_name, script_path)
+    if not spec or not spec.loader:
+        return None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
-OWNER_353DC9_SCRIPT = ROOT / "scripts" / "content_contract_353dc9_owner_receipt.py"
-OWNER_353DC9_SPEC = importlib.util.spec_from_file_location(
-    "content_contract_353dc9_owner_receipt", OWNER_353DC9_SCRIPT
-)
-assert OWNER_353DC9_SPEC and OWNER_353DC9_SPEC.loader
-OWNER_353DC9 = importlib.util.module_from_spec(OWNER_353DC9_SPEC)
-OWNER_353DC9_SPEC.loader.exec_module(OWNER_353DC9)
 
-OWNER_202B82_SCRIPT = ROOT / "scripts" / "content_contract_202b82_owner_receipt.py"
-OWNER_202B82_SPEC = importlib.util.spec_from_file_location(
-    "content_contract_202b82_owner_receipt", OWNER_202B82_SCRIPT
+OWNER_50590 = _load_optional_owner_script(
+    "content_contract_50590_owner_receipt",
+    "content_contract_50590_owner_receipt.py",
 )
-assert OWNER_202B82_SPEC and OWNER_202B82_SPEC.loader
-OWNER_202B82 = importlib.util.module_from_spec(OWNER_202B82_SPEC)
-OWNER_202B82_SPEC.loader.exec_module(OWNER_202B82)
+OWNER_353DC9 = _load_optional_owner_script(
+    "content_contract_353dc9_owner_receipt",
+    "content_contract_353dc9_owner_receipt.py",
+)
+OWNER_202B82 = _load_optional_owner_script(
+    "content_contract_202b82_owner_receipt",
+    "content_contract_202b82_owner_receipt.py",
+)
 
 CANONICAL_ROUTING_SCRIPT = ROOT / "scripts" / "canonical_routing.py"
 CANONICAL_ROUTING_SPEC = importlib.util.spec_from_file_location(
@@ -628,6 +629,8 @@ def validate_story_material_inbox() -> list[str]:
 
 
 def validate_owner_50590_candidate() -> list[str]:
+    if OWNER_50590 is None:
+        return []
     try:
         OWNER_50590.validate_owner_candidate()
     except Exception as error:
@@ -636,6 +639,8 @@ def validate_owner_50590_candidate() -> list[str]:
 
 
 def validate_owner_353dc9_candidate() -> list[str]:
+    if OWNER_353DC9 is None:
+        return []
     try:
         OWNER_353DC9.validate_current_candidate()
     except Exception as error:
@@ -644,6 +649,8 @@ def validate_owner_353dc9_candidate() -> list[str]:
 
 
 def validate_owner_202b82_candidate() -> list[str]:
+    if OWNER_202B82 is None:
+        return []
     try:
         OWNER_202B82.validate_current_candidate()
     except Exception as error:

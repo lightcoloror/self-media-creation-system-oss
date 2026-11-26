@@ -3,8 +3,7 @@
   "skill_id": "insurance-content-storycraft",
   "contract_owner": {
     "tool_id": "content-studio-poc",
-    "repository": "https://github.com/lightcoloror/content-visual-studio-oss",
-    "public_commit": "e5bdff31cd2598d681a2b71e701e596673e9e7c6"
+    "repository": "https://github.com/lightcoloror/content-visual-studio"
   },
   "contracts": [
     {
@@ -20,12 +19,12 @@
     {
       "contract_id": "initial-draft-quality-gate-validator",
       "relative_path": "scripts/initial_draft_quality_gate.py",
-      "sha256": "ae89b4e6f8fb1568b46105e36c6d785dad6f6a25df1cadba6bf9729c10506961"
+      "sha256": "b8c975a8f4baaa30fa753bcc7941032744affe657eea2a63dcb839225bf9981d"
     },
     {
       "contract_id": "narrative-realization-validator",
       "relative_path": "scripts/narrative_realization.py",
-      "sha256": "014fff750ed87215900becb084b9880bf4ab9ca7b25a4f33378050d078a1118e"
+      "sha256": "558fe9090b5eae2d0a09237bf662969a39113b6bb2b5b0ec565c3a5c2fc2601c"
     }
   ],
   "required_gate_ids": [

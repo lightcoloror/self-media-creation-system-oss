@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Explicit editorial disposition of observed timing deviations",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "measurement_sha256", "synthetic_only", "reviewer_kind", "reviewer", "reviewed_at", "decision", "reason", "deviation_codes", "observation_plan", "review_source", "publish_authorized"],
+  "properties": {
+    "schema_version": {"const": "short-video-timing-editorial-exception.v1"},
+    "measurement_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "synthetic_only": {"type": "boolean"},
+    "reviewer_kind": {"enum": ["human", "synthetic-fixture"]},
+    "reviewer": {"type": "string", "minLength": 2, "maxLength": 160, "pattern": "\\S"},
+    "reviewed_at": {"type": "string", "format": "date-time"},
+    "decision": {"const": "retain-as-experiment"},
+    "reason": {"type": "string", "minLength": 10, "maxLength": 1000, "pattern": "\\S"},
+    "deviation_codes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["audience_stake_too_late", "reason_to_continue_too_late", "first_advance_too_late", "information_advance_gap_too_long", "main_payoff_too_late"]}},
+    "observation_plan": {"type": "string", "minLength": 10, "maxLength": 1000, "pattern": "\\S"},
+    "review_source": {
+      "type": "object", "additionalProperties": false, "required": ["owner", "path", "sha256"],
+      "properties": {
+        "owner": {"enum": ["self-media-creation-system", "content-studio-poc"]},
+        "path": {"type": "string", "minLength": 1, "maxLength": 500, "pattern": "^(?![A-Za-z]:)(?!/)(?!\\\\)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "publish_authorized": {"const": false}
+  },
+  "allOf": [{
+    "if": {"properties": {"synthetic_only": {"const": true}}},
+    "then": {"properties": {"reviewer_kind": {"const": "synthetic-fixture"}}},
+    "else": {"properties": {"reviewer_kind": {"const": "human"}}}
+  }]
+}

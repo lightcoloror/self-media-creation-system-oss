@@ -1,6 +1,6 @@
 {
   "schema_version": "1.2",
-  "updated_at": "2026-11-02T20:20:30+08:00",
+  "updated_at": "2026-11-22T09:38:00+08:00",
   "priority": [
     "explicit-user-request",
     "user-confirmed-facts-and-edits",
@@ -271,9 +271,9 @@
       "status": "hard-gate",
       "loader": {
         "skill_path": "../../../skills/content-fact-card/SKILL.md",
-        "skill_sha256": "4432086c7e71ace39ce12cc3ab5e727cd2e082d7a7e2fcc6a11aefc8381c20b6",
+        "skill_sha256": "a69628936f141ce4a0ae95fcfd1502464bc8affae7f2f974f2113b71d3244951",
         "contract_binding_path": "../../../skills/content-fact-card/references/contract-binding.json",
-        "contract_binding_sha256": "6d42e42f76921a4edc84460997c5585da2466fae3a5207c4ca0369c15282bd3e",
+        "contract_binding_sha256": "607bf19e1ce6b181f34a2e3e7b54efca08b93e5a1b0921b47c0c1966674b88b5",
         "deployment_mode": "copy-only",
         "on_mismatch": "fail-closed"
       }
@@ -313,9 +313,9 @@
       ],
       "loader": {
         "skill_path": "../../../skills/insurance-content-storycraft/SKILL.md",
-        "skill_sha256": "47568e7420c8ad4a91fc2e6377e3a7d49877282843e97a16ca4652bff356df91",
+        "skill_sha256": "9860d8dc9f824b792d6a8ff17bef29e14073ad9eb6d287f66e1ca40f62924746",
         "contract_binding_path": "../../../skills/insurance-content-storycraft/references/contract-binding.json",
-        "contract_binding_sha256": "4cb148d1378ba84e0791a874dc84d4dbc0bff813e45342b3bbe3579fc889d111",
+        "contract_binding_sha256": "f644215989a8359496e8eaad512561e5659819b1f4f905c27c7e16cc9e960ea2",
         "deployment_mode": "copy-only",
         "on_mismatch": "fail-closed"
       }
@@ -485,6 +485,53 @@
         "framework-decision-before-draft",
         "fact-and-body-promise-alignment"
       ]
+    },
+    {
+      "id": "dbs-standard-answer",
+      "status": "on-demand",
+      "use_for": [
+        "concept-replacement-with-classic-theory",
+        "cross-disciplinary-theory-discovery",
+        "historical-isomorphism-and-conditional-answer",
+        "theory-to-broad-audience-problem-mapping"
+      ],
+      "not_for": [
+        "fact-verification-authority",
+        "medical-or-insurance-fact-substitute",
+        "forced-theory-on-all-genres",
+        "unverified-verbatim-quote-as-primary-source",
+        "automatic-publication"
+      ],
+      "requires": [
+        "explicit-proposition-or-problem",
+        "labelled-verification-status",
+        "theory-boundary-and-counterexample",
+        "unverified-origin-routes-to-supplement"
+      ],
+      "local_adaptation_ref": "skill-invocation-runbook.md#理论查证与概念替换按需入口"
+    },
+    {
+      "id": "dbs-theory-grounding",
+      "status": "on-demand",
+      "use_for": [
+        "proposition-and-counterexample-audit",
+        "single-theory-grounding-and-case-reinterpretation",
+        "applicable-boundary-definition"
+      ],
+      "not_for": [
+        "fact-verification-authority",
+        "medical-or-insurance-fact-substitute",
+        "name-dropping-without-mechanism-fit",
+        "unverified-verbatim-quote-as-primary-source",
+        "automatic-publication"
+      ],
+      "requires": [
+        "explicit-proposition-or-case",
+        "labelled-verification-status",
+        "theory-boundary-and-counterexample",
+        "unverified-origin-routes-to-supplement"
+      ],
+      "local_adaptation_ref": "skill-invocation-runbook.md#理论查证与概念替换按需入口"
     }
   ],
   "legacy_aliases": {

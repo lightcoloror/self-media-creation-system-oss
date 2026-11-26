@@ -9,7 +9,7 @@
     "task_id": {"type": "string", "minLength": 6},
     "revision_id": {"type": "string", "minLength": 1},
     "task_kind": {"enum": ["create", "rewrite", "replan", "technical-rework"]},
-    "topic_domain": {"enum": ["travel-experience", "case", "explanation", "other", "unknown"]},
+    "topic_domain": {"enum": ["travel-experience", "case", "explanation", "insurance", "finance", "medical", "health", "other", "unknown"]},
     "primary_intent": {"enum": ["preserve-experience", "activity-highlights", "practical-guide", "compare-experiences", "sensory-place", "observe-people-place", "causal-change", "explain-or-answer", "unknown"]},
     "requested_route": {"enum": ["auto", "story", "travel-experience", "expository"]},
     "requested_vlog_style": {"enum": ["auto", "chronological-diary", "activity-highlights", "practical-guide", "experience-review", "atmospheric-montage", "observational"]},

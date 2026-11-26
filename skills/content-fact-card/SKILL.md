@@ -143,3 +143,13 @@ Block or keep `needs-review` when any of these apply:
 
 All outputs are local planning/review artifacts. This Skill grants no authority to publish, upload, contact customers, write CRM or knowledge bases, or call external Providers.
 
+## Update record
+
+### 2026-08-24 23:30:00 +08:00 | Codex (GPT-5.6 Sol)
+
+- Intent: converge the prose Skill with the current machine-owned fact-card contract.
+- Decision: replace the incompatible free-form template with exact `content-fact-card.v0` fields and explicit Schema precedence.
+- Reason: the earlier Skill emitted fields rejected by the `additionalProperties: false` Schema.
+- Evidence: bound Content Studio Schema plus synthetic positive and fail-closed regression fixtures.
+- Effective scope: all new fact-card machine artifacts; historical prose notes remain provenance only.
+- Rollback: restore the prior Skill revision, but treat it as reference-only because it is not machine-contract compatible.
